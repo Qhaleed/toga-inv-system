@@ -6,7 +6,7 @@ import Register from './pages/register-page/Register';
 import AdminHome from './pages/admin-home/AdminHome';
 import AdminDashboard from './pages/admin-dashboard/AdminDashboard';
 import StudentHome from './pages/student-home/StudentHome';
-
+import './index.css';
 function App() {
   return (
     <div className="App">
