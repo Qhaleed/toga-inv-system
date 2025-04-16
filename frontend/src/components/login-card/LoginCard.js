@@ -62,6 +62,11 @@ function LoginCard() {
             Login
           </button>
         </form>
+        <div className="text-center mt-4">
+          <a href="/register" className="text-indigo-500 hover:underline">
+            Register
+          </a>
+        </div>
       </div>
     </div>
   );
