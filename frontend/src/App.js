@@ -13,6 +13,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="*" element={<Login />} /> {/* Change to 404 page if have na  */}
           <Route path="/home" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin-home" element={<AdminHome />} />
