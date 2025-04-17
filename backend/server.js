@@ -25,7 +25,7 @@ app.post('/login', async (req, res) => {
     res.json({ token });
 });
 
-// Protected route
+// Protected routed 
 app.get('/protected', verifyToken, (req, res) => {
     res.json({ message: 'You accessed a protected route!', user: req.user });
 });
