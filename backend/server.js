@@ -1,9 +1,17 @@
 // server.js
 const express = require('express');
+const app = express();
+
+app.listen(5000, () => console.log('Server running on port 5000'));
+
+const userRouter = require('./routes/users');
+app.use('/users', userRouter);
+
+
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 require('dotenv').config();
-const app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -31,15 +39,17 @@ app.get('/protected', verifyToken, (req, res) => {
 });
 
 
-app.get('/', (req, res) => {
-    res.json({ message: `Backend in running ,SECRET_KEY:  ${SECRET_KEY}` });
 
+app.get('/', (req, res) => {
+    res.send("Hello niga, backend is running")
+    res.json({ message: `Backend in running ,SECRET_KEY:  ${SECRET_KEY}` });
 })
 
 app.get('/api', (req, res) => {
     res.json({ message: `real shi api` });
 
 })
+
 // Middleware to verify token
 function verifyToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -53,4 +63,3 @@ function verifyToken(req, res, next) {
     });
 }
 
-app.listen(5000, () => console.log('Server running on port 5000'));
