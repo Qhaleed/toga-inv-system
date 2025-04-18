@@ -1,11 +1,11 @@
-import React from 'react'
-import LoginCard from '../../components/login-card/LoginCard';
+import React from "react";
+import LoginCard from "../../components/login-card/LoginCard";
 function Login() {
-    return (
-        <>
-            <LoginCard></LoginCard>
-        </>
-    )
+  return (
+    <>
+      <LoginCard></LoginCard>
+    </>
+  );
 }
 
-export default Login
+export default Login;
