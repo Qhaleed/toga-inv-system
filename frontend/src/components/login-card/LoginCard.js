@@ -38,7 +38,7 @@ function LoginCard() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200">
+    <div className="flex items-center justify-center min-h-screen bg-login-bg bg-cover bg-no-repeat bg-center">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-indigo-700 mb-6">Welcome Back 👋</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
