@@ -19,3 +19,5 @@ Login Guide:
             { email: "student1@toga.edu", password: "student123" },
             { email: "student2@toga.edu", password: "student456" }
         ];
+
+dang tailwind setup is shite
