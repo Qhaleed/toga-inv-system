@@ -1,46 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LoginCard() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userRole', data.role);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userRole", data.role);
 
         // Redirect based on role retrieved from the server
-        if (data.role === 'admin') {
-          navigate('/admin-home');
+        if (data.role === "admin") {
+          navigate("/admin-home");
         } else {
-          navigate('/student-home');
+          navigate("/student-home");
         }
       } else {
         const errorData = await response.json();
-        setError(errorData.message || 'Login failed');
+        setError(errorData.message || "Login failed");
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-login-bg  bg-cover bg-no-repeat bg-center">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-indigo-700 mb-6">Welcome Back 👋</h2>
+        <h2 className="text-2xl font-bold text-center text-indigo-700 mb-6">
+          Welcome Back 👋
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             label="Email"
@@ -58,10 +60,7 @@ function LoginCard() {
           />
           <div className="flex items-center justify-between text-sm">
             <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                className="accent-indigo-500"
-              />
+              <input type="checkbox" className="accent-indigo-500" />
               Remember me
               <div></div>
             </label>
@@ -90,7 +89,9 @@ function LoginCard() {
 function InputField({ label, type, value, onChange, placeholder }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
       <input
         type={type}
         value={value}
