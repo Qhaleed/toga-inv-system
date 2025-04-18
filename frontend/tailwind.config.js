@@ -19,7 +19,7 @@ module.exports = {
       },
       fontFamily: {
         figtree: ["Figtree", "sans-serif"], // Primary font
-        manjari: ["Manjari", "sans-serif"], // Fallback font
+        manjari: ["Manjari", "sans-serif"], // secon font
       },
     },
   },
