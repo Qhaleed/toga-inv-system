@@ -63,6 +63,7 @@ function LoginCard() {
                 className="accent-indigo-500"
               />
               Remember me
+              <div></div>
             </label>
             <a href="#" className="text-indigo-500 hover:underline">
               Forgot password?
