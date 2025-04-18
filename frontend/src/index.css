@@ -2,9 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&display=swap');
-/* Apply the font globally */
-body {
-  font-family: 'Figtree', 'Manjari', sans-serif;
+/* Figtree Thin */
+@font-face {
+  font-family: 'Figtree';
+  src: url('/frontend/src/assets/fonts/Manjari-Thin.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* Figtree Regular */
+@font-face {
+  font-family: 'Figtree';
+  src: url('./assets/fonts/Figtree-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Figtree Bold */
+@font-face {
+  font-family: 'Figtree';
+  src: url('./assets/fonts/Figtree-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
 }

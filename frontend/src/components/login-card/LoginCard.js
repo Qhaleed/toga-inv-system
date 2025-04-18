@@ -53,26 +53,26 @@ function LoginCard() {
 
             <div className="w-80 h-28 mt-4 ml-6 flex flex-col justify-start space-y-2">
               <div className="flex items-start gap-5">
-                <span className="text-white text-2xl font-normal font-['Manjari']">
+                <span className="text-white text-2xl font-normal font-manjari">
                   •
                 </span>
-                <span className="text-white text-2xl font-normal font-['Manjari']">
+                <span className="text-white text-2xl font-normal font-manjari">
                   Streamlined management
                 </span>
               </div>
               <div className="flex items-start gap-5">
-                <span className="text-white text-2xl font-normal font-['Manjari']">
+                <span className="text-white text-2xl font-normal font-manjari">
                   •
                 </span>
-                <span className="text-white text-2xl font-normal font-['Manjari']">
+                <span className="text-white text-2xl font-thin font-manjari">
                   Other point
                 </span>
               </div>
               <div className="flex items-start gap-5">
-                <span className="text-white text-2xl font-normal font-['Manjari']">
+                <span className="text-white text-2xl font-normal font-manjari">
                   •
                 </span>
-                <span className="text-white text-2xl font-normal font-['Manjari']">
+                <span className="text-white text-2xl font-normal font-manjari">
                   More flavor text
                 </span>
               </div>
