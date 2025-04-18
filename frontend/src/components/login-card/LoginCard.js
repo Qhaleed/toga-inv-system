@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function LoginCard() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +19,16 @@ function LoginCard() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        alert('Login successful!');
+        localStorage.setItem('userEmail', email);
+
+        // Determine if user is admin or student based on email
+        if (email === 'admin123@gmail.com') {
+          // Redirect to admin home
+          navigate('/admin-home');
+        } else {
+          // Redirect to student home
+          navigate('/student-home');
+        }
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Login failed');
