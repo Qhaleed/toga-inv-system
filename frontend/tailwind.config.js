@@ -14,12 +14,12 @@ module.exports = {
           "linear-gradient(to right, #03003A, #252779, #23105A)",
         "linear-custom":
           "linear-gradient(to bottom right, #1C113A, #23105A, #252779)",
-        "login-bg": "url('/src/assets/loginbg.jpg')",
+        "login-bg": "url('/src/assets/loginbg.jpg')", //background for the lopin page
         "text-gradient-ul": "linear-gradient(to top left, #C15DEF, #FFFFFF)",
       },
       fontFamily: {
         figtree: ["Figtree", "sans-serif"], // Primary font
-        manjari: ["Manjari", "sans-serif"], // Fallback font
+        manjari: ["Manjari", "sans-serif"], // secon font
       },
     },
   },
