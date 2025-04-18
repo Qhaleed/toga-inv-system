@@ -20,13 +20,12 @@ function LoginCard() {
         const data = await response.json();
         localStorage.setItem('token', data.token);
         localStorage.setItem('userEmail', email);
+        localStorage.setItem('userRole', data.role);
 
-        // Determine if user is admin or student based on email
-        if (email === 'admin123@gmail.com') {
-          // Redirect to admin home
+        // Redirect based on role retrieved from the server
+        if (data.role === 'admin') {
           navigate('/admin-home');
         } else {
-          // Redirect to student home
           navigate('/student-home');
         }
       } else {

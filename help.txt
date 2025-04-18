@@ -3,6 +3,6 @@ To start frontend:
         npm start
 To start backend:
     cd backend:
-        npm start startDev // This will enable nodemon(hot reload package)
+        npm start devStart // This will enable nodemon(hot reload package)
         or use this
         node server.js
