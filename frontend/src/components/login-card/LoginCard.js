@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoaderAnimation from "./LoaderAnimation"; // Adjust path if needed
 
 function LoginCard() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
+
     try {
       const response = await fetch("http://localhost:5000/login", {
         method: "POST",
@@ -22,38 +26,42 @@ function LoginCard() {
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userRole", data.role);
 
-        // Redirect based on role retrieved from the server
-        if (data.role === "admin") {
-          navigate("/admin-home");
-        } else {
-          navigate("/student-home");
-        }
+        // Wait 2 seconds before navigating
+        setTimeout(() => {
+          if (data.role === "admin") {
+            navigate("/admin-home");
+          } else {
+            navigate("/student-home");
+          }
+        }, 2000); // Wait for 2 seconds
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Login failed");
+        setLoading(false); // Stop loading if response fails
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
+      setLoading(false); // Stop loading if there's an error
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-login-bg bg-opacity-0 bg-cover bg-no-repeat bg-center">
+    <div className="flex items-center justify-center min-h-screen bg-login-bg bg-opacity-0 bg-cover bg-no-repeat bg-center relative">
       {/* Background Overlay */}
-      <div className="fixed inset-0 bg-black/60 rounded-l w-full min-h-screen"></div>
+      <div className="fixed inset-0 bg-black/60 z-0"></div>
 
-      {/* The Card Content */}
-      <div className="overflow-hidden relative z-10 bg-[#D9D9D9] bg-opacity-20  p-8 rounded-[30px] shadow-l w-[90%] sm:w-[80%] md:w-[80%] lg:w-[851px]  lg:h-[500px] l:w-[1000px]">
+      {/* Login Card */}
+      <div className="overflow-hidden relative z-10 bg-[#D9D9D9] bg-opacity-20 p-8 rounded-[30px] shadow-l w-[90%] sm:w-[80%] md:w-[80%] lg:w-[851px] lg:h-[500px]">
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-[35%_65%] gap-5 h-full">
           {/* Left Side Content */}
-          <div className="  p-0 relative">
+          <div className="p-0 relative">
             {/* Title */}
-            <div className=" mt-5 ml-5 pt-5 bg-red-400 justify-start text-transparent bg-clip-text bg-text-gradient-ul  text-[22px] sm:text-[25px] md:text-[24px] lg:text-[35px] leading-tight font-semibold">
+            <div className="mt-5 ml-5 pt-5 bg-red-400 justify-start text-transparent bg-clip-text bg-text-gradient-ul text-[22px] sm:text-[25px] md:text-[24px] lg:text-[35px] leading-tight font-semibold">
               Toga Inventory Management System
             </div>
 
             {/* Bullet Points */}
-            <div className="w-full mt-10 h-auto ml-6 flex flex-col sm:gap-2 sm:ml-0 md:ml-1  justify-start space-y-2">
+            <div className="w-full mt-10 h-auto ml-6 flex flex-col sm:gap-2 sm:ml-0 md:ml-1 justify-start space-y-2">
               <div className="flex items-start gap-5">
                 <span className="text-white text-sm font-regular font-manjari hidden md:block md:text-sm">
                   •
@@ -71,7 +79,7 @@ function LoginCard() {
                 </span>
               </div>
               <div className="flex items-start gap-5">
-                <span className="text-white text-sm font-regular  hidden md:block font-manjari md:text-[12px]">
+                <span className="text-white text-sm font-regular hidden md:block font-manjari md:text-[12px]">
                   •
                 </span>
                 <span className="text-white text-sm font-regular font-manjari md:text-[12px]">
@@ -80,7 +88,7 @@ function LoginCard() {
               </div>
             </div>
             {/* Vertical Divider */}
-            <div className="absolute top-10 right-0 w-0.5  md:block hidden rounded-4xl min-h-80  bg-gray-400"></div>
+            <div className="absolute top-10 right-0 w-0.5 md:block hidden rounded-4xl min-h-80 bg-gray-400"></div>
           </div>
 
           {/* Right Side Content */}
@@ -100,7 +108,7 @@ function LoginCard() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="NameOfUser"
               />
-              <br></br>
+              <br />
               <InputField
                 label="Password"
                 type="password"
@@ -120,16 +128,16 @@ function LoginCard() {
               </div>
               <button
                 type="submit"
-                className="min-w-max  rounded-full bg-[#1E1E49] hover:bg-[#45458d] text-white font-semibold py-2  transition duration-300"
+                className="min-w-max rounded-full bg-[#1E1E49] hover:bg-[#45458d] text-white font-semibold py-2 transition duration-300"
               >
                 Login
               </button>
-              {error && <p className="text-red-500 text-center ">{error}</p>}
+              {error && <p className="text-red-500 text-center">{error}</p>}
 
-              <div className=" flex min-w-max  justify-center items-center text-center h-10 rounded-full bg-[#D9D9D9] hover:bg-[#f8dbff] transition duration-300">
+              <div className="flex min-w-max justify-center items-center text-center h-10 rounded-full bg-[#D9D9D9] hover:bg-[#f8dbff] transition duration-300">
                 <a
                   href="/register"
-                  className="text-[#17153B] hover: w-full max-h-fit pt-2 pb-2 "
+                  className="text-[#17153B] hover:w-full max-h-fit pt-2 pb-2"
                 >
                   Register
                 </a>
@@ -137,10 +145,17 @@ function LoginCard() {
             </form>
           </div>
         </div>
+
+        {loading && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+            <LoaderAnimation />
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
 function InputField({
   label,
   type,
@@ -158,12 +173,7 @@ function InputField({
         type={type}
         value={value}
         onChange={onChange}
-        className="flex-1 px-4 py-0  bg-white bg-opacity-0 border-b-2 border-gray-300 border-opacity-30 rounded-sm
-            text-white placeholder-gray-300
-            focus:outline-none 
-            focus:border-purple-600
-            transition duration-200
-"
+        className="flex-1 px-4 py-0 bg-white bg-opacity-0 border-b-2 border-gray-300 border-opacity-30 rounded-sm text-white placeholder-gray-300 focus:outline-none focus:border-purple-600 transition duration-200"
         placeholder={placeholder}
         required
       />
