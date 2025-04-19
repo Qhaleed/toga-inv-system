@@ -4,7 +4,6 @@ import BgImg from "../../assets/images/reglogbg.jpg";
 import UploadIcon from "../../assets/images/cloudupload.png";
 
 export default function RegisterForm() {
-  const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -203,7 +202,7 @@ export default function RegisterForm() {
               <span className="text-white-400 text-lg sm:text-xl font-semibold">
                 Upload ID Image
               </span>
-              <div className="mt-3 w-full group rounded-xl p-4 sm:p-6 text-center cursor-pointer bg-gradient-to-b from-indigo-950 to-indigo-800 rounded-[30px] transition-all duration-300 ease-in-out hover:opacity-100">
+              <div className="mt-3 w-full group p-4 sm:p-6 text-center cursor-pointer bg-gradient-to-b from-indigo-950 to-indigo-800 rounded-[30px] transition-all duration-300 ease-in-out hover:opacity-100">
                 <div className="border-2 border-dashed border-white-500 opacity-80 rounded-[20px] p-4 sm:p-6">
                   <input
                     type="file"
