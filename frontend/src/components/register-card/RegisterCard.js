@@ -268,7 +268,7 @@ export default function RegisterForm() {
 
             <button
               type="submit"
-              className="w-full bg-[#1E1E49] hover:bg-[#45458d] py-2  transition rounded-full font-semibold text-white"
+              className="w-full bg-[#1E1E49] hover:bg-[#45458d] py-2  transition rounded-full font-manjari text-white"
             >
               Register and Verify Account
             </button>
