@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import BgImg from "../../assets/images/reglogbg.jpg";
 import UploadIcon from "../../assets/images/cloudupload.png";
 
 export default function RegisterForm() {
@@ -32,10 +31,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-no-repeat bg-center p-4 sm:p-6"
-      style={{ backgroundImage: `url(${BgImg})` }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-login-bg bg-cover bg-no-repeat bg-center p-4 sm:p-6">
       <div className="w-full max-w-5xl bg-white bg-opacity-30 backdrop-blur-lg rounded-2xl p-6 sm:p-10 shadow-2xl ring-1 ring-white/10">
         <div className="grid grid-cols-1 md:grid-cols-[0.8fr_2.2fr] gap-6">
           <div className="space-y-4 text-white border-r-2 border-white border-opacity-80 pr-4 sm:pr-6">
