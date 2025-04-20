@@ -16,7 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 const SECRET_KEY = process.env.SECRET_KEY;
-console.log('SECRET_KEY:', SECRET_KEY);
+// console.log('SECRET_KEY:', SECRET_KEY);
+
 
 // Arrays for admin and student accounts
 const adminAccounts = [
