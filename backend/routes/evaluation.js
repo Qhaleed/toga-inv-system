@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.send("User List");
-})
+    res.send("Evaluation route is active!");
+});
 
-module.exports = router
+module.exports = router;
