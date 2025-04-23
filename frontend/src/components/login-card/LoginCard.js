@@ -114,7 +114,6 @@ function LoginCard() {
               </div>
 
               <div
-                id="eye"
                 className=" relative pb-2 w-auto overflow-hidden mr-3"
               >
                 <InputField
@@ -124,7 +123,7 @@ function LoginCard() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="•••••••••••"
                 />
-                <EyeOff className="absolute hover:cursor-auto text-white top-12 right-2 transform -translate-y-1/2" />
+                <EyeOff  id="eye"   onClick={document.getElementById } className="absolute hover:cursor-pointer text-white top-12 right-2 transform -translate-y-1/2" />
               </div>
               <div className="flex items-center justify-between text-sm ">
                 <label className="flex items-center gap-2">
