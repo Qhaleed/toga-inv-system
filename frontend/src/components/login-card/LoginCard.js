@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoaderAnimation from "./LoaderAnimation"; // Adjust path if needed
-import { ReactComponent as MyIcon } from "../../assets/icons/eyeOff.svg"; // Adjust path if needed
+import { ReactComponent as EyeOff } from "../../assets/icons/eyeOff.svg"; // Adjust path if needed
+import { ReactComponent as EyeOn } from "../../assets/icons/eyeIconOpen.svg"; // Adjust path if needed
 
 function LoginCard() {
   const [email, setEmail] = useState("");
@@ -123,7 +124,7 @@ function LoginCard() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="•••••••••••"
                 />
-                <MyIcon className="absolute  text-white top-12 right-2 transform -translate-y-1/2" />
+                <EyeOff className="absolute hover:cursor-auto text-white top-12 right-2 transform -translate-y-1/2" />
               </div>
               <div className="flex items-center justify-between text-sm ">
                 <label className="flex items-center gap-2">
