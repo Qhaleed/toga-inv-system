@@ -11,7 +11,7 @@ module.exports = {
       },
       backgroundImage: {
         "linear-primary":
-          "linear-gradient(to right, #03003A, #252779, #23105A)",
+          "linear-gradient(to bottom, #03003A, #252779, #23105A)", //background of page 
         "linear-custom":
           "linear-gradient(to bottom right, #1C113A, #23105A, #252779)",
         "login-bg": "url('/src/assets/images/loginbg.jpg')", //background for the lopin page
@@ -20,6 +20,7 @@ module.exports = {
       fontFamily: {
         figtree: ["Figtree", "sans-serif"], // Primary font
         manjari: ["Manjari", "sans-serif"], // secon font
+              // <div className="fixed inset-0 bg-black/60 z-0"></div> // for dark bg effect
       },
     },
   },

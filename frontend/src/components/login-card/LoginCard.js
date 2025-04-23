@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoaderAnimation from "./LoaderAnimation"; // Adjust path if needed
+import { ReactComponent as MyIcon } from "../../assets/icons/eyeOff.svg"; // Adjust path if needed
 
 function LoginCard() {
   const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ function LoginCard() {
     setLoading(true); // Start loading
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("http://localhost:5001/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -46,7 +47,7 @@ function LoginCard() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-login-bg bg-opacity-0 bg-cover bg-no-repeat bg-center relative">
+    <div className="flex items-center justify-center min-h-screen bg-`login-bg bg-opacity-0 bg-cover bg-no-repeat bg-center relative">
       {/* Background Overlay */}
       <div className="fixed inset-0 bg-black/60 z-0"></div>
 
@@ -99,39 +100,51 @@ function LoginCard() {
 
             <form
               onSubmit={handleSubmit}
-              className="space-y-4 text-white flex flex-col font-manjari"
+              className="space-y-1 text-white flex flex-col font-manjari"
             >
-              <InputField
-                label="Username"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="NameOfUser"
-              />
-              <br />
-              <InputField
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="•••••••••••"
-              />
-              <div className="flex items-center justify-between text-sm">
+              <div className="relative overflow-hidden mr-3">
+                <InputField
+                  label="Username"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="NameOfUser"
+                />
+              </div>
+
+              <div
+                id="eye"
+                className=" relative pb-2 w-auto overflow-hidden mr-3"
+              >
+                <InputField
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="•••••••••••"
+                />
+                <MyIcon className="absolute  text-white top-12 right-2 transform -translate-y-1/2" />
+              </div>
+              <div className="flex items-center justify-between text-sm ">
                 <label className="flex items-center gap-2">
                   <input type="checkbox" className="accent-indigo-500" />
                   Remember me
                   <div></div>
                 </label>
-                <a href="#" className="text-white hover:underline">
+                <a href="/" className="text-white hover:underline">
+                  {" "}
+                  {/* wala pang reference*/}
                   Forgot password?
                 </a>
               </div>
+              <br></br>
               <button
                 type="submit"
-                className="min-w-max rounded-full bg-[#1E1E49] hover:bg-[#45458d] text-white font-semibold py-2 transition duration-300"
+                className="min-w-max  rounded-full bg-[#1E1E49] hover:bg-[#45458d] text-white font-semibold py-2 transition duration-300"
               >
                 Login
               </button>
+              <br></br>
               {error && <p className="text-red-500 text-center">{error}</p>}
 
               <div className="flex min-w-max justify-center items-center text-center h-10 rounded-full bg-[#D9D9D9] hover:bg-[#f8dbff] transition duration-300">
