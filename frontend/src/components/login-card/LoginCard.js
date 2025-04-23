@@ -47,7 +47,7 @@ function LoginCard() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-`login-bg bg-opacity-0 bg-cover bg-no-repeat bg-center relative">
+    <div className="flex items-center justify-center min-h-screen bg-login-bg bg-opacity-0 bg-cover bg-no-repeat bg-center relative">
       {/* Background Overlay */}
       <div className="fixed inset-0 bg-black/60 z-0"></div>
 
