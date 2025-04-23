@@ -123,7 +123,7 @@ function LoginCard() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="•••••••••••"
                 />
-                <EyeOff  id="eye"   onClick={function => () =  } className="absolute hover:cursor-pointer text-white top-12 right-2 transform -translate-y-1/2" />
+                <EyeOff  id="eye" className="absolute hover:cursor-pointer text-white top-12 right-2 transform -translate-y-1/2" />
               </div>
               <div className="flex items-center justify-between text-sm ">
                 <label className="flex items-center gap-2">
