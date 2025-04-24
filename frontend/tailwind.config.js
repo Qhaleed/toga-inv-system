@@ -8,6 +8,8 @@ module.exports = {
         secondary: "#252779",
         tertiary: "#23105A",
         fourtiary: "#1C113A",
+        darkpurple: "rgb(101 77 123 / <alpha-value>)",
+        purple: "rgb(154, 84, 186)", 
       },
       backgroundImage: {
         "linear-primary":
