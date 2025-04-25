@@ -9,11 +9,11 @@ module.exports = {
         tertiary: "#23105A",
         fourtiary: "#1C113A",
         darkpurple: "rgb(101 77 123 / <alpha-value>)",
-        purple: "rgb(154, 84, 186)", 
+        purple: "rgb(154, 84, 186)",
       },
       backgroundImage: {
         "linear-primary":
-          "linear-gradient(to bottom, #03003A, #252779, #23105A)", //background of page 
+              "linear-gradient(to top, #03003A, #252779, #23105A , #1C113A)", //background of page
         "linear-custom":
           "linear-gradient(to bottom right, #1C113A, #23105A, #252779)",
         "login-bg": "url('/src/assets/images/loginbg.jpg')", //background for the lopin page
@@ -22,7 +22,7 @@ module.exports = {
       fontFamily: {
         figtree: ["Figtree", "sans-serif"], // Primary font
         manjari: ["Manjari", "sans-serif"], // secon font
-              // <div className="fixed inset-0 bg-black/60 z-0"></div> // for dark bg effect
+        // <div className="fixed inset-0 bg-black/60 z-0"></div> // for dark bg effect
       },
     },
   },
