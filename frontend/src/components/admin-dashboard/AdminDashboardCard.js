@@ -52,10 +52,10 @@ function AdminDashboardCard() {
         setevaluationToggle(true);
     }
 
-    const dashboard = dashboardToggle ? "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white ml-6 mr-12 rounded-xl transition-all ease-out duration-500" : "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white ml-6 mr-12 rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500";
-    const inventory = !inventoryToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white mx-3 rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white mx-3 rounded-xl transition-all ease-out duration-500";
-    const pending = !pendingToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white mx-3 rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white mx-3 rounded-xl hover:opacity-100 transition-all ease-out duration-500";
-    const evaluation = !evaluationToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white mx-3 rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white mx-3 rounded-xl hover:opacity-100 transition-all ease-out duration-500";
+    const dashboard = dashboardToggle ? "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex ml-6 justify-center mr-6 items-center w-36 h-7 text-white  rounded-xl transition-all ease-out duration-500" : "hover:scale-110 border border-white mr-6 flex ml-6 justify-center items-center w-36 h-7 text-white  rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500";
+    const inventory = !inventoryToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 mr-6 text-white rounded-xl opacity-40 hover:opacity-100  transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border mr-6 border-darkpurple/70 flex justify-center items-center w-36  h-7 text-white rounded-xl transition-all ease-out duration-500";
+    const pending = !pendingToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white rounded-xl mr-6 opacity-40 hover:opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border mr-6 border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white  rounded-xl hover:opacity-100 transition-all ease-out duration-500";
+    const evaluation = !evaluationToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white rounded-xl hover:opacity-100 transition-all ease-out duration-500";
 
     const houseiconToggle = dashboardToggle ? <Home className="w-4"></Home> : <GrayHouse className="w-4"></GrayHouse>;
     const inventoryiconToggle = !inventoryToggle ? <Inventory className="w-4"></Inventory> : <PurpleInventory className="w-4"></PurpleInventory>;
@@ -64,8 +64,8 @@ function AdminDashboardCard() {
 
 
     return (
-        <div className="h-screen w-screen bg-linear-primary bg-cover bg-fixed font-figtree font-medium">
-            <div className="h-full w-full grid grid-cols-4">
+        <div className="h-screen overflow-hidden w-screen  fixed bg-linear-primary bg-cover font-figtree font-medium">
+            <div className="h-screen  fixed w-screen grid grid-cols-4 ">
                 <div className="col-span-1 h-full flex flex-col justify-start items-center">
                     <div className="w-80 h-28 border border-violet-950 mt-5 rounded-xl bg-linear-custom bg-center flex">
                         <div className="ml-4 h-full w-16 flex justify-center items-center">
@@ -76,7 +76,7 @@ function AdminDashboardCard() {
                             <p className="text-xs font-light">Administator</p>
                             <p className="text-xs font-light">UI/UX Designer</p>
                         </div>
-                        <div className="h-full w-20 flex justify-end items-center">
+                        <div className="h-full w-20 flex justify-end items-center"> 
                             <button className="bg-violet-950 hover:bg-violet-900 hover:scale-105 h-12 w-12 rounded-full flex justify-center items-center mr-3 border border-gray-700 transform-all ease-out duration-500">
                                 <Calendar className="w-6"></Calendar>
                                 <div className="relative">
@@ -84,10 +84,12 @@ function AdminDashboardCard() {
                                 </div>
                             </button>
                         </div>
-
+                            
                     </div>
-                    <div className="w-80 h-[500px] mt-5 rounded-xl bg-linear-custom bg-center border border-violet-900 border-opacity-60 flex flex-col justify-start items-center">
-                        <div className="w-72 h-64 border border-gray-400 border-opacity-30 mt-4 rounded-xl bg-linear-custom shadow-[0px_6px_10px_4px_rgba(0,0,0,0.15)] flex flex-col justify-start items-center">
+
+                    
+                    <div className="w-80 h-[500px] z-10 mt-8 rounded-xl bg-linear-custom border border-violet-900 border-opacity-60 flex flex-col justify-start items-center"> {/* Sidebar */}
+                        <div className="w-72 h-64 border border-gray-400 border-opacity-30 mt-4 rounded-xl bg-linear-custom shadow-[0px_6px_10px_4px_rgba(0,0,0,0.15)]  flex flex-col justify-start items-center">
                             <div className="m-2 mb-1 w-64 h-1/2">
                                 <h4 className="text-gray-400 text-xs mt-1">ITEM STATUS</h4>
                                 <div className="w-full h-[90px]">
@@ -138,29 +140,36 @@ function AdminDashboardCard() {
                     </div>
 
                 </div>
-                <div className="col-span-3 h-full">
-                    <div className="h-32">
-                        <div className="h-1/2 flex justify-start items-center">
+
+
+                <div className="col-span-3 h-full "> {/* Navigation */}
+                    <div className="h-32 "> {/* Top Navigation */}
+                        <div className="h-1/2 flex justify-start items-center "> {/* search Navigation */}
                             <button onClick={switchDashboard} className={dashboard}>
                                 <span>{houseiconToggle}</span>
-                                <span className="text-xs ml-1">Dashboard</span>
+                                <span className="text-xs ml-3">Dashboard</span>
                             </button>
                             <button onClick={switchInventory} className={inventory}>
                                 <span>{inventoryiconToggle}</span>
-                                <span className="text-xs mx-1">Inventory</span>
-                                <span><Arrow className="w-4"></Arrow></span>
+                                <span className="text-xs mx-3">Inventory</span>
+
                             </button>
+
                             <button onClick={switchPending} className={pending}>
                                 <span>{pendingiconToggle}</span>
-                                <span className="text-xs mx-1">Pending</span>
-                                <span><Arrow className="w-4"></Arrow></span>
+                                <span className="text-xs mx-3">Pending</span>
+
                             </button>
+
                             <button onClick={switchEvaluation} className={evaluation}>
                                 <span>{evaluationiconToggle}</span>
-                                <span className="text-xs mx-1">Evaluation</span>
-                                <span><Arrow className="w-4"></Arrow></span>
+                                <span className="text-xs mx-3">Evaluation</span>
+
                             </button>
+                            
                         </div>
+
+                        
                         <div className="h-1/2 flex justify-start items-center">
                             <div className="ml-6 mr-6 w-[600px] transform-all ease-out duration-500">
                                 <div className="relative">
