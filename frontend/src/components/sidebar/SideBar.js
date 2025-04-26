@@ -20,18 +20,20 @@ import {ReactComponent as Calendar} from "../../assets/icons/white-calendar.svg"
 
 const SideBar = () => {
     return(
-        <div className="col-span-1 h-full flex flex-col justify-start items-center">
-                    <div className="w-80 h-28 border border-violet-950 mt-5 rounded-xl bg-linear-custom bg-center flex">
-                        <div className="ml-4 h-full w-16 flex justify-center items-center">
-                            <img className="w-16 rounded-full" src={Profile} alt="profile"/>
+        <div className="col-span-1 h-full flex flex-col justify-start items-center bg-[#001C47]">
+                    <div className="w-full h-28 bg-[#102F5E] bg-center flex justify-between">
+                        <div className="flex justify-center">
+                            <div className="h-full ml-4 w-16 flex justify-center items-center ">
+                                <img className="w-16 rounded-full" src={Profile} alt="profile"/>
+                            </div>
+                            <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
+                                <h4 className="font-bold">Joshua Guiritan</h4>
+                                <p className="text-xs font-light">Administator</p>
+                                <p className="text-xs font-light">UI/UX Designer</p>
+                            </div>
                         </div>
-                        <div className="ml-3 h-full w-36 flex flex-col justify-center items-start text-white">
-                            <h4 className="font-bold">Joshua Guiritan</h4>
-                            <p className="text-xs font-light">Administator</p>
-                            <p className="text-xs font-light">UI/UX Designer</p>
-                        </div>
-                        <div className="h-full w-20 flex justify-end items-center"> 
-                            <button className="bg-violet-950 hover:bg-violet-900 hover:scale-105 h-12 w-12 rounded-full flex justify-center items-center mr-3 border border-gray-700 transform-all ease-out duration-500">
+                        <div className="h-full flex justify-end items-center mr-6"> 
+                            <button className="bg-violet-950 hover:bg-violet-900 hover:scale-105 h-12 w-12 rounded-full flex justify-center items-center border border-gray-700 transform-all ease-out duration-500">
                                 <Calendar className="w-6"></Calendar>
                                 <div className="relative">
                                     <div className="bg-purple rounded-full text-white text-xs absolute px-1 bottom-2">4</div>
