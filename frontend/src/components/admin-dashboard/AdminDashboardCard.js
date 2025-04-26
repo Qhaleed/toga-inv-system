@@ -4,7 +4,6 @@ import {ReactComponent as Home} from "../../assets/icons/purple-house.svg";
 import {ReactComponent as Inventory} from "../../assets/icons/inventory-icon.svg";
 import {ReactComponent as Search} from "../../assets/icons/searchIcon.svg";
 import {ReactComponent as Application} from "../../assets/icons/application.svg";
-import {ReactComponent as Arrow} from "../../assets/icons/arrow down.svg";
 import {ReactComponent as PurpleGrid} from "../../assets/icons/purple-grid.svg";
 import {ReactComponent as GrayRows} from "../../assets/icons/gray-rows.svg";
 import {ReactComponent as PurpleInventory} from "../../assets/icons/purple-inventory.svg";
@@ -70,7 +69,7 @@ function AdminDashboardCard() {
                     <div className="w-80 h-28 border border-violet-950 mt-5 rounded-xl bg-linear-custom bg-center flex">
                         <div className="ml-4 h-full w-16 flex justify-center items-center">
                             <img className="w-16 rounded-full" src={Profile} alt="profile"/>
-                        </div>
+                        </div>``
                         <div className="ml-3 h-full w-36 flex flex-col justify-center items-start text-white">
                             <h4 className="font-bold">Joshua Guiritan</h4>
                             <p className="text-xs font-light">Administator</p>
