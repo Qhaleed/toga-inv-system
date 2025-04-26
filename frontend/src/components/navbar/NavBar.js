@@ -11,6 +11,25 @@ import {ReactComponent as PurpleStatistic} from "../../assets/icons/purple-stati
 import {ReactComponent as PurpleApplication} from "../../assets/icons/purple-searchcheck.svg";
 import {useState} from "react";
 
+/*
+
+    Follow these if you use SideBar and Navbar!
+
+    <div className="h-screen overflow-hidden w-screen fixed bg-linear-primary bg-cover font-figtree font-medium">
+        <div className="h-screen fixed w-screen grid grid-cols-4 ">
+            <SideBar />
+            <div className="col-span-3 h-full">
+                <Navbar />
+                <-- INPUT YOUR CODE HERE -->
+            </div>
+        </div>
+    </div>    
+
+
+*/
+
+
+
 const Navbar = () => {
 
     // TOGGLE EFFECTS
@@ -58,8 +77,8 @@ const Navbar = () => {
     const evaluationiconToggle = !evaluationToggle ? <Application className="w-4"></Application> : <PurpleApplication className="w-4"></PurpleApplication>
 
     return(
-        <div className="col-span-3 h-full "> {/* Navigation */}
-            <div className="h-32 "> {/* Top Navigation */}
+        
+            <div className="h-32 border border-white"> {/* Top Navigation */}
                 <div className="h-1/2 flex justify-start items-center "> {/* search Navigation */}
                     <button onClick={switchDashboard} className={dashboard}>
                         <span>{houseiconToggle}</span>
@@ -96,7 +115,7 @@ const Navbar = () => {
                     <button className="hover:scale-105 h-10 w-40 bg-purple rounded-xl text-white transform-all ease-out duration-500">Modify Table</button>
                 </div>
             </div>
-        </div>
+        
     );
 }
 

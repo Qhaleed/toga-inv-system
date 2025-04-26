@@ -1,6 +1,23 @@
 import Profile from "../../assets/images/profilepicture.jpg";
 import {ReactComponent as Calendar} from "../../assets/icons/white-calendar.svg";
 
+/*
+
+    Follow these if you use SideBar and Navbar!
+
+    <div className="h-screen overflow-hidden w-screen fixed bg-linear-primary bg-cover font-figtree font-medium">
+        <div className="h-screen fixed w-screen grid grid-cols-4 ">
+            <SideBar />
+            <div className="col-span-3 h-full">
+                <Navbar />
+                <-- INPUT YOUR CODE HERE -->
+            </div>
+        </div>
+    </div>    
+
+
+*/
+
 const SideBar = () => {
     return(
         <div className="col-span-1 h-full flex flex-col justify-start items-center">
