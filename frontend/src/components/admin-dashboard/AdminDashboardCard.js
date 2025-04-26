@@ -8,7 +8,7 @@ import {ReactComponent as EyeIcon} from "../../assets/icons/eye-icon.svg";
 const AdminDashboardCard = () => {
 
     return (
-        <div className="h-screen overflow-hidden w-screen fixed bg-linear-primary bg-cover font-figtree font-medium">
+        <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
             <div className="h-screen fixed w-screen grid grid-cols-4 ">
                 <SideBar />
                 <div className="col-span-3 h-full border border-red-500"> {/* Navigation */}
@@ -74,7 +74,58 @@ const AdminDashboardCard = () => {
                                         </div>
                                     </td>
                                     <td>
-                                        <div className="h-full w-full py-2 flex justify-between">
+                                        <div className="h-full w-full py-2 flex justify-around">
+                                            <button className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md"><EyeIcon className="w-5" /></button>
+                                            <button className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md"><Table className="w-5" /></button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr className="h-12 bg-[#E9E9E9] text-xs font-normal">
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600">
+                                            <h3 className="ml-4"><span className="mr-3">1</span>Kenneth Clyde A. Que</h3>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
+                                            <button className="bg-[#D2D2D2] text-black border border-black w-24 rounded-full">BSCS</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
+                                            <button className="bg-[#D2D2D2] text-black border border-black w-16 rounded-full">XL</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
+                                            <button className="bg-[#D2D2D2] text-black border border-black w-16 rounded-full">XL</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
+                                            <button className="bg-[#D2D2D2] text-black border border-black w-16 rounded-full">XL</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
+                                            <button className="bg-[#D2D2D2] text-black border border-black w-16 rounded-full">XL</button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
+                                            <h3>September 27, 2025</h3>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
+                                            <h3>Borrowed</h3>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className="h-full w-full py-2 flex justify-around">
+                                            <button className="w-7 h-7 bg-[#D2D2D2] text-black border border-black flex justify-center items-center rounded-md"><EyeIcon className="w-5" /></button>
+                                            <button className="w-7 h-7 bg-[#D2D2D2] text-black border border-black flex justify-center items-center rounded-md"><Table className="w-5" /></button>
                                         </div>
                                     </td>
                                 </tr>
