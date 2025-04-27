@@ -9,6 +9,11 @@ To start backend:
         or use this
         node server.js
 
+To Start temporary database of json for tables:
+
+cd toga-inv-system/frontend/src/components/admin-dashboard
+then 
+npx json-server --watch sample.json --port 8000
 Login Guide:
     Hardcoded pa yung mga accounts natin atm:
     

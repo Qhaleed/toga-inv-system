@@ -42,7 +42,7 @@ function LoginCard() {
         setLoading(false); // Stop loading if response fails
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError("Di pa nag run server nigga - kc");
       setLoading(false); // Stop loading if there's an error
     }
   };
