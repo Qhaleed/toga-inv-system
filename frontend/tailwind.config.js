@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#03003A",
+        primary: "#141552",
         secondary: "#252779",
         tertiary: "#23105A",
         fourtiary: "#1C113A",
@@ -12,8 +12,6 @@ module.exports = {
         purple: "rgb(154, 84, 186)",
       },
       backgroundImage: {
-        "linear-primary":
-              "linear-gradient(to top, #03003A, #252779, #23105A , #1C113A)", //background of page
         "linear-custom":
           "linear-gradient(to bottom right, #1C113A, #23105A, #252779)",
         "login-bg": "url('/src/assets/images/loginbg.jpg')", //background for the lopin page
