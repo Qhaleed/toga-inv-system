@@ -1,0 +1,54 @@
+{
+    "dashboard": [
+        {
+            "studentname": "Joshua Guiritan",
+            "program": "BSCS",
+            "tassel": "Blue",
+            "hood": "White",
+            "gown": "2XL",
+            "dateofreservation": "August 1, 2004",
+            "status": "Borrowed",
+            "id": 1
+        },
+        {
+            "studentname": "Joshua Guiritan",
+            "program": "BSCS",
+            "tassel": "White",
+            "hood": "Yellow",
+            "gown": "XL",
+            "dateofreservation": "January 1, 2010",
+            "status": "Borrowed",
+            "id": 2
+        },
+        {
+            "studentname": "Joshua Guiritan",
+            "program": "BSCS",
+            "tassel": "Yellow",
+            "hood": "Orange",
+            "gown": "M",
+            "dateofreservation": "August 1, 2004",
+            "status": "Borrowed",
+            "id": 3
+        },
+        {
+            "studentname": "Joshua Guiritan",
+            "program": "BSCS",
+            "tassel": "Blue",
+            "hood": "Maroon",
+            "gown": "S",
+            "dateofreservation": "August 1, 2004",
+            "status": "Borrowed",
+            "id": 4
+        },
+        {
+            "studentname": "Joshua Guiritan",
+            "program": "BSCS",
+            "tassel": "Orange",
+            "hood": "Blue",
+            "gown": "L",
+            "dateofreservation": "August 1, 2004",
+            "status": "Borrowed",
+            "id": 5
+        }
+    ]
+}
