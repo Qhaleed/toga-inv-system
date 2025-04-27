@@ -30,7 +30,7 @@ function LoginCard() {
 
         setTimeout(() => {
           if (data.role === "admin") {
-            navigate("/admin-home");
+            navigate("/admin-dashboard");
           } else {
             navigate("/student-home");
           }
