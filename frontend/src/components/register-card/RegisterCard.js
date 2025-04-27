@@ -37,6 +37,16 @@ export default function RegisterForm() {
       title="Register and validate your account"
       onSubmit={handleSubmit}
     >
+      {/* STEP 1 */}
+      <div>
+        <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
+          STEP 1:
+        </span>
+        <span className="text-white-50 text-lg sm:text-xl font-semibold">
+          Register your account
+        </span>
+      </div>
+
       {/* Email */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
         <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
@@ -106,83 +116,90 @@ export default function RegisterForm() {
         </span>
       </div>
 
-      {/* First Name */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
-        <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
-          First Name
-        </label>
-        <input
-          type="text"
-          name="firstName"
-          placeholder="Juan Antonio"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
-          value={formData.firstName}
-          onChange={handleChange}
-        />
+      {/* STEP 2 */}
+      <div>
+        <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
+          STEP 2:
+        </span>
+        <span className="text-white-400 text-lg sm:text-xl font-semibold">
+          Input Student Details
+        </span>
+        <div className="grid sm:grid-cols-[2fr_1fr] gap-4 mt-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+            <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
+              First Name
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="Juan Antonio"
+              className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+                        text-white placeholder-gray-300 placeholder:font-manjari
+                        focus:outline-none 
+                        focus:border-primary
+                        transition duration-200"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+            <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
+              M.I.
+            </label>
+            <input
+              type="text"
+              name="middleInitial"
+              placeholder="A."
+              className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+                        text-white placeholder-gray-300 placeholder:font-manjari
+                        focus:outline-none 
+                        focus:border-primary
+                        transition duration-200"
+              value={formData.middleInitial}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mt-4">
+          <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
+            Surname
+          </label>
+          <input
+            type="text"
+            name="surname"
+            placeholder="Dela Cruz"
+            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+                      text-white placeholder-gray-300 placeholder:font-manjari
+                      focus:outline-none 
+                      focus:border-primary
+                      transition duration-200"
+            value={formData.surname}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mt-4">
+          <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
+            ID Number
+          </label>
+          <input
+            type="text"
+            name="idNumber"
+            placeholder="123456"
+            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+                      text-white placeholder-gray-300 placeholder:font-manjari
+                      focus:outline-none 
+                      focus:border-primary
+                      transition duration-200"
+            value={formData.idNumber}
+            onChange={handleChange}
+          />
+        </div>
       </div>
 
-      {/* Middle Initial */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
-        <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
-          M.I.
-        </label>
-        <input
-          type="text"
-          name="middleInitial"
-          placeholder="A."
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
-          value={formData.middleInitial}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* Surname */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
-        <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
-          Surname
-        </label>
-        <input
-          type="text"
-          name="surname"
-          placeholder="Dela Cruz"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
-          value={formData.surname}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* ID Number */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
-        <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
-          ID Number
-        </label>
-        <input
-          type="text"
-          name="idNumber"
-          placeholder="123456"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
-          value={formData.idNumber}
-          onChange={handleChange}
-        />
-      </div>
-
-      {/* Upload ID Image */}
+      {/* STEP 3 */}
       <div>
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
           STEP 3:
@@ -211,7 +228,7 @@ export default function RegisterForm() {
               </p>
               <button
                 type="button"
-                className="font-manjari font-bold mt-2 px-4 py-1 bg-white text-black rounded-full text-sm transition hover:bg-gray-200 hover:scale-105"
+                className="font-manjari font-bold mt-2 px-4 py-1 bg-white text-black rounded-full text-sm transition hover:bg-gray-200"
               >
                 Browse Computer
               </button>
