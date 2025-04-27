@@ -16,7 +16,7 @@ function LoginCard() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5001/login", {
+      const response = await fetch("/auth/login", { //change proxy in package.json to 5001 if mac (default is 5000)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -43,6 +43,7 @@ function LoginCard() {
     } catch (err) {
       setError("An error occurred. Please try again.");
       setLoading(false);
+
     }
   };
 
