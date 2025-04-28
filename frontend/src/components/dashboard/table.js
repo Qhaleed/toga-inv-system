@@ -2,7 +2,7 @@ import Rows from "./rows";
 
 const Table = () => {
     return(
-    <div className="h-[590px] mt-2 w-full border border-white flex justify-center overflow-hidden">  {/*Table Container for Positioning*/}
+    <div className="h-[590px] mt-2 w-full border border-white flex justify-center overflow-auto">  {/*Table Container for Positioning*/}
         <div class="h-full w-[96%] border border-white"> 
             <table className="table-auto border w-full border-gray-400"> {/*Dashboard Table*/}
                 <thead>
