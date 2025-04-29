@@ -201,9 +201,9 @@ export default function RegisterForm() {
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-8">
           <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
-            Title
+            Course
           </label>
           <select
             name="program"
