@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import UploadIcon from "../../assets/images/cloudupload.png";
-import FormWrapper from "../common/FormWrapper"; // Import the reusable wrapper
+import FormWrapper from "../common/FormWrapper";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,15 +15,33 @@ export default function RegisterForm() {
     surname: "",
     middleInitial: "",
     idNumber: "",
-    idImage: null,
+    idImage: [],
+    program: "",
   });
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files || e.dataTransfer.files);
+    const newImages = files.filter((file) => file.type.startsWith("image/"));
+
+    setFormData((prev) => ({
+      ...prev,
+      idImage: [...prev.idImage, ...newImages],
+    }));
+  };
+
+  const handleRemoveImage = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      idImage: prev.idImage.filter((_, index) => index !== indexToRemove),
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -92,7 +110,7 @@ export default function RegisterForm() {
       </div>
 
       {/* Confirm Password */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 relative">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 relative mb-6">
         <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
           Confirm Password
         </label>
@@ -117,52 +135,56 @@ export default function RegisterForm() {
       </div>
 
       {/* STEP 2 */}
-      <div>
+      <div className="mt-4">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
           STEP 2:
         </span>
-        <span className="text-white-400 text-lg sm:text-xl font-semibold">
+        <span className="text-white-400 text-lg sm:text-xl font-semibold mr-1">
           Input Student Details
         </span>
-        <div className="grid sm:grid-cols-[2fr_1fr] gap-4 mt-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
-            <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
-              First Name
-            </label>
-            <input
-              type="text"
-              name="firstName"
-              placeholder="Juan Antonio"
-              className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+      </div>
+      <div className="grid sm:grid-cols-[2fr_1fr] gap-4 mt-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+          {/* First Name */}
+          <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
+            First Name
+          </label>
+          <input
+            type="text"
+            name="firstName"
+            placeholder="Juan Antonio"
+            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
                         text-white placeholder-gray-300 placeholder:font-manjari
                         focus:outline-none 
                         focus:border-primary
                         transition duration-200"
-              value={formData.firstName}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
-            <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
-              M.I.
-            </label>
-            <input
-              type="text"
-              name="middleInitial"
-              placeholder="A."
-              className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                        text-white placeholder-gray-300 placeholder:font-manjari
-                        focus:outline-none 
-                        focus:border-primary
-                        transition duration-200"
-              value={formData.middleInitial}
-              onChange={handleChange}
-            />
-          </div>
+            value={formData.firstName}
+            onChange={handleChange}
+          />
         </div>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mt-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+          <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
+            M.I.
+          </label>
+          <input
+            type="text"
+            name="middleInitial"
+            placeholder="A."
+            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+                        text-white placeholder-gray-300 placeholder:font-manjari
+                        focus:outline-none 
+                        focus:border-primary
+                        transition duration-200"
+            value={formData.middleInitial}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-[2fr_1fr] gap-4 mt-4">
+        {/* Surname */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
           <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
             Surname
           </label>
@@ -171,16 +193,41 @@ export default function RegisterForm() {
             name="surname"
             placeholder="Dela Cruz"
             className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                      text-white placeholder-gray-300 placeholder:font-manjari
-                      focus:outline-none 
-                      focus:border-primary
-                      transition duration-200"
+                        text-white placeholder-gray-300 placeholder:font-manjari
+                        focus:outline-none 
+                        focus:border-primary
+                        transition duration-200"
             value={formData.surname}
             onChange={handleChange}
           />
         </div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+          <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
+            Title
+          </label>
+          <select
+            name="program"
+            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+                        text-white placeholder-gray-300 placeholder:font-manjari
+                        focus:outline-none 
+                        focus:border-primary
+                        transition duration-200"
+            value={formData.title}
+            onChange={handleChange}
+          >
+            <option value="" disabled>
+              Select
+            </option>
+            <option value="*">Bruh</option>
+            <option value="*">Pluh</option>
+            <option value="*">Guh</option>
+          </select>
+        </div>
+      </div>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mt-4">
+      <div className="grid sm:grid-cols-[2fr_1fr] gap-4 mt-4">
+        {/* ID Number */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
           <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
             ID Number
           </label>
@@ -189,10 +236,10 @@ export default function RegisterForm() {
             name="idNumber"
             placeholder="123456"
             className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                      text-white placeholder-gray-300 placeholder:font-manjari
-                      focus:outline-none 
-                      focus:border-primary
-                      transition duration-200"
+                        text-white placeholder-gray-300 placeholder:font-manjari
+                        focus:outline-none 
+                        focus:border-primary
+                        transition duration-200"
             value={formData.idNumber}
             onChange={handleChange}
           />
@@ -200,48 +247,71 @@ export default function RegisterForm() {
       </div>
 
       {/* STEP 3 */}
-      <div>
+      <div className="mt-4">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
           STEP 3:
         </span>
-        <span className="text-white-400 text-lg sm:text-xl font-semibold">
+        <span className="text-white-400 text-lg sm:text-xl font-semibold mr-1">
           Upload ID Image
         </span>
-        <div className="mt-3 w-full group p-4 sm:p-6 text-center cursor-pointer bg-gradient-to-b from-[#112047] to-[#2A4D89] rounded-[30px] transition-all duration-300 ease-in-out hover:opacity-100">
-          <div className="border-2 border-dashed border-white border-opacity-50 rounded-[20px] p-4 sm:p-6">
-            <input
-              type="file"
-              name="idImage"
-              accept="image/*"
-              className="hidden"
-              id="upload"
-              onChange={handleChange}
+      </div>
+      <div
+        className="mt-3 w-full group p-4 sm:p-6 text-center cursor-pointer bg-gradient-to-b from-[#112047] to-[#2A4D89] rounded-[30px] transition-all duration-300 ease-in-out hover:opacity-100"
+        onDrop={handleImageChange}
+        onDragOver={(e) => e.preventDefault()}
+      >
+        <div className="border-2 border-dashed border-white border-opacity-50 rounded-[20px] p-4 sm:p-6">
+          <input
+            type="file"
+            name="idImage"
+            accept="image/*"
+            className="hidden"
+            id="upload"
+            multiple
+            onChange={handleImageChange}
+          />
+          <label htmlFor="upload" className="cursor-pointer">
+            <img
+              src={UploadIcon}
+              alt="Upload"
+              className="mx-auto transition-transform ease-in-out duration-300 group-hover:scale-110"
             />
-            <label htmlFor="upload">
-              <img
-                src={UploadIcon}
-                alt="Upload"
-                className="mx-auto transition-transform ease-in-out duration-300 group-hover:scale-110"
-              />
-              <p className="text-sm mt-2 font-manjari text-white-400">
-                Drag your image here or upload from computer
-              </p>
-              <button
-                type="button"
-                className="font-manjari font-bold mt-2 px-4 py-1 bg-white text-black rounded-full text-sm transition hover:bg-gray-200"
-              >
-                Browse Computer
-              </button>
-            </label>
-            {formData.idImage && (
-              <p className="mt-2 text-xs text-green-300">
-                Uploaded: {formData.idImage.name}
-              </p>
-            )}
-          </div>
+            <p className="text-sm mt-2 font-manjari text-white-400">
+              Drag your images here or upload from computer
+            </p>
+            <button
+              type="button"
+              className="font-manjari font-bold mt-2 px-4 pt-1 bg-white text-black rounded-full text-sm transition hover:bg-gray-300"
+              onClick={() => document.getElementById("upload").click()}
+            >
+              Browse Computer
+            </button>
+          </label>
+
+          {formData.idImage.length > 0 && (
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {formData.idImage.map((image, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`Preview ${index + 1}`}
+                    className="w-full h-24 object-cover rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute top-1 right-1 bg-black bg-opacity-60 text-white text-xs px-1 rounded hover:bg-opacity-90 transition"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Submit Button */}
       <button
         type="submit"
         className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white"
