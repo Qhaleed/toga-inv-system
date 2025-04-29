@@ -16,7 +16,8 @@ function LoginCard() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/auth/login", { //change proxy in package.json to 5001 if mac (default is 5000)
+      const response = await fetch("/auth/login", {
+        //change proxy in package.json to 5001 if mac (default is 5000)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -43,7 +44,6 @@ function LoginCard() {
     } catch (err) {
       setError("An error occurred. Please try again.");
       setLoading(false);
-
     }
   };
 
@@ -114,11 +114,19 @@ function LoginCard() {
 
       {/* Remember Me and Forgot Password */}
       <div className="flex items-center justify-between text-sm mb-6">
-        <label className="flex items-center font-manjari gap-3">
-          <input type="checkbox" className="select-none accent-indigo-500" />
-          Remember me
+        {/* Remember Me */}
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            className="w-4 h-4 accent-[#2A4D89] border-2 border-gray-300 rounded"
+          />
+          <span className="text-white font-manjari select-none pt-1">
+            Remember me
+          </span>
         </label>
-        <a href="/" className="font-manjari text-white hover:underline">
+
+        {/* Forgot Password */}
+        <a href="/" className="font-manjari text-white pt-1 hover:underline">
           Forgot password?
         </a>
       </div>

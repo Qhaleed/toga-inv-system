@@ -7,7 +7,7 @@ export default function FormWrapper({ title, children, onSubmit }) {
       <div className="w-full max-w-5xl bg-white bg-opacity-50 backdrop-blur-lg rounded-2xl p-6 sm:p-10 shadow-2xl ring-1 ring-white/10">
         <div className="grid grid-cols-1 md:grid-cols-[0.8fr_2.2fr] gap-6">
           {/* Titles and All (Left) */}
-          <div className="space-y-4 text-white border-r-2 border-white border-opacity-50 pr-4 sm:pr-6">
+          <div className="space-y-4 text-white border-b-2 md:border-b-0 md:border-r-2 border-white border-opacity-50 pb-4 md:pb-0 pr-0 md:pr-4 sm:pr-6">
             <h2 className="text-2xl sm:text-3xl text-primary font-figtree font-bold leading-snug">
               {title}
             </h2>
