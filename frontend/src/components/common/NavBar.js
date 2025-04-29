@@ -1,12 +1,12 @@
-import {ReactComponent as Home} from "../../assets/icons/purple-house.svg";
-import {ReactComponent as Inventory} from "../../assets/icons/inventory-icon.svg";
-import {ReactComponent as Search} from "../../assets/icons/searchIcon.svg";
+import {ReactComponent as Home} from "../../assets/icons/gray-house.svg";
+import {ReactComponent as Inventory} from "../../assets/icons/gray-inventory.svg";
+import {ReactComponent as Search} from "../../assets/icons/blue-search.svg";
 import {ReactComponent as Application} from "../../assets/icons/application.svg";
 import {ReactComponent as PurpleGrid} from "../../assets/icons/purple-grid.svg";
 import {ReactComponent as GrayRows} from "../../assets/icons/gray-rows.svg";
 import {ReactComponent as PurpleInventory} from "../../assets/icons/purple-inventory.svg";
 import {ReactComponent as GrayHouse} from "../../assets/icons/gray-house.svg";
-import {ReactComponent as Statistic} from "../../assets/icons/white-statistics.svg";
+import {ReactComponent as Statistic} from "../../assets/icons/gray-statistics.svg";
 import {ReactComponent as PurpleStatistic} from "../../assets/icons/purple-statistics.svg";
 import {ReactComponent as PurpleApplication} from "../../assets/icons/purple-searchcheck.svg";
 import {useState} from "react";
@@ -27,8 +27,6 @@ import {useState} from "react";
 
 
 */
-
-
 
 const Navbar = () => {
 
@@ -66,10 +64,10 @@ const Navbar = () => {
         setevaluationToggle(true);
     }
 
-    const dashboard = dashboardToggle ? "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex ml-6 justify-center mr-6 items-center w-36 h-7 text-white  rounded-xl transition-all ease-out duration-500" : "hover:scale-110 border border-white mr-6 flex ml-6 justify-center items-center w-36 h-7 text-white  rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500";
-    const inventory = !inventoryToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 mr-6 text-white rounded-xl opacity-40 hover:opacity-100  transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border mr-6 border-darkpurple/70 flex justify-center items-center w-36  h-7 text-white rounded-xl transition-all ease-out duration-500";
-    const pending = !pendingToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white rounded-xl mr-6 opacity-40 hover:opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border mr-6 border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white  rounded-xl hover:opacity-100 transition-all ease-out duration-500";
-    const evaluation = !evaluationToggle ? "hover:scale-110 border border-white flex justify-center items-center w-36 h-7 text-white rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white rounded-xl hover:opacity-100 transition-all ease-out duration-500";
+    const dashboard = dashboardToggle ? "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex ml-6 justify-center mr-6 items-center w-36 h-7 text-white rounded-xl transition-all ease-out duration-500" : "hover:scale-110 border border-white mr-6 flex ml-6 justify-center items-center w-36 h-7 text-white  rounded-xl opacity-40 hover:opacity-100 transition-all ease-out duration-500";
+    const inventory = !inventoryToggle ? "hover:scale-110 border border-gray-500 flex justify-center items-center w-36 h-7 mr-6 text-gray-500 rounded-xl opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border mr-6 border-darkpurple/70 flex justify-center items-center w-36  h-7 text-white rounded-xl transition-all ease-out duration-500";
+    const pending = !pendingToggle ? "hover:scale-110 border border-gray-500 flex justify-center items-center w-36 h-7 text-gray-500 rounded-xl mr-6 opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border mr-6 border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white  rounded-xl hover:opacity-100 transition-all ease-out duration-500";
+    const evaluation = !evaluationToggle ? "hover:scale-110 border border-gray-500 flex justify-center items-center w-36 h-7 text-gray-500 rounded-xl opacity-100 transition-all ease-out duration-500" : "hover:scale-110 bg-darkpurple/70 border border-darkpurple/70 flex justify-center items-center w-36 h-7 text-white rounded-xl hover:opacity-100 transition-all ease-out duration-500";
 
     const houseiconToggle = dashboardToggle ? <Home className="w-4"></Home> : <GrayHouse className="w-4"></GrayHouse>;
     const inventoryiconToggle = !inventoryToggle ? <Inventory className="w-4"></Inventory> : <PurpleInventory className="w-4"></PurpleInventory>;
@@ -78,7 +76,7 @@ const Navbar = () => {
 
     return(
         
-            <div className="h-32 border border-white"> {/* Top Navigation */}
+            <div className="h-32"> {/* Top Navigation */}
                 <div className="h-1/2 flex justify-start items-center "> {/* search Navigation */}
                     <button onClick={switchDashboard} className={dashboard}>
                         <span>{houseiconToggle}</span>
@@ -102,7 +100,7 @@ const Navbar = () => {
                         <div className="relative">
                             <Search className="absolute w-8 top-2.5 left-2.5"></Search>
                         </div>
-                        <input className="bg-transparent w-full px-10 py-2 text-white rounded-xl border-2 border-gray-300 hover:border-gray-500 focus:border-purple outline-none transform-all ease-out duration-500" type="text" placeholder="Search student..."/>
+                        <input className="bg-[#E2E2E2] shadow-inner shadow-gray-500 w-full px-10 py-2 text-[#02327B] rounded-xl outline-none transform-all ease-out duration-500 placeholder:text-[#02327B]" type="text" placeholder="Search student..."/>
                     </div>
                     <div className="hover:scale-110 h-10 w-20 bg-darkpurple/70 rounded-xl flex justify-around items-center overflow-hidden transform-all ease-out duration-500 mr-5">
                         <div className="h-10 w-10 flex justify-center items-center rounded-s-xl">
@@ -112,7 +110,7 @@ const Navbar = () => {
                             <PurpleGrid className="w-9 p-1"></PurpleGrid>
                         </div>
                     </div>
-                    <button className="hover:scale-105 h-10 w-40 bg-purple rounded-xl text-white transform-all ease-out duration-500">Modify Table</button>
+                    <button className="hover:scale-105 h-10 w-40 bg-[#0C7E48] rounded-xl text-white transform-all ease-out duration-500">Modify Table</button>
                 </div>
             </div>
         

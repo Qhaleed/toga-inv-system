@@ -1,10 +1,11 @@
-import Rows from "./rows";
+import Rows from "./Rows";
+import "./Table.css";
 
 const Table = () => {
     return(
-    <div className="h-[590px] mt-2 w-full border border-white flex justify-center overflow-hidden">  {/*Table Container for Positioning*/}
-        <div class="h-full w-[96%] border border-white"> 
-            <table className="table-auto border w-full border-gray-400"> {/*Dashboard Table*/}
+    <div className="h-[590px] mt-4 w-full flex justify-center">  {/*Table Container for Positioning*/}
+        <div class="h-full w-[96%] overflow-auto scroll-style"> 
+            <table className="table-auto w-full border border-gray-400 "> {/*Dashboard Table*/}
                 <thead>
                     <tr className="bg-[#02327B] text-sm text-white h-10"> {/*Table Headers*/} 
                         <th>
