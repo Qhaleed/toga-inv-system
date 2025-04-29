@@ -21,7 +21,7 @@ const Rows = () => {
     },[]);
 
     const SwitchMode = (id) => { {/*switching function*/}
-        setDashboard((db) => db.map((item) =>
+        setDashboard(dashboard.map((item) =>
         item.id === id ? {...item, eye: item.eye === "block" ? "hidden" : "block", trash: item.trash === "hidden" ? "block" : "hidden"} : item
         )
       );
@@ -45,7 +45,7 @@ const Rows = () => {
                         <td>
                         <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                                 <h3 className={`text-black ${db.eye}`}>{db.tassel}</h3>
-                                <select className={`bg-[#0C7E48] text-white w-16 rounded-full text-center h-6 ${db.trash}`}>
+                                <select className={`bg-[#0C7E48] text-white w-16 rounded-full text-center ${db.trash}`}>
                                     <option className="text-center" disabled selected hidden>{db.tassel}</option> {/*TASSEL*/}
                                     <option className="text-center">Blue</option>
                                     <option className="text-center">Maroon</option>
@@ -58,7 +58,7 @@ const Rows = () => {
                         <td>
                             <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                                 <h3 className={`text-black ${db.eye}`}>{db.hood}</h3>
-                                <select className={`bg-[#0C7E48] text-white w-16 rounded-full text-center h-6 ${db.trash}`}>
+                                <select className={`bg-[#0C7E48] text-white w-16 rounded-full text-center ${db.trash}`}>
                                     <option className="text-center" disabled selected hidden>{db.hood}</option> {/*HOOD*/}
                                     <option className="text-center">Blue</option>
                                     <option className="text-center">Maroon</option>
@@ -71,7 +71,7 @@ const Rows = () => {
                         <td>
                             <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                                 <h3 className={`text-black" ${db.eye}`}>{db.gown}</h3>
-                                <select className={`bg-[#0C7E48] text-white w-16 rounded-full text-center h-6 ${db.trash}`}> {/*GOWN*/}
+                                <select className={`bg-[#0C7E48] text-white w-16 rounded-full text-center ${db.trash}`}> {/*GOWN*/}
                                     <option className="text-center" disabled selected hidden>{db.gown}</option>
                                     <option className="text-center">XS</option>
                                     <option className="text-center">S</option>
@@ -91,7 +91,7 @@ const Rows = () => {
                         <td>
                             <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                                 <h3 className={`text-black ${db.eye}`}>{db.status}</h3>
-                                <select className={`bg-[#0C7E48] text-white w-28 rounded-full text-center h-6 ${db.trash}`}> {/*STATUS*/}
+                                <select className={`bg-[#0C7E48] text-white w-28 rounded-full text-center ${db.trash}`}> {/*STATUS*/}
                                     <option className="text-center" disabled selected hidden>{db.status}</option>
                                     <option className="text-center">Borrowed</option>
                                     <option className="text-center">Not Borrowed</option>
@@ -121,7 +121,7 @@ const Rows = () => {
                         <td>
                             <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                                 <h3 className={`text-black ${db.eye}`}>{db.tassel}</h3>
-                                <select className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center h-6 ${db.trash}`}> {/*TASSEL*/}
+                                <select className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center ${db.trash}`}> {/*TASSEL*/}
                                     <option className="text-center" disabled selected hidden>{db.tassel}</option>
                                     <option className="text-center">Blue</option>
                                     <option className="text-center">Maroon</option>
@@ -134,7 +134,7 @@ const Rows = () => {
                         <td>
                             <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                                 <h3 className={`text-black ${db.eye}`}>{db.hood}</h3>
-                                <select className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center h-6 ${db.trash}`}>
+                                <select className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center ${db.trash}`}>
                                     <option className="text-center" disabled selected hidden>{db.hood}</option> {/*HOOD*/}
                                     <option className="text-center">Blue</option>
                                     <option className="text-center">Maroon</option>
@@ -147,7 +147,7 @@ const Rows = () => {
                         <td>
                         <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                                 <h3 className={`text-black ${db.eye}`}>{db.gown}</h3>
-                                <select className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center h-6 ${db.trash}`}>
+                                <select className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center ${db.trash}`}>
                                     <option className="text-center" disabled selected hidden>{db.gown}</option> {/*GOWN*/}
                                     <option className="text-center">XS</option>
                                     <option className="text-center">S</option>
@@ -167,7 +167,7 @@ const Rows = () => {
                         <td>
                             <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center"> {/*STATUS*/}
                                 <h3 className={`text-black ${db.eye}`}>{db.status}</h3>
-                                <select className={`bg-[#D2D2D2] text-black border border-black w-28 rounded-full text-center h-6 ${db.trash}`}>
+                                <select className={`bg-[#D2D2D2] text-black border border-black w-28 rounded-full text-center ${db.trash}`}>
                                     <option className="text-center" disabled selected hidden>{db.status}</option>
                                     <option className="text-center">Borrowed</option>
                                     <option className="text-center">Not Borrowed</option>
