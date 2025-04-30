@@ -10,24 +10,15 @@ const AdminDashboardCard = () => {
   return (
     <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
       {/* ETo pinaka root Container niggas*/}
-      <div className="h-screen fixed w-screen" style={{ display: "flex" }}>
+      <div className="h-screen fixed w-screen grid-cols-4" style={{ display: "flex" }}>
         <SideBar />
-        <div className="flex-1 ml-[20vw] h-full">
+        <div className="col-span-3 border border-red-500 h-full">
           {/* Right Container */}
-          <div
-            className="w-full flex flex-col items-center"
-            style={{ maxWidth: "98%" }}
-          >
-            <div
-              className="w-full"
-              style={{ height: "60px", marginBottom: "8px" }}
-            >
+          <div className="w-full flex flex-col items-center" style={{ maxWidth: "98%" }}>
+            <div className="w-full" style={{ height: "60px", marginBottom: "8px" }}>
               <NavBar isGrid={isGrid} setIsGrid={setIsGrid} />
             </div>
-            <div
-              className="flex justify-center items-start w-full"
-              style={{ height: "600px" }}
-            >
+            <div className="flex justify-center items-start w-full" style={{ height: "600px" }}>
               <Table isGrid={isGrid} /> {/*Dashboard Table*/}
             </div>
           </div>
