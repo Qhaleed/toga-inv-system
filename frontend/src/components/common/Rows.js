@@ -42,7 +42,7 @@ const Rows = ({ isGrid }) => {
           style={{ maxHeight: "500px", paddingBottom: "48px" }} // para sa grid view to
         >
           <div className="grid grid-cols-3 gap-6 p-4">
-            {dashboard.slice(0, 6).map((db, idx) => (
+            {dashboard.map((db, idx) => (
               <div
                 key={db.id}
                 className="bg-white rounded-lg shadow p-4 flex flex-col items-center border border-gray-200 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:shadow-xl opacity-0 animate-fade-in"
