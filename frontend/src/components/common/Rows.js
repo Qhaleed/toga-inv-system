@@ -10,14 +10,14 @@ const Rows = ({ isGrid }) => {
   const [dashboard, setDashboard] = useState([]);
 
   useEffect(() => {
-    //dito gakuha ng file sa JSOn
+    // kuha data sa JSON
     fetch("http://localhost:8000/dashboard")
       .then((res) => res.json())
       .then((data) => setDashboard(data));
   }, []);
 
   const SwitchMode = (id) => {
-    // switching function to depende sa click
+    // switch edit mode
     setDashboard(
       dashboard.map((item) =>
         item.id === id
@@ -32,14 +32,14 @@ const Rows = ({ isGrid }) => {
   };
 
   if (isGrid) {
-    // bale function ng grid view na to sia
+    // grid view to
 
     return (
       <div className="flex flex-col h-full animate-fade-in">
-        {/* wala na fixed header dto */}
+        {/* wala header dito */}
         <div
           className="flex-1 overflow-y-auto min-h-0"
-          style={{ maxHeight: "500px", paddingBottom: "48px" }} // para sa grid view to
+          style={{ maxHeight: "500px", paddingBottom: "48px" }} // para sa grid
         >
           <div className="grid grid-cols-3 gap-6 p-4">
             {dashboard.map((db, idx) => (
@@ -85,7 +85,7 @@ const Rows = ({ isGrid }) => {
             ))}
           </div>
         </div>
-        {/* nmigga  */}
+        {/* action btn sa baba */}
         <div className="p-4 flex justify-center">
           <button className="bg-blue-600 text-white px-6 py-2 rounded shadow transition-transform duration-300 hover:scale-105 hover:bg-blue-800">
             Action Button
@@ -94,36 +94,39 @@ const Rows = ({ isGrid }) => {
       </div>
     );
   } else {
-    // Animate table in when going back
+    // table view to
     return (
       <tbody className="animate-fade-in">
-        {/* Make the table header sticky */}
-        {/* This should be done in Table.js, but you can add the class here for thead */}
+        {/* sticky header sa Table.js */}
         {dashboard.map((db) =>
           db.id % 2 !== 0 ? (
             <tr className="h-12 bg-[#BAB4B1] text-xs font-normal" key={db.id}>
-              {" "}
-              {/*Condition for different colored rows*/} {/*ODD COLORED ROWS*/}
+              {/* odd row color */}
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600">
-                  <h3 className="ml-4">{db.studentname}</h3> {/*STUDENT NAME*/}
+                  <h3 className="ml-4">{db.studentname}</h3> {/*pangalan*/}
                 </div>
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  <h3 className="text-black">{db.program}</h3> {/*PROGRAM*/}
+                  <h3 className="text-black">{db.program}</h3> {/*program*/}
                 </div>
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className={`text-black ${db.eye}`}>{db.tassel}</h3>
                   <select
-                    className={`bg-[#0C7E48] text-white w-16 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#0C7E48] text-white w-16 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
                     <option className="text-center" disabled selected hidden>
                       {db.tassel}
                     </option>{" "}
-                    {/*TASSEL*/}
+                    {/*tassel*/}
                     <option className="text-center">Blue</option>
                     <option className="text-center">Maroon</option>
                     <option className="text-center">Orange</option>
@@ -136,12 +139,17 @@ const Rows = ({ isGrid }) => {
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className={`text-black ${db.eye}`}>{db.hood}</h3>
                   <select
-                    className={`bg-[#0C7E48] text-white w-16 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#0C7E48] text-white w-16 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
                     <option className="text-center" disabled selected hidden>
                       {db.hood}
                     </option>{" "}
-                    {/*HOOD*/}
+                    {/*hood*/}
                     <option className="text-center">Blue</option>
                     <option className="text-center">Maroon</option>
                     <option className="text-center">Orange</option>
@@ -154,13 +162,17 @@ const Rows = ({ isGrid }) => {
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className={`text-black" ${db.eye}`}>{db.gown}</h3>
                   <select
-                    className={`bg-[#0C7E48] text-white w-16 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#0C7E48] text-white w-16 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
-                    {" "}
-                    {/*GOWN*/}
                     <option className="text-center" disabled selected hidden>
                       {db.gown}
-                    </option>
+                    </option>{" "}
+                    {/*gown*/}
                     <option className="text-center">XS</option>
                     <option className="text-center">S</option>
                     <option className="text-center">M</option>
@@ -173,20 +185,24 @@ const Rows = ({ isGrid }) => {
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  <h3>{db.dateofreservation}</h3> {/*DATE OF RESERVATION*/}
+                  <h3>{db.dateofreservation}</h3> {/*date*/}
                 </div>
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className={`text-black ${db.eye}`}>{db.status}</h3>
                   <select
-                    className={`bg-[#0C7E48] text-white w-28 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#0C7E48] text-white w-28 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
-                    {" "}
-                    {/*STATUS*/}
                     <option className="text-center" disabled selected hidden>
                       {db.status}
-                    </option>
+                    </option>{" "}
+                    {/*status*/}
                     <option className="text-center">Borrowed</option>
                     <option className="text-center">Not Borrowed</option>
                   </select>
@@ -195,18 +211,18 @@ const Rows = ({ isGrid }) => {
               <td>
                 <div className="h-full w-full py-2 flex justify-evenly">
                   <button
-                    className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md ${db.eye}`}
+                    className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700 ${db.eye}`}
                   >
                     <EyeIcon className="w-5" />
                   </button>{" "}
-                  {/*BUTTONS FOR CUSTOMIZATION*/}
+                  {/*buttons*/}
                   <button
-                    className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md ${db.trash}`}
+                    className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700 ${db.trash}`}
                   >
                     <Trash className="w-4" />
                   </button>
                   <button
-                    className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md"
+                    className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700"
                     onClick={() => SwitchMode(db.id)}
                   >
                     <Table className="w-5" />
@@ -216,28 +232,33 @@ const Rows = ({ isGrid }) => {
             </tr>
           ) : (
             <tr className="h-12 bg-[#E9E9E9] text-xs font-normal" key={db.id}>
+              {/* even row color */}
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600">
-                  <h3 className="ml-4">{db.studentname}</h3> {/*STUDENT NAME*/}
+                  <h3 className="ml-4">{db.studentname}</h3> {/*pangalan*/}
                 </div>
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className="text-black">{db.program}</h3>
-                  {/*PROGRAM*/}
+                  {/*program*/}
                 </div>
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className={`text-black ${db.eye}`}>{db.tassel}</h3>
                   <select
-                    className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
-                    {" "}
-                    {/*TASSEL*/}
                     <option className="text-center" disabled selected hidden>
                       {db.tassel}
-                    </option>
+                    </option>{" "}
+                    {/*tassel*/}
                     <option className="text-center">Blue</option>
                     <option className="text-center">Maroon</option>
                     <option className="text-center">Orange</option>
@@ -250,12 +271,17 @@ const Rows = ({ isGrid }) => {
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className={`text-black ${db.eye}`}>{db.hood}</h3>
                   <select
-                    className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
                     <option className="text-center" disabled selected hidden>
                       {db.hood}
                     </option>{" "}
-                    {/*HOOD*/}
+                    {/*hood*/}
                     <option className="text-center">Blue</option>
                     <option className="text-center">Maroon</option>
                     <option className="text-center">Orange</option>
@@ -268,12 +294,17 @@ const Rows = ({ isGrid }) => {
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
                   <h3 className={`text-black ${db.eye}`}>{db.gown}</h3>
                   <select
-                    className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#D2D2D2] text-black border border-black w-16 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
                     <option className="text-center" disabled selected hidden>
                       {db.gown}
                     </option>{" "}
-                    {/*GOWN*/}
+                    {/*gown*/}
                     <option className="text-center">XS</option>
                     <option className="text-center">S</option>
                     <option className="text-center">M</option>
@@ -286,22 +317,25 @@ const Rows = ({ isGrid }) => {
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {" "}
-                  {/*DATE OF RESERVATION*/}
                   <h3>{db.dateofreservation}</h3>
+                  {/*date*/}
                 </div>
               </td>
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {" "}
-                  {/*STATUS*/}
                   <h3 className={`text-black ${db.eye}`}>{db.status}</h3>
                   <select
-                    className={`bg-[#D2D2D2] text-black border border-black w-28 rounded-full text-center ${db.trash}`}
+                    className={`bg-[#D2D2D2] text-black border border-black w-28 rounded-full text-center transition-all duration-200 ${db.trash}`}
+                    style={{
+                      position: db.trash === "hidden" ? "absolute" : "static",
+                      opacity: db.trash === "hidden" ? 0 : 1,
+                      pointerEvents: db.trash === "hidden" ? "none" : "auto",
+                    }}
                   >
                     <option className="text-center" disabled selected hidden>
                       {db.status}
-                    </option>
+                    </option>{" "}
+                    {/*status*/}
                     <option className="text-center">Borrowed</option>
                     <option className="text-center">Not Borrowed</option>
                   </select>
@@ -314,7 +348,7 @@ const Rows = ({ isGrid }) => {
                   >
                     <BlackEyeIcon className="w-5" />
                   </button>{" "}
-                  {/*BUTTONS FOR CUSTOMIZATION*/}
+                  {/*buttons*/}
                   <button
                     className={`w-7 h-7 bg-[#D2D2D2] text-black border border-black flex justify-center items-center rounded-md ${db.trash}`}
                   >

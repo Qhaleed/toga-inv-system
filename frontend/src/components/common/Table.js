@@ -3,10 +3,10 @@ import "./Table.css";
 
 const Table = ({ isGrid }) => {
   return (
-    <div className="h-[590px] mt-4 w-full flex justify-center">
+    <div className="h-[590px] mt-4 w-[98%] flex justify-center ml-[5px]">
       {" "}
       {/*Table Container for Positioning*/}
-      <div className="h-full w-[96%] overflow-auto scroll-style">
+      <div className="h-full w-full max-w-[98%] overflow-auto scroll-style">
         {isGrid ? (
           // Grid mode: 3 columns, 2 rows
           <Rows isGrid={true} />

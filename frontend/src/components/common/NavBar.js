@@ -108,7 +108,7 @@ const Navbar = ({ isGrid, setIsGrid }) => {
   );
 
   return (
-    <div className="h-32">
+    <div className="h-32 ml-[5px]">
       {/* Top nav */}
       <div className="h-1/2 flex justify-start items-center ">
         {/* Tabs */}
