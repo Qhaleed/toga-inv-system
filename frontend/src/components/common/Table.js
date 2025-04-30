@@ -2,19 +2,36 @@ import Rows from "./Rows";
 import "./Table.css";
 
 const Table = ({ isGrid }) => {
+  // --- HEIGHT CONTROL: Edit this value to adjust the height of the grid/column view ---
+  const mainContentHeight = "80vh"; // <-- EDIT THIS VALUE FOR HEIGHT
+
   return (
-    <div className="h-[78%] mt-10  w-[98%] flex justify-center ml-[30px] ">
-      {/* Parent box for table with black outline, no rounded corners */}
-      <div className="h-full  min-w-[95%] flex items-stretch justify-center">
+    <div className="h-[80vh] mt-10 w-[98%] flex justify-center ml-[30px]">
+      {" "}
+      {/* Set muna ng main container nas naka 80vh*/}
+      {/* Parent box to  */}
+      <div className="h-full min-w-[98%] flex items-stretch justify-center">
         <div
-          className={`h-full w-full ${
-            isGrid ? "" : "outline outline-2 outline-black"
-          } bg-white flex flex-col`}
+          className={`h-full w-full bg-white shadow-md outline-2 ${
+            isGrid
+              ? ""
+              : "outline outline-1.5 outline-gray-950 outline-offset-[-1px] outline-blur-md"
+          } flex flex-col`}
         >
           {isGrid ? (
-            <Rows isGrid={true} hideActionButton={true} />
+            // Grid view content will fill and scroll to the bottom of the parent
+            <div className="flex-1 flex flex-col h-full">
+              {/* The grid will fill the parent (80vh white bg), and content will be 100% of parent */}
+              <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-4 h-full">
+                <Rows isGrid={true} hideActionButton={true} />
+              </div>
+            </div>
           ) : (
-            <div className="relative w-full h-full flex flex-col">
+            <div
+              className="relative w-full flex flex-col"
+              style={{ height: mainContentHeight }}
+            >
+              {/* HEIGHT CONTROL: This is the column/table view container. Adjust height above. */}
               <div className="sticky top-0 z-10 bg-[#02327B] w-full">
                 {" "}
                 {/*Header del table*/}
