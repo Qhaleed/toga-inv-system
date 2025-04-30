@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import UploadIcon from "../../assets/images/cloudupload.png";
 import FormWrapper from "../common/FormWrapper";
@@ -19,6 +19,21 @@ export default function RegisterForm() {
     program: "",
   });
 
+  useEffect(() => {
+    const preventDefaults = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    window.addEventListener("dragover", preventDefaults);
+    window.addEventListener("drop", preventDefaults);
+
+    return () => {
+      window.removeEventListener("dragover", preventDefaults);
+      window.removeEventListener("drop", preventDefaults);
+    };
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -35,6 +50,10 @@ export default function RegisterForm() {
       ...prev,
       idImage: [...prev.idImage, ...newImages],
     }));
+
+    if (e.target.files) {
+      e.target.value = "";
+    }
   };
 
   const handleRemoveImage = (indexToRemove) => {
@@ -54,6 +73,7 @@ export default function RegisterForm() {
     <FormWrapper
       title="Register and validate your account"
       onSubmit={handleSubmit}
+      className="register-card"
     >
       {/* STEP 1 */}
       <div>
@@ -212,7 +232,7 @@ export default function RegisterForm() {
                         focus:outline-none 
                         focus:border-primary
                         transition duration-200"
-            value={formData.title}
+            value={formData.program}
             onChange={handleChange}
           >
             <option value="" disabled>

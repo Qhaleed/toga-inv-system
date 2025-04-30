@@ -52,15 +52,16 @@ function LoginCard() {
       title="Toga Inventory Management System"
       onSubmit={handleSubmit}
     >
+      {/* Form content */}
       {/* Title */}
-      <div className="mb-6">
+      <div className="mb-4">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
           LOGIN TO YOUR ACCOUNT
         </span>
       </div>
 
       {/* Email */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mb-4">
         <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
           Email
         </label>
@@ -79,7 +80,7 @@ function LoginCard() {
       </div>
 
       {/* Password */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 relative mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 relative mb-4">
         <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
           Password
         </label>
@@ -105,7 +106,7 @@ function LoginCard() {
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6">
+        <div className="mb-4">
           <p className="text-red-500 text-center font-manjari font-bold">
             {error}
           </p>
@@ -113,7 +114,7 @@ function LoginCard() {
       )}
 
       {/* Remember Me and Forgot Password */}
-      <div className="flex items-center justify-between text-sm mb-6">
+      <div className="flex items-center justify-between text-sm mb-4">
         {/* Remember Me */}
         <label className="flex items-center gap-2 cursor-pointer">
           <input
@@ -134,13 +135,13 @@ function LoginCard() {
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white mb-6"
+        className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white mb-4"
       >
         Login
       </button>
 
       {/* Register Link */}
-      <div className="flex justify-center items-center text-center h-10 rounded-full font-manjari bg-white hover:bg-gray-300 transition duration-300 mb-6">
+      <div className="flex justify-center items-center text-center h-10 rounded-full font-manjari bg-white hover:bg-gray-300 transition duration-300">
         <a
           href="/register"
           className="text-[#17153B] hover:w-full max-h-fit pt-2 pb-2"
