@@ -22,7 +22,7 @@ F3B51A
 
 const SideBar = () => {
   return (
-    <div className="col-span-1 h-full flex flex-col justify-start items-center bg-[#001C47] w-full max-w-[90%] text-sm">
+    <div className="h-full flex flex-col justify-start items-center bg-[#001C47] min-w-[20%] w-[20vw] max-w-[20vw] text-sm fixed top-0 left-0 z-30">
       <div className="w-full h-24 bg-[#102F5E] bg-center flex justify-between">
         <div className="flex justify-center">
           <div className="h-full ml-2 w-12 flex justify-center items-center ">

@@ -120,12 +120,16 @@
   font-style: italic;
 }
 
-.scroll-bar::-webkit-scrollbar-track {
-  background-color: #0038f1;
-  color: red;
+.scroll-style::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
 }
-.scroll-bar::-webkit-scrollbar-thumb {
-  background: #ff0707;
+.scroll-style::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 8px;
+}
+.scroll-style::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Fade-in animation to okay */

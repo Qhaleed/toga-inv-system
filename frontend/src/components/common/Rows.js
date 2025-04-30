@@ -6,7 +6,7 @@ import { ReactComponent as BlackEyeIcon } from "../../assets/icons/black-eye-ico
 import { ReactComponent as BlackTrash } from "../../assets/icons/black-trash.svg";
 import { useState, useEffect } from "react";
 
-const Rows = ({ isGrid }) => {
+const Rows = ({ isGrid, hideActionButton }) => {
   const [dashboard, setDashboard] = useState([]);
 
   useEffect(() => {
@@ -33,13 +33,12 @@ const Rows = ({ isGrid }) => {
 
   if (isGrid) {
     // grid view to
-
     return (
       <div className="flex flex-col h-full animate-fade-in">
         {/* wala header dito */}
         <div
           className="flex-1 overflow-y-auto min-h-0"
-          style={{ maxHeight: "500px", paddingBottom: "48px" }} // para sa grid
+          style={{ maxHeight: "500px", paddingBottom: "48px" }}
         >
           <div className="grid grid-cols-3 gap-6 p-4">
             {dashboard.map((db, idx) => (
@@ -85,12 +84,14 @@ const Rows = ({ isGrid }) => {
             ))}
           </div>
         </div>
-        {/* action btn sa baba */}
-        <div className="p-4 flex justify-center">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded shadow transition-transform duration-300 hover:scale-105 hover:bg-blue-800">
-            Action Button
-          </button>
-        </div>
+        {/* action btn sa baba, hide if grid floating */}
+        {!hideActionButton && (
+          <div className="p-4 flex justify-center">
+            <button className="bg-blue-600 text-white px-6 py-2 rounded shadow transition-transform duration-300 hover:scale-105 hover:bg-blue-800">
+              Action Button
+            </button>
+          </div>
+        )}
       </div>
     );
   } else {
