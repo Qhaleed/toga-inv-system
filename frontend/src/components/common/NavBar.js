@@ -9,8 +9,8 @@ import { ReactComponent as GrayStatistic } from "../../assets/icons/gray-statist
 import { ReactComponent as GrayApplication } from "../../assets/icons/gray-checkgray.svg";
 import { ReactComponent as GrayRows } from "../../assets/icons/gray-rows.svg";
 import { ReactComponent as GrayGrid } from "../../assets/icons/gray-grid.svg";
-import { ReactComponent as Rows } from "../../assets/icons/purple-rows.svg";
-import { ReactComponent as Grid } from "../../assets/icons/purple-grid.svg";
+import { ReactComponent as Rows } from "../../assets/icons/white-row.svg";
+import { ReactComponent as Grid } from "../../assets/icons/white-grid.svg";
 import { useState } from "react";
 
 /*

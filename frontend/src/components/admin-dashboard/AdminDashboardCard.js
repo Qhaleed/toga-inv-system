@@ -10,7 +10,7 @@ const AdminDashboardCard = () => {
   return (
     <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
       {/* ETo pinaka root Container niggas*/}
-      <div className="h-screen fixed w-screen grid-cols-4" style={{ display: "flex" }}>
+      <div className="h-screen fixed w-screen grid grid-cols-4 border border-red-500">
         <SideBar />
         <div className="col-span-3 border border-red-500 h-full">
           {/* Right Container */}
