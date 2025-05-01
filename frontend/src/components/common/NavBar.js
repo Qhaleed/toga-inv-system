@@ -9,8 +9,8 @@ import { ReactComponent as GrayStatistic } from "../../assets/icons/gray-statist
 import { ReactComponent as GrayApplication } from "../../assets/icons/gray-checkgray.svg";
 import { ReactComponent as GrayRows } from "../../assets/icons/gray-rows.svg";
 import { ReactComponent as GrayGrid } from "../../assets/icons/gray-grid.svg";
-import { ReactComponent as Rows } from "../../assets/icons/purple-rows.svg";
-import { ReactComponent as Grid } from "../../assets/icons/purple-grid.svg";
+import { ReactComponent as Rows } from "../../assets/icons/white-row.svg";
+import { ReactComponent as Grid } from "../../assets/icons/white-grid.svg";
 import { useState } from "react";
 
 /*
@@ -30,9 +30,8 @@ import { useState } from "react";
 
 */
 
-const Navbar = ({ isGrid, setIsGrid }) => {
+const Navbar = ({ isGrid, setIsGrid, modifyTable, setmodifyTable }) => {
   // TOGGLE EFFECTS
-
   const [dashboardToggle, setdashboardToggle] = useState(true);
   const [inventoryToggle, setinventoryToggle] = useState(false);
   const [pendingToggle, setpendingToggle] = useState(false);
@@ -64,6 +63,15 @@ const Navbar = ({ isGrid, setIsGrid }) => {
     setpendingToggle(false);
     setevaluationToggle(true);
   };
+
+  const editallClicked = () => {
+    if(!modifyTable){
+      setmodifyTable(true);
+    }
+    else{
+      setmodifyTable(false);
+    };
+  }
 
   // Removed unused switchSize function since each button now has its own onClick logic
 
@@ -207,7 +215,7 @@ const Navbar = ({ isGrid, setIsGrid }) => {
               {gridIcon}
             </button>
           </div>
-          <button className="hover:scale-105 h-7 w-28 bg-[#0C7E48] rounded-lg text-xs text-white ml-2">
+          <button className="hover:scale-105 h-7 w-28 bg-[#0C7E48] rounded-lg text-xs text-white ml-2" onClick={editallClicked}>
             Modify Table
           </button>
         </div>

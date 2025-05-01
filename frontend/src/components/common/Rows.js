@@ -1,6 +1,7 @@
 import { ReactComponent as Table } from "../../assets/icons/table.svg";
 import { ReactComponent as EyeIcon } from "../../assets/icons/eye-icon.svg";
-import { ReactComponent as Trash } from "../../assets/icons/trash.svg";
+import { ReactComponent as Trash } from "../../assets/icons/black-trash.svg";
+import { ReactComponent as BlackTable } from "../../assets/icons/black-table.svg";
 import { useState, useEffect } from "react";
 
 const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
@@ -8,7 +9,7 @@ const hoodOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const gownOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 const statusOptions = ["Borrowed", "Not Borrowed"];
 
-const Rows = ({ isGrid, hideActionButton }) => {
+const Rows = ({ isGrid, hideActionButton, modifyTable}) => {
   const [dashboard, setDashboard] = useState([]);
   // Bagong state para sa edit mode per row/card
   const [editId, setEditId] = useState(null);
@@ -21,8 +22,19 @@ const Rows = ({ isGrid, hideActionButton }) => {
       .then((data) => setDashboard(data));
   }, []);
 
+  useEffect(() => {
+    if(modifyTable){
+      setDashboard((prev) => prev.map((item) => ({...item, eye: "hidden", trash: "block"})));
+    } 
+    else{
+      setDashboard((prev) => prev.map((item) => ({...item, eye: "block", trash: "hidden"})));
+    }
+  }, [modifyTable]);
+
   // Para sa grid/column view: pag click ng edit icon, mag-edit mode
   const handleEditClick = (db) => {
+    setDashboard((prev) => prev.map((item) => 
+    db.id === item.id ? {...item, eye: item.eye === "block" ? "hidden" : "block", trash: item.trash === "hidden" ? "block" : "hidden"} : item));
     setEditId(db.id);
     setEditData({ ...db }); // copy current data
   };
@@ -222,6 +234,7 @@ const Rows = ({ isGrid, hideActionButton }) => {
       <tbody className="animate-fade-in">
         {dashboard.map((db) => {
           const isEditing = editId === db.id;
+          const notEye = db.eye !== "block";
           const rowColor = db.id % 2 !== 0 ? "bg-[#BAB4B1]" : "bg-[#E9E9E9]";
           return (
             <tr
@@ -243,7 +256,7 @@ const Rows = ({ isGrid, hideActionButton }) => {
               {/* Tassel */}
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {isEditing ? (
+                  {notEye ? (
                     <select
                       className="bg-[#0C7E48] text-white w-16 rounded-md text-center focus:outline-primary"
                       name="tassel"
@@ -265,7 +278,7 @@ const Rows = ({ isGrid, hideActionButton }) => {
               {/* Hood */}
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {isEditing ? (
+                  {notEye ? (
                     <select
                       className="bg-[#0C7E48] text-white w-16 rounded-md text-center focus:outline-primary"
                       name="hood"
@@ -287,7 +300,7 @@ const Rows = ({ isGrid, hideActionButton }) => {
               {/* Gown */}
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {isEditing ? (
+                  {notEye ? (
                     <select
                       className="bg-[#0C7E48] text-white w-16 rounded-md text-center focus:outline-primary"
                       name="gown"
@@ -315,7 +328,7 @@ const Rows = ({ isGrid, hideActionButton }) => {
               {/* Status */}
               <td>
                 <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {isEditing ? (
+                  {notEye ? (
                     <select
                       className="bg-[#0C7E48] text-white w-28 rounded-md text-center focus:outline-primary"
                       name="status"
@@ -337,46 +350,32 @@ const Rows = ({ isGrid, hideActionButton }) => {
               {/* Actions */}
               <td className="relative">
                 <div className="h-full w-full py-2 flex justify-evenly">
-                  {isEditing ? (
-                    <>
-                      {/* Floating Save/Cancel Popup for table view */}
-                      <div className="absolute top-0 right-10 z-20 flex flex-col gap-2 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
-                        <button
-                          className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
-                          onClick={() => handleSave(db.id)}
-                        >
-                          Save
-                        </button>
-                        <button
-                          className="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-600 text-xs"
-                          onClick={handleCancel}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                      <button
-                        className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
-                        // trash icon only in edit mode
-                      >
-                        <Trash className="w-4" />
-                      </button>
-                    </>
-                  ) : (
                     <>
                       <button
-                        className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700"
+                        className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700 ${db.eye}`}
                         // eye icon only
                       >
                         <EyeIcon className="w-5" />
                       </button>
                       <button
-                        className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700"
+                        className={`w-7 h-7 border border-gray-600 bg-[#D2D2D2] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-gray-400 ${db.trash}`}
+                        // eye icon only
+                      >
+                        <Trash className="w-5" />
+                      </button>
+                      <button
+                        className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700 ${db.eye}`}
                         onClick={() => handleEditClick(db)}
                       >
                         <Table className="w-5" />
                       </button>
+                      <button
+                        className={`w-7 h-7 border border-gray-600 bg-[#D2D2D2] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700 ${db.trash}`}
+                        onClick={() => handleEditClick(db)}
+                      >
+                        <BlackTable className="w-5" />
+                      </button>
                     </>
-                  )}
                 </div>
               </td>
             </tr>

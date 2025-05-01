@@ -1,10 +1,11 @@
 import Rows from "./Rows";
 import "./Table.css";
+import {useState} from "react";
 
-const Table = ({ isGrid }) => {
+const Table = ({ isGrid, modifyTable }) => {
   // --- HEIGHT CONTROL: Edit this value to adjust the height of the grid/column view ---
   const mainContentHeight = "80vh"; // <-- EDIT THIS VALUE FOR HEIGHT
-
+  console.log(modifyTable);
   return (
     <div className="h-[80vh] mt-10 w-[98%] flex justify-center ml-[30px]">
       {" "}
@@ -54,7 +55,7 @@ const Table = ({ isGrid }) => {
               </div>
               <div className="flex-1 w-full overflow-y-auto overflow-x-hidden">
                 <table className="table-auto w-full border-none border-spacing-0 border-b-2 border-black min-w-0 max-w-full">
-                  <Rows isGrid={false} />
+                  <Rows isGrid={false} modifyTable={modifyTable}/>
                 </table>
               </div>
             </div>
