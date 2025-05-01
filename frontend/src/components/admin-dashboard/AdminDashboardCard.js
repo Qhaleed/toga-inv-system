@@ -6,20 +6,21 @@ import NavBar from "../common/NavBar";
 const AdminDashboardCard = () => {
   // SO MAY STATES TYO DALAWA GRID PTI COLUMNS
   const [isGrid, setIsGrid] = useState(false);
+  const [modifyTable, setmodifyTable] = useState(false);
 
   return (
     <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
       {/* ETo pinaka root Container niggas*/}
-      <div className="h-screen fixed w-screen grid grid-cols-4 border border-red-500">
+      <div className="h-screen fixed w-screen grid grid-cols-4"> {/*<div className="h-screen fixed w-screen grid-cols-4 border border-red-500">*/}
         <SideBar />
-        <div className="col-span-3 border border-red-500 h-full">
+        <div className="col-span-3 h-full">
           {/* Right Container */}
           <div className="w-full flex flex-col items-center" style={{ maxWidth: "98%" }}>
             <div className="w-full" style={{ height: "60px", marginBottom: "8px" }}>
-              <NavBar isGrid={isGrid} setIsGrid={setIsGrid} />
+              <NavBar isGrid={isGrid} setIsGrid={setIsGrid} modifyTable={modifyTable} setmodifyTable={setmodifyTable}/>
             </div>
             <div className="flex justify-center items-start w-full" style={{ height: "600px" }}>
-              <Table isGrid={isGrid} /> {/*Dashboard Table*/}
+              <Table isGrid={isGrid} modifyTable={modifyTable}/> {/*Dashboard Table*/}
             </div>
           </div>
         </div>
