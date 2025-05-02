@@ -36,28 +36,28 @@ const Table = ({ isGrid, modifyTable }) => {
                 className="w-full  bg-[#02327B] "
                 style={{ display: "flex" }}
               >
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[180px] w-[180px] h-10">
+                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[180px] w-[180px] h-10">
                   Student Name
                 </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center   border-gray-600 max-w-[120px] w-[120px] h-10">
+                <div className="text-center ml-5 text-white text-xs font-bold flex items-center justify-center   border-gray-600 max-w-[120px] w-[120px] h-10">
                   Program
                 </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
+                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
                   Tassel
                 </div>
                 <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
                   Hood
                 </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
+                <div className="text-center ml-4 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
                   Gown
                 </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[120px] w-[120px] h-10">
+                <div className="text-center ml-4 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[120px] w-[120px] h-10">
                   Date of Reservation
                 </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[100px] w-[100px] h-10">
+                <div className="text-center ml-2 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[100px] w-[100px] h-10">
                   Status
                 </div>
-                <div className="text-center  mr-3 text-white text-xs font-bold flex items-center justify-center max-w-[100px] w-[100px] h-10">
+                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center max-w-[100px] w-[100px] h-10">
                   Actions
                 </div>
               </div>
