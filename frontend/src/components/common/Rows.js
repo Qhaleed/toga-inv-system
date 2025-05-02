@@ -1,7 +1,8 @@
 import { ReactComponent as Table } from "../../assets/icons/table.svg";
 import { ReactComponent as EyeIcon } from "../../assets/icons/eye-icon.svg";
 import { ReactComponent as Trash } from "../../assets/icons/black-trash.svg";
-import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
+import { ReactComponent as ChevronDown } from "../../assets/icons/chevron-down.svg";
+
 import { useState, useEffect, useRef } from "react";
 
 const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
@@ -547,14 +548,20 @@ function CustomDropdown({ value, options, onChange, disabled }) {
           background: open ? "#8D8D8D" : "#DBDBDB",
           color: open ? "#F3B51A" : "#000000",
           transition: "background 0.3s",
+          position: "relative",
         }}
       >
         <span className="truncate">{value}</span>
-        <span className="ml-1 flex items-center">
-          <ArrowDown
-            className="w-3 h-3 text-black"
-            style={{ fill: open ? "#F3B51A" : "#000" }}
-          />
+        <span
+          className="ml-2 flex items-center"
+          style={{
+            position: "absolute",
+            right: 6,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          <ChevronDown className="w-3 h-3 text-black" style={{ opacity: open ? 1 : 0.7 }} />
         </span>
       </div>
       {open && (
