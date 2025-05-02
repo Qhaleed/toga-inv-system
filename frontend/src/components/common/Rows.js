@@ -417,8 +417,9 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                   ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[100px] w-[100px] align-middle relative">
-                <div className="w-20 justify-start text-black text-xs font-semibold font-Figtree tracking-widest flex items-center h-full ml-[23px]">
+              {/* Status */}
+              <td className="w-[100px] align-middle relative">
+                <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
                   {db.status}
                 </div>
                 <span
@@ -426,6 +427,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                   style={{ borderRadius: "2px" }}
                 ></span>
               </td>
+              {/* Actions */}
               <td className="text-center max-w-[100px] w-[100px] align-middle">
                 <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
                   {editId === db.id ? (

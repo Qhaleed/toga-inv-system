@@ -10,14 +10,8 @@ const Table = ({ isGrid, modifyTable }) => {
       {" "}
       {/* Set muna ng main container tas naka 80vh*/}
       {/* Parent box to  */}
-      <div className="h-full min-w-[98%] flex items-stretch justify-center">
-        <div
-          className={`h-full w-[95%] bg-gray shadow-md outline-2 ${
-            isGrid
-              ? ""
-              : "outline outline-1.5 outline-gray-950 outline-offset-[-1px] outline-blur-md"
-          } flex flex-col`}
-        >
+      <div className="h-full min-w-[100%] flex items-stretch justify-center">
+        <div className="w-full flex flex-col justify-center items-center">
           {isGrid ? (
             // Grid view content will fill and scroll to the bottom of the parent
             <div className="flex-1 flex flex-col h-full">
@@ -28,38 +22,47 @@ const Table = ({ isGrid, modifyTable }) => {
             </div>
           ) : (
             <div
-              className="relative w-full flex flex-col"
-              style={{ height: mainContentHeight }}
+              className={`relative w-full flex flex-col outline outline-1.5 outline-black outline-offset-[-1px] outline-blur-md`}
+              style={{
+                height: "auto",
+                maxHeight: mainContentHeight,
+                minHeight: "0",
+                overflow: "visible",
+                // The parent will only grow to fit the content, but never exceed 80vh
+              }}
             >
               {/* Custom header ste outside del table for sticky effect  */}
-              <div
-                className="w-full  bg-[#02327B] "
-                style={{ display: "flex" }}
-              >
-                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[180px] w-[180px] h-10">
-                  Student Name
-                </div>
-                <div className="text-center ml-5 text-white text-xs font-bold flex items-center justify-center   border-gray-600 max-w-[120px] w-[120px] h-10">
-                  Program
-                </div>
-                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Tassel
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Hood
-                </div>
-                <div className="text-center ml-4 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Gown
-                </div>
-                <div className="text-center ml-4 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[120px] w-[120px] h-10">
-                  Date of Reservation
-                </div>
-                <div className="text-center ml-2 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[100px] w-[100px] h-10">
-                  Status
-                </div>
-                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center max-w-[100px] w-[100px] h-10">
-                  Actions
-                </div>
+              <div className=" bg-[#02327B] flex flex-row sticky top-0 z-10">
+                <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg sticky top-0 z-10">
+                  <thead>
+                    <tr className="bg-[#02327B] h-16">
+                      <th className="max-w-[180px] w-[180px] text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Student Name
+                      </th>
+                      <th className="max-w-[120px] w-[120px] text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Program
+                      </th>
+                      <th className="max-w-[80px] w-[80px] text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Tassel
+                      </th>
+                      <th className="max-w-[80px] w-[80px] text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Hood
+                      </th>
+                      <th className="max-w-[80px] w-[80px] text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Gown
+                      </th>
+                      <th className="max-w-[120px] w-[120px] text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Date of Reservation
+                      </th>
+                      <th className="max-w-[100px] w-[100px] bg-black text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Status
+                      </th>
+                      <th className="max-w-[100px] w-[100px] text-white text-xs font-bold text-center align-middle sm:text-[10px] md:text-xs">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
               </div>
               <div className="flex-1 w-full overflow-y- overflow-x-hidden">
                 <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg">
