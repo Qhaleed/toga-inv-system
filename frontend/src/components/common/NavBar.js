@@ -211,10 +211,12 @@ const Navbar = ({ isGrid, setIsGrid, modifyTable, setmodifyTable }) => {
             </button>
           </div>
           <button
-            className="hover:scale-105 h-7 w-28 bg-[#0C7E48] rounded-lg text-xs text-white ml-2"
+            className={`hover:scale-105 h-7 w-28 rounded-lg text-xs text-white ml-2 ${
+              modifyTable ? "bg-[#919191] ring-2 " : "bg-[#0C7E48]"
+            }`}
             onClick={editallClicked}
           >
-            {modifyTable ? "Done" : "Modify Table"}
+            {modifyTable ? "Edit Table" : "Modify Table"}
           </button>
         </div>
       </div>

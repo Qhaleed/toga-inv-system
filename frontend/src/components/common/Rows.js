@@ -1,7 +1,7 @@
 import { ReactComponent as Table } from "../../assets/icons/table.svg";
 import { ReactComponent as EyeIcon } from "../../assets/icons/eye-icon.svg";
 import { ReactComponent as Trash } from "../../assets/icons/black-trash.svg";
-import { ReactComponent as BlackTable } from "../../assets/icons/black-table.svg";
+
 import { useState, useEffect, useRef } from "react";
 
 const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
@@ -231,7 +231,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                         Save
                       </button>
                       <button
-                        className="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-600 text-xs"
+                        className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
                         onClick={handleCancel}
                       >
                         Cancel
@@ -304,11 +304,13 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
     const isEditingAny = modifyTable || editId !== null;
     return (
       <tbody
-        className={`w-full${isEditingAny ? "" : " overflow-y-auto"}`}
+        className={`w-full${
+          isEditingAny ? "" : " overflow-y-auto"
+        } scrollbar-hide custom-scrollbar-hide`}
         style={isEditingAny ? {} : { maxHeight: "calc(80vh - 40px)" }}
       >
         {dashboard.map((db, idx) => {
-          const rowColor = db.id % 2 !== 0 ? "bg-[#BAB4B1]" : "bg-[#E9E9E9]";
+          const rowColor = db.id % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
           const isEditing = modifyTable || editId === db.id;
           return [
             <tr
@@ -316,17 +318,25 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
               key={db.id}
               style={{ maxWidth: "100%" }}
             >
-              <td className="text-center max-w-[180px] w-[180px] border-r border-gray-600 align-middle">
+              <td className="text-center max-w-[180px] w-[180px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center">
                   <h3 className="truncate">{db.studentname}</h3>
+                  <span
+                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    style={{ borderRadius: "2px" }}
+                  ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[120px] w-[120px] border-r border-gray-600 align-middle">
+              <td className="text-center max-w-[120px] w-[120px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center">
                   <h3 className="truncate">{db.program}</h3>
+                  <span
+                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    style={{ borderRadius: "2px" }}
+                  ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[80px] w-[80px] border-r border-gray-600 align-middle">
+              <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
                     <input
@@ -339,14 +349,18 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                               handleCellChange(db.id, "tassel", e.target.value)
                           : handleEditChange
                       }
-                      className="w-full text-center rounded-[20px] border border-[#0C7E48] focus:outline-primary bg-white text-black px-2 py-1"
+                      className=" relative w-16 h-5 text-center bg-[#D2D2D2]  rounded-[10px] border border-[#8D8D8D] focus:outline-primary bg-[D2D2D2] text-black px-2 py-1"
                     />
                   ) : (
                     <h3 className="truncate">{db.tassel}</h3>
                   )}
+                  <span
+                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    style={{ borderRadius: "2px" }}
+                  ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[80px] w-[80px] border-r border-gray-600 align-middle">
+              <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
                     <input
@@ -359,14 +373,18 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                               handleCellChange(db.id, "hood", e.target.value)
                           : handleEditChange
                       }
-                      className="w-full text-center rounded-[20px] border border-[#0C7E48] focus:outline-primary bg-white text-black px-2 py-1"
+                      className=" relative w-16 h-5 text-center bg-[#D2D2D2] rounded-[10px] border border-[#8D8D8D] focus:outline-primary bg-[D2D2D2]  text-black px-2 py-1"
                     />
                   ) : (
                     <h3 className="truncate">{db.hood}</h3>
                   )}
+                  <span
+                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    style={{ borderRadius: "2px" }}
+                  ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[80px] w-[80px] border-r border-gray-600 align-middle">
+              <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
                     <input
@@ -379,21 +397,34 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                               handleCellChange(db.id, "gown", e.target.value)
                           : handleEditChange
                       }
-                      className="w-full text-center rounded-[20px] border border-[#0C7E48] focus:outline-primary bg-white text-black px-2 py-1"
+                      className=" relative w-16 h-5 text-center bg-[#D2D2D2]  rounded-[10px] border border-[#8D8D8D] focus:outline-grey  bg-[D2D2D2] text-black px-2 py-1"
                     />
                   ) : (
                     <h3 className="truncate">{db.gown}</h3>
                   )}
+                  <span
+                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    style={{ borderRadius: "2px" }}
+                  ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[120px] w-[120px] border-r border-gray-600 align-middle">
+              <td className="text-center max-w-[120px] w-[120px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center">
                   <h3 className="truncate">{db.dateofreservation}</h3>
+                  <span
+                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    style={{ borderRadius: "2px" }}
+                  ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[100px] w-[100px] border-r border-gray-600 align-middle">
+              <td className="text-center max-w-[100px] w-[100px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center">
                   <h3 className="truncate">{db.status}</h3>
+
+                  <span
+                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    style={{ borderRadius: "2px" }}
+                  ></span>
                 </div>
               </td>
               <td className="text-center max-w-[100px] w-[100px] align-middle">
@@ -401,13 +432,13 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                   {modifyTable ? (
                     <>
                       <button
-                        className="w-7 h-7 bg-gray-400 flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
+                        className="w-7 h-7 bg-[#919191] flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
                         disabled
                       >
                         <EyeIcon className="w-5" />
                       </button>
                       <button
-                        className="w-7 h-7 bg-gray-400 flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
+                        className="w-7 h-7 bg-[#919191] flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
                         disabled
                       >
                         <Table className="w-5" />
@@ -417,7 +448,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                     <>
                       <button
                         className="px-2 py-0.5 bg-emerald-700 text-white rounded text-[10px] mr-1 min-w-[40px] min-h-[22px] hover:bg-blue-800"
-                        style={{ fontSize: '10px', padding: '2px 8px' }}
+                        style={{ fontSize: "10px", padding: "2px 8px" }}
                         onClick={async () => {
                           // Save to backend
                           await fetch(
@@ -446,8 +477,8 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                         Save
                       </button>
                       <button
-                        className="px-2 py-0.5 bg-gray-400 text-white rounded text-[10px] min-w-[40px] min-h-[22px] hover:bg-gray-600"
-                        style={{ fontSize: '10px', padding: '2px 8px' }}
+                        className="px-2 py-0.5 bg-[#919191] text-white rounded text-[10px] min-w-[40px] min-h-[22px] hover:bg-gray-600"
+                        style={{ fontSize: "10px", padding: "2px 8px" }}
                         onClick={handleCancel}
                       >
                         Cancel
