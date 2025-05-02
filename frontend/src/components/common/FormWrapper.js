@@ -26,7 +26,7 @@ export default function FormWrapper({ title, children, onSubmit, className }) {
           <form
             onSubmit={onSubmit}
             className={`space-y-6 text-white ${
-              className === "register-card" ? "overflow-y-auto pr-2" : ""
+              className === "register-card" ? "overflow-y-auto pr-10" : ""
             }`}
           >
             {children}

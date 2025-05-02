@@ -16,7 +16,7 @@ export default function RegisterForm() {
     middleInitial: "",
     idNumber: "",
     idImage: [],
-    program: "",
+    course: "",
   });
 
   useEffect(() => {
@@ -182,7 +182,7 @@ export default function RegisterForm() {
             onChange={handleChange}
           />
         </div>
-
+        {/*Middle Initial */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
           <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
             M.I.
@@ -221,31 +221,6 @@ export default function RegisterForm() {
             onChange={handleChange}
           />
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-8">
-          <label className="w-full sm:w-10 text-primary text-m font-manjari font-bold">
-            Course
-          </label>
-          <select
-            name="program"
-            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                        text-white placeholder-gray-300 placeholder:font-manjari
-                        focus:outline-none 
-                        focus:border-primary
-                        transition duration-200"
-            value={formData.program}
-            onChange={handleChange}
-          >
-            <option value="" disabled>
-              Select
-            </option>
-            <option value="*">Bruh</option>
-            <option value="*">Pluh</option>
-            <option value="*">Guh</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid sm:grid-cols-[2fr_1fr] gap-4 mt-4">
         {/* ID Number */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
           <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
@@ -263,6 +238,37 @@ export default function RegisterForm() {
             value={formData.idNumber}
             onChange={handleChange}
           />
+        </div>
+      </div>
+
+      <div className="mt-4">
+        {/* Course */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+          <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
+            Course
+          </label>
+          <select
+            name="program"
+            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+                       text-white placeholder-gray-300 placeholder:font-manjari
+                       focus:outline-none focus:border-primary focus:bg-opacity-
+                       transition duration-200 ease-in-out hover:bg-opacity-20"
+            value={formData.program}
+            onChange={handleChange}
+          >
+            <option value="" disabled className="text-gray-400">
+              Select
+            </option>
+            <option value="Bruh" className="text-black bg-white">
+              Bruh
+            </option>
+            <option value="Pluh" className="text-black bg-white">
+              Pluh
+            </option>
+            <option value="Guh" className="text-black bg-white">
+              Guh
+            </option>
+          </select>
         </div>
       </div>
 
