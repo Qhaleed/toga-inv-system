@@ -1,69 +1,22 @@
-import EvaluationRows from "./EvaluationRows";
+import React from "react";
+import Rows from "../common/Rows";
 
 const EvaluationTable = ({ isGrid, modifyTable }) => {
-  // --- HEIGHT CONTROL: Edit this value to adjust the height of the grid/column view ---
-  const mainContentHeight = "80vh"; // <-- EDIT THIS VALUE FOR HEIGHT
-  console.log(modifyTable);
   return (
-    <div className="h-[80vh] mt-10 w-[98%] flex justify-center ml-[30px]">
-      {" "}
-      {/* Set muna ng main container tas naka 80vh*/}
-      {/* Parent box to  */}
-      <div className="h-full min-w-[98%] flex items-stretch justify-center">
-        <div
-          className={`h-full w-[95%] bg-gray shadow-md outline-2 ${
-            isGrid
-              ? ""
-              : "outline outline-1.5 outline-gray-950 outline-offset-[-1px] outline-blur-md"
-          } flex flex-col`}
-        >
-          {isGrid ? (
-            // Grid view content will fill and scroll to the bottom of the parent
+    <div className="w-full flex flex-col items-center">
+      {/* Header similar to dashboard */}
+      <div className="w-full max-w-[1200px] flex flex-col items-start justify-center mt-8 mb-2 px-2"></div>
+      <div className="h-[80vh] w-full max-w-[1200px] flex justify-center mt-4 px-1 sm:px-2 md:px-5 lg:ml-[0px] lg:w-[98%]">
+        <div className="h-full w-full flex items-stretch justify-center">
+          <div className="h-full w-full flex flex-col justify-center items-center">
             <div className="flex-1 flex flex-col h-full">
-              {/* The grid will fill the parent (80vh white bg), and content will be 100% of parent */}
-              <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-4 h-full">
-                <EvaluationRows isGrid={true} hideActionButton={true} />
-              </div>
-            </div>
-          ) : (
-            <div
-              className="relative w-full flex flex-col"
-              style={{ height: mainContentHeight }}
-            >
-              {/* Custom header ste outside del table for sticky effect  */}
-              <div
-                className="w-full  bg-[#02327B] "
-                style={{ display: "flex" }}
-              >
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[180px] w-[180px] h-10">
-                  Student Name
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center   border-gray-600 max-w-[120px] w-[120px] h-10">
-                  Program
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Tassel
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Hood
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Gown
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[120px] w-[120px] h-10">
-                  Evaluation
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[100px] w-[100px] h-10">
-                  Status
-                </div>
-              </div>
-              <div className="flex-1 w-full overflow-y- overflow-x-hidden">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-12 sm:p-2 md:p-4 h-full">
                 <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg">
-                  <EvaluationRows isGrid={false} modifyTable={modifyTable} />
+                  <Rows isGrid={isGrid} modifyTable={modifyTable} />
                 </table>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

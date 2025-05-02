@@ -6,62 +6,74 @@ const Table = ({ isGrid, modifyTable }) => {
   const mainContentHeight = "80vh"; // <-- EDIT THIS VALUE FOR HEIGHT
   console.log(modifyTable);
   return (
-    <div className="h-[80vh] mt-10 w-[98%] flex justify-center ml-[30px]">
-      {" "}
-      {/* Set muna ng main container tas naka 80vh*/}
-      {/* Parent box to  */}
-      <div className="h-full min-w-[98%] flex items-stretch justify-center">
-        <div
-          className={`h-full w-[95%] bg-gray shadow-md outline-2 ${
-            isGrid
-              ? ""
-              : "outline outline-1.5 outline-gray-950 outline-offset-[-1px] outline-blur-md"
-          } flex flex-col`}
-        >
+    <div className="h-[80vh] mt-10 w-full overflow-clip on max-w-[1400px] flex justify-center ml-0  sm:px-2 md:px-5 lg:ml-[0px] lg:w-[100%]">
+      {/* Set main container responsive: full width on mobile, margin on lg */}
+      <div className="h-full  w-full    flex items-stretch justify-center">
+        <div className="w-full flex flex-col   justify-center items-center">
           {isGrid ? (
-            // Grid view content will fill and scroll to the bottom of the parent
             <div className="flex-1 flex flex-col h-full">
-              {/* The grid will fill the parent (80vh white bg), and content will be 100% of parent */}
-              <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-4 h-full">
+              <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-12 sm:p-2 md:p-4 h-full">
                 <Rows isGrid={true} hideActionButton={true} />
               </div>
             </div>
           ) : (
             <div
-              className="relative w-full flex flex-col"
-              style={{ height: mainContentHeight }}
+              className="relative w-fit flex flex-col outline outline-1.5 outline-black outline-offset-[-1px] outline-blur-md"
+              style={{
+                maxHeight: mainContentHeight,
+                minHeight: 1,
+                overflow: "visible",
+              }}
             >
-              {/* Custom header ste outside del table for sticky effect  */}
-              <div
-                className="w-full  bg-[#02327B] "
-                style={{ display: "flex" }}
-              >
-                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[180px] w-[180px] h-10">
-                  Student Name
-                </div>
-                <div className="text-center ml-5 text-white text-xs font-bold flex items-center justify-center   border-gray-600 max-w-[120px] w-[120px] h-10">
-                  Program
-                </div>
-                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Tassel
-                </div>
-                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Hood
-                </div>
-                <div className="text-center ml-4 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
-                  Gown
-                </div>
-                <div className="text-center ml-4 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[120px] w-[120px] h-10">
-                  Date of Reservation
-                </div>
-                <div className="text-center ml-2 text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[100px] w-[100px] h-10">
-                  Status
-                </div>
-                <div className="text-center ml-3 text-white text-xs font-bold flex items-center justify-center max-w-[100px] w-[100px] h-10">
-                  Actions
-                </div>
+              <div className="bg-[#02327B] w-full sticky top-0 z-10">
+                <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg sticky top-0 z-10 md:table-fixed md:w-full md:max-w-full md:min-w-0 sm:w-full sm:table-fixed">
+                  <thead>
+                    <tr className="bg-[#02327B]  full h-10 xs:h-12 sm:h-12 md:h-16">
+                      <th className="md:w-[23%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Student Name
+                        </span>
+                      </th>
+                      <th className=" sm:w-[12%] md:w-[15%] md:pl-6 sm:pr-8  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Program
+                        </span>
+                      </th>
+                      <th className="w-[10%] sm:pr-6 md:w-[10%] md:pl-4   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Tassel
+                        </span>
+                      </th>
+                      <th className="sm:w-[8.5%] sm:pr-1  md:pr-6 md:pl-4 md:w-[10%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Hood
+                        </span>
+                      </th>
+                      <th className="w-[10%]   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Gown
+                        </span>
+                      </th>
+                      <th className="w-[15%] pl-2 text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Date of Reservation
+                        </span>
+                      </th>
+                      <th className="w-[12.5%]   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Status
+                        </span>
+                      </th>
+                      <th className="w-[13.5%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                        <span className="block w-full text-center truncate">
+                          Actions
+                        </span>
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
               </div>
-              <div className="flex-1 w-full overflow-y- overflow-x-hidden">
+              <div className="flex-1 w-full overflow-y-auto overflow-x-auto">
                 <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg">
                   <Rows isGrid={false} modifyTable={modifyTable} />
                 </table>
