@@ -1,7 +1,7 @@
 import { ReactComponent as Table } from "../../assets/icons/table.svg";
 import { ReactComponent as EyeIcon } from "../../assets/icons/eye-icon.svg";
 import { ReactComponent as Trash } from "../../assets/icons/black-trash.svg";
-
+import { ReactComponent as ArrowDown } from "../../assets/icons/arrow-down.svg";
 import { useState, useEffect, useRef } from "react";
 
 const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
@@ -133,157 +133,168 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
   if (isGrid) {
     // grid view to
     return (
-      <div className="flex flex-col h-full animate-fade-in">
-        {/* wala header dito */}
-        <div
-          className="flex-1 overflow-y-auto min-h-0"
-          style={{ maxHeight: "500px", paddingBottom: "48px" }}
-        >
-          <div className="grid grid-cols-3 gap-6 p-4">
-            {dashboard.map((db, idx) => (
-              <div
-                key={db.id}
-                className="bg-white rounded-lg shadow p-4 flex flex-col items-center border border-gray-200 transition-transform duration-500 ease-in-out transform hover:scale-105 hover:shadow-xl opacity-0 animate-fade-in relative"
-                style={{ animationDelay: `${idx * 80}ms` }}
-              >
-                {editId === db.id ? (
-                  // Edit mode UI
-                  <>
-                    <h3 className="font-bold text-lg mb-2 text-center">
-                      {db.studentname}
-                    </h3>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Program: <span>{db.program}</span>
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Tassel:{" "}
-                      <select
-                        className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                        name="tassel"
-                        value={editData.tassel}
-                        onChange={handleEditChange}
-                        style={{ position: "static" }}
-                      >
-                        {tasselOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Hood:{" "}
-                      <select
-                        className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                        name="hood"
-                        value={editData.hood}
-                        onChange={handleEditChange}
-                        style={{ position: "static" }}
-                      >
-                        {hoodOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Gown:{" "}
-                      <select
-                        className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                        name="gown"
-                        value={editData.gown}
-                        onChange={handleEditChange}
-                        style={{ position: "static" }}
-                      >
-                        {gownOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Date: <span>{db.dateofreservation}</span>
-                    </div>
-                    <div className="text-sm text-gray-700 mb-2">
-                      Status:{" "}
-                      <select
-                        className="bg-[#0C7E48] text-white w-24 text-center ml-5 focus:outline-primary rounded-md"
-                        name="status"
-                        value={editData.status}
-                        onChange={handleEditChange}
-                        style={{ position: "static" }}
-                      >
-                        {statusOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {/* Floating Save/Cancel Popup */}
-                    <div className="absolute top-2 right-2 z-20 flex flex-col gap-2 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
-                      <button
-                        className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
-                        onClick={() => handleSave(db.id)}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
-                        onClick={handleCancel}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  // Normal view UI
-                  <>
-                    <h3 className="font-bold text-lg mb-2">{db.studentname}</h3>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Program: {db.program}
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Tassel: {db.tassel}
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Hood: {db.hood}
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Gown: {db.gown}
-                    </div>
-                    <div className="text-sm text-gray-700 mb-1">
-                      Date: {db.dateofreservation}
-                    </div>
-                    <div className="text-sm text-gray-700 mb-2">
-                      Status: {db.status}
-                    </div>
-                    <div className="flex gap-2 mt-2">
-                      <button className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700">
-                        <EyeIcon className="w-5" />
-                      </button>
-                      <button
-                        className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700"
-                        onClick={() => handleEditClick(db)}
-                      >
-                        <Table className="w-5" />
-                      </button>
-                      <button
-                        className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700 ml-2"
-                        onClick={() => {
-                          /* implement delete logic here */
-                        }}
-                      >
-                        <Trash className="w-4" />
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            ))}
-          </div>
+      <div className="w-full animate-fade-in" style={{ height: "80vh" }}>
+        <div className="flex flex-wrap gap-4 h-full w-full p-4 justify-center items-start">
+          {dashboard.map((db, idx) => (
+            <div
+              key={db.id}
+              className="bg-slate-50 rounded-lg shadow flex flex-col items-center border border-gray-200 transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-xl opacity-0 animate-fade-in relative"
+              style={{
+                animationDelay: `${idx * 80}ms`,
+                width: "100%",
+                maxWidth: "320px",
+                minWidth: "220px",
+                height: "340px",
+                maxHeight: "400px",
+                minHeight: "300px",
+                padding: "1.5rem",
+                flex: "1 1 300px",
+                boxSizing: "border-box",
+                margin: 0,
+              }}
+            >
+              {editId === db.id ? (
+                // Edit mode UI
+                <>
+                  <h3 className="font-bold text-lg mb-2 text-center">
+                    {db.studentname}
+                  </h3>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Program: <span>{db.program}</span>
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Tassel:{" "}
+                    <select
+                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
+                      name="tassel"
+                      value={editData.tassel}
+                      onChange={handleEditChange}
+                      style={{ position: "static" }}
+                    >
+                      {tasselOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Hood:{" "}
+                    <select
+                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
+                      name="hood"
+                      value={editData.hood}
+                      onChange={handleEditChange}
+                      style={{ position: "static" }}
+                    >
+                      {hoodOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Gown:{" "}
+                    <select
+                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
+                      name="gown"
+                      value={editData.gown}
+                      onChange={handleEditChange}
+                      style={{ position: "static" }}
+                    >
+                      {gownOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Date: <span>{db.dateofreservation}</span>
+                  </div>
+                  <div className="text-sm text-gray-700 mb-2">
+                    Status:{" "}
+                    <select
+                      className="bg-[#0C7E48] text-white w-24 text-center ml-5 focus:outline-primary rounded-md"
+                      name="status"
+                      value={editData.status}
+                      onChange={handleEditChange}
+                      style={{ position: "static" }}
+                    >
+                      {statusOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  {/* Floating Save/Cancel Popup Niggas */}
+                  <div className="absolute top-2 right-2 z-20 flex flex-col gap-2 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
+                    <button
+                      className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
+                      onClick={() => handleSave(db.id)}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                // Normal view UI
+                <>
+                  <h3 className="font-bold text-lg mb-2">{db.studentname}</h3>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Program: {db.program}
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Tassel: {db.tassel}
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Hood: {db.hood}
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Gown: {db.gown}
+                  </div>
+                  <div className="text-sm text-gray-700 mb-1">
+                    Date: {db.dateofreservation}
+                  </div>
+                  <div className="text-sm text-gray-700 mb-2">
+                    Status: {db.status}
+                  </div>
+                  <div className="flex gap-2 mt-2 w-full">
+                    <button
+                      className="w-full h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 hover:bg-green-700"
+                      style={{ minWidth: 0 }}
+                    >
+                      <EyeIcon className="w-5" />
+                    </button>
+                    <button
+                      className="w-full h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 hover:bg-blue-700"
+                      style={{ minWidth: 0 }}
+                      onClick={() => handleEditClick(db)}
+                    >
+                      <Table className="w-5" />
+                    </button>
+                    <button
+                      className="w-full h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 hover:bg-red-700 ml-2"
+                      style={{ minWidth: 0 }}
+                      onClick={() => {
+                        /* implement delete logic here */
+                      }}
+                    >
+                      <Trash className="w-4" />
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
         </div>
         {/* action btn sa baba, hide if grid floating */}
         {!hideActionButton && (
@@ -311,12 +322,12 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
           const isEditing = modifyTable || editId === db.id;
           return [
             <tr
-              className={`h-10 ${rowColor} text-xs font-normal table-fixed w-full`}
+              className={`h-16 w-[1417px] ${rowColor} text-xs font-normal table-fixed`}
               key={db.id}
               style={{ maxWidth: "100%" }}
             >
-              <td className="text-center max-w-[180px] w-[180px] align-middle relative">
-                <div className="h-full w-full py-2 flex justify-center items-center">
+              <td className="text-center max-w-[180px]  align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
+                <div className="h-full w-[100%] py-4 flex justify-center items-center">
                   <h3 className="truncate">{db.studentname}</h3>
                   <span
                     className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
@@ -324,7 +335,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                   ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[120px] w-[120px] align-middle relative">
+              <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                 <div className="h-full w-full py-2 flex justify-center items-center">
                   <h3 className="truncate">{db.program}</h3>
                   <span
@@ -334,7 +345,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 </div>
               </td>
               {/* Tassel */}
-              <td className="text-center max-w-[80px] w-[80px] align-middle relative">
+              <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
                     <CustomDropdown
@@ -359,7 +370,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 </div>
               </td>
               {/* Hood */}
-              <td className="text-center max-w-[80px] w-[80px] align-middle relative">
+              <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
                     <CustomDropdown
@@ -384,7 +395,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 </div>
               </td>
               {/* Gown */}
-              <td className="text-center max-w-[80px] w-[80px] align-middle relative">
+              <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
                     <CustomDropdown
@@ -408,7 +419,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                   ></span>
                 </div>
               </td>
-              <td className="text-center max-w-[120px] w-[120px] align-middle relative">
+              <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                 <div className="h-full w-full py-2 flex justify-center items-center">
                   <h3 className="truncate">{db.dateofreservation}</h3>
                   <span
@@ -418,7 +429,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 </div>
               </td>
               {/* Status */}
-              <td className="w-[100px] align-middle relative">
+              <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                 <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
                   {db.status}
                 </div>
@@ -428,7 +439,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 ></span>
               </td>
               {/* Actions */}
-              <td className="text-center max-w-[100px] w-[100px] align-middle">
+              <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                 <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
                   {editId === db.id ? (
                     <>
@@ -440,7 +451,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                       >
                         <Trash className="w-4" />
                       </button>
-                      {/* Floating Save/Cancel absolute container at the bottom */}
+                      {/* Floating Save/Cancel absolute container at the bottom sa edit view inline */}
                       <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
                         <button
                           className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
@@ -480,10 +491,9 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 <td
                   colSpan={8}
                   style={{
-                    height: "3px",
+                    height: "1px",
                     background: "transparent",
                     padding: 0,
-                    border: "none",
                   }}
                 ></td>
               </tr>
@@ -525,32 +535,41 @@ function CustomDropdown({ value, options, onChange, disabled }) {
         cursor: disabled ? "not-allowed" : "pointer",
         boxSizing: "border-box",
         height: "15px",
-        background: open ? "#D2D2D2" : "#B3B3D2D2D2B3",
+        background: open ? "#fff" : "#2D2B3",
         transition: "outline-color 0.3s, background 0.2s",
       }}
     >
       <div
-        className={`w-full text-center py-0.5 text-black text-[11px] font-semibold font-Figtree tracking-widest`}
+        className={`w-full text-black text-[11px] font-semibold font-Figtree tracking-widest flex items-center justify-between px-2`}
         style={{
-          borderRadius: 30,
-          height: "18px",
-          background: open ? "#8D8D8D" : "#D2D2D2", // bg of selection
+          borderRadius: 35,
+          height: "16px",
+          background: open ? "#8D8D8D" : "#DBDBDB",
+          color: open ? "#F3B51A" : "#000000",
           transition: "background 0.3s",
         }}
       >
-        {value}
+        <span className="truncate">{value}</span>
+        <span className="ml-1 flex items-center">
+          <ArrowDown
+            className="w-3 h-3 text-black"
+            style={{ fill: open ? "#F3B51A" : "#000" }}
+          />
+        </span>
       </div>
       {open && (
         <div
-          className="absolute z-30 left-0 top-full w-full border border-[#F3B51A] rounded shadow-md mt-1 animate-fade-in"
-          style={{ minWidth: "10px", background: "#D22D2" }}
+          className="absolute z-30 left-0 top-full w-full border border-[#0C7E48] shadow-md mt-1 animate-fade-in"
+          style={{ minWidth: "12px", background: "#D4D4D4" }}
         >
           {options.map((opt) => (
             <div
               key={opt}
-              className={`  px-3 py-1 text-xs font-Figtree text-black cursor-pointer ${
-                opt === value ? "font-bold" : ""
-              } hover:bg-[#D4D4D4]`}
+              className={`px-2 py-1.5 text-xs font-Figtree ring-1 ring-opacity-50 flex-col w-full text-black cursor-pointer ${
+                opt === value
+                  ? "font-bold text-[#0C7E48] bg-slate-200 w-full"
+                  : ""
+              } hover:text-[#F3B51A]`}
               style={{ background: "#D4D4D4", transition: "background 0.2s" }}
               onClick={() => {
                 onChange(opt);
