@@ -18,6 +18,9 @@ export default function RegisterForm() {
     idImage: [],
     course: "",
   });
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const options = ["Bruh", "Pluh", "Guh"];
 
   useEffect(() => {
     const preventDefaults = (e) => {
@@ -243,32 +246,41 @@ export default function RegisterForm() {
 
       <div className="mt-4">
         {/* Course */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
-          <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
-            Course
-          </label>
-          <select
-            name="program"
-            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                       text-white placeholder-gray-300 placeholder:font-manjari
-                       focus:outline-none focus:border-primary focus:bg-opacity-
-                       transition duration-200 ease-in-out hover:bg-opacity-20"
-            value={formData.program}
-            onChange={handleChange}
-          >
-            <option value="" disabled className="text-gray-400">
-              Select
-            </option>
-            <option value="Bruh" className="text-black bg-white">
-              Bruh
-            </option>
-            <option value="Pluh" className="text-black bg-white">
-              Pluh
-            </option>
-            <option value="Guh" className="text-black bg-white">
-              Guh
-            </option>
-          </select>
+        <div className="relative w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+            <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
+              Course
+            </label>
+
+            <div
+              onClick={() => setOpen(!open)}
+              className="w-full flex-1 cursor-pointer bg-[#2A4D89] text-white border-b-2 border-gray-600 rounded-md font-manjari
+                hover:bg-gray-700 transition duration-200 ease-in-out relative"
+            >
+              <div className="py-2 px-3">{value || "Select"}</div>
+
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white">
+                ▼
+              </div>
+
+              {open && (
+                <div className="absolute z-10 mt-1 w-full bg-gray-800 text-white rounded-md shadow-lg max-h-40 overflow-y-auto border border-gray-600">
+                  {options.map((opt) => (
+                    <div
+                      key={opt}
+                      onClick={() => {
+                        setValue(opt);
+                        setOpen(false);
+                      }}
+                      className="px-6 py-3 hover:bg-primary hover:text-white transition"
+                    >
+                      {opt}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
