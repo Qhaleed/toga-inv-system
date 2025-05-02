@@ -10,7 +10,8 @@
       "status": "Borrowed",
       "id": "1",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -22,7 +23,8 @@
       "status": "Borrowed",
       "id": "2",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -34,7 +36,8 @@
       "status": "Borrowed",
       "id": "3",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -46,7 +49,8 @@
       "status": "Borrowed",
       "id": "4",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -58,7 +62,8 @@
       "status": "Borrowed",
       "id": "5",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -70,7 +75,8 @@
       "status": "Borrowed",
       "id": "6",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -82,7 +88,8 @@
       "status": "Borrowed",
       "id": "7",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -94,7 +101,8 @@
       "status": "Borrowed",
       "id": "8",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -106,7 +114,8 @@
       "status": "Borrowed",
       "id": "9",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -118,7 +127,8 @@
       "status": "Borrowed",
       "id": "10",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -130,7 +140,8 @@
       "status": "Borrowed",
       "id": "11",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -142,7 +153,8 @@
       "status": "Borrowed",
       "id": "12",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -154,7 +166,8 @@
       "status": "Borrowed",
       "id": "13",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -166,7 +179,8 @@
       "status": "Borrowed",
       "id": "14",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -178,7 +192,8 @@
       "status": "Borrowed",
       "id": "15",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -190,7 +205,8 @@
       "status": "Borrowed",
       "id": "16",
       "eye": "block",
-      "trash": "hidden"
+      "trash": "hidden",
+      "evaluation" : "Evaluated"
     }
   ]
 }

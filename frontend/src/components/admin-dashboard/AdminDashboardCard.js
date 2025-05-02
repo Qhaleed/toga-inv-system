@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Table from "../common/Table";
+import EvaluationTable from "../evaluation/EvaluationTable";
 import SideBar from "../common/SideBar";
 import NavBar from "../common/NavBar";
 
@@ -20,7 +21,8 @@ const AdminDashboardCard = () => {
               <NavBar isGrid={isGrid} setIsGrid={setIsGrid} modifyTable={modifyTable} setmodifyTable={setmodifyTable}/>
             </div>
             <div className="flex justify-center items-start w-full" style={{ height: "600px" }}>
-              <Table isGrid={isGrid} modifyTable={modifyTable}/> {/*Dashboard Table*/}
+               {/*<Table isGrid={isGrid} modifyTable={modifyTable}/> {/*Dashboard Table*/}
+               <EvaluationTable isGrid={isGrid} modifyTable={modifyTable}/> {/*Evaluation Table*/}
             </div>
           </div>
         </div>
