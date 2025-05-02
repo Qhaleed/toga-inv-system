@@ -3,28 +3,28 @@
     {
       "studentname": "Joshua Guiritan",
       "program": "BSCS",
-      "tassel": "Blue",
-      "hood": "nigga",
-      "gown": "S",
+      "tassel": "Maroon",
+      "hood": "Yellow",
+      "gown": "XS",
       "dateofreservation": "August 1, 2004",
       "status": "Borrowed",
       "id": "1",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
       "program": "BSCS",
       "tassel": "White",
-      "hood": "Yellow",
+      "hood": "Orange",
       "gown": "XL",
       "dateofreservation": "January 1, 2010",
       "status": "Borrowed",
       "id": "2",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -37,20 +37,20 @@
       "id": "3",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
       "program": "BSCS",
       "tassel": "Blue",
       "hood": "Maroon",
-      "gown": "S",
+      "gown": "L",
       "dateofreservation": "August 1, 2004",
       "status": "Borrowed",
       "id": "4",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -63,7 +63,7 @@
       "id": "5",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -76,7 +76,7 @@
       "id": "6",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -89,7 +89,7 @@
       "id": "7",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -102,7 +102,7 @@
       "id": "8",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -115,7 +115,7 @@
       "id": "9",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -128,7 +128,7 @@
       "id": "10",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -141,7 +141,7 @@
       "id": "11",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -154,7 +154,7 @@
       "id": "12",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -167,7 +167,7 @@
       "id": "13",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -180,7 +180,7 @@
       "id": "14",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -193,7 +193,7 @@
       "id": "15",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     },
     {
       "studentname": "Joshua Guiritan",
@@ -206,7 +206,7 @@
       "id": "16",
       "eye": "block",
       "trash": "hidden",
-      "evaluation" : "Evaluated"
+      "evaluation": "Evaluated"
     }
   ]
 }

@@ -237,14 +237,6 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                         Cancel
                       </button>
                     </div>
-                    <div className="flex gap-2 mt-2">
-                      <button
-                        className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
-                        // trash icon only in edit mode
-                      >
-                        <Trash className="w-4" />
-                      </button>
-                    </div>
                   </>
                 ) : (
                   // Normal view UI
@@ -269,10 +261,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                       Status: {db.status}
                     </div>
                     <div className="flex gap-2 mt-2">
-                      <button
-                        className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700"
-                        // eye icon only
-                      >
+                      <button className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700">
                         <EyeIcon className="w-5" />
                       </button>
                       <button
@@ -280,6 +269,14 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                         onClick={() => handleEditClick(db)}
                       >
                         <Table className="w-5" />
+                      </button>
+                      <button
+                        className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700 ml-2"
+                        onClick={() => {
+                          /* implement delete logic here */
+                        }}
+                      >
+                        <Trash className="w-4" />
                       </button>
                     </div>
                   </>
@@ -336,74 +333,77 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                   ></span>
                 </div>
               </td>
+              {/* Tassel */}
               <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
-                    <input
-                      type="text"
-                      name="tassel"
+                    <CustomDropdown
                       value={modifyTable ? db.tassel : editData.tassel}
-                      onChange={
+                      options={tasselOptions}
+                      onChange={(val) =>
                         modifyTable
-                          ? (e) =>
-                              handleCellChange(db.id, "tassel", e.target.value)
-                          : handleEditChange
+                          ? handleCellChange(db.id, "tassel", val)
+                          : handleEditChange({
+                              target: { name: "tassel", value: val },
+                            })
                       }
-                      className=" relative w-16 h-5 text-center bg-[#D2D2D2]  rounded-[10px] border border-[#8D8D8D] focus:outline-primary bg-[D2D2D2] text-black px-2 py-1"
+                      disabled={false}
                     />
                   ) : (
                     <h3 className="truncate">{db.tassel}</h3>
                   )}
                   <span
-                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                     style={{ borderRadius: "2px" }}
                   ></span>
                 </div>
               </td>
+              {/* Hood */}
               <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
-                    <input
-                      type="text"
-                      name="hood"
+                    <CustomDropdown
                       value={modifyTable ? db.hood : editData.hood}
-                      onChange={
+                      options={hoodOptions}
+                      onChange={(val) =>
                         modifyTable
-                          ? (e) =>
-                              handleCellChange(db.id, "hood", e.target.value)
-                          : handleEditChange
+                          ? handleCellChange(db.id, "hood", val)
+                          : handleEditChange({
+                              target: { name: "hood", value: val },
+                            })
                       }
-                      className=" relative w-16 h-5 text-center bg-[#D2D2D2] rounded-[10px] border border-[#8D8D8D] focus:outline-primary bg-[D2D2D2]  text-black px-2 py-1"
+                      disabled={false}
                     />
                   ) : (
                     <h3 className="truncate">{db.hood}</h3>
                   )}
                   <span
-                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                     style={{ borderRadius: "2px" }}
                   ></span>
                 </div>
               </td>
+              {/* Gown */}
               <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
-                    <input
-                      type="text"
-                      name="gown"
+                    <CustomDropdown
                       value={modifyTable ? db.gown : editData.gown}
-                      onChange={
+                      options={gownOptions}
+                      onChange={(val) =>
                         modifyTable
-                          ? (e) =>
-                              handleCellChange(db.id, "gown", e.target.value)
-                          : handleEditChange
+                          ? handleCellChange(db.id, "gown", val)
+                          : handleEditChange({
+                              target: { name: "gown", value: val },
+                            })
                       }
-                      className=" relative w-16 h-5 text-center bg-[#D2D2D2]  rounded-[10px] border border-[#8D8D8D] focus:outline-grey  bg-[D2D2D2] text-black px-2 py-1"
+                      disabled={false}
                     />
                   ) : (
                     <h3 className="truncate">{db.gown}</h3>
                   )}
                   <span
-                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                    className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                     style={{ borderRadius: "2px" }}
                   ></span>
                 </div>
@@ -418,71 +418,41 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 </div>
               </td>
               <td className="text-center max-w-[100px] w-[100px] align-middle relative">
-                <div className="h-full w-full py-2 flex justify-center items-center">
-                  <h3 className="truncate">{db.status}</h3>
-
-                  <span
-                    className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
-                    style={{ borderRadius: "2px" }}
-                  ></span>
+                <div className="w-20 justify-start text-black text-xs font-semibold font-Figtree tracking-widest">
+                  {db.status}
                 </div>
+                <span
+                  className="absolute right-0 top-[10px] h-7 w-0.5 bg-gray-600 opacity-50"
+                  style={{ borderRadius: "2px" }}
+                ></span>
               </td>
               <td className="text-center max-w-[100px] w-[100px] align-middle">
-                <div className="h-full w-full py-2 flex justify-center items-center gap-2">
-                  {modifyTable ? (
+                <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
+                  {editId === db.id ? (
                     <>
                       <button
-                        className="w-7 h-7 bg-[#919191] flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
-                        disabled
-                      >
-                        <EyeIcon className="w-5" />
-                      </button>
-                      <button
-                        className="w-7 h-7 bg-[#919191] flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
-                        disabled
-                      >
-                        <Table className="w-5" />
-                      </button>
-                    </>
-                  ) : isEditing ? (
-                    <>
-                      <button
-                        className="px-2 py-0.5 bg-emerald-700 text-white rounded text-[10px] mr-1 min-w-[40px] min-h-[22px] hover:bg-blue-800"
-                        style={{ fontSize: "10px", padding: "2px 8px" }}
-                        onClick={async () => {
-                          // Save to backend
-                          await fetch(
-                            `http://localhost:8000/dashboard/${db.id}`,
-                            {
-                              method: "PATCH",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({
-                                tassel: editData.tassel,
-                                hood: editData.hood,
-                                gown: editData.gown,
-                              }),
-                            }
-                          );
-                          setDashboard((prev) =>
-                            prev.map((item) =>
-                              item.id === db.id
-                                ? { ...item, ...editData }
-                                : item
-                            )
-                          );
-                          setEditId(null);
-                          setEditData({});
+                        className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
+                        onClick={() => {
+                          // TODO: implement delete logic for column view
                         }}
                       >
-                        Save
+                        <Trash className="w-4" />
                       </button>
-                      <button
-                        className="px-2 py-0.5 bg-[#919191] text-white rounded text-[10px] min-w-[40px] min-h-[22px] hover:bg-gray-600"
-                        style={{ fontSize: "10px", padding: "2px 8px" }}
-                        onClick={handleCancel}
-                      >
-                        Cancel
-                      </button>
+                      {/* Floating Save/Cancel absolute container at the bottom */}
+                      <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
+                        <button
+                          className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
+                          onClick={() => handleSave(db.id)}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
+                          onClick={handleCancel}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </>
                   ) : (
                     <>
@@ -522,5 +492,76 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
     );
   }
 };
+
+// CustomDropdown for table inline editing (no duplicate imports)
+function CustomDropdown({ value, options, onChange, disabled }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`relative w-[60px] h-[15px] flex justify-center items-center ${
+        disabled ? "pointer-events-none opacity-60" : ""
+      }`}
+      tabIndex={0}
+      onClick={() => !disabled && setOpen((o) => !o)}
+      onBlur={() => setOpen(false)}
+      style={{
+        outline: open ? "1.5px solid #EDB427" : "1.5px solid #696969",
+        borderRadius: 30,
+        cursor: disabled ? "not-allowed" : "pointer",
+        boxSizing: "border-box",
+        height: "15px",
+        background: open ? "#D2D2D2" : "#B3B3D2D2D2B3",
+        transition: "outline-color 0.3s, background 0.2s",
+      }}
+    >
+      <div
+        className={`w-full text-center py-0.5 text-black text-[11px] font-semibold font-Figtree tracking-widest`}
+        style={{
+          borderRadius: 30,
+          height: "18px",
+          background: open ? "#8D8D8D" : "#D2D2D2", // bg of selection
+          transition: "background 0.3s",
+        }}
+      >
+        {value}
+      </div>
+      {open && (
+        <div
+          className="absolute z-30 left-0 top-full w-full border border-[#F3B51A] rounded shadow-md mt-1 animate-fade-in"
+          style={{ minWidth: "10px", background: "#D22D2" }}
+        >
+          {options.map((opt) => (
+            <div
+              key={opt}
+              className={`  px-3 py-1 text-xs font-Figtree text-black cursor-pointer ${
+                opt === value ? "font-bold" : ""
+              } hover:bg-[#D4D4D4]`}
+              style={{ background: "#D4D4D4", transition: "background 0.2s" }}
+              onClick={() => {
+                onChange(opt);
+                setOpen(false);
+              }}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default Rows;

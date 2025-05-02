@@ -1,24 +1,16 @@
 import React, { useState } from "react";
-import Table from "../common/Table";
-import SideBar from "../common/SideBar";
 import NavBar from "../common/NavBar";
+import EvaluationTable from "./EvaluationTable";
 
-const AdminDashboardCard = () => {
-  // SO MAY STATES TYO DALAWA GRID PTI COLUMNS
+const EvaluationPage = () => {
   const [isGrid, setIsGrid] = useState(false);
   const [modifyTable, setmodifyTable] = useState(false);
-
+  // Optionally, you can add activeTab state if you want tab highlighting
   return (
-    <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
-      {/* ETo pinaka root Container niggas*/}
-
-      <div className="h-screen fixed w-screen grid grid-cols-4">
-        {" "}
-        {/*<div className="h-screen fixed w-screen grid-cols-4 border border-red-500">*/}
-        <SideBar />
+    <div className="h-screen w-screen bg-[#EBEBEB] font-figtree font-medium">
+      <div className="h-screen w-screen grid grid-cols-4">
+        {/* You can add a sidebar here if needed */}
         <div className="col-span-3 h-full">
-          {/* Right Container */}
-
           <div
             className="w-full flex flex-col items-center"
             style={{ maxWidth: "98%" }}
@@ -34,15 +26,13 @@ const AdminDashboardCard = () => {
                 setmodifyTable={setmodifyTable}
               />
             </div>
-
             <div
               className={`flex justify-center items-start w-full transition-all duration-500 ${
                 !isGrid ? "animate-fade-in-bottom" : ""
               }`}
               style={{ height: "600px" }}
             >
-              <Table isGrid={isGrid} modifyTable={modifyTable} />{" "}
-              {/*Dashboard Table*/}
+              <EvaluationTable isGrid={isGrid} modifyTable={modifyTable} />
             </div>
           </div>
         </div>
@@ -51,4 +41,4 @@ const AdminDashboardCard = () => {
   );
 };
 
-export default AdminDashboardCard;
+export default EvaluationPage;
