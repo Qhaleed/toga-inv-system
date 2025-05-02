@@ -93,12 +93,15 @@ const SideBar = () => {
     }
 
     return(
-        <div className="col-span-1 h-full flex flex-col justify-start items-center bg-[#001C47]">
+        
+        <div className="col-span-1 overflow-hidden flex-wrap h-full flex flex-col justify-start items-center bg-[#001C47]"> {/* SIDE BAR HERO CONTAINER*/}
             <div className="w-full h-28 bg-[#102F5E] bg-center flex justify-between">
                 <div className="flex justify-center">
                     <div className="h-full ml-4 w-16 flex justify-center items-center ">
                         <img className="w-16 rounded-full" src={Profile} alt="profile"/>
                     </div>
+
+
                     <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
                         <h4 className="font-bold">Joshua Guiritan</h4>
                         <p className="text-xs font-light">Administator</p>

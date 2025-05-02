@@ -10,3 +10,7 @@
   background: #ff0707;
 }
 /* Your custom CSS goes below (if needed) */
+
+* {
+  font-family: 'figtree';
+}
