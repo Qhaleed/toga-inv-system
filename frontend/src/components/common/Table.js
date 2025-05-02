@@ -1,6 +1,5 @@
 import Rows from "./Rows";
 import "./Table.css";
-import {useState} from "react";
 
 const Table = ({ isGrid, modifyTable }) => {
   // --- HEIGHT CONTROL: Edit this value to adjust the height of the grid/column view ---
@@ -9,11 +8,11 @@ const Table = ({ isGrid, modifyTable }) => {
   return (
     <div className="h-[80vh] mt-10 w-[98%] flex justify-center ml-[30px]">
       {" "}
-      {/* Set muna ng main container nas naka 80vh*/}
+      {/* Set muna ng main container tas naka 80vh*/}
       {/* Parent box to  */}
       <div className="h-full min-w-[98%] flex items-stretch justify-center">
         <div
-          className={`h-full w-full bg-white shadow-md outline-2 ${
+          className={`h-full w-[95%] bg-gray shadow-md outline-2 ${
             isGrid
               ? ""
               : "outline outline-1.5 outline-gray-950 outline-offset-[-1px] outline-blur-md"
@@ -32,30 +31,39 @@ const Table = ({ isGrid, modifyTable }) => {
               className="relative w-full flex flex-col"
               style={{ height: mainContentHeight }}
             >
-              {/* HEIGHT CONTROL: This is the column/table view container. Adjust height above. */}
-              <div className="sticky top-0 z-10 bg-[#02327B] w-full">
-                {" "}
-                {/*Header del table*/}
-                <table className="table-auto w-[83%] border-none border-separate border-spacing-0 ">
-                  <thead>
-                    <tr className="text-[12px] text-white h-10">
-                      <th className="font-normal text-left pl-4">
-                        Student Name
-                      </th>
-                      <th className="font-normal pl-5 w-18">Program</th>
-                      <th className="font-normal  w-15 ">Tassel</th>
-                      <th className="font-normal w-16 pl-6">Hood</th>
-                      <th className="font-normal w-16 pl-6">Gown</th>
-                      <th className="font-normal">Date of Reservation</th>
-                      <th className="font-normal">Status</th>
-                      <th className="font-normal"></th>
-                    </tr>
-                  </thead>
-                </table>
+              {/* Custom header ste outside del table for sticky effect  */}
+              <div
+                className="w-full  bg-[#02327B] "
+                style={{ display: "flex" }}
+              >
+                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[180px] w-[180px] h-10">
+                  Student Name
+                </div>
+                <div className="text-center text-white text-xs font-bold flex items-center justify-center   border-gray-600 max-w-[120px] w-[120px] h-10">
+                  Program
+                </div>
+                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
+                  Tassel
+                </div>
+                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
+                  Hood
+                </div>
+                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[80px] w-[80px] h-10">
+                  Gown
+                </div>
+                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[120px] w-[120px] h-10">
+                  Date of Reservation
+                </div>
+                <div className="text-center text-white text-xs font-bold flex items-center justify-center  border-gray-600 max-w-[100px] w-[100px] h-10">
+                  Status
+                </div>
+                <div className="text-center  mr-3 text-white text-xs font-bold flex items-center justify-center max-w-[100px] w-[100px] h-10">
+                  Actions
+                </div>
               </div>
-              <div className="flex-1 w-full overflow-y-auto overflow-x-hidden">
-                <table className="table-auto w-full border-none border-spacing-0 border-b-2 border-black min-w-0 max-w-full">
-                  <Rows isGrid={false} modifyTable={modifyTable}/>
+              <div className="flex-1 w-full overflow-y- overflow-x-hidden">
+                <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg">
+                  <Rows isGrid={false} modifyTable={modifyTable} />
                 </table>
               </div>
             </div>
