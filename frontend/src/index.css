@@ -192,3 +192,77 @@
 .animate-slide-in-right {
   animation: slide-in-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Fade-in from bottom animation for column view */
+@keyframes fade-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-bottom {
+  animation: fade-in-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Custom dropdown styles for all tables */
+select.table-dropdown {
+  position: absolute;
+  width: 70px;
+
+  border: 1px solid #808080 !important;
+
+  text-align: center !important;
+  padding-right: 18px !important; /* space for arrow */
+
+  box-shadow: none !important;
+  font-family: inherit;
+  font-size: inherit; /* Use the inherited font size, don't force a small size */
+  height: 23px;
+
+  border-radius: 15px !important;
+  transition: background 0.2s, border 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  background-image: none !important; /* Remove custom arrow */
+}
+
+select.table-dropdown:focus {
+  border-color: #808080 !important;
+  outline: 1.5px solid #808080 !important;
+  box-shadow: none !important;
+}
+
+select.table-dropdown:hover,
+select.table-dropdown:active {
+  background-color: #edb427 !important;
+  border-color: #edb427 !important;
+}
+
+select.table-dropdown option {
+  background: #fff;
+  color: #232323;
+  border-radius: 0 !important;
+  padding: 4px 8px;
+  text-align: center;
+  font-size: inherit; /* Inherit font size from select */
+  transition: background 0.2s, color 0.2s;
+}
+select.table-dropdown option:hover,
+select.table-dropdown option:checked {
+  background: #edb427 !important;
+  color: #232323 !important;
+}
+
+select.table-dropdown:disabled {
+  background: #f3f3f3 !important;
+  color: #bdbdbd !important;
+  cursor: not-allowed;
+}
+
+select.table-dropdown::-ms-expand {
+  display: none;
+}

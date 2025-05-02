@@ -157,7 +157,7 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
                     <div className="text-sm text-gray-700 mb-1">
                       Tassel:{" "}
                       <select
-                        className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
+                        className="table-dropdown w-full text-center rounded-[20px] px-2 py-1"
                         name="tassel"
                         value={editData.tassel}
                         onChange={handleEditChange}
@@ -173,7 +173,7 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
                     <div className="text-sm text-gray-700 mb-1">
                       Hood:{" "}
                       <select
-                        className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
+                        className="table-dropdown w-full text-center rounded-[20px] px-2 py-1"
                         name="hood"
                         value={editData.hood}
                         onChange={handleEditChange}
@@ -189,7 +189,7 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
                     <div className="text-sm text-gray-700 mb-1">
                       Gown:{" "}
                       <select
-                        className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
+                        className="table-dropdown w-full text-center rounded-[20px] px-2 py-1"
                         name="gown"
                         value={editData.gown}
                         onChange={handleEditChange}
@@ -338,8 +338,7 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
               <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
-                    <input
-                      type="text"
+                    <select
                       name="tassel"
                       value={modifyTable ? db.tassel : editData.tassel}
                       onChange={
@@ -348,8 +347,14 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
                               handleCellChange(db.id, "tassel", e.target.value)
                           : handleEditChange
                       }
-                      className=" relative w-16 h-5 text-center bg-[#D2D2D2]  rounded-[10px] border border-[#8D8D8D] focus:outline-primary bg-[D2D2D2] text-black px-2 py-1"
-                    />
+                      className="table-dropdown w-full text-center rounded-[20px] px-2 py-1"
+                    >
+                      {tasselOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
                   ) : (
                     <h3 className="truncate">{db.tassel}</h3>
                   )}
@@ -362,8 +367,7 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
               <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
-                    <input
-                      type="text"
+                    <select
                       name="hood"
                       value={modifyTable ? db.hood : editData.hood}
                       onChange={
@@ -372,8 +376,14 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
                               handleCellChange(db.id, "hood", e.target.value)
                           : handleEditChange
                       }
-                      className=" relative w-16 h-5 text-center bg-[#D2D2D2] rounded-[10px] border border-[#8D8D8D] focus:outline-primary bg-[D2D2D2]  text-black px-2 py-1"
-                    />
+                      className="table-dropdown w-full text-center rounded-[20px] px-2 py-1"
+                    >
+                      {hoodOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
                   ) : (
                     <h3 className="truncate">{db.hood}</h3>
                   )}
@@ -386,8 +396,7 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
               <td className="text-center max-w-[80px] w-[80px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                   {isEditing ? (
-                    <input
-                      type="text"
+                    <select
                       name="gown"
                       value={modifyTable ? db.gown : editData.gown}
                       onChange={
@@ -396,8 +405,14 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
                               handleCellChange(db.id, "gown", e.target.value)
                           : handleEditChange
                       }
-                      className=" relative w-16 h-5 text-center bg-[#D2D2D2]  rounded-[10px] border border-[#8D8D8D] focus:outline-grey  bg-[D2D2D2] text-black px-2 py-1"
-                    />
+                      className="table-dropdown w-full text-center rounded-[20px] px-2 py-1"
+                    >
+                      {gownOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
                   ) : (
                     <h3 className="truncate">{db.gown}</h3>
                   )}
@@ -409,7 +424,9 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
               </td>
               <td className="text-center max-w-[120px] w-[120px] align-middle relative">
                 <div className="h-full w-full py-2 flex justify-center items-center">
-                  <button className="truncate bg-[#0C7E48] text-white px-4 rounded-full hover:bg-[rgb(27,107,70)]">Evaluate</button>
+                  <button className="truncate bg-[#0C7E48] text-white px-4 rounded-full hover:bg-[rgb(27,107,70)]">
+                    Evaluate
+                  </button>
                   <span
                     className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
                     style={{ borderRadius: "2px" }}
@@ -417,9 +434,13 @@ const EvaluationRows = ({ isGrid, hideActionButton, modifyTable }) => {
                 </div>
               </td>
               <td className="text-center max-w-[100px] w-[100px] align-middle relative">
-                <div className="h-full w-full py-2 flex justify-center items-center">
-                  <h3 className="truncate">{db.evaluation}</h3>
+                <div className="w-20 justify-start text-black text-xs font-semibold font-Figtree tracking-widest">
+                  {db.status}
                 </div>
+                <span
+                  className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                  style={{ borderRadius: "2px" }}
+                ></span>
               </td>
             </tr>,
             idx < dashboard.length - 1 && (
