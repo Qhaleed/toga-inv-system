@@ -209,7 +209,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                     <div className="text-sm text-gray-700 mb-2">
                       Status:{" "}
                       <select
-                        className="bg-[#0C7E48] text-white w-24 text-center focus:outline-primary rounded-md"
+                        className="bg-[#0C7E48] text-white w-24 text-center ml-5 focus:outline-primary rounded-md"
                         name="status"
                         value={editData.status}
                         onChange={handleEditChange}
@@ -418,7 +418,7 @@ const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
                 </div>
               </td>
               <td className="text-center max-w-[100px] w-[100px] align-middle relative">
-                <div className="w-20 justify-start text-black text-xs font-semibold font-Figtree tracking-widest">
+                <div className="w-20 justify-start text-black text-xs font-semibold font-Figtree tracking-widest flex items-center h-full ml-[23px]">
                   {db.status}
                 </div>
                 <span
