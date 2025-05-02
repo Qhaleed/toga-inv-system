@@ -133,18 +133,20 @@ function LoginCard() {
       </div>
 
       {/* Submit Button */}
-      <button
-        type="submit"
-        className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white mb-4"
-      >
-        Login
-      </button>
+      <div className="mb-6">
+        <button
+          type="submit"
+          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white"
+        >
+          Login
+        </button>
+      </div>
 
       {/* Register Link */}
-      <div className="flex justify-center items-center text-center h-10 rounded-full font-manjari bg-white hover:bg-gray-300 transition duration-300">
+      <div className="flex justify-center items-center text-center">
         <a
           href="/register"
-          className="text-[#17153B] hover:w-full max-h-fit pt-2 pb-2"
+          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300"
         >
           Register
         </a>
