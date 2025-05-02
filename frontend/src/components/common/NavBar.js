@@ -65,13 +65,8 @@ const Navbar = ({ isGrid, setIsGrid, modifyTable, setmodifyTable }) => {
   };
 
   const editallClicked = () => {
-    if(!modifyTable){
-      setmodifyTable(true);
-    }
-    else{
-      setmodifyTable(false);
-    };
-  }
+    setmodifyTable((prev) => !prev);
+  };
 
   // Removed unused switchSize function since each button now has its own onClick logic
 
@@ -215,8 +210,11 @@ const Navbar = ({ isGrid, setIsGrid, modifyTable, setmodifyTable }) => {
               {gridIcon}
             </button>
           </div>
-          <button className="hover:scale-105 h-7 w-28 bg-[#0C7E48] rounded-lg text-xs text-white ml-2" onClick={editallClicked}>
-            Modify Table
+          <button
+            className="hover:scale-105 h-7 w-28 bg-[#0C7E48] rounded-lg text-xs text-white ml-2"
+            onClick={editallClicked}
+          >
+            {modifyTable ? "Done" : "Modify Table"}
           </button>
         </div>
       </div>

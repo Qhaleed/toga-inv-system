@@ -2,16 +2,16 @@ import { ReactComponent as Table } from "../../assets/icons/table.svg";
 import { ReactComponent as EyeIcon } from "../../assets/icons/eye-icon.svg";
 import { ReactComponent as Trash } from "../../assets/icons/black-trash.svg";
 import { ReactComponent as BlackTable } from "../../assets/icons/black-table.svg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const hoodOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const gownOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 const statusOptions = ["Borrowed", "Not Borrowed"];
 
-const Rows = ({ isGrid, hideActionButton, modifyTable}) => {
+const Rows = ({ isGrid, hideActionButton, modifyTable }) => {
   const [dashboard, setDashboard] = useState([]);
-  // Bagong state para sa edit mode per row/card
+  const [originalDashboard, setOriginalDashboard] = useState([]); // Track original data
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
 
@@ -19,22 +19,85 @@ const Rows = ({ isGrid, hideActionButton, modifyTable}) => {
     // kuha data sa JSON
     fetch("http://localhost:8000/dashboard")
       .then((res) => res.json())
-      .then((data) => setDashboard(data));
+      .then((data) => {
+        setDashboard(data);
+        setOriginalDashboard(data);
+      });
   }, []);
 
   useEffect(() => {
-    if(modifyTable){
-      setDashboard((prev) => prev.map((item) => ({...item, eye: "hidden", trash: "block"})));
-    } 
-    else{
-      setDashboard((prev) => prev.map((item) => ({...item, eye: "block", trash: "hidden"})));
+    if (modifyTable) {
+      setDashboard((prev) =>
+        prev.map((item) => ({ ...item, eye: "hidden", trash: "block" }))
+      );
+    } else {
+      setDashboard((prev) =>
+        prev.map((item) => ({ ...item, eye: "block", trash: "hidden" }))
+      );
     }
+  }, [modifyTable]);
+
+  useEffect(() => {
+    if (modifyTable) {
+      setEditId(null);
+      setEditData({});
+    }
+  }, [modifyTable]);
+
+  const prevModifyTable = useRef(modifyTable);
+
+  useEffect(() => {
+    if (prevModifyTable.current && !modifyTable) {
+      // Exiting modify mode, save changes
+      const changedRows = dashboard.filter((row) => {
+        const orig = originalDashboard.find((o) => o.id === row.id);
+        return (
+          orig &&
+          (row.tassel !== orig.tassel ||
+            row.hood !== orig.hood ||
+            row.gown !== orig.gown)
+        );
+      });
+      if (changedRows.length > 0) {
+        Promise.all(
+          changedRows.map((row) =>
+            fetch(`http://localhost:8000/dashboard/${row.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                tassel: row.tassel,
+                hood: row.hood,
+                gown: row.gown,
+              }),
+            })
+          )
+        )
+          .then(() => {
+            alert("Changes saved!");
+            setOriginalDashboard(dashboard);
+          })
+          .catch(() => {
+            alert("Failed to save changes.");
+          });
+      }
+    }
+    prevModifyTable.current = modifyTable;
+    // eslint-disable-next-line
   }, [modifyTable]);
 
   // Para sa grid/column view: pag click ng edit icon, mag-edit mode
   const handleEditClick = (db) => {
-    setDashboard((prev) => prev.map((item) => 
-    db.id === item.id ? {...item, eye: item.eye === "block" ? "hidden" : "block", trash: item.trash === "hidden" ? "block" : "hidden"} : item));
+    setDashboard((prev) =>
+      prev.map((item) =>
+        db.id === item.id
+          ? {
+              ...item,
+              eye: item.eye === "block" ? "hidden" : "block",
+              trash: item.trash === "hidden" ? "block" : "hidden",
+            }
+          : item
+      )
+    );
     setEditId(db.id);
     setEditData({ ...db }); // copy current data
   };
@@ -58,6 +121,13 @@ const Rows = ({ isGrid, hideActionButton, modifyTable}) => {
   const handleCancel = () => {
     setEditId(null);
     setEditData({});
+  };
+
+  // When editing a cell in modifyTable mode, update dashboard state directly
+  const handleCellChange = (id, name, value) => {
+    setDashboard((prev) =>
+      prev.map((row) => (row.id === id ? { ...row, [name]: value } : row))
+    );
   };
 
   if (isGrid) {
@@ -230,156 +300,192 @@ const Rows = ({ isGrid, hideActionButton, modifyTable}) => {
     );
   } else {
     // table/column view with inline editing
+    // Remove scrolling in edit mode (modifyTable) and in per-row inline editing (editId !== null)
+    const isEditingAny = modifyTable || editId !== null;
     return (
-      <tbody className="animate-fade-in">
-        {dashboard.map((db) => {
-          const isEditing = editId === db.id;
-          const notEye = db.eye !== "block";
+      <tbody
+        className={`w-full${isEditingAny ? "" : " overflow-y-auto"}`}
+        style={isEditingAny ? {} : { maxHeight: "calc(80vh - 40px)" }}
+      >
+        {dashboard.map((db, idx) => {
           const rowColor = db.id % 2 !== 0 ? "bg-[#BAB4B1]" : "bg-[#E9E9E9]";
-          return (
+          const isEditing = modifyTable || editId === db.id;
+          return [
             <tr
-              className={`h-12 ${rowColor} text-xs font-normal relative`}
+              className={`h-10 ${rowColor} text-xs font-normal table-fixed w-full`}
               key={db.id}
+              style={{ maxWidth: "100%" }}
             >
-              {/* Student Name */}
-              <td>
-                <div className="h-full w-full py-2 border-r border-gray-600">
-                  <h3 className="ml-4">{db.studentname}</h3>
+              <td className="text-center max-w-[180px] w-[180px] border-r border-gray-600 align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center">
+                  <h3 className="truncate">{db.studentname}</h3>
                 </div>
               </td>
-              {/* Program */}
-              <td>
-                <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  <h3 className="text-black">{db.program}</h3>
+              <td className="text-center max-w-[120px] w-[120px] border-r border-gray-600 align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center">
+                  <h3 className="truncate">{db.program}</h3>
                 </div>
               </td>
-              {/* Tassel */}
-              <td>
-                <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {notEye ? (
-                    <select
-                      className="bg-[#0C7E48] text-white w-16 rounded-md text-center focus:outline-primary"
+              <td className="text-center max-w-[80px] w-[80px] border-r border-gray-600 align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center relative">
+                  {isEditing ? (
+                    <input
+                      type="text"
                       name="tassel"
-                      value={editData.tassel}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {tasselOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      value={modifyTable ? db.tassel : editData.tassel}
+                      onChange={
+                        modifyTable
+                          ? (e) =>
+                              handleCellChange(db.id, "tassel", e.target.value)
+                          : handleEditChange
+                      }
+                      className="w-full text-center rounded-[20px] border border-[#0C7E48] focus:outline-primary bg-white text-black px-2 py-1"
+                    />
                   ) : (
-                    <h3 className="text-black">{db.tassel}</h3>
+                    <h3 className="truncate">{db.tassel}</h3>
                   )}
                 </div>
               </td>
-              {/* Hood */}
-              <td>
-                <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {notEye ? (
-                    <select
-                      className="bg-[#0C7E48] text-white w-16 rounded-md text-center focus:outline-primary"
+              <td className="text-center max-w-[80px] w-[80px] border-r border-gray-600 align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center relative">
+                  {isEditing ? (
+                    <input
+                      type="text"
                       name="hood"
-                      value={editData.hood}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {hoodOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      value={modifyTable ? db.hood : editData.hood}
+                      onChange={
+                        modifyTable
+                          ? (e) =>
+                              handleCellChange(db.id, "hood", e.target.value)
+                          : handleEditChange
+                      }
+                      className="w-full text-center rounded-[20px] border border-[#0C7E48] focus:outline-primary bg-white text-black px-2 py-1"
+                    />
                   ) : (
-                    <h3 className="text-black">{db.hood}</h3>
+                    <h3 className="truncate">{db.hood}</h3>
                   )}
                 </div>
               </td>
-              {/* Gown */}
-              <td>
-                <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {notEye ? (
-                    <select
-                      className="bg-[#0C7E48] text-white w-16 rounded-md text-center focus:outline-primary"
+              <td className="text-center max-w-[80px] w-[80px] border-r border-gray-600 align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center relative">
+                  {isEditing ? (
+                    <input
+                      type="text"
                       name="gown"
-                      value={editData.gown}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {gownOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      value={modifyTable ? db.gown : editData.gown}
+                      onChange={
+                        modifyTable
+                          ? (e) =>
+                              handleCellChange(db.id, "gown", e.target.value)
+                          : handleEditChange
+                      }
+                      className="w-full text-center rounded-[20px] border border-[#0C7E48] focus:outline-primary bg-white text-black px-2 py-1"
+                    />
                   ) : (
-                    <h3 className="text-black">{db.gown}</h3>
+                    <h3 className="truncate">{db.gown}</h3>
                   )}
                 </div>
               </td>
-              {/* Date of Reservation */}
-              <td>
-                <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  <h3>{db.dateofreservation}</h3>
+              <td className="text-center max-w-[120px] w-[120px] border-r border-gray-600 align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center">
+                  <h3 className="truncate">{db.dateofreservation}</h3>
                 </div>
               </td>
-              {/* Status */}
-              <td>
-                <div className="h-full w-full py-2 border-r border-gray-600 flex justify-center">
-                  {notEye ? (
-                    <select
-                      className="bg-[#0C7E48] text-white w-28 rounded-md text-center focus:outline-primary"
-                      name="status"
-                      value={editData.status}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {statusOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <h3 className="text-black">{db.status}</h3>
-                  )}
+              <td className="text-center max-w-[100px] w-[100px] border-r border-gray-600 align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center">
+                  <h3 className="truncate">{db.status}</h3>
                 </div>
               </td>
-              {/* Actions */}
-              <td className="relative">
-                <div className="h-full w-full py-2 flex justify-evenly">
+              <td className="text-center max-w-[100px] w-[100px] align-middle">
+                <div className="h-full w-full py-2 flex justify-center items-center gap-2">
+                  {modifyTable ? (
                     <>
                       <button
-                        className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700 ${db.eye}`}
-                        // eye icon only
+                        className="w-7 h-7 bg-gray-400 flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
+                        disabled
                       >
                         <EyeIcon className="w-5" />
                       </button>
                       <button
-                        className={`w-7 h-7 border border-gray-600 bg-[#D2D2D2] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-gray-400 ${db.trash}`}
-                        // eye icon only
-                      >
-                        <Trash className="w-5" />
-                      </button>
-                      <button
-                        className={`w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700 ${db.eye}`}
-                        onClick={() => handleEditClick(db)}
+                        className="w-7 h-7 bg-gray-400 flex justify-center items-center rounded-md opacity-60 cursor-not-allowed"
+                        disabled
                       >
                         <Table className="w-5" />
                       </button>
+                    </>
+                  ) : isEditing ? (
+                    <>
                       <button
-                        className={`w-7 h-7 border border-gray-600 bg-[#D2D2D2] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700 ${db.trash}`}
-                        onClick={() => handleEditClick(db)}
+                        className="px-2 py-0.5 bg-emerald-700 text-white rounded text-[10px] mr-1 min-w-[40px] min-h-[22px] hover:bg-blue-800"
+                        style={{ fontSize: '10px', padding: '2px 8px' }}
+                        onClick={async () => {
+                          // Save to backend
+                          await fetch(
+                            `http://localhost:8000/dashboard/${db.id}`,
+                            {
+                              method: "PATCH",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({
+                                tassel: editData.tassel,
+                                hood: editData.hood,
+                                gown: editData.gown,
+                              }),
+                            }
+                          );
+                          setDashboard((prev) =>
+                            prev.map((item) =>
+                              item.id === db.id
+                                ? { ...item, ...editData }
+                                : item
+                            )
+                          );
+                          setEditId(null);
+                          setEditData({});
+                        }}
                       >
-                        <BlackTable className="w-5" />
+                        Save
+                      </button>
+                      <button
+                        className="px-2 py-0.5 bg-gray-400 text-white rounded text-[10px] min-w-[40px] min-h-[22px] hover:bg-gray-600"
+                        style={{ fontSize: '10px', padding: '2px 8px' }}
+                        onClick={handleCancel}
+                      >
+                        Cancel
                       </button>
                     </>
+                  ) : (
+                    <>
+                      <button className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700">
+                        <EyeIcon className="w-5" />
+                      </button>
+                      <button
+                        className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-blue-700"
+                        onClick={() => {
+                          setEditId(db.id);
+                          setEditData({ ...db });
+                        }}
+                      >
+                        <Table className="w-5" />
+                      </button>
+                    </>
+                  )}
                 </div>
               </td>
-            </tr>
-          );
+            </tr>,
+            idx < dashboard.length - 1 && (
+              <tr key={`gap-${db.id}`} className="w-full">
+                <td
+                  colSpan={8}
+                  style={{
+                    height: "3px",
+                    background: "transparent",
+                    padding: 0,
+                    border: "none",
+                  }}
+                ></td>
+              </tr>
+            ),
+          ];
         })}
       </tbody>
     );
