@@ -29,42 +29,42 @@ const Table = ({ isGrid, modifyTable }) => {
                 <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg sticky top-0 z-10 md:table-fixed md:w-full md:max-w-full md:min-w-0 sm:w-full sm:table-fixed">
                   <thead>
                     <tr className="bg-[#02327B]  full h-10 xs:h-12 sm:h-12 md:h-16">
-                      <th className="md:w-[23%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="md:w-[23%]  text-white text-[10px]  md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Student Name
                         </span>
                       </th>
-                      <th className=" sm:w-[12%] md:w-[15%] md:pl-6 sm:pr-8  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className=" sm:w-[12%] md:w-[15%] md:pl-6 sm:pr-8  text-white text-[10px] md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Program
                         </span>
                       </th>
-                      <th className="w-[10%] sm:pr-6 md:w-[10%] md:pl-4   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[10%] sm:pr-6 md:w-[10%] md:pl-4   text-white text-[10px]  md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Tassel
                         </span>
                       </th>
-                      <th className="sm:w-[8.5%] sm:pr-1  md:pr-6 md:pl-4 md:w-[10%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="sm:w-[8.5%] sm:pr-1  md:pr-6 md:pl-4 md:w-[10%]  text-white text-[10px] md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Hood
                         </span>
                       </th>
-                      <th className="w-[10%]   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[10%]   text-white text-[10px] md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Gown
                         </span>
                       </th>
-                      <th className="w-[15%] pl-2 text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[15%] pl-2 text-white text-[10px] md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Date of Reservation
                         </span>
                       </th>
-                      <th className="w-[12.5%]   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[12.5%]   text-white text-[10px] md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Status
                         </span>
                       </th>
-                      <th className="w-[13.5%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[13.5%]  text-white text-[10px] md:text-[14px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Actions
                         </span>
