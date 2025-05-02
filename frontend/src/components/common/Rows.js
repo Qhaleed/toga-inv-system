@@ -524,68 +524,135 @@ function CustomDropdown({ value, options, onChange, disabled }) {
   return (
     <div
       ref={ref}
-      className={`relative w-[60px] h-[15px] flex justify-center items-center ${
+      className={`relative w-[80%] flex justify-center items-center ${
         disabled ? "pointer-events-none opacity-60" : ""
       }`}
       tabIndex={0}
-      onClick={() => !disabled && setOpen((o) => !o)}
-      onBlur={() => setOpen(false)}
       style={{
-        outline: open ? "1.5px solid #EDB427" : "1.5px solid #696969",
+        outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
         borderRadius: 30,
         cursor: disabled ? "not-allowed" : "pointer",
         boxSizing: "border-box",
-        height: "15px",
-        background: open ? "#fff" : "#2D2B3",
+        background: open ? "#fff" : "#F3F4F6",
         transition: "outline-color 0.3s, background 0.2s",
       }}
     >
-      <div
-        className={`w-full text-black text-[11px] font-semibold font-Figtree tracking-widest flex items-center justify-between px-2`}
+      <button
+        type="button"
+        className="w-full flex items-center  px-1 md:px-3 text-black sm:text-[8px] text-[6px] md:text-[10px] lg:text-[11px] justify-center font-semibold font-Figtree tracking-widest focus:outline-[#EDB427] focus:outline-1.5 focus:outline-offset-[-1px] focus:outline-blur-md"
         style={{
           borderRadius: 35,
-          height: "16px",
-          background: open ? "#8D8D8D" : "#DBDBDB",
-          color: open ? "#F3B51A" : "#000000",
+          minHeight: "20px",
+          background: open ? "#0C7E48" : "#DBDBDB",
+          color: open ? "#fff" : "#000000",
           transition: "background 0.3s",
           position: "relative",
         }}
+        onClick={() => !disabled && setOpen((o) => !o)}
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={open}
       >
         <span className="truncate">{value}</span>
         <span
-          className="ml-2 flex items-center"
+          className=" items-center absolute hidden  md:flex lg:flex"
           style={{
-            position: "absolute",
-            right: 6,
+            right: 16,
             top: "50%",
             transform: "translateY(-50%)",
+            pointerEvents: "cursor",
           }}
         >
-          <ChevronDown className="w-3 h-3 text-black" style={{ opacity: open ? 1 : 0.7 }} />
+          <ChevronDown
+            className="w-2.5 h-2.5 text-black absolute"
+            style={{ opacity: open ? 0.8 : 12 }}
+            aria-hidden="true"
+          />
         </span>
-      </div>
+      </button>
       {open && (
-        <div
-          className="absolute z-30 left-0 top-full w-full border border-[#0C7E48] shadow-md mt-1 animate-fade-in"
-          style={{ minWidth: "12px", background: "#D4D4D4" }}
-        >
-          {options.map((opt) => (
-            <div
-              key={opt}
-              className={`px-2 py-1.5 text-xs font-Figtree ring-1 ring-opacity-50 flex-col w-full text-black cursor-pointer ${
-                opt === value
-                  ? "font-bold text-[#0C7E48] bg-slate-200 w-full"
-                  : ""
-              } hover:text-[#F3B51A]`}
-              style={{ background: "#D4D4D4", transition: "background 0.2s" }}
-              onClick={() => {
-                onChange(opt);
-                setOpen(false);
-              }}
-            >
-              {opt}
-            </div>
-          ))}
+        <div className="absolute z-30 left-0 top-full w-full mt-1 animate-fade-in flex justify-center">
+          {/* Parent background div for border and background */}
+          <div
+            className="w-full h-full absolute top-0 left-0 rounded-lg border-[1.5px] border-[#0C7E48] bg-[#E9E9E9] pointer-events-none"
+            style={{ zIndex: 0 }}
+          />
+          <div
+            className="relative w-full overflow-auto flex flex-col items-center"
+            style={{ zIndex: 1 }}
+            role="listbox"
+          >
+            {options.map((opt, idx) => (
+              <div
+                key={opt}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
+                  opt === value
+                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                    : ""
+                }`}
+                style={{
+                  background: opt === value ? "#E9E9E9" : "transparent",
+                  borderRadius: "0",
+                  borderLeft: opt === value ? "5px solid #0C7E48" : "none",
+                  borderRight: opt === value ? "5px solid #0C7E48" : "none",
+                  borderTop: "none",
+                  borderBottom: "none",
+                }}
+                onClick={() => {
+                  onChange(opt);
+                  setOpen(false);
+                }}
+                role="option"
+                aria-selected={opt === value}
+                tabIndex={0}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#E0F2F1";
+                  e.currentTarget.style.color = "#0C7E48";
+                  // Rounded top for first, bottom for last
+                  if (idx === 0) {
+                    e.currentTarget.style.borderTopLeftRadius = "5px";
+                    e.currentTarget.style.borderTopRightRadius = "5px";
+                  } else if (idx === options.length - 1) {
+                    e.currentTarget.style.borderBottomLeftRadius = "5px";
+                    e.currentTarget.style.borderBottomRightRadius = "5px";
+                  } else {
+                    e.currentTarget.style.borderTopLeftRadius = "0";
+                    e.currentTarget.style.borderTopRightRadius = "0";
+                    e.currentTarget.style.borderBottomLeftRadius = "0";
+                    e.currentTarget.style.borderBottomRightRadius = "0";
+                  }
+                  if (opt === value) {
+                    e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
+                    e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
+                    e.currentTarget.style.borderTop = "none";
+                    e.currentTarget.style.borderBottom = "none";
+                  } else {
+                    e.currentTarget.style.border = "none";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    opt === value ? "#E9E9E9" : "transparent";
+                  e.currentTarget.style.color =
+                    opt === value ? "#0C7E48" : "#000";
+                  e.currentTarget.style.borderTopLeftRadius = "4";
+                  e.currentTarget.style.borderTopRightRadius = "4";
+                  e.currentTarget.style.borderBottomLeftRadius = "4";
+                  e.currentTarget.style.borderBottomRightRadius = "4";
+                  if (opt === value) {
+                    e.currentTarget.style.borderLeft = "4px solid #0C7E48";
+                    e.currentTarget.style.borderRight = "4px solid #0C7E48";
+                    e.currentTarget.style.borderTop = "none";
+                    e.currentTarget.style.borderBottom = "none";
+                  } else {
+                    e.currentTarget.style.border = "none";
+                  }
+                }}
+              >
+                {opt}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

@@ -6,7 +6,7 @@ const Table = ({ isGrid, modifyTable }) => {
   const mainContentHeight = "80vh"; // <-- EDIT THIS VALUE FOR HEIGHT
   console.log(modifyTable);
   return (
-    <div className="h-[80vh] mt-10 w-full max-w-[1200px] flex justify-center ml-0 px-1 sm:px-2 md:px-5 lg:ml-[0px] lg:w-[98%]">
+    <div className="h-[80vh] mt-10 w-full overflow-clip on max-w-[1400px] flex justify-center ml-0  sm:px-2 md:px-5 lg:ml-[0px] lg:w-[100%]">
       {/* Set main container responsive: full width on mobile, margin on lg */}
       <div className="h-full  w-full    flex items-stretch justify-center">
         <div className="w-full flex flex-col   justify-center items-center">
@@ -29,27 +29,27 @@ const Table = ({ isGrid, modifyTable }) => {
                 <table className="table-auto w-full border-none border-separate border-spacing-0 rounded-b-lg sticky top-0 z-10 md:table-fixed md:w-full md:max-w-full md:min-w-0 sm:w-full sm:table-fixed">
                   <thead>
                     <tr className="bg-[#02327B]  full h-10 xs:h-12 sm:h-12 md:h-16">
-                      <th className="md:w-[23%] bg-red-50   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="md:w-[23%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Student Name
                         </span>
                       </th>
-                      <th className=" sm:w-[12%] md:w-[15%] md:pl-6 sm:pr-8 bg-black  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className=" sm:w-[12%] md:w-[15%] md:pl-6 sm:pr-8  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Program
                         </span>
                       </th>
-                      <th className="w-[10%] sm:pr-6 md:w-[10%] md:pl-4  bg-red-950  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[10%] sm:pr-6 md:w-[10%] md:pl-4   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Tassel
                         </span>
                       </th>
-                      <th className="sm:w-[8.5%] sm:pr-1  md:pr-6 md:pl-4 md:w-[10%] bg-green-950  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="sm:w-[8.5%] sm:pr-1  md:pr-6 md:pl-4 md:w-[10%]  text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Hood
                         </span>
                       </th>
-                      <th className="w-[10%]  bg-fuchsia-200 text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[10%]   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Gown
                         </span>
@@ -59,7 +59,7 @@ const Table = ({ isGrid, modifyTable }) => {
                           Date of Reservation
                         </span>
                       </th>
-                      <th className="w-[12.5%]  bg-fuchsia-200 text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
+                      <th className="w-[12.5%]   text-white text-[10px] xs:text-xs font-bold text-center align-middle truncate">
                         <span className="block w-full text-center truncate">
                           Status
                         </span>
