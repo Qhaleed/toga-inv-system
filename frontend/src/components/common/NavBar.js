@@ -90,7 +90,9 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("dashboard", Home, GrayHouse)}
           </span>
-          <span className="text-[10px] ml-2">Dashboard</span>
+          <span className="text-[10px] mx-1 md:mx-4 content-center ">
+            Dashboard
+          </span>
         </button>
 
         <button
@@ -100,7 +102,7 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("inventory", Inventory, GrayInventory)}
           </span>
-          <span className="text-[10px] mx-2">Inventory</span>
+          <span className="text-[10px] mx-2 md:mx-4">Inventory</span>
         </button>
 
         <button
@@ -110,7 +112,9 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("pending", Statistic, GrayStatistic)}
           </span>
-          <span className="text-[10px] mx-2">Pending</span>
+          <span className="text-[10px] mx-2 md:mx-5 content-center">
+            Pending
+          </span>
         </button>
 
         <button
@@ -120,7 +124,7 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("evaluation", Application, GrayApplication)}
           </span>
-          <span className="text-[10px] mx-2">Evaluation</span>
+          <span className="text-[10px]  mx-1  md:mx-4">Evaluation</span>
         </button>
 
         {/* Logout button at top right */}
