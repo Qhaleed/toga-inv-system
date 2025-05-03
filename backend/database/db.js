@@ -52,28 +52,16 @@ async function getTable(email) {
     }
 }
 
-/*
-    username: "",
-    password: "",
-    confirmPassword: "",
-    email: "",
-    firstName: "",
-    surname: "",
-    middleInitial: "",
-    idNumber: "",
-    idImage: [],
-    course: "",
-*/
-
 async function registForm({ email, password, first_name, surname, middleInitial, idNumber, course }) {
     const role = 'student'; // default role in registration
     try {
-        await pool.query(
-            `INSERT INTO accounts (email, password, first_name, surname, id_number, middle_initial, course, role)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        const [result] = await pool.query(
+            `INSERT INTO accounts (email, password, first_name, surname, middle_initial, id_number, course, role)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
             [email, password, first_name, surname, middleInitial, idNumber, course, role]
         );
         console.log('Successfully registered')
+        return result;
     } catch (err) {
         console.error('Database error in registForm:', err);
     }
@@ -81,7 +69,7 @@ async function registForm({ email, password, first_name, surname, middleInitial,
 
 
 module.exports = {
-    registForm,
+    pool,
     getTable,
-    pool  // ← export the pool directly
+    registForm
 };
