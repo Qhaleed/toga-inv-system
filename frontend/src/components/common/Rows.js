@@ -2,13 +2,15 @@ import { ReactComponent as Table } from "../../assets/icons/table.svg";
 import { ReactComponent as EyeIcon } from "../../assets/icons/eye-icon.svg";
 import { ReactComponent as Trash } from "../../assets/icons/black-trash.svg";
 import { ReactComponent as ChevronDown } from "../../assets/icons/chevron-down.svg";
+import PopupWindow from "./PopupWindow";
+import HoverPopup from "./HoverPopup";
+import GridView from "./GridView";
 
 import { useState, useEffect, useRef } from "react";
 
 const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const hoodOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const gownOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
-const statusOptions = ["Borrowed", "Not Borrowed"];
 
 const Rows = ({
   isGrid,
@@ -24,6 +26,11 @@ const Rows = ({
   // Animation state for table
   const [tableAnim, setTableAnim] = useState("");
   const prevSortOrder = useRef(sortOrder);
+  const [popupMode, setPopupMode] = useState("none"); // "none" | "hover" | "full"
+  const [hoveredEyeId, setHoveredEyeId] = useState(null);
+  // PopupWindow state
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupUser, setPopupUser] = useState(null);
 
   useEffect(() => {
     // kuha data sa JSON
@@ -179,183 +186,30 @@ const Rows = ({
   }, [sortOrder, isGrid]);
 
   if (isGrid) {
-    // grid view to
+    // Instead of rendering the grid view here, delegate to the dedicated GridView component
+    // This ensures a single source of truth for the grid view UI and logic
+    // Usage: <GridView ...props />
     return (
-      <div className="w-full animate-fade-in" style={{ height: "80vh" }}>
-        <div className="flex flex-wrap gap-4 h-full w-full p-4 justify-center items-start">
-          {dashboard.map((db, idx) => (
-            <div
-              key={db.id}
-              className="bg-slate-50 rounded-lg shadow flex flex-col items-center border border-gray-200 transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-xl opacity-0 animate-fade-in relative"
-              style={{
-                animationDelay: `${idx * 80}ms`,
-                width: "100%",
-                maxWidth: "320px",
-                minWidth: "220px",
-                height: "340px",
-                maxHeight: "400px",
-                minHeight: "300px",
-                padding: "1.5rem",
-                flex: "1 1 300px",
-                boxSizing: "border-box",
-                margin: 0,
-              }}
-            >
-              {editId === db.id ? (
-                // Edit mode UI, edit kayo here
-
-                <>
-                  <h3 className="font-bold text-lg mb-2 text-center">
-                    {db.studentname}
-                  </h3>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Program: <span>{db.program}</span>
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Tassel:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                      name="tassel"
-                      value={editData.tassel}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {tasselOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Hood:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                      name="hood"
-                      value={editData.hood}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {hoodOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Gown:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                      name="gown"
-                      value={editData.gown}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {gownOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Date: <span>{db.dateofreservation}</span>
-                  </div>
-                  <div className="text-sm text-gray-700 mb-2">
-                    Status:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-24 text-center ml-5 focus:outline-primary rounded-md"
-                      name="status"
-                      value={editData.status}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {statusOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {/* Floating Save/Cancel Popup Niggas */}
-                  <div className="absolute top-2 right-2 z-20 flex flex-col gap-2 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
-                    <button
-                      className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
-                      onClick={() => handleSave(db.id)}
-                    >
-                      Save
-                    </button>
-                    <button
-                      className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
-                      onClick={handleCancel}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              ) : (
-                // Normal view UI
-                <>
-                  <h3 className="font-bold text-lg mb-2">{db.studentname}</h3>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Program: {db.program}
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Tassel: {db.tassel}
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Hood: {db.hood}
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Gown: {db.gown}
-                  </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Date: {db.dateofreservation}
-                  </div>
-                  <div className="text-sm text-gray-700 mb-2">
-                    Status: {db.status}
-                  </div>
-                  <div className="flex gap-2 mt-2 w-full">
-                    <button
-                      className="w-full h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105"
-                      style={{
-                        minWidth: 0,
-                        background: modifyTable ? "#bdbdbd" : "#0C7E48",
-                        cursor: modifyTable ? "not-allowed" : "pointer",
-                      }}
-                      disabled={modifyTable}
-                    >
-                      <EyeIcon className="w-5" />
-                    </button>
-                    <button
-                      className="w-full h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105"
-                      style={{
-                        minWidth: 0,
-                        background: modifyTable ? "#bdbdbd" : "#0C7E48",
-                        cursor: modifyTable ? "not-allowed" : "pointer",
-                      }}
-                      disabled={modifyTable}
-                      onClick={() => !modifyTable && handleEditClick(db)}
-                    >
-                      <Table className="w-5" />
-                    </button>
-                    <button
-                      className="w-full h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 hover:bg-red-700 ml-2"
-                      style={{ minWidth: 0 }}
-                      onClick={() => {
-                        /* implement niyo delete logic here */
-                      }}
-                    >
-                      <Trash className="w-4" />
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      <GridView
+        dashboard={dashboard}
+        editId={editId}
+        editData={editData}
+        hoveredEyeId={hoveredEyeId}
+        popupMode={popupMode}
+        modifyTable={modifyTable}
+        tasselOptions={tasselOptions}
+        hoodOptions={hoodOptions}
+        gownOptions={gownOptions}
+        handleEditClick={handleEditClick}
+        handleEditChange={handleEditChange}
+        handleSave={handleSave}
+        handleCancel={handleCancel}
+        setHoveredEyeId={setHoveredEyeId}
+        setPopupMode={setPopupMode}
+        setPopupUser={setPopupUser}
+        setPopupOpen={setPopupOpen}
+        hideActionButton={hideActionButton}
+      />
     );
   } else {
     // Table/column view with sticky header and scrollable table
@@ -414,7 +268,7 @@ const Rows = ({
                   sortedDashboard.map((db, idx) => {
                     const rowColor = getRowColor(idx);
                     const isEditing = modifyTable || editId === db.id;
-                    return [
+                    return (
                       <tr
                         className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-fixed`}
                         key={db.id}
@@ -564,20 +418,55 @@ const Rows = ({
                               </>
                             ) : (
                               <>
-                                <button
-                                  className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"
-                                  style={{
-                                    background: modifyTable
-                                      ? "#bdbdbd"
-                                      : "#0C7E48",
-                                    cursor: modifyTable
-                                      ? "not-allowed"
-                                      : "pointer",
-                                  }}
-                                  disabled={modifyTable}
+                                <div
+                                  className="relative"
+                                  onMouseLeave={() => setHoveredEyeId(null)}
                                 >
-                                  <EyeIcon className="w-5" />
-                                </button>
+                                  <button
+                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
+                                      hoveredEyeId === db.id
+                                        ? "bg-blue-600"
+                                        : ""
+                                    }`}
+                                    style={{
+                                      background: modifyTable
+                                        ? "#bdbdbd"
+                                        : hoveredEyeId === db.id
+                                        ? "#2563eb"
+                                        : "#0C7E48",
+                                      cursor: modifyTable
+                                        ? "not-allowed"
+                                        : "pointer",
+                                    }}
+                                    disabled={modifyTable}
+                                    onMouseEnter={() => setHoveredEyeId(db.id)}
+                                    onClick={() => {
+                                      setHoveredEyeId(db.id);
+                                      setPopupUser(db);
+                                      setPopupOpen(true);
+                                      setPopupMode("full");
+                                    }}
+                                  >
+                                    <EyeIcon
+                                      className={`w-5 transition-colors duration-200 ${
+                                        hoveredEyeId === db.id
+                                          ? "text-blue-200"
+                                          : "text-white"
+                                      }`}
+                                    />
+                                  </button>
+                                  {hoveredEyeId === db.id && (
+                                    <div
+                                      className="absolute right-2 -translate-x-1/2 top-10 z-50 w-80 bg-white rounded-xl shadow-2xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto border border-gray-200"
+                                      onMouseEnter={() =>
+                                        setHoveredEyeId(db.id)
+                                      }
+                                      onMouseLeave={() => setHoveredEyeId(null)}
+                                    >
+                                      <HoverPopup user={db} />
+                                    </div>
+                                  )}
+                                </div>
                                 <button
                                   className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"
                                   style={{
@@ -602,40 +491,30 @@ const Rows = ({
                             )}
                           </div>
                         </td>
-                      </tr>,
-                      idx < sortedDashboard.length - 1 && (
-                        <tr key={`gap-${db.id}`} className="w-full">
-                          <td
-                            colSpan={-1}
-                            style={{
-                              height: "2px",
-                              background: "white",
-                            }}
-                          ></td>
-                        </tr>
-                      ),
-                    ];
+                      </tr>
+                    );
                   })
                 )}
               </tbody>
             </table>
           </div>
         </div>
+        <PopupWindow
+          open={popupOpen}
+          onClose={() => setPopupOpen(false)}
+          user={popupUser}
+          showBackButton={false}
+          fullScreen={true}
+        />
       </div>
     );
   }
 };
 
-// Helper to always alternate row color for contrast
-function getRowColor(idx) {
-  // If table bg is light, use a slightly darker shade for odd rows
-  // If table bg is dark, use a lighter shade for odd rows
-  // For now, always alternate between two light grays
-  return idx % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
-}
+export default Rows;
 
-// CustomDropdown for table inline editing (no duplicate imports)
-function CustomDropdown({ value, options, onChange, disabled }) {
+// CustomDropdown for table/grid inline editing
+const CustomDropdown = ({ value, options, onChange, disabled }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
@@ -667,11 +546,11 @@ function CustomDropdown({ value, options, onChange, disabled }) {
     >
       <button
         type="button"
-        className="w-full flex items-center  px-1 md:px-3 text-black sm:text-[8px] text-[6px] md:text-[10px] lg:text-[11px] justify-center font-semibold font-Figtree tracking-widest focus:outline-[#EDB427] focus:outline-1.5 focus:outline-offset-[-1px] focus:outline-blur-md"
+        className="w-full flex items-center px-1 md:px-3 text-black sm:text-[8px] text-[6px] md:text-[10px] lg:text-[11px] justify-center font-semibold font-Figtree tracking-widest focus:outline-[#EDB427] focus:outline-1.5 focus:outline-offset-[-1px] focus:outline-blur-md"
         style={{
           borderRadius: 35,
           minHeight: "20px",
-          background: open ? "#0C7E48" : "#DBDBDB", //text of dropdown
+          background: open ? "#0C7E48" : "#DBDBDB",
           color: open ? "#fff" : "#000000",
           transition: "background 0.3s",
           position: "relative",
@@ -683,7 +562,7 @@ function CustomDropdown({ value, options, onChange, disabled }) {
       >
         <span className="truncate">{value}</span>
         <span
-          className=" items-center absolute hidden  md:flex lg:flex"
+          className="items-center absolute hidden md:flex lg:flex"
           style={{
             right: 16,
             top: "50%",
@@ -693,17 +572,13 @@ function CustomDropdown({ value, options, onChange, disabled }) {
         >
           <ChevronDown
             className="w-2.5 h-2.5 text-black absolute"
-            style={{
-              opacity: open ? 0.8 : 1,
-              color: open ? "#fff" : "#000", //nigga alternate colors
-            }}
+            style={{ opacity: open ? 0.8 : 1, color: open ? "#fff" : "#000" }}
             aria-hidden="true"
           />
         </span>
       </button>
       {open && (
         <div className="absolute z-30 left-0 top-full w-full mt-1 animate-fade-in flex justify-center">
-          {/* Parent background div for border and background */}
           <div
             className="w-full h-full absolute top-0 left-0 rounded-lg border-[1.5px] border-[#0C7E48] bg-[#E9E9E9] pointer-events-none"
             style={{ zIndex: 0 }}
@@ -737,9 +612,8 @@ function CustomDropdown({ value, options, onChange, disabled }) {
                 aria-selected={opt === value}
                 tabIndex={0}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#d9d9d9"; //hover bg effect to
-                  e.currentTarget.style.color = "#0C7E48"; //h0oveer text color
-                  // Rounded top for first, bottom for last
+                  e.currentTarget.style.background = "#d9d9d9";
+                  e.currentTarget.style.color = "#0C7E48";
                   if (idx === 0) {
                     e.currentTarget.style.borderTopLeftRadius = "5px";
                     e.currentTarget.style.borderTopRightRadius = "5px";
@@ -788,6 +662,9 @@ function CustomDropdown({ value, options, onChange, disabled }) {
       )}
     </div>
   );
-}
+};
 
-export default Rows;
+function getRowColor(index) {
+  // Alternate row colors for better readability
+  return index % 2 === 0 ? "bg-white" : "bg-gray-50";
+}
