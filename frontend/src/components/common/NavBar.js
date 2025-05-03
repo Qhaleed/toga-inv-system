@@ -62,7 +62,7 @@ const Navbar = ({
 
   const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
 
-  // Logout handler
+  // eto ung logut butson
   const handleLogout = () => {
     setLoading(true);
     localStorage.removeItem("token");
@@ -124,11 +124,11 @@ const Navbar = ({
         </button>
 
         {/* Logout button at top right */}
-        <div className="absolute right-8 top-2">
+        <div className="relative ml-auto mr-5 ">
           <button
             onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded shadow transition-all duration-200"
-            style={{ minWidth: 90 }}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded shadow transition-all duration-200"
+            style={{ minWidth: 20 }}
           >
             Logout
           </button>
