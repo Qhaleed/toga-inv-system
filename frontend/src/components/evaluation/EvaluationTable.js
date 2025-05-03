@@ -1,7 +1,7 @@
 import EvaluationRows from "./EvaluationRows";
 import "../common/Table.css";
 
-const EvaluationTable = ({ isGrid, modifyTable, value, setValue, EvaluationTab, setEvaluationTab }) => {
+const EvaluationTable = ({ isGrid, modifyTable, value, setValue, evalTab, setEvaluationTab }) => {
   const mainContentHeight = "80vh";
   return (
     <div className="w-full flex flex-col items-center justify-start mt-10">
@@ -50,9 +50,7 @@ const EvaluationTable = ({ isGrid, modifyTable, value, setValue, EvaluationTab, 
                       isGrid={false}
                       modifyTable={modifyTable}
                       rowHeightClass="h-16"
-                      value={value}
                       setValue={setValue} 
-                      EvaluationTab={EvaluationTab} 
                       setEvaluationTab={setEvaluationTab}
                     />
                   </table>

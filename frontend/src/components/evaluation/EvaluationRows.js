@@ -16,9 +16,7 @@ const EvaluationRows = ({
   hideActionButton,
   modifyTable,
   rowHeightClass = "h-16",
-  value, 
   setValue, 
-  EvaluationTab, 
   setEvaluationTab
 }) => {
   const [dashboard, setDashboard] = useState([]);
@@ -425,7 +423,7 @@ const EvaluationRows = ({
                   {/*Evaluation*/}
                   <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                     <div className="h-full w-full py-2 flex justify-center items-center">
-                      <button onClick={() => openTab(db)}className="truncate bg-[#0C7E48] text-white text-[10px] w-20 rounded-full lg:w-24 lg:text-xs hover:scale-105 transition-all duration-150 ease-out">Evaluate</button>
+                      <button onClick={() => openTab(db)} className="truncate bg-[#0C7E48] text-white text-[10px] w-20 rounded-full lg:w-24 lg:text-xs hover:scale-105 transition-all duration-150 ease-out">Evaluate</button>
                       <span
                         className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
                         style={{ borderRadius: "2px" }}
