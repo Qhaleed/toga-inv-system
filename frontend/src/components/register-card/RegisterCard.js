@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import UploadIcon from "../../assets/images/cloudupload.png";
 import FormWrapper from "../common/FormWrapper";
+import "../../styles/animations.css";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +18,51 @@ export default function RegisterForm() {
     idNumber: "",
     idImage: [],
     course: "",
+  });
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const courseGroups = {
+    Blue: [
+      "Bachelor of Early Childhood Education (BECEd)",
+      "Bachelor of Elementary Education (BEEd)",
+      "Bachelor of Physical Education (BPEd)",
+      "Bachelor of Secondary Education (BSEd)",
+    ],
+    Maroon: [
+      "BS Biomedical Engineering (BSBME)",
+      "BS Computer Engineering (BSCE)",
+      "BS Electronics Communication Engineering (BSECE)",
+      "Associate in Electronics Engineering Technology (AEET)",
+      "Associate in Computer Networking (ACN)",
+    ],
+    Orange: ["BS Nursing (BSN)"],
+    White: [
+      "BS Biology (BSBio)",
+      "BS Computer Science (BSCS)",
+      "BS Information Technology (BSIT)",
+      "BS Mathematics (BSMath)",
+      "BS Mathematics Sciences (BSMS)",
+      "BS New Media and Computer Animation (BSNMCA)",
+      "BS Psychology (BSPsych)",
+      "BA Communication (BAC)",
+      "BA English Language Studies (BAELS)",
+      "BA Interdisciplinary Studies (BAIDS)",
+      "BA International Studies (BAIS)",
+      "BA Philosophy (BAPhil)",
+    ],
+    Yellow: [
+      "BS Accountancy (BSA)",
+      "BS Accounting Information System (BSAIS)",
+      "BS Internal Auditing (BSIA)",
+      "BS Management Accounting (BSMA)",
+      "BS Business Administration (BSBA)",
+      "BS Office Management (BSOM)",
+      "BS Legal Management (BSLM)",
+    ],
+  };
+
+  Object.keys(courseGroups).forEach((color) => {
+    courseGroups[color].sort();
   });
 
   useEffect(() => {
@@ -243,32 +289,57 @@ export default function RegisterForm() {
 
       <div className="mt-4">
         {/* Course */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
-          <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
-            Course
-          </label>
-          <select
-            name="program"
-            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                       text-white placeholder-gray-300 placeholder:font-manjari
-                       focus:outline-none focus:border-primary focus:bg-opacity-
-                       transition duration-200 ease-in-out hover:bg-opacity-20"
-            value={formData.program}
-            onChange={handleChange}
-          >
-            <option value="" disabled className="text-gray-400">
-              Select
-            </option>
-            <option value="Bruh" className="text-black bg-white">
-              Bruh
-            </option>
-            <option value="Pluh" className="text-black bg-white">
-              Pluh
-            </option>
-            <option value="Guh" className="text-black bg-white">
-              Guh
-            </option>
-          </select>
+        <div className="relative w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4">
+            <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
+              Course
+            </label>
+
+            <div
+              onClick={() => setOpen(!open)}
+              onMouseDown={(e) => e.preventDefault()}
+              className="w-full flex-1 cursor-pointer bg-[#2A4D89] text-white rounded-md font-manjari
+                hover:bg-primary transition duration-200 ease-in-out relative"
+            >
+              <div className="py-2 px-3">{value || "Select"}</div>
+
+              {/* Dropdown Arrow */}
+              <div
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
+              >
+                ▼
+              </div>
+
+              {open && (
+                <div
+                  className="absolute z-10 mt-1 w-full bg-gray-800 text-white rounded-md shadow-lg max-h-40 overflow-y-auto border border-gray-600
+                    opacity-0 animate-fade-down transition-opacity duration-300"
+                >
+                  {Object.entries(courseGroups).map(([color, courses]) => (
+                    <div key={color}>
+                      <div className="px-4 py-2 bg-gray-700 font-figtree font-semibold">
+                        {color} Toga
+                      </div>
+                      {courses.map((course) => (
+                        <div
+                          key={course}
+                          onClick={() => {
+                            setValue(course);
+                            setOpen(false);
+                          }}
+                          className="px-6 py-3 hover:bg-primary hover:text-white transition duration-200 ease-in-out"
+                        >
+                          {course}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -281,6 +352,7 @@ export default function RegisterForm() {
           Upload ID Image
         </span>
       </div>
+      {/* Upload ID Image Box */}
       <div
         className="mt-3 w-full group p-4 sm:p-6 text-center cursor-pointer bg-gradient-to-b from-[#112047] to-[#2A4D89] rounded-[30px] transition-all duration-300 ease-in-out hover:opacity-100"
         onDrop={handleImageChange}
@@ -307,7 +379,7 @@ export default function RegisterForm() {
             </p>
             <button
               type="button"
-              className="font-manjari font-bold mt-2 px-4 pt-1 bg-white text-black rounded-full text-sm transition hover:bg-gray-300"
+              className="font-manjari font-bold mt-2 px-4 pt-1 bg-white text-black rounded-full text-sm transition hover:bg-gray-300 user-select-none"
               onClick={() => document.getElementById("upload").click()}
             >
               Browse Computer
