@@ -8,6 +8,7 @@ const AdminDashboardCard = () => {
   const [isGrid, setIsGrid] = useState(false);
   const [modifyTable, setmodifyTable] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [sortOrder, setSortOrder] = useState(null); // Add sort state here
 
   return (
     <div className="h-screen  w-screen flex bg-[#EBEBEB] font-figtree font-medium">
@@ -16,7 +17,7 @@ const AdminDashboardCard = () => {
         {/* Sidebar: full width above navbar on small screens, left on large screens */}
         <div className="w-full sm:col-span-1 ">
           {/* Always show sidebar on large screens, toggle on small screens */}
-          <SideBar alwaysShowOnLarge />
+          <SideBar alwaysShowOnLarge setSortOrder={setSortOrder} />
         </div>
 
         {/* Main content: below sidebar on small screens, right of sidebar on large screens */}
@@ -38,7 +39,11 @@ const AdminDashboardCard = () => {
                 setActiveTab={setActiveTab}
               />
             </div>
-            <Table isGrid={isGrid} modifyTable={modifyTable} />;
+            <Table
+              isGrid={isGrid}
+              modifyTable={modifyTable}
+              sortOrder={sortOrder}
+            />
           </div>
         </div>
       </div>
