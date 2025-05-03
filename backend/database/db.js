@@ -40,4 +40,48 @@ async function testConnection() {
 
 testConnection();
 
-module.exports = pool;
+async function getTable(email) {
+    try {
+        const [rows] = await pool.query(
+            `SELECT * FROM accounts WHERE email = ?`, 
+            [email]
+        );
+        return rows;
+    } catch (err) {
+        console.error('Database error in getTable:', err);
+    }
+}
+
+/*
+    username: "",
+    password: "",
+    confirmPassword: "",
+    email: "",
+    firstName: "",
+    surname: "",
+    middleInitial: "",
+    idNumber: "",
+    idImage: [],
+    course: "",
+*/
+
+async function registForm({ email, password, first_name, surname, middleInitial, idNumber, course }) {
+    const role = 'student'; // default role in registration
+    try {
+        await pool.query(
+            `INSERT INTO accounts (email, password, first_name, surname, id_number, middle_initial, course, role)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [email, password, first_name, surname, middleInitial, idNumber, course, role]
+        );
+        console.log('Successfully registered')
+    } catch (err) {
+        console.error('Database error in registForm:', err);
+    }
+}
+
+
+module.exports = {
+    registForm,
+    getTable,
+    pool  // ← export the pool directly
+};
