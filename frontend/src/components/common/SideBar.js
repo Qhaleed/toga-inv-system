@@ -8,119 +8,102 @@ const SideBar = ({ alwaysShowOnLarge }) => {
     typeof window !== "undefined" && window.innerWidth >= 640
   );
   const [showSidebar, setShowSidebar] = useState(isLargeScreen);
-  const [all, setAll] = useState(true);
-  const [borrowed, setBorrowed] = useState(false);
-  const [returned, setReturned] = useState(false);
-  const [requests, setRequests] = useState(false);
-  const [name, setName] = useState(false);
-  const [dateNew, setdateNew] = useState(false);
-  const [dateOld, setdateOld] = useState(false);
-  const [sidebarName, setSidebarName] = useState("Loading...");
+  // const [all, setAll] = useState(true);
+  // const [borrowed, setBorrowed] = useState(false);
+  // const [returned, setReturned] = useState(false);
+  // const [requests, setRequests] = useState(false);
+  // const [name, setName] = useState(false);
+  // const [dateNew, setdateNew] = useState(false);
+  // const [dateOld, setdateOld] = useState(false);
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
 
-  const allClicked = () => {
-    setAll(true);
-    setBorrowed(false);
-    setReturned(false);
-    setRequests(false);
-  };
-  const borrowedClicked = () => {
-    setAll(false);
-    setBorrowed(true);
-    setReturned(false);
-    setRequests(false);
-  };
-  const returnedClicked = () => {
-    setAll(false);
-    setBorrowed(false);
-    setReturned(true);
-    setRequests(false);
-  };
-  const requestsClicked = () => {
-    setAll(false);
-    setBorrowed(false);
-    setReturned(false);
-    setRequests(true);
-  };
-  const nameClicked = () => {
-    if (!name) {
-      setName(true);
-      setdateNew(false);
-      setdateOld(false);
-    } else {
-      setName(false);
-      setdateNew(false);
-      setdateOld(false);
-    }
-  };
-  const dateNewClicked = () => {
-    if (!dateNew) {
-      setName(false);
-      setdateNew(true);
-      setdateOld(false);
-    } else {
-      setName(false);
-      setdateNew(false);
-      setdateOld(false);
-    }
-  };
-  const dateOldClicked = () => {
-    if (!dateOld) {
-      setName(false);
-      setdateNew(false);
-      setdateOld(true);
-    } else {
-      setName(false);
-      setdateNew(false);
-      setdateOld(false);
-    }
-  };
+  // const allClicked = () => {
+  //   setAll(true);
+  //   setBorrowed(false);
+  //   setReturned(false);
+  //   setRequests(false);
+  // };
+  // const borrowedClicked = () => {
+  //   setAll(false);
+  //   setBorrowed(true);
+  //   setReturned(false);
+  //   setRequests(false);
+  // };
+  // const returnedClicked = () => {
+  //   setAll(false);
+  //   setBorrowed(false);
+  //   setReturned(true);
+  //   setRequests(false);
+  // };
+  // const requestsClicked = () => {
+  //   setAll(false);
+  //   setBorrowed(false);
+  //   setReturned(false);
+  //   setRequests(true);
+  // };
+  // const nameClicked = () => {
+  //   if (!name) {
+  //     setName(true);
+  //     setdateNew(false);
+  //     setdateOld(false);
+  //   } else {
+  //     setName(false);
+  //     setdateNew(false);
+  //     setdateOld(false);
+  //   }
+  // };
+  // const dateNewClicked = () => {
+  //   if (!dateNew) {
+  //     setName(false);
+  //     setdateNew(true);
+  //     setdateOld(false);
+  //   } else {
+  //     setName(false);
+  //     setdateNew(false);
+  //     setdateOld(false);
+  //   }
+  // };
+  // const dateOldClicked = () => {
+  //   if (!dateOld) {
+  //     setName(false);
+  //     setdateNew(false);
+  //     setdateOld(true);
+  //   } else {
+  //     setName(false);
+  //     setdateNew(false);
+  //     setdateOld(false);
+  //   }
+  // };
 
-  // Listen for window resize to update isLargeScreen and autoshow sidebar
   useEffect(() => {
     function handleResize() {
       const large = window.innerWidth >= 640;
       setIsLargeScreen(large);
-      if (large) setShowSidebar(true); // Always show sidebar on large screens
+      if (large) setShowSidebar(true); // transition for large screens
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Fetch the first student name from sample.json
+  // FETCHER TO NG NAME AND ROLE SA JSON SERVER
   useEffect(() => {
-    fetch("/components/admin-dashboard/sample.json")
+    fetch("http://localhost:8000/admins")
       .then((res) => res.json())
       .then((data) => {
-        if (data && data.dashboard && data.dashboard.length > 0) {
-          setSidebarName(data.dashboard[0].studentname);
+        if (Array.isArray(data) && data.length > 0) {
+          setAdminName(data[0].adminname);
+          setAdminRole(data[0].adminrole);
         } else {
-          setSidebarName("Unknown");
-        }
-      })
-      .catch(() => setSidebarName("Unknown"));
-  }, []);
-
-  // Fetch admin name and role from sample.json in public folder
-  useEffect(() => {
-    fetch("/components/admin-dashboard/sample.json")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.admin) {
-          setAdminName(data.admin.name || "");
-          setAdminRole(data.admin.role || "");
-        } else {
-          setAdminName("");
-          setAdminRole("");
+          setAdminName("No admin found");
+          setAdminRole("N/A");
         }
       })
       .catch(() => {
-        setAdminName("");
-        setAdminRole("");
+        setAdminName("Fetch error");
+        setAdminRole("Fetch error");
       });
   }, []);
-
   // Responsive: show/hide sidebar on small screens, always show on large
   const visible = isLargeScreen ? true : showSidebar;
 
@@ -151,7 +134,7 @@ const SideBar = ({ alwaysShowOnLarge }) => {
           {/* SIDE BAR HERO CONTAINER*/}
           <div className=" w-full md:w-full h-20 md:h-24  bg-[#102F5E] bg-center flex justify-between">
             <div className="flex justify-center">
-              <div className="h-full  ml-1  w-16 flex justify-center items-center ">
+              <div className="  h-full  ml-1  w-16 flex justify-center items-center ">
                 <img
                   className=" w-10 md:w-16 rounded-full"
                   src={Profile}
@@ -160,7 +143,7 @@ const SideBar = ({ alwaysShowOnLarge }) => {
               </div>
 
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
-                <p className="text-[10px] md:font-bold">{adminName}</p>
+                <p className="text-[16px] md:font-bold">{adminName}</p>
                 <p className="sm:text-[14px] text-[13px] md:text-xs font-light">
                   {adminRole}
                 </p>

@@ -23,7 +23,7 @@ const Table = ({ isGrid, modifyTable }) => {
                 className="relative w-full flex flex-col min-h-[300px] max-w-full border border-black shadow outline-none bg-white rounded-lg"
                 style={{
                   maxHeight: mainContentHeight,
-                  minHeight: 400,
+                  minHeight: 600,
                   minWidth: 300,
                   maxWidth: "100vw",
                   overflow: "visible",
