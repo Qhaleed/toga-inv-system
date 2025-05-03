@@ -11,7 +11,9 @@ import { ReactComponent as GrayRows } from "../../assets/icons/gray-rows.svg";
 import { ReactComponent as GrayGrid } from "../../assets/icons/gray-grid.svg";
 import { ReactComponent as Rows } from "../../assets/icons/white-row.svg";
 import { ReactComponent as Grid } from "../../assets/icons/white-grid.svg";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import LoaderAnimation from "../login-card/LoaderAnimation";
 
 const Navbar = ({
   isGrid,
@@ -26,6 +28,7 @@ const Navbar = ({
   };
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const tabClass = (tabName) =>
     activeTab === tabName
@@ -57,10 +60,27 @@ const Navbar = ({
     />
   );
 
-const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
+  const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
+
+  // Logout handler
+  const handleLogout = () => {
+    setLoading(true);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userEmail");
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/login");
+    }, 1500);
+  };
 
   return (
-    <div className="h-24">
+    <div className="h-24 relative">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <LoaderAnimation />
+        </div>
+      )}
       {/* Top Navigation */}
       <div className="h-1/2 flex justify-start items-center ml-14">
         <button
@@ -102,6 +122,17 @@ const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
           </span>
           <span className="text-[10px] mx-2">Evaluation</span>
         </button>
+
+        {/* Logout button at top right */}
+        <div className="absolute right-8 top-2">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-5 rounded shadow transition-all duration-200"
+            style={{ minWidth: 90 }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Bottom Navigation */}
