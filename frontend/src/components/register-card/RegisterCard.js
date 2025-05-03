@@ -109,11 +109,32 @@ export default function RegisterForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => { //send values to the backend
     e.preventDefault();
-    console.log(formData);
-    alert("Form Submitted");
-  };
+    try {
+        const response = await fetch('http://localhost:5001/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: formData.email,
+                password: formData.password,
+                first_name: formData.firstName,
+                surname: formData.surname,
+                middleInitial: formData.middleInitial,
+                idNumber: formData.idNumber,
+                course: value
+            }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('Registration successful!');
+        } else {
+            alert(data.message || 'Registration failed');
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+    }
+};
 
   return (
     <FormWrapper
