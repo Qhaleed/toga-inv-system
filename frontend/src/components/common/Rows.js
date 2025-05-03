@@ -4,7 +4,6 @@ import { ReactComponent as Trash } from "../../assets/icons/black-trash.svg";
 import { ReactComponent as ChevronDown } from "../../assets/icons/chevron-down.svg";
 
 import { useState, useEffect, useRef } from "react";
-import { HiMiniArchiveBoxArrowDown } from "react-icons/hi2";
 
 const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const hoodOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
@@ -302,7 +301,7 @@ const Rows = ({
                       className="w-full h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 hover:bg-red-700 ml-2"
                       style={{ minWidth: 0 }}
                       onClick={() => {
-                        /* implement delete logic here */
+                        /* implement niyo delete logic here */
                       }}
                     >
                       <Trash className="w-4" />
@@ -359,186 +358,199 @@ const Rows = ({
                 </tr>
               </thead>
               <tbody className="w-full">
-                {dashboard.map((db, idx) => {
-                  const rowColor =
-                    db.id % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
-                  const isEditing = modifyTable || editId === db.id;
-                  return [
-                    <tr
-                      className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-fixed`}
-                      key={db.id}
-                      style={{ maxWidth: "100%" }}
+                {dashboard.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={8}
+                      className="text-center py-8 text-gray-500 font-semibold bg-white"
                     >
-                      <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
-                        <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                          <h3 className="truncate">{db.studentname}</h3>
-                          {/* Removed the span that was under student name only */}
-                        </div>
-                      </td>
-                      <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center">
-                          <h3 className="truncate">{db.program}</h3>
+                      No data found
+                    </td>
+                  </tr>
+                ) : (
+                  dashboard.map((db, idx) => {
+                    const rowColor =
+                      db.id % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
+                    const isEditing = modifyTable || editId === db.id;
+                    return [
+                      <tr
+                        className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-fixed`}
+                        key={db.id}
+                        style={{ maxWidth: "100%" }}
+                      >
+                        <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
+                          <div className="h-full w-[100%] py-4 flex justify-center items-center">
+                            <h3 className="truncate">{db.studentname}</h3>
+                            {/* Removed the span that was under student name only */}
+                          </div>
+                        </td>
+                        <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center">
+                            <h3 className="truncate">{db.program}</h3>
+                            <span
+                              className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                              style={{ borderRadius: "2px" }}
+                            ></span>
+                          </div>
+                        </td>
+                        {/* Tassel */}
+                        <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center relative">
+                            {isEditing ? (
+                              <CustomDropdown
+                                value={
+                                  modifyTable ? db.tassel : editData.tassel
+                                }
+                                options={tasselOptions}
+                                onChange={(val) =>
+                                  modifyTable
+                                    ? handleCellChange(db.id, "tassel", val)
+                                    : handleEditChange({
+                                        target: { name: "tassel", value: val },
+                                      })
+                                }
+                                disabled={false}
+                              />
+                            ) : (
+                              <h3 className="truncate">{db.tassel}</h3>
+                            )}
+                            <span
+                              className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
+                              style={{ borderRadius: "2px" }}
+                            ></span>
+                          </div>
+                        </td>
+                        {/* Hood */}
+                        <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center relative">
+                            {isEditing ? (
+                              <CustomDropdown
+                                value={modifyTable ? db.hood : editData.hood}
+                                options={hoodOptions}
+                                onChange={(val) =>
+                                  modifyTable
+                                    ? handleCellChange(db.id, "hood", val)
+                                    : handleEditChange({
+                                        target: { name: "hood", value: val },
+                                      })
+                                }
+                                disabled={false}
+                              />
+                            ) : (
+                              <h3 className="truncate">{db.hood}</h3>
+                            )}
+                            <span
+                              className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
+                              style={{ borderRadius: "2px" }}
+                            ></span>
+                          </div>
+                        </td>
+                        {/* Gown */}
+                        <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center relative">
+                            {isEditing ? (
+                              <CustomDropdown
+                                value={modifyTable ? db.gown : editData.gown}
+                                options={gownOptions}
+                                onChange={(val) =>
+                                  modifyTable
+                                    ? handleCellChange(db.id, "gown", val)
+                                    : handleEditChange({
+                                        target: { name: "gown", value: val },
+                                      })
+                                }
+                                disabled={false}
+                              />
+                            ) : (
+                              <h3 className="truncate">{db.gown}</h3>
+                            )}
+                            <span
+                              className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
+                              style={{ borderRadius: "2px" }}
+                            ></span>
+                          </div>
+                        </td>
+                        <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center">
+                            <h3 className="truncate">{db.dateofreservation}</h3>
+                            <span
+                              className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                              style={{ borderRadius: "2px" }}
+                            ></span>
+                          </div>
+                        </td>
+                        {/* Status */}
+                        <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
+                          <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
+                            {db.status}
+                          </div>
                           <span
-                            className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
+                            className="absolute right-0 top-[10px] h-7 w-0.5 bg-gray-600 opacity-50"
                             style={{ borderRadius: "2px" }}
                           ></span>
-                        </div>
-                      </td>
-                      {/* Tassel */}
-                      <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {isEditing ? (
-                            <CustomDropdown
-                              value={modifyTable ? db.tassel : editData.tassel}
-                              options={tasselOptions}
-                              onChange={(val) =>
-                                modifyTable
-                                  ? handleCellChange(db.id, "tassel", val)
-                                  : handleEditChange({
-                                      target: { name: "tassel", value: val },
-                                    })
-                              }
-                              disabled={false}
-                            />
-                          ) : (
-                            <h3 className="truncate">{db.tassel}</h3>
-                          )}
-                          <span
-                            className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
-                            style={{ borderRadius: "2px" }}
-                          ></span>
-                        </div>
-                      </td>
-                      {/* Hood */}
-                      <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {isEditing ? (
-                            <CustomDropdown
-                              value={modifyTable ? db.hood : editData.hood}
-                              options={hoodOptions}
-                              onChange={(val) =>
-                                modifyTable
-                                  ? handleCellChange(db.id, "hood", val)
-                                  : handleEditChange({
-                                      target: { name: "hood", value: val },
-                                    })
-                              }
-                              disabled={false}
-                            />
-                          ) : (
-                            <h3 className="truncate">{db.hood}</h3>
-                          )}
-                          <span
-                            className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
-                            style={{ borderRadius: "2px" }}
-                          ></span>
-                        </div>
-                      </td>
-                      {/* Gown */}
-                      <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {isEditing ? (
-                            <CustomDropdown
-                              value={modifyTable ? db.gown : editData.gown}
-                              options={gownOptions}
-                              onChange={(val) =>
-                                modifyTable
-                                  ? handleCellChange(db.id, "gown", val)
-                                  : handleEditChange({
-                                      target: { name: "gown", value: val },
-                                    })
-                              }
-                              disabled={false}
-                            />
-                          ) : (
-                            <h3 className="truncate">{db.gown}</h3>
-                          )}
-                          <span
-                            className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
-                            style={{ borderRadius: "2px" }}
-                          ></span>
-                        </div>
-                      </td>
-                      <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center">
-                          <h3 className="truncate">{db.dateofreservation}</h3>
-                          <span
-                            className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
-                            style={{ borderRadius: "2px" }}
-                          ></span>
-                        </div>
-                      </td>
-                      {/* Status */}
-                      <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
-                        <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                          {db.status}
-                        </div>
-                        <span
-                          className="absolute right-0 top-[10px] h-7 w-0.5 bg-gray-600 opacity-50"
-                          style={{ borderRadius: "2px" }}
-                        ></span>
-                      </td>
-                      {/* Actions */}
-                      <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
-                          {editId === db.id ? (
-                            <>
-                              <button
-                                className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
-                                onClick={() => {
-                                  // TODO: implement delete logic for column view
-                                }}
-                              >
-                                <Trash className="w-4" />
-                              </button>
-                              {/* Floating Save/Cancel absolute container at the bottom sa edit view inline */}
-                              <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
+                        </td>
+                        {/* Actions */}
+                        <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
+                            {editId === db.id ? (
+                              <>
                                 <button
-                                  className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
-                                  onClick={() => handleSave(db.id)}
+                                  className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
+                                  onClick={() => {
+                                    // TODO: implement delete logic for column view
+                                  }}
                                 >
-                                  Save
+                                  <Trash className="w-4" />
+                                </button>
+                                {/* Floating Save/Cancel absolute container at the bottom sa edit view inline */}
+                                <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
+                                  <button
+                                    className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
+                                    onClick={() => handleSave(db.id)}
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
+                                    onClick={handleCancel}
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <button className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700">
+                                  <EyeIcon className="w-5" />
                                 </button>
                                 <button
-                                  className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
-                                  onClick={handleCancel}
+                                  className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700"
+                                  onClick={() => {
+                                    setEditId(db.id);
+                                    setEditData({ ...db });
+                                  }}
                                 >
-                                  Cancel
+                                  <Table className="w-5" />
                                 </button>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <button className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700">
-                                <EyeIcon className="w-5" />
-                              </button>
-                              <button
-                                className="w-7 h-7 bg-[#0C7E48] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-green-700"
-                                onClick={() => {
-                                  setEditId(db.id);
-                                  setEditData({ ...db });
-                                }}
-                              >
-                                <Table className="w-5" />
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>,
-                    idx < dashboard.length - 1 && (
-                      <tr key={`gap-${db.id}`} className="w-full">
-                        <td
-                          colSpan={-1}
-                          style={{
-                            height: "2px",
-                            background: "white",
-                          }}
-                        ></td>
-                      </tr>
-                    ),
-                  ];
-                })}
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>,
+                      idx < dashboard.length - 1 && (
+                        <tr key={`gap-${db.id}`} className="w-full">
+                          <td
+                            colSpan={-1}
+                            style={{
+                              height: "2px",
+                              background: "white",
+                            }}
+                          ></td>
+                        </tr>
+                      ),
+                    ];
+                  })
+                )}
               </tbody>
             </table>
           </div>

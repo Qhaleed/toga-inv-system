@@ -10,14 +10,15 @@ const AdminDashboardCard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
 
   return (
-    <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
+    <div className="h-screen  w-screen flex bg-[#EBEBEB] font-figtree font-medium">
       {/* Responsive: Sidebar above navbar on small screens, left on large screens */}
-      <div className="w-full flex flex-col sm:grid sm:grid-cols-4 h-screen">
+      <div className="w-full lex-col sm:grid sm:grid-cols-4 ">
         {/* Sidebar: full width above navbar on small screens, left on large screens */}
-        <div className="w-full sm:col-span-1">
+        <div className="w-full sm:col-span-1 ">
           {/* Always show sidebar on large screens, toggle on small screens */}
           <SideBar alwaysShowOnLarge />
         </div>
+
         {/* Main content: below sidebar on small screens, right of sidebar on large screens */}
         <div className="flex-1 sm:col-span-3 h-full">
           <div
