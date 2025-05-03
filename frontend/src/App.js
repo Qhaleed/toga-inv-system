@@ -8,6 +8,7 @@ import AdminDashboard from './pages/admin-dashboard/AdminDashboard';
 import StudentHome from './pages/student-home/StudentHome';
 import ProtectedRoute from './components/protected-route/ProtectedRoute';
 import './index.css';
+import Evaluation from './pages/evaluation-page/Evaluation';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
             <Route path="/admin-home" element={<AdminHome />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/evaluation-page" element={<Evaluation />} />
           </Route>
 
           {/* Student only routes */}
