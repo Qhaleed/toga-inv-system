@@ -127,8 +127,8 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
             <MenuIcon
               className={`w-7 h-7 transition-colors duration-300 ${
                 showSidebar
-                  ? "text-white fill-white"
-                  : "text-[#F3B51A] fill-[#F3B51A]"
+                  ? "text-color-[#000] fill-[#000]"
+                  : "text-[#000] fill-[#000]"
               }`}
             />
           </div>
@@ -138,13 +138,16 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
       {/* Sidebar idea ->> above navbar on small screens, left on large screens */}
       {visible && (
         <div
-          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap  h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-30 sm:z-auto transition-all duration-500 ease-in-out ${
-            showSidebar ? "animate-slide-in-left" : "animate-fade-in"
+          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap  h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-30 sm:z-auto transition-all ${
+            showSidebar
+              ? "animate-slide-in-top duration-800"
+              : "animate-fade-in duration-800"
           }`}
           style={{
             position: "static",
             height: isLargeScreen ? "100vh" : "88%",
-            transition: "transform 0.2s",
+            transition: "transform ",
+            animation: showSidebar ? "slide-in-top 2s" : "fade-in 0.8s",
           }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
@@ -168,7 +171,7 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
 
             <div className="h-full flex justify-end items-center mr-4">
               <button className="bg-[#F3B51A] hover:bg-[#dc9f2d] scale-75 md:scale-100 hover:scale-105 h-12 w-12 rounded-full flex justify-center items-center border border-gray-700 transform-all ease-out duration-500">
-                <Calendar className="w-6"></Calendar>
+                <Calendar className="w-6" />
                 <div className="relative">
                   <div className="bg-[#0C7E48] rounded-full text-white text-xs absolute px-1 bottom-2">
                     4 {/* Notification counts logic adnkjasndkjasndkajsnd */}
@@ -192,15 +195,15 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
 
               <div className="w-full h-[90px]  md:scale-100">
                 <div className="w-full h-1/2 flex justify-between items-center ">
-                  <button className=" relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:scale-105 transform-all ease-out duration-300">
+                  <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:scale-105 transform-all ease-out duration-300">
                     <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-black ml-3">
                       All
                     </p>
-                    <div className="  right-0 absolute sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                    <div className="right-0 absolute sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
                       123
                     </div>
                   </button>
-                  <button className=" relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#E9E9E9] transform-all ease-out duration-300 hover:scale-105">
+                  <button className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-100 hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300">
                     <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-black ml-3">
                       Borrowed
                     </p>
@@ -210,7 +213,7 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
                   </button>
                 </div>
                 <div className="w-full h-1/2 flex  justify-between items-center ">
-                  <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E9E9E9] transform-all ease-out duration-300 hover:scale-105">
+                  <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105">
                     <p className="sm:text-[14px] text-[13px] font-bold text-black ml-3">
                       Returned
                     </p>
@@ -218,7 +221,7 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
                       19
                     </div>
                   </button>
-                  <button className=" relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#E9E9E9] transform-all ease-out duration-300 hover:scale-105">
+                  <button className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-100 hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105">
                     <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-black ml-3">
                       Requests
                     </p>
