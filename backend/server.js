@@ -16,10 +16,16 @@ const evaluationRoute = require('./routes/evaluation');
 const invenRoute = require('./routes/inventory');
 const authRoute = require('./routes/auth');
 
+// Routes for db
+const accountsRoute = require('./routes/accounts');
+
+
 app.use('/users', userRouter);
 app.use('/evaluation', evaluationRoute);
 app.use('/inventory', invenRoute);
 app.use('/auth', authRoute);
+app.use('/accounts', accountsRoute);
+
 
 // Root Test
 app.get('/', (req, res) => {
