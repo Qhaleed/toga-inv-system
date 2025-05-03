@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 // DB test
 app.get('/dashboard', async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT * FROM dashboard");
+        const [rows] = await db.pool.query("SELECT * FROM dashboard");
         res.json(rows);
     } catch (err) {
         console.error(err);
