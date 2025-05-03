@@ -14,15 +14,13 @@ router.post('/', async (req, res) => {
         password,
         first_name,
         surname,
-        middleInitial,
         idNumber,
+        middleInitial,
         course,
         role = 'student'
     } = req.body;
 
     try {
-
-
         // check if the email exists
         const existingUsers = await db.getTable(email);
         if (existingUsers.length > 0) {
@@ -33,14 +31,14 @@ router.post('/', async (req, res) => {
         //const hashedPass = await bcrypt.hash(password, 10);
 
         // Insert new values in accounts table
-        const result = await db.registForm({ //registForm({ email, password, first_name, surname, middleInitial, idNumber, course })
+        const result = await db.registForm({ //email, password, first_name, surname, middleInitial, idNumber, course
             email, 
             password, 
             first_name,
-            surname,  
-            middleInitial,
+            surname,
+            middleInitial, 
             idNumber, 
-            course
+            course 
         });
         console.log('Registration successful');
 

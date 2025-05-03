@@ -69,7 +69,8 @@ async function registForm({ email, password, first_name, surname, middleInitial,
 
 
 module.exports = {
-    registForm,
+    pool,
     getTable,
-    pool
+    registForm
 };
+
