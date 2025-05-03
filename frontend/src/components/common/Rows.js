@@ -186,8 +186,8 @@ const Rows = ({
   }, [sortOrder, isGrid]);
 
   if (isGrid) {
-    // Instead of rendering the grid view here, delegate to the dedicated GridView component
-    // This ensures a single source of truth for the grid view UI and logic
+    // Instead of rendering the grid view here, ni reuse ko nalang un grid view component
+    // cleaner code, send lang props sa gridview if may idadagdag
     // Usage: <GridView ...props />
     return (
       <GridView
