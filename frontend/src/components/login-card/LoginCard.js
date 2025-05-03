@@ -14,7 +14,7 @@ function LoginCard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Show loader when login starts
     try {
       const response = await fetch("/auth/login", {
         //change proxy in package.json to 5001 if mac (default is 5000)
@@ -30,6 +30,7 @@ function LoginCard() {
         localStorage.setItem("userRole", data.role);
 
         setTimeout(() => {
+          setLoading(false); // Hide loader after navigation
           if (data.role === "admin") {
             navigate("/admin-dashboard");
           } else {
