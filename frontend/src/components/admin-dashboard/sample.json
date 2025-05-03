@@ -208,5 +208,9 @@
       "trash": "hidden",
       "evaluation": "Evaluated"
     }
-  ]
+  ],
+  "admin": {
+    "name": "Kenneth Clyde Que",
+    "role": "Frontend Developer"
+  }
 }
