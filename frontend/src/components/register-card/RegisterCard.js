@@ -109,9 +109,22 @@ export default function RegisterForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+    const send_data = await fetch('http://localhost:5001/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          first_name: formData.firstName,
+          surname: formData.surname,
+          middleInitial: formData.middleInitial,
+          idNumber: formData.idNumber,
+          course: value,
+      }),
+  });
     alert("Form Submitted");
   };
 
