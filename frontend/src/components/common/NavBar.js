@@ -101,42 +101,40 @@ const Navbar = ({
 
       {/* Bottom Navigation */}
       <div className="h-1/2 flex justify-start items-center">
-        <div className="ml-8 mr-3 w-[400px]">
-          <div className="relative ml-7">
+        <div className="w-full max-w-[500px]">
+          <div className="relative lg:ml-14 md:ml-10  mr-2">
             <Search className="absolute w-5 top-1 left-2" />
             <input
-              className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500 w-[520px] px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-2 focus:outline-[#02327B]"
+              className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500 w-full px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
               type="text"
               placeholder="Search student..."
             />
           </div>
         </div>
-
-        <div className="h-7 w-16 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-40">
+        <div className="h-7 w-16 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-2">
           <button
             onClick={() => setIsGrid(false)}
-            className={`${
+            className={`h-7 w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
               !isGrid
-                ? "bg-[#02327B] text-white opacity-100"
+                ? "bg-[#02327B] text-white"
                 : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-            } h-7 w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105`}
+            }`}
           >
             {rowIcon}
           </button>
           <button
             onClick={() => setIsGrid(true)}
-            className={`${
+            className={`h-7 w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
               isGrid
-                ? "bg-[#02327B] text-white opacity-100"
+                ? "bg-[#02327B] text-white"
                 : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-            } h-7 w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105`}
+            }`}
           >
             {gridIcon}
           </button>
         </div>
-
         <button
-          className={`hover:scale-105 h-7 w-28 rounded-lg text-xs text-white ml-2 ${
+          className={`hover:scale-105 h-7 w-28 rounded-lg text-xs text-white ml-2 mr-4 ${
             modifyTable ? "bg-[#919191] ring-2" : "bg-[#0C7E48]"
           }`}
           onClick={editallClicked}
