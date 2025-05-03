@@ -12,7 +12,9 @@ router.post('/login', async (req, res) => {
 
     try {
         // Query the database for the user with the provided email
-        const [users] = await db.query(
+        // Please wag alisin yung pool kay di yan magana
+
+        const [users] = await db.pool.query(
             "SELECT * FROM accounts WHERE email = ?",
             [email]
         );

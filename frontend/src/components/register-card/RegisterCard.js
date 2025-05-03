@@ -109,22 +109,9 @@ export default function RegisterForm() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    const send_data = await fetch('http://localhost:5001/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          first_name: formData.firstName,
-          surname: formData.surname,
-          middleInitial: formData.middleInitial,
-          idNumber: formData.idNumber,
-          course: value,
-      }),
-  });
     alert("Form Submitted");
   };
 
@@ -318,9 +305,8 @@ export default function RegisterForm() {
 
               {/* Dropdown Arrow */}
               <div
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
-                  open ? "rotate-180" : "rotate-0"
-                }`}
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
+                  }`}
               >
                 ▼
               </div>

@@ -5,7 +5,7 @@ const db = require('../database/db')
 router.get('/', async (req, res) => {
 
     try {
-        const [rows] = await db.query("SELECT * FROM accounts");
+        const [rows] = await db.pool.query("SELECT * FROM accounts");
         res.json(rows);
 
 
