@@ -42,18 +42,18 @@ const AdminDashboardCard = () => {
 
   return (
     <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
-      {/* ETo pinaka root Container niggas*/}
-
-      <div className="h-screen fixed w-screen grid grid-cols-4">
-        {" "}
-        {/*<div className="h-screen fixed w-screen grid-cols-4 border border-red-500">*/}
-        <SideBar />
-        <div className="col-span-3 h-full">
-          {/* Right Container */}
-
+      {/* Responsive: Sidebar above navbar on small screens, left on large screens */}
+      <div className="w-full flex flex-col sm:grid sm:grid-cols-4 h-screen">
+        {/* Sidebar: full width above navbar on small screens, left on large screens */}
+        <div className="w-full sm:col-span-1">
+          {/* Always show sidebar on large screens, toggle on small screens */}
+          <SideBar alwaysShowOnLarge />
+        </div>
+        {/* Main content: below sidebar on small screens, right of sidebar on large screens */}
+        <div className="flex-1 sm:col-span-3 h-full">
           <div
             className="w-full flex flex-col items-center"
-            style={{ maxWidth: "98%" }}
+            style={{ maxWidth: "100vw" }}
           >
             <div
               className="w-full"
@@ -68,15 +68,7 @@ const AdminDashboardCard = () => {
                 setActiveTab={setActiveTab}
               />
             </div>
-
-            <div
-              className={`flex justify-center items-start w-full transition-all duration-500 ${
-                !isGrid ? "animate-fade-in-bottom" : ""
-              }`}
-              style={{ height: "600px" }}
-            >
-              {renderContent()}
-            </div>
+            {renderContent()}
           </div>
         </div>
       </div>
