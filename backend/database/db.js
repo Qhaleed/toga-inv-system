@@ -73,3 +73,4 @@ module.exports = {
     getTable,
     registForm
 };
+

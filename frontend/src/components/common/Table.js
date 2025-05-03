@@ -1,7 +1,12 @@
 import Rows from "./Rows";
 import "./Table.css";
+import { useState, useEffect } from "react";
 
-const Table = ({ isGrid, modifyTable }) => {
+const Table = ({ isGrid, modifyTable, sortOrder }) => {
+  const [internalSortOrder, setInternalSortOrder] = useState(sortOrder || null);
+  useEffect(() => {
+    setInternalSortOrder(sortOrder);
+  }, [sortOrder]);
   const mainContentHeight = "80vh";
   return (
     <div className="w-full flex flex-col items-center justify-start mt-10">
@@ -23,7 +28,7 @@ const Table = ({ isGrid, modifyTable }) => {
                 className="relative w-full flex flex-col min-h-[300px] max-w-full border border-black shadow outline-none bg-white rounded-lg"
                 style={{
                   maxHeight: mainContentHeight,
-                  minHeight: 400,
+                  minHeight: 600,
                   minWidth: 300,
                   maxWidth: "100vw",
                   overflow: "visible",
@@ -50,6 +55,7 @@ const Table = ({ isGrid, modifyTable }) => {
                       isGrid={false}
                       modifyTable={modifyTable}
                       rowHeightClass="h-16"
+                      sortOrder={internalSortOrder}
                     />
                   </table>
                 </div>

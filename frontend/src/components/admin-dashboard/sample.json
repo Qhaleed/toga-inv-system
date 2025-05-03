@@ -1,4 +1,26 @@
 {
+  "admins": [
+    {
+      "adminname": "Kenneth Clyde Que",
+      "adminrole": "Frontend Developer",
+      "id": "1"
+    },
+    {
+      "adminname": "Joshua Guiritan",
+      "adminrole": "UI/UX Designer",
+      "id": "2"
+    },
+    {
+      "adminname": "Jon Orillineda",
+      "adminrole": "Senior Developer",
+      "id": "3"
+    },
+    {
+      "adminname": "Kenneth Clyde Que",
+      "adminrole": "Data Analyst",
+      "id": "4"
+    }
+  ],
   "dashboard": [
     {
       "studentname": "Joshua Guiritan",
@@ -207,6 +229,28 @@
       "eye": "block",
       "trash": "hidden",
       "evaluation": "Evaluated"
+    }
+  ],
+  "admin": [
+    {
+      "adminname": "Kenneth Clyde Que",
+      "adminrole": "Frontend Developer",
+      "id": "1"
+    },
+    {
+      "adminname": "Kenneth Clyde Que",
+      "adminrole": "Frontend Developer",
+      "id": "2"
+    },
+    {
+      "adminname": "Kenneth Clyde Que",
+      "adminrole": "Frontend Developer",
+      "id": "3"
+    },
+    {
+      "adminname": "Kenneth Clyde Que",
+      "adminrole": "Frontend Developer",
+      "id": "4"
     }
   ]
 }

@@ -2,55 +2,26 @@ import React, { useState } from "react";
 import Table from "../common/Table";
 import SideBar from "../common/SideBar";
 import NavBar from "../common/NavBar";
-import EvaluationTable from "../../components/evaluation/EvaluationTable";
 
 const AdminDashboardCard = () => {
   // SO MAY STATES TYO DALAWA GRID PTI COLUMNS
   const [isGrid, setIsGrid] = useState(false);
   const [modifyTable, setmodifyTable] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
-
-  function renderContent() {
-    if (activeTab === "dashboard") {
-      return <Table isGrid={isGrid} modifyTable={modifyTable} />;
-    }
-    if (activeTab === "evaluation") {
-      return (
-        <div className="w-full h-full flex justify-center items-start">
-          <div className="w-full max-w-[1400px] h-full">
-            <EvaluationTable isGrid={isGrid} modifyTable={modifyTable} />
-          </div>
-        </div>
-      );
-    }
-    if (activeTab === "inventory") {
-      return (
-        <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-[#02327B]">
-          Inventory Placeholder
-        </div>
-      );
-    }
-    if (activeTab === "pending") {
-      return (
-        <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-[#02327B]">
-          Pending Placeholder
-        </div>
-      );
-    }
-    return null;
-  }
+  const [sortOrder, setSortOrder] = useState(null); // Add sort state here
 
   return (
-    <div className="h-screen overflow-hidden w-screen fixed bg-[#EBEBEB] font-figtree font-medium">
-      {/* Responsive: Sidebar above navbar on small screens, left on large screens */}
-      <div className="w-full flex flex-col sm:grid sm:grid-cols-4 h-screen">
-        {/* Sidebar: full width above navbar on small screens, left on large screens */}
-        <div className="w-full sm:col-span-1">
+    <div className="h-screen  w-screen relative fixed bg-[#EBEBEB] font-figtree font-medium">
+      {/* responsive view____  > Sidebar above navbar on small screens, left on large screens */}
+      <div className="max-w-full  relative fixed sm:grid sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5   sm:gap-0 sm:top-0 sm:left-0 sm:h-screen sm:w-screen">
+        {/* sidebar section _____> full width above navbar on small screens, left on large screens */}
+        <div className="w-full sm:col-span-1 ">
           {/* Always show sidebar on large screens, toggle on small screens */}
-          <SideBar alwaysShowOnLarge />
+          <SideBar alwaysShowOnLarge setSortOrder={setSortOrder} />
         </div>
-        {/* Main content: below sidebar on small screens, right of sidebar on large screens */}
-        <div className="flex-1 sm:col-span-3 h-full">
+
+        {/* MAIN CONTENT TO ____> below sidebar on small screens, right of sidebar on large screens */}
+        <div className="flex-1 md:col-span-2  xl:col-span-4 sm:col-span-2  h-full">
           <div
             className="w-full flex flex-col items-center"
             style={{ maxWidth: "100vw" }}
@@ -68,7 +39,11 @@ const AdminDashboardCard = () => {
                 setActiveTab={setActiveTab}
               />
             </div>
-            {renderContent()}
+            <Table
+              isGrid={isGrid}
+              modifyTable={modifyTable}
+              sortOrder={sortOrder}
+            />
           </div>
         </div>
       </div>

@@ -11,6 +11,9 @@ import { ReactComponent as GrayRows } from "../../assets/icons/gray-rows.svg";
 import { ReactComponent as GrayGrid } from "../../assets/icons/gray-grid.svg";
 import { ReactComponent as Rows } from "../../assets/icons/white-row.svg";
 import { ReactComponent as Grid } from "../../assets/icons/white-grid.svg";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import LoaderAnimation from "../login-card/LoaderAnimation";
 
 const Navbar = ({
   isGrid,
@@ -23,6 +26,9 @@ const Navbar = ({
   const editallClicked = () => {
     setmodifyTable((prev) => !prev);
   };
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const tabClass = (tabName) =>
     activeTab === tabName
@@ -54,18 +60,39 @@ const Navbar = ({
     />
   );
 
+  const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
+
+  // eto ung logut butson
+  const handleLogout = () => {
+    setLoading(true);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userEmail");
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/login");
+    }, 1500);
+  };
+
   return (
-    <div className="h-24">
+    <div className="h-24 relative">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <LoaderAnimation />
+        </div>
+      )}
       {/* Top Navigation */}
       <div className="h-1/2 flex justify-start items-center ml-14">
         <button
-          onClick={() => setActiveTab("dashboard")}
+          onClick={() => navigate("/admin-dashboard")}
           className={tabClass("dashboard")}
         >
           <span className="w-3">
             {iconToggle("dashboard", Home, GrayHouse)}
           </span>
-          <span className="text-[10px] ml-2">Dashboard</span>
+          <span className="text-[10px] mx-1 md:mx-4 content-center ">
+            Dashboard
+          </span>
         </button>
 
         <button
@@ -75,7 +102,7 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("inventory", Inventory, GrayInventory)}
           </span>
-          <span className="text-[10px] mx-2">Inventory</span>
+          <span className="text-[10px] mx-2 md:mx-4">Inventory</span>
         </button>
 
         <button
@@ -85,18 +112,31 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("pending", Statistic, GrayStatistic)}
           </span>
-          <span className="text-[10px] mx-2">Pending</span>
+          <span className="text-[10px] mx-2 md:mx-5 content-center">
+            Pending
+          </span>
         </button>
 
         <button
-          onClick={() => setActiveTab("evaluation")}
+          onClick={() => navigate("/evaluation-page")}
           className={tabClass("evaluation")}
         >
           <span className="w-3">
             {iconToggle("evaluation", Application, GrayApplication)}
           </span>
-          <span className="text-[10px] mx-2">Evaluation</span>
+          <span className="text-[10px]  mx-1  md:mx-4">Evaluation</span>
         </button>
+
+        {/* Logout button at top right */}
+        <div className="relative ml-auto mr-5 ">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded shadow transition-all duration-200"
+            style={{ minWidth: 20 }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Bottom Navigation */}
@@ -134,7 +174,7 @@ const Navbar = ({
           </button>
         </div>
         <button
-          className={`hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+          className={`${isModifyTable} hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
             modifyTable ? "bg-[#ca4a4a] ring-black ring-1" : "bg-[#0C7E48]"
           }`}
           onClick={editallClicked}
