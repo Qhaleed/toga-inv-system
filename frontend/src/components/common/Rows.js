@@ -182,143 +182,134 @@ const Rows = ({
     // grid view to
     return (
       <div className="w-full animate-fade-in" style={{ height: "80vh" }}>
-        <div className="flex flex-wrap gap-4 h-full w-full p-4 justify-center items-start">
+        <div
+          className="flex flex-row flex-wrap gap-4 w-full p-4 justify-center sm:justify-start items-start shadow-lg"
+          style={{ boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)" }}
+        >
           {dashboard.map((db, idx) => (
             <div
               key={db.id}
-              className="bg-slate-50 rounded-lg shadow flex flex-col items-center border border-gray-200 transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-xl opacity-0 animate-fade-in relative"
+              className="bg-white shadow-lg mt-10 md:mt-0 flex flex-col items-center border border-gray-200 transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-xl opacity-0 animate-fade-in relative"
               style={{
                 animationDelay: `${idx * 80}ms`,
-                width: "100%",
-                maxWidth: "320px",
-                minWidth: "220px",
-                height: "340px",
-                maxHeight: "400px",
-                minHeight: "300px",
-                padding: "1.5rem",
-                flex: "1 1 300px",
+                maxWidth: "350px",
+                minWidth: "300px",
+                height: "400px",
+                maxHeight: "500px",
+                minHeight: "450px",
+                padding: "2rem",
+                flex: "1 1 200px",
                 boxSizing: "border-box",
-                margin: 0,
               }}
             >
               {editId === db.id ? (
-                // Edit mode UI, edit kayo here
-
-                <>
-                  <h3 className="font-bold text-lg mb-2 text-center">
+                // Edit mode UI: inline, block-level, no absolute
+                <div className="w-full items-center flex flex-col justify-center">
+                  <h4 className="flex font-bold text-2xl mb-4 text-center block">
                     {db.studentname}
-                  </h3>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Program: <span>{db.program}</span>
+                  </h4>
+
+                  <div className="text- text-gray-700 mb-2">
+                    Program: {db.program}
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Tassel:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                      name="tassel"
+
+                  <div className="flex items-center mb-2 w-full">
+                    <span className="  right-8 relative justify-start items-start text- text-gray-700  w-full text-center">
+                      Tassel:{" "}
+                    </span>
+                    <CustomDropdownGrid
                       value={editData.tassel}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {tasselOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      options={tasselOptions}
+                      onChange={(val) =>
+                        handleEditChange({
+                          target: { name: "tassel", value: val },
+                        })
+                      }
+                      disabled={false}
+                    />
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Hood:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                      name="hood"
+
+                  <div className="flex relative items-center mb-2 w-full">
+                    <span className="flex  right-8 relative justify-center items-center text- text-gray-700  w-full  text-center">
+                      Hood:{" "}
+                    </span>
+                    <CustomDropdownGrid
                       value={editData.hood}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {hoodOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      options={hoodOptions}
+                      onChange={(val) =>
+                        handleEditChange({
+                          target: { name: "hood", value: val },
+                        })
+                      }
+                      disabled={false}
+                    />
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Gown:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-20 text-center focus:outline-primary rounded-md"
-                      name="gown"
+                  <div className="flex relative items-center mb-2 w-full">
+                    <span className="flex right-8 relative justify-center items-center text- text-gray-700  w-full text-center">
+                      Gown:{" "}
+                    </span>
+                    <CustomDropdownGrid
                       value={editData.gown}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {gownOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      options={gownOptions}
+                      onChange={(val) =>
+                        handleEditChange({
+                          target: { name: "gown", value: val },
+                        })
+                      }
+                      disabled={false}
+                    />
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
-                    Date: <span>{db.dateofreservation}</span>
+
+                  <div className="text- text-gray-700 mb-2">
+                    Date: {db.dateofreservation}
                   </div>
-                  <div className="text-sm text-gray-700 mb-2">
-                    Status:{" "}
-                    <select
-                      className="bg-[#0C7E48] text-white w-24 text-center ml-5 focus:outline-primary rounded-md"
-                      name="status"
-                      value={editData.status}
-                      onChange={handleEditChange}
-                      style={{ position: "static" }}
-                    >
-                      {statusOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+
+                  <div className="text- text-gray-700 mb-4">
+                    Status: {db.status}
                   </div>
-                  {/* Floating Save/Cancel Popup Niggas */}
-                  <div className="absolute top-2 right-2 z-20 flex flex-col gap-2 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
+                  <div className="flex gap-2 mt-2 w-full"></div>
+                  <div className="flex gap-2 mt-4 w-full justify-center">
                     <button
-                      className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
+                      className="px-4 py-2 bg-emerald-700 text-white rounded hover:bg-blue-800 text-base"
                       onClick={() => handleSave(db.id)}
                     >
                       Save
                     </button>
                     <button
-                      className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
+                      className="px-4 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-base"
                       onClick={handleCancel}
                     >
                       Cancel
                     </button>
                   </div>
-                </>
+                </div>
               ) : (
                 // Normal view UI
                 <>
-                  <h3 className="font-bold text-lg mb-2">{db.studentname}</h3>
-                  <div className="text-sm text-gray-700 mb-1">
+                  <h3 className="font-bold text-2xl mb-4 text-center">
+                    {db.studentname}
+                  </h3>
+                  <div className="text- text-gray-700 mb-2">
                     Program: {db.program}
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
+                  <div className="text- text-gray-700 mb-2">
                     Tassel: {db.tassel}
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
+                  <div className="text- text-gray-700 mb-2">
                     Hood: {db.hood}
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
+                  <div className="text- text-gray-700 mb-2">
                     Gown: {db.gown}
                   </div>
-                  <div className="text-sm text-gray-700 mb-1">
+                  <div className="text- text-gray-700 mb-2">
                     Date: {db.dateofreservation}
                   </div>
-                  <div className="text-sm text-gray-700 mb-2">
+                  <div className="text- text-gray-700 mb-4">
                     Status: {db.status}
                   </div>
                   <div className="flex gap-2 mt-2 w-full">
                     <button
-                      className="w-full h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105"
+                      className="w-full h-9 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 text-base"
                       style={{
                         minWidth: 0,
                         background: modifyTable ? "#bdbdbd" : "#0C7E48",
@@ -326,10 +317,10 @@ const Rows = ({
                       }}
                       disabled={modifyTable}
                     >
-                      <EyeIcon className="w-5" />
+                      <EyeIcon className="w-6" />
                     </button>
                     <button
-                      className="w-full h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105"
+                      className="w-full h-9 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 text-base"
                       style={{
                         minWidth: 0,
                         background: modifyTable ? "#bdbdbd" : "#0C7E48",
@@ -338,16 +329,16 @@ const Rows = ({
                       disabled={modifyTable}
                       onClick={() => !modifyTable && handleEditClick(db)}
                     >
-                      <Table className="w-5" />
+                      <Table className="w-6" />
                     </button>
                     <button
-                      className="w-full h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 hover:bg-red-700 ml-2"
-                      style={{ minWidth: 0 }}
+                      className="w-full h-9 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 ml-2 text-base"
+                      style={{ minWidth: 0, background: "#C0392B" }}
                       onClick={() => {
-                        /* implement niyo delete logic here */
+                        /* implement delete logic here */
                       }}
                     >
-                      <Trash className="w-4" />
+                      <Trash className="w-5" />
                     </button>
                   </div>
                 </>
@@ -355,6 +346,14 @@ const Rows = ({
             </div>
           ))}
         </div>
+        {/* action btn sa baba, hide if grid floating */}
+        {!hideActionButton && (
+          <div className="p-4 flex justify-center">
+            <button className="bg-blue-600 text-white px-6 py-2 rounded shadow transition-transform duration-300 hover:scale-105 hover:bg-blue-800">
+              Action Button
+            </button>
+          </div>
+        )}
       </div>
     );
   } else {
@@ -630,7 +629,7 @@ const Rows = ({
 function getRowColor(idx) {
   // If table bg is light, use a slightly darker shade for odd rows
   // If table bg is dark, use a lighter shade for odd rows
-  // For now, always alternate between two light grays
+  // For now, always alternate between two light grays niggas
   return idx % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
 }
 
@@ -667,7 +666,7 @@ function CustomDropdown({ value, options, onChange, disabled }) {
     >
       <button
         type="button"
-        className="w-full flex items-center  px-1 md:px-3 text-black sm:text-[8px] text-[6px] md:text-[10px] lg:text-[11px] justify-center font-semibold font-Figtree tracking-widest focus:outline-[#EDB427] focus:outline-1.5 focus:outline-offset-[-1px] focus:outline-blur-md"
+        className="w-full flex items-center  px-1 md:px-2 text-black sm:text-[8px] text-[6px] md:text-[10px] lg:text-[11px] justify-center font-semibold font-Figtree tracking-widest focus:outline-[#EDB427] focus:outline-1.5 focus:outline-offset-[-1px] focus:outline-blur-md"
         style={{
           borderRadius: 35,
           minHeight: "20px",
@@ -740,6 +739,151 @@ function CustomDropdown({ value, options, onChange, disabled }) {
                   e.currentTarget.style.background = "#d9d9d9"; //hover bg effect to
                   e.currentTarget.style.color = "#0C7E48"; //h0oveer text color
                   // Rounded top for first, bottom for last
+                  if (idx === 0) {
+                    e.currentTarget.style.borderTopLeftRadius = "5px";
+                    e.currentTarget.style.borderTopRightRadius = "5px";
+                  } else if (idx === options.length - 1) {
+                    e.currentTarget.style.borderBottomLeftRadius = "5px";
+                    e.currentTarget.style.borderBottomRightRadius = "5px";
+                  } else {
+                    e.currentTarget.style.borderTopLeftRadius = "0";
+                    e.currentTarget.style.borderTopRightRadius = "0";
+                    e.currentTarget.style.borderBottomLeftRadius = "0";
+                    e.currentTarget.style.borderBottomRightRadius = "0";
+                  }
+                  if (opt === value) {
+                    e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
+                    e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
+                    e.currentTarget.style.borderTop = "none";
+                    e.currentTarget.style.borderBottom = "none";
+                  } else {
+                    e.currentTarget.style.border = "none";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    opt === value ? "#E9E9E9" : "transparent";
+                  e.currentTarget.style.color =
+                    opt === value ? "#0C7E48" : "#000";
+                  e.currentTarget.style.borderTopLeftRadius = "4";
+                  e.currentTarget.style.borderTopRightRadius = "4";
+                  e.currentTarget.style.borderBottomLeftRadius = "4";
+                  e.currentTarget.style.borderBottomRightRadius = "4";
+                  if (opt === value) {
+                    e.currentTarget.style.borderLeft = "4px solid #0C7E48";
+                    e.currentTarget.style.borderRight = "4px solid #0C7E48";
+                    e.currentTarget.style.borderTop = "none";
+                    e.currentTarget.style.borderBottom = "none";
+                  } else {
+                    e.currentTarget.style.border = "none";
+                  }
+                }}
+              >
+                {opt}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// CustomDropdown for grid view editing
+function CustomDropdownGrid({ value, options, onChange, disabled }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={`absolute  ml-[150px] flex justify-center items-center ${
+        disabled ? "pointer-events-none opacity-60" : ""
+      }`}
+      tabIndex={0}
+      style={{
+        outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
+        borderRadius: 30,
+        cursor: disabled ? "not-allowed" : "pointer",
+        boxSizing: "border-box",
+        background: open ? "#fff" : "#F3F4F6",
+        transition: "outline-color 0.3s, background 0.2s",
+      }}
+    >
+      <button
+        type="button"
+        className=" relative flex  px-4  md:text-[14px]  font-semibold font-Figtree tracking-widest focus:outline-[#EDB427] focus:outline-1.5 focus:outline-offset-[-2x] focus:outline-blur-md"
+        style={{
+          borderRadius: 35,
+          minHeight: "10px",
+          background: open ? "#0C7E48" : "#DBDBDB",
+          color: open ? "#fff" : "#000000",
+          transition: "background 0.3s",
+        }}
+        onClick={() => !disabled && setOpen((o) => !o)}
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        <span className="truncate">{value}</span>
+        <span className="items-center absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex lg:flex">
+          <ChevronDown
+            className="w-3 h-3 text-black absolute"
+            style={{
+              opacity: open ? 0.8 : 1,
+              color: open ? "#fff" : "#000",
+            }}
+            aria-hidden="true"
+          />
+        </span>
+      </button>
+      {open && (
+        <div className="absolute z-30 left-0 top-full w-full mt-1 animate-fade-in flex justify-center">
+          <div
+            className="w-full h-full absolute top-0 left-0 rounded-lg border-[1.5px] border-[#0C7E48] bg-[#E9E9E9] pointer-events-none"
+            style={{ zIndex: 0 }}
+          />
+          <div
+            className=" w-full overflow-auto flex flex-col items-center"
+            style={{ zIndex: 1 }}
+            role="listbox"
+          >
+            {options.map((opt, idx) => (
+              <div
+                key={opt}
+                className={`my-1.0 text-base font-Figtree w-full h-10 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
+                  opt === value
+                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                    : ""
+                }`}
+                style={{
+                  background: opt === value ? "#E9E9E9" : "transparent",
+                  borderRadius: "0",
+                  borderLeft: opt === value ? "5px solid #0C7E48" : "none",
+                  borderRight: opt === value ? "5px solid #0C7E48" : "none",
+                  borderTop: "none",
+                  borderBottom: "none",
+                }}
+                onClick={() => {
+                  onChange(opt);
+                  setOpen(false);
+                }}
+                role="option"
+                aria-selected={opt === value}
+                tabIndex={0}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#d9d9d9";
+                  e.currentTarget.style.color = "#0C7E48";
                   if (idx === 0) {
                     e.currentTarget.style.borderTopLeftRadius = "5px";
                     e.currentTarget.style.borderTopRightRadius = "5px";
