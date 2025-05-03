@@ -102,7 +102,7 @@ const Navbar = ({
       {/* Bottom Navigation */}
       <div className="h-1/2 flex justify-start items-center">
         <div className="w-full max-w-[500px]">
-          <div className="relative lg:ml-14 md:ml-10  mr-2">
+          <div className="relative lg:ml-14 md:ml-10 ml-8 mr-2">
             <Search className="absolute w-5 top-1 left-2" />
             <input
               className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500 w-full px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
@@ -111,10 +111,10 @@ const Navbar = ({
             />
           </div>
         </div>
-        <div className="h-7 w-16 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-2">
+        <div className="h-7 w-22 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6  mr-8 md:mr-2">
           <button
             onClick={() => setIsGrid(false)}
-            className={`h-7 w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+            className={`h-7 w-8 md:h-7 md:w-10  flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
               !isGrid
                 ? "bg-[#02327B] text-white"
                 : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
@@ -124,7 +124,7 @@ const Navbar = ({
           </button>
           <button
             onClick={() => setIsGrid(true)}
-            className={`h-7 w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+            className={` h-7 w-8 md:h-7 md:w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
               isGrid
                 ? "bg-[#02327B] text-white"
                 : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
@@ -134,12 +134,12 @@ const Navbar = ({
           </button>
         </div>
         <button
-          className={`hover:scale-105 h-7 w-28 rounded-lg text-xs text-white ml-2 mr-4 ${
-            modifyTable ? "bg-[#919191] ring-2" : "bg-[#0C7E48]"
+          className={`hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+            modifyTable ? "bg-[#ca4a4a] ring-black ring-1" : "bg-[#0C7E48]"
           }`}
           onClick={editallClicked}
         >
-          {modifyTable ? "Edit Table" : "Modify Table"}
+          {modifyTable ? "Save Table" : "Modify Table"}
         </button>
       </div>
     </div>
