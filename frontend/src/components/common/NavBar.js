@@ -11,6 +11,7 @@ import { ReactComponent as GrayRows } from "../../assets/icons/gray-rows.svg";
 import { ReactComponent as GrayGrid } from "../../assets/icons/gray-grid.svg";
 import { ReactComponent as Rows } from "../../assets/icons/white-row.svg";
 import { ReactComponent as Grid } from "../../assets/icons/white-grid.svg";
+import {useNavigate} from "react-router-dom";
 
 const Navbar = ({
   isGrid,
@@ -23,6 +24,8 @@ const Navbar = ({
   const editallClicked = () => {
     setmodifyTable((prev) => !prev);
   };
+
+  const navigate = useNavigate();
 
   const tabClass = (tabName) =>
     activeTab === tabName
@@ -54,12 +57,14 @@ const Navbar = ({
     />
   );
 
+const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
+
   return (
     <div className="h-24">
       {/* Top Navigation */}
       <div className="h-1/2 flex justify-start items-center ml-14">
         <button
-          onClick={() => setActiveTab("dashboard")}
+          onClick={() => navigate("/admin-dashboard")}
           className={tabClass("dashboard")}
         >
           <span className="w-3">
@@ -89,7 +94,7 @@ const Navbar = ({
         </button>
 
         <button
-          onClick={() => setActiveTab("evaluation")}
+          onClick={() => navigate("/evaluation-page")}
           className={tabClass("evaluation")}
         >
           <span className="w-3">
@@ -134,7 +139,7 @@ const Navbar = ({
           </button>
         </div>
         <button
-          className={`hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+          className={`${isModifyTable} hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
             modifyTable ? "bg-[#ca4a4a] ring-black ring-1" : "bg-[#0C7E48]"
           }`}
           onClick={editallClicked}
