@@ -12,6 +12,7 @@ router.post('/', async (req, res) => {
     const {
         email,
         password,
+        confirmPassword,
         first_name,
         surname,
         idNumber,
@@ -30,13 +31,35 @@ router.post('/', async (req, res) => {
         // password hash
         //const hashedPass = await bcrypt.hash(password, 10);
 
+        //check if password > 8 letters
+        if (password.length < 8) {
+            return res.status(400).json({ message: 'Password must be at least 8 characters' });
+        }        
+
+        //check if both password are correct
+        if (password != confirmPassword) {
+            return res.status(400).json({ message: 'Password is not matched' });
+        }
+
+        //convert first letter of the names to Capital Letters (including m.i.)
+        function checkWord(input) { 
+            if (!input) return '';
+            return input
+                .trim()
+                .split(/\s+/)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        }
+        
+
+
         // Insert new values in accounts table
         const result = await db.registForm({ //email, password, first_name, surname, middleInitial, idNumber, course
             email, 
             password, 
-            first_name,
-            surname,
-            middleInitial, 
+            first_name: checkWord(first_name),
+            surname: checkWord(surname),
+            middleInitial: checkWord(middleInitial), 
             idNumber, 
             course 
         });

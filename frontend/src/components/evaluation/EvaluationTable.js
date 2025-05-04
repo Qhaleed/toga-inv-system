@@ -1,7 +1,14 @@
 import EvaluationRows from "./EvaluationRows";
 import "../common/Table.css";
 
-const EvaluationTable = ({ isGrid, modifyTable, value, setValue, evalTab, setEvaluationTab }) => {
+const EvaluationTable = ({
+  isGrid,
+  modifyTable,
+  value,
+  setValue,
+  evalTab,
+  setEvaluationTab,
+}) => {
   const mainContentHeight = "80vh";
   return (
     <div className="w-full flex flex-col items-center justify-start mt-10">
@@ -12,13 +19,6 @@ const EvaluationTable = ({ isGrid, modifyTable, value, setValue, evalTab, setEva
       >
         <div className="h-full w-full flex items-stretch justify-center">
           <div className="h-full w-full flex flex-col justify-start items-center">
-            {isGrid ? (
-              <div className="flex-1 flex flex-col h-full">
-                <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-12 sm:p-2 md:p-4 h-full">
-                  <EvaluationRows isGrid hideActionButton />
-                </div>
-              </div>
-            ) : (
               <div
                 className="relative w-full flex flex-col min-h-[300px] max-w-full border border-black shadow outline-none bg-white rounded-lg"
                 style={{
@@ -50,13 +50,12 @@ const EvaluationTable = ({ isGrid, modifyTable, value, setValue, evalTab, setEva
                       isGrid={false}
                       modifyTable={modifyTable}
                       rowHeightClass="h-16"
-                      setValue={setValue} 
+                      setValue={setValue}
                       setEvaluationTab={setEvaluationTab}
                     />
                   </table>
                 </div>
               </div>
-            )}
           </div>
         </div>
       </div>

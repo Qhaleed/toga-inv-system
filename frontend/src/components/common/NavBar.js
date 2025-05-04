@@ -60,7 +60,7 @@ const Navbar = ({
     />
   );
 
-  const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
+  const isEvaluation = activeTab === "evaluation" ? "hidden" : "block";
 
   // eto ung logut butson
   const handleLogout = () => {
@@ -152,7 +152,7 @@ const Navbar = ({
             />
           </div>
         </div>
-        <div className="h-7 w-22 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6  mr-8 md:mr-2">
+        <div className={`h-7 w-22 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6  mr-8 md:mr-2 ${isEvaluation}`}>
           <button
             onClick={() => setIsGrid(false)}
             className={`h-7 w-8 md:h-7 md:w-10  flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
@@ -175,7 +175,7 @@ const Navbar = ({
           </button>
         </div>
         <button
-          className={`${isModifyTable} hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+          className={`${isEvaluation} hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
             modifyTable ? "bg-[#ca4a4a] ring-black ring-1" : "bg-[#0C7E48]"
           }`}
           onClick={editallClicked}
