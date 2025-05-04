@@ -482,7 +482,7 @@ const Rows = ({
                                   </button>
                                   {hoveredEyeId === db.id && (
                                     <div
-                                      className={`absolute right-2 -translate-x-1/2 z-50 w-80 bg-white rounded-xl shadow-2xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto border border-gray-200 ${
+                                      className={`absolute right-2 -translate-x-1/2 z-50 w-80 h-fit   rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto ${
                                         popupDirection === "up"
                                           ? "bottom-10"
                                           : "top-10"
