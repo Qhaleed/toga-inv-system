@@ -32,8 +32,8 @@ const Navbar = ({
 
   const tabClass = (tabName) =>
     activeTab === tabName
-      ? "hover:scale-105 bg-gray-300 border border-[#02327B] flex ml-2 justify-center mr-2 items-center w-28 h-5 text-xs text-[#02327B] rounded-lg transition-all ease-out duration-500"
-      : "hover:scale-105 mr-2 flex ml-2 justify-center items-center w-28 h-5 text-xs text-gray-500 border border-gray-500 rounded-lg transition-all ease-out duration-500";
+      ? "hover:scale-105 bg-gray-300 border border-[#02327B] flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6  lg:w-40 lg:h-6 w-18 h-4 text-xs text-[#02327B] rounded-lg transition-all ease-out duration-500"
+      : "hover:scale-105 mr-2 flex ml-2 justify-center items-center w-28 h-5 text-xs text-gray-500 border  lg:w-30 lg:h-6  lg:w-40 lg:h-6 w-18 h-4 border-gray-500 rounded-lg transition-all ease-out duration-500";
 
   const iconToggle = (tabName, ActiveIcon, InactiveIcon) =>
     activeTab === tabName ? (
@@ -82,7 +82,8 @@ const Navbar = ({
         </div>
       )}
       {/* Top Navigation */}
-      <div className="h-1/2 flex justify-start items-center ml-14">
+      <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 ml-8 mr-2">
+        {/* Dashboard button */}
         <button
           onClick={() => navigate("/admin-dashboard")}
           className={tabClass("dashboard")}
@@ -102,7 +103,7 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("inventory", Inventory, GrayInventory)}
           </span>
-          <span className="text-[10px] mx-2 md:mx-4">Inventory</span>
+          <span className="text-[12px] mx-2 md:mx-4">Inventory</span>
         </button>
 
         <button
@@ -141,7 +142,7 @@ const Navbar = ({
 
       {/* Bottom Navigation */}
       <div className="h-1/2 flex justify-start items-center">
-        <div className="w-full max-w-[500px]">
+        <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[800px]">
           <div className="relative lg:ml-14 md:ml-10 ml-8 mr-2">
             <Search className="absolute w-5 top-1 left-2" />
             <input

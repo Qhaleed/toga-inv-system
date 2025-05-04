@@ -11,7 +11,7 @@ const AdminDashboardCard = () => {
   const [sortOrder, setSortOrder] = useState(null); // Add sort state here
 
   return (
-    <div className="h-screen  w-screen relative fixed bg-[#EBEBEB] font-figtree font-medium">
+    <div className="h-fit w-screen relative fixed bg-[#EBEBEB] font-figtree font-medium">
       {/* responsive view____  > Sidebar above navbar on small screens, left on large screens */}
       <div className="max-w-full  relative fixed sm:grid sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5   sm:gap-0 sm:top-0 sm:left-0 sm:h-screen sm:w-screen">
         {/* sidebar section _____> full width above navbar on small screens, left on large screens */}
@@ -21,10 +21,10 @@ const AdminDashboardCard = () => {
         </div>
 
         {/* MAIN CONTENT TO ____> below sidebar on small screens, right of sidebar on large screens */}
-        <div className="flex-1 md:col-span-2  xl:col-span-4 sm:col-span-2  h-full">
+        <div className="flex-1 md:col-span-  xl:col-span-4 sm:col-span-2 overflow-x-clipped sm:overflow-x-visible col-span-1 h-full">
           <div
-            className="w-full flex flex-col items-center"
-            style={{ maxWidth: "100vw" }}
+            className="w-full h-screen  overflow-hidden flex flex-col items-center"
+            style={{ maxWidth: "screen" }}
           >
             <div
               className="w-full"

@@ -7,7 +7,7 @@ const LoaderAnimation = () => {
       <div className="w-16 h-16 border-4 border-t-transparent border-white border-solid rounded-full animate-spin"></div>
 
       <p className="text-white text-lg font-semibold animate-pulse">
-        Logging in, please wait...
+        Loading, please wait...
       </p>
 
       <div className="mt-4">
