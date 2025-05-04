@@ -3,7 +3,7 @@ import Profile from "../../assets/images/profilepicture.jpg";
 import { ReactComponent as Calendar } from "../../assets/icons/black-calendar.svg";
 import { ReactComponent as MenuIcon } from "../../assets/icons/white-row.svg";
 
-const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
+const SideBar = ({ alwaysShowOnLarge, setSortOrder, activeTab }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
     typeof window !== "undefined" && window.innerWidth >= 640
@@ -115,6 +115,8 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
   const handleSortDateNewest = () => setSortOrder && setSortOrder("newest");
   const handleSortDateOldest = () => setSortOrder && setSortOrder("oldest");
 
+  console.log(activeTab);
+
   return (
     <>
       {/* Optional to for small screen */}
@@ -177,7 +179,7 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
                     4 {/* Notification counts logic adnkjasndkjasndkajsnd */}
                   </div>
                 </div>
-              </button>
+              </button> 
             </div>
           </div>
 
@@ -187,12 +189,44 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
           </div>
 
           {/* SIDE BAR NAVIGATION CONTAINER*/}
-          <div className=" min-w-full scale-90  md:w-11/12  md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-60 bg-[#102F5E] flex items-center rounded-xl md:mt-7">
+          <div className=" min-w-full md:w-11/12  md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-60 bg-[#102F5E] flex items-center rounded-xl md:mt-7">
             <div className="relative w-full flex flex-col justify-between    md:w-full">
               <h4 className="text-white text-[13px]  md:text-[13px] mt-1 ml-4 md:scale-100">
                 ITEM STATUS
               </h4>
 
+              {activeTab === "evaluation" ? (
+              <div className="w-full h-[90px]  md:scale-100">
+                <div className="w-full h-1/2 flex justify-between items-center ">
+                  <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:scale-105 transform-all ease-out duration-300">
+                    <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-black ml-3">
+                      All
+                    </p>
+                    <div className="right-0 absolute sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      123
+                    </div>
+                  </button>
+                  <button className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-100 hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300">
+                    <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-black ml-3">
+                      Evaluated
+                    </p>
+                    <div className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      13
+                    </div>
+                  </button>
+                </div>
+                <div className="w-full h-1/2 flex  justify-between items-center ">
+                  <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105">
+                    <p className="sm:text-[14px] text-[13px] font-bold text-black ml-3">
+                     No Evaluation
+                    </p>
+                    <div className="absolute right-0 sm:text-[14px] text-[13px] md:sm:text-[14px]  bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      19
+                    </div>
+                  </button>
+                </div>
+              </div>
+              ) : (
               <div className="w-full h-[90px]  md:scale-100">
                 <div className="w-full h-1/2 flex justify-between items-center ">
                   <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:scale-105 transform-all ease-out duration-300">
@@ -231,6 +265,8 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder }) => {
                   </button>
                 </div>
               </div>
+              )}
+              
               <h4 className="text-white text-xs mt-1 ml-4 md:scale-100">
                 SORT BY
               </h4>
