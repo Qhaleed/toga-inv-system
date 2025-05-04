@@ -91,7 +91,7 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("dashboard", Home, GrayHouse)}
           </span>
-          <span className="text-[10px] mx-1 md:mx-4 content-center ">
+          <span className="text-[12px] mx-1 md:mx-6 content-center ">
             Dashboard
           </span>
         </button>
@@ -113,7 +113,7 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("pending", Statistic, GrayStatistic)}
           </span>
-          <span className="text-[10px] mx-2 md:mx-5 content-center">
+          <span className="text-[12px] mx-2 md:mx-6 content-center">
             Pending
           </span>
         </button>
@@ -125,14 +125,14 @@ const Navbar = ({
           <span className="w-3">
             {iconToggle("evaluation", Application, GrayApplication)}
           </span>
-          <span className="text-[10px]  mx-1  md:mx-4">Evaluation</span>
+          <span className="text-[12px]  mx-1  md:mx-4">Evaluation</span>
         </button>
 
         {/* Logout button at top right */}
         <div className="relative ml-auto mr-5 ">
           <button
             onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded shadow transition-all duration-200"
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded-2xl shadow transition-all duration-500"
             style={{ minWidth: 20 }}
           >
             Logout
@@ -152,7 +152,9 @@ const Navbar = ({
             />
           </div>
         </div>
-        <div className={`h-7 w-22 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6  mr-8 md:mr-2 ${isEvaluation}`}>
+        <div
+          className={`h-7 w-22 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6  mr-8 md:mr-2 ${isEvaluation}`}
+        >
           <button
             onClick={() => setIsGrid(false)}
             className={`h-7 w-8 md:h-7 md:w-10  flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
@@ -176,7 +178,9 @@ const Navbar = ({
         </div>
         <button
           className={`${isEvaluation} hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
-            modifyTable ? "bg-[#ca4a4a] ring-black ring-1" : "bg-[#0C7E48]"
+            modifyTable
+              ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
+              : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
           }`}
           onClick={editallClicked}
         >
