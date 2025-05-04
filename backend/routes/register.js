@@ -1,4 +1,5 @@
 const express = require('express');
+//const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const db = require('../database/db');
@@ -6,36 +7,50 @@ require('dotenv').config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-// Registration Route
+// Registration route
 router.post('/', async (req, res) => {
-    const { email, password, name, role = 'student' } = req.body;
+    const {
+        email,
+        password,
+        first_name,
+        surname,
+        idNumber,
+        middleInitial,
+        course,
+        role = 'student'
+    } = req.body;
 
     try {
-        // Check if user already exists
-        const [existingUsers] = await db.pool.query(
-            "SELECT * FROM accounts WHERE email = ?",
-            [email]
-        );
-
+        // check if the email exists
+        const existingUsers = await db.getTable(email);
         if (existingUsers.length > 0) {
             return res.status(400).json({ message: 'Email already registered' });
         }
 
-        // In a real application, hash the password before storing it
-        // const hashedPassword = await bcrypt.hash(password, 10);
+        // password hash
+        //const hashedPass = await bcrypt.hash(password, 10);
 
-        // Insert new user
-        const [result] = await db.pool.query(
-            "INSERT INTO accounts (email, password, name, role) VALUES (?, ?, ?, ?)",
-            [email, password, name, role]
+        // Insert new values in accounts table
+        const result = await db.registForm({ //email, password, first_name, surname, middleInitial, idNumber, course
+            email, 
+            password, 
+            first_name,
+            surname,
+            middleInitial, 
+            idNumber, 
+            course 
+        });
+        console.log('Registration successful');
+
+        const token = jwt.sign(
+            {
+                id: result.insertId,
+                email,
+                role
+            },
+            SECRET_KEY,
+            { expiresIn: '1h' }
         );
-
-        // Generate token for new user
-        const token = jwt.sign({
-            id: result.insertId,
-            email,
-            role
-        }, SECRET_KEY, { expiresIn: '1h' });
 
         res.status(201).json({
             message: 'Account created successfully',

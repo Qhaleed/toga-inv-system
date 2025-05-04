@@ -11,7 +11,9 @@ import { ReactComponent as GrayRows } from "../../assets/icons/gray-rows.svg";
 import { ReactComponent as GrayGrid } from "../../assets/icons/gray-grid.svg";
 import { ReactComponent as Rows } from "../../assets/icons/white-row.svg";
 import { ReactComponent as Grid } from "../../assets/icons/white-grid.svg";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import LoaderAnimation from "../login-card/LoaderAnimation";
 
 const Navbar = ({
   isGrid,
@@ -26,11 +28,12 @@ const Navbar = ({
   };
 
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const tabClass = (tabName) =>
     activeTab === tabName
-      ? "hover:scale-105 bg-gray-300 border border-[#02327B] flex ml-2 justify-center mr-2 items-center w-28 h-5 text-xs text-[#02327B] rounded-lg transition-all ease-out duration-500"
-      : "hover:scale-105 mr-2 flex ml-2 justify-center items-center w-28 h-5 text-xs text-gray-500 border border-gray-500 rounded-lg transition-all ease-out duration-500";
+      ? "hover:scale-105 bg-gray-300 border border-[#02327B] flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6  lg:w-40 lg:h-6 w-18 h-4 text-xs text-[#02327B] rounded-lg transition-all ease-out duration-500"
+      : "hover:scale-105 mr-2 flex ml-2 justify-center items-center w-28 h-5 text-xs text-gray-500 border  lg:w-30 lg:h-6  lg:w-40 lg:h-6 w-18 h-4 border-gray-500 rounded-lg transition-all ease-out duration-500";
 
   const iconToggle = (tabName, ActiveIcon, InactiveIcon) =>
     activeTab === tabName ? (
@@ -57,12 +60,30 @@ const Navbar = ({
     />
   );
 
-const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
+  const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
+
+  // eto ung logut butson
+  const handleLogout = () => {
+    setLoading(true);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userEmail");
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/login");
+    }, 1500);
+  };
 
   return (
-    <div className="h-24">
+    <div className="h-24 relative">
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <LoaderAnimation />
+        </div>
+      )}
       {/* Top Navigation */}
-      <div className="h-1/2 flex justify-start items-center ml-14">
+      <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 ml-8 mr-2">
+        {/* Dashboard button */}
         <button
           onClick={() => navigate("/admin-dashboard")}
           className={tabClass("dashboard")}
@@ -70,7 +91,9 @@ const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
           <span className="w-3">
             {iconToggle("dashboard", Home, GrayHouse)}
           </span>
-          <span className="text-[10px] ml-2">Dashboard</span>
+          <span className="text-[10px] mx-1 md:mx-4 content-center ">
+            Dashboard
+          </span>
         </button>
 
         <button
@@ -80,7 +103,7 @@ const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
           <span className="w-3">
             {iconToggle("inventory", Inventory, GrayInventory)}
           </span>
-          <span className="text-[10px] mx-2">Inventory</span>
+          <span className="text-[12px] mx-2 md:mx-4">Inventory</span>
         </button>
 
         <button
@@ -90,7 +113,9 @@ const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
           <span className="w-3">
             {iconToggle("pending", Statistic, GrayStatistic)}
           </span>
-          <span className="text-[10px] mx-2">Pending</span>
+          <span className="text-[10px] mx-2 md:mx-5 content-center">
+            Pending
+          </span>
         </button>
 
         <button
@@ -100,13 +125,24 @@ const isModifyTable = activeTab === "evaluation" ? "hidden" : "block";
           <span className="w-3">
             {iconToggle("evaluation", Application, GrayApplication)}
           </span>
-          <span className="text-[10px] mx-2">Evaluation</span>
+          <span className="text-[10px]  mx-1  md:mx-4">Evaluation</span>
         </button>
+
+        {/* Logout button at top right */}
+        <div className="relative ml-auto mr-5 ">
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded shadow transition-all duration-200"
+            style={{ minWidth: 20 }}
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Bottom Navigation */}
       <div className="h-1/2 flex justify-start items-center">
-        <div className="w-full max-w-[500px]">
+        <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[800px]">
           <div className="relative lg:ml-14 md:ml-10 ml-8 mr-2">
             <Search className="absolute w-5 top-1 left-2" />
             <input
