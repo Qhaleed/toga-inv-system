@@ -82,7 +82,7 @@ const Navbar = ({
         </div>
       )}
       {/* Top Navigation */}
-      <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 ml-8 mr-2">
+      <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 mr-2">
         {/* Dashboard button */}
         <button
           onClick={() => navigate("/admin-dashboard")}

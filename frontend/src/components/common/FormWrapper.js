@@ -7,7 +7,7 @@ export default function FormWrapper({ title, children, onSubmit, className }) {
       <div className="relative z-10 w-fit max-w-5xl bg-white bg-opacity-50 backdrop-blur-lg rounded-2xl p-6 sm:p-10 shadow-2xl ring-1 ring-white/10">
         <div
           className={`grid grid-cols-1 md:grid-cols-[0.8fr_2.2fr] gap-6 ${
-            className === "register-card" ? "h-fit" : "h-screen"
+            className === "register-card" ? "h-fit" : "h-[40vh]"
           }`}
         >
           {/* Left side (fixed) */}
