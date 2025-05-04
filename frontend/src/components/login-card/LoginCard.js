@@ -39,11 +39,11 @@ function LoginCard() {
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Login failed");
+        setError(errorData.message || "Wrong email or password nigga!");
         setLoading(false);
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError("error to fetch server nigga SERVER IS DOWN");
       setLoading(false);
     }
   };
@@ -156,7 +156,7 @@ function LoginCard() {
       {/* Loader Animation */}
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <LoaderAnimation />
+          <LoaderAnimation />{" "}
         </div>
       )}
     </FormWrapper>
