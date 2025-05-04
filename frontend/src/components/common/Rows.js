@@ -19,6 +19,7 @@ const Rows = ({
   rowHeightClass = "h-16",
   sortOrder,
 }) => {
+  const [popupDirection, setPopupDirection] = useState("down"); // "down" or "up" ung popup window
   const [dashboard, setDashboard] = useState([]);
   const [originalDashboard, setOriginalDashboard] = useState([]); // Track original data
   const [editId, setEditId] = useState(null);
@@ -185,10 +186,32 @@ const Rows = ({
     }
   }, [sortOrder, isGrid]);
 
+  // Ito palang ung handleEyeMouseEnter para sa hover popup position niya
+  function handleEyeMouseEnter(event, dbId) {
+    setHoveredEyeId(dbId);
+    const tableContainer =
+      event.target.closest(".table-scroll-container") ||
+      document.querySelector(".table-scroll-container");
+    const buttonRect = event.target.getBoundingClientRect();
+    const popupHeight = 340; // Approximate height of popup (px)
+    let direction = "down";
+    if (tableContainer) {
+      const containerRect = tableContainer.getBoundingClientRect();
+      if (buttonRect.bottom + popupHeight > containerRect.bottom) {
+        direction = "up";
+      }
+    } else {
+      if (buttonRect.bottom + popupHeight > window.innerHeight) {
+        direction = "up";
+      }
+    }
+    setPopupDirection(direction);
+  }
+
   if (isGrid) {
     // Instead of rendering the grid view here, ni reuse ko nalang un grid view component
     // cleaner code, send lang props sa gridview if may idadagdag
-    // Usage: <GridView ...props />
+    // bale gridview tapos props nalang like sa baba
     return (
       <GridView
         dashboard={dashboard}
@@ -439,7 +462,9 @@ const Rows = ({
                                         : "pointer",
                                     }}
                                     disabled={modifyTable}
-                                    onMouseEnter={() => setHoveredEyeId(db.id)}
+                                    onMouseEnter={(e) =>
+                                      handleEyeMouseEnter(e, db.id)
+                                    }
                                     onClick={() => {
                                       setHoveredEyeId(db.id);
                                       setPopupUser(db);
@@ -457,9 +482,18 @@ const Rows = ({
                                   </button>
                                   {hoveredEyeId === db.id && (
                                     <div
-                                      className="absolute right-2 -translate-x-1/2 top-10 z-50 w-80 bg-white rounded-xl shadow-2xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto border border-gray-200"
-                                      onMouseEnter={() =>
-                                        setHoveredEyeId(db.id)
+                                      className={`absolute right-2 -translate-x-1/2 z-50 w-80 h-fit   rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto ${
+                                        popupDirection === "up"
+                                          ? "bottom-10"
+                                          : "top-10"
+                                      }`}
+                                      style={
+                                        popupDirection === "up"
+                                          ? { bottom: "2.5rem" }
+                                          : { top: "2.5rem" }
+                                      }
+                                      onMouseEnter={(e) =>
+                                        handleEyeMouseEnter(e, db.id)
                                       }
                                       onMouseLeave={() => setHoveredEyeId(null)}
                                     >

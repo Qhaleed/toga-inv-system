@@ -46,6 +46,7 @@ const PopupWindow = ({
         >
           Back
         </button>
+        <h5>PLACEHOLDER MUNA TO </h5>
         <div className="grid grid-cols-2 grid-rows-3 w-full h-full p-6 gap-2">
           <div className="bg-blue-200 flex items-center justify-center font-bold text-lg w-full h-20 rounded-xl">
             {user ? user.program : "Program"}

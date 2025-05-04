@@ -3,11 +3,11 @@ export default function FormWrapper({ title, children, onSubmit, className }) {
     <div
       className={`min-h-screen flex items-center justify-center bg-login-bg bg-cover bg-no-repeat bg-center p-4 sm:p-6 ${className}`}
     >
-      <div className="fixed inset-0 bg-black/50 rounded-l w-full min-h-screen"></div>
-      <div className="relative z-10 w-full max-w-5xl bg-white bg-opacity-50 backdrop-blur-lg rounded-2xl p-6 sm:p-10 shadow-2xl ring-1 ring-white/10">
+      <div className="fixed inset-0 bg-black/50 rounded-l w-full mn-h-screen"></div>
+      <div className="relative z-10 w-fit max-w-5xl bg-white bg-opacity-50 backdrop-blur-lg rounded-2xl p-6 sm:p-10 shadow-2xl ring-1 ring-white/10">
         <div
           className={`grid grid-cols-1 md:grid-cols-[0.8fr_2.2fr] gap-6 ${
-            className === "register-card" ? "h-[80vh]" : ""
+            className === "register-card" ? "h-fit" : "h-[40vh]"
           }`}
         >
           {/* Left side (fixed) */}
