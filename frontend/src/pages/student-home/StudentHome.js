@@ -1,10 +1,8 @@
-import React from 'react';
-import StudentHomeCard from '../../components/student-home/StudentHomeCard';
+import React from "react";
+import Dashboard from "../../components/student-home/StudentHomeCard";
 
-function StudentHome() {
-    return (
-        <StudentHomeCard />
-    );
-}
+const StudentHome = () => {
+  return <Dashboard />;
+};
 
 export default StudentHome;

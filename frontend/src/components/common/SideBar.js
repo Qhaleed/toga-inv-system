@@ -140,7 +140,7 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder, activeTab }) => {
       {/* Sidebar idea ->> above navbar on small screens, left on large screens */}
       {visible && (
         <div
-          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap  h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-30 sm:z-auto transition-all ${
+          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-30 sm:z-auto transition-all ${
             showSidebar
               ? "animate-slide-in-top duration-800"
               : "animate-fade-in duration-800"
@@ -153,7 +153,7 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder, activeTab }) => {
           }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
-          <div className=" w-full md:w-full h-20 md:h-24  bg-[#102F5E] bg-center flex justify-between">
+          <div className="w-full md:w-full h-20 md:h-24  bg-[#102F5E] bg-center flex justify-between">
             <div className="flex justify-center">
               <div className="  h-full  ml-1  w-16 flex justify-center items-center ">
                 <img
@@ -189,7 +189,6 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder, activeTab }) => {
           </div>
 
           {/* SIDE BAR NAVIGATION CONTAINER*/}
-
           <div className=" min-w-full md:w-11/12  md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-60 bg-[#102F5E] flex items-center rounded-xl md:mt-7">
             <div className="relative w-full flex flex-col justify-between md:w-full">
               <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
@@ -320,7 +319,7 @@ const SideBar = ({ alwaysShowOnLarge, setSortOrder, activeTab }) => {
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </>
