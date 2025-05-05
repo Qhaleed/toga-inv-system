@@ -6,11 +6,11 @@ export default function FormWrapper({ title, children, onSubmit, className }) {
       <div className="relative z-10 w-full max-w-[1000px] min-h-[500px] bg-white bg-opacity-50 backdrop-blur-lg rounded-3xl p-6 sm:p-10 shadow-2xl ring-1 ring-white/10">
         <div
           className={`grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 ${
-            className === "register-card" ? "max-h-[80vh] overflow-y-auto" : ""
+            className === "register-card" ? "max-h-[80vh]" : ""
           }`}
         >
           {/* Left side */}
-          <div className="space-y-6 text-white border-b-2 md:border-b-0 md:border-r-2 border-white border-opacity-50 pb-6 md:pb-0 pr-0 md:pr-6 sm:pr-8 sticky top-0">
+          <div className="space-y-6 text-white border-b-2 md:border-b-0 md:border-r-2 border-white border-opacity-50 pb-6 md:pb-0 pr-0 md:pr-6 sm:pr-8 overflow-hidden">
             <h2 className="text-3xl mt-4 sm:text-4xl text-primary font-figtree font-bold leading-snug">
               {title}
             </h2>
@@ -26,7 +26,7 @@ export default function FormWrapper({ title, children, onSubmit, className }) {
             onSubmit={onSubmit}
             className={`space-y-8 text-white ${
               className === "register-card"
-                ? "overflow-y-auto pr-6 sm:pr-8 max-h-fit"
+                ? "overflow-y-auto pr-6 sm:pr-8 max-h-[80vh]"
                 : ""
             }`}
           >

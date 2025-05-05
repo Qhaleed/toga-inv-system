@@ -17,7 +17,6 @@ function LoginCard() {
     setLoading(true); // Show loader when login starts
     try {
       const response = await fetch("/auth/login", {
-        //change proxy in package.json to 5001 if mac (default is 5000)
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -39,22 +38,20 @@ function LoginCard() {
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Wrong email or password nigga!");
+        setError(errorData.message || "Wrong email or password.");
         setLoading(false);
       }
     } catch (err) {
-      setError("error to fetch server nigga SERVER IS DOWN");
+      setError("Error connecting to the server. Please try again later.");
       setLoading(false);
     }
   };
 
   return (
-
     <FormWrapper
       title="Toga Inventory Management System"
       onSubmit={handleSubmit}
     >
-      {/* Form content */}
       {/* Title */}
       <div className="mt-4 mb-4">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
@@ -72,17 +69,17 @@ function LoginCard() {
           name="email"
           placeholder="example@email.com"
           className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+                     text-white placeholder-gray-300 placeholder:font-manjari
+                     focus:outline-none 
+                     focus:border-primary
+                     transition duration-200"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
 
       {/* Password */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 space-y-6  relative sm:gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 space-y-6 relative sm:gap-4 mb-6">
         <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold mt-8">
           Password
         </label>
@@ -91,10 +88,10 @@ function LoginCard() {
           name="password"
           placeholder="•••••••••••"
           className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
+                     text-white placeholder-gray-300 placeholder:font-manjari
+                     focus:outline-none 
+                     focus:border-primary
+                     transition duration-200"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -108,7 +105,6 @@ function LoginCard() {
 
       {/* Remember Me and Forgot Password */}
       <div className="flex flex-col sm:flex-row items-center justify-between text-sm mb-4">
-        {/* Remember Me */}
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -117,7 +113,7 @@ function LoginCard() {
           <span className="text-white font-manjari pt-1 select-none">
             Remember me
           </span>
-        </div>
+        </label>
 
         {/* Error Message */}
         {error && (
@@ -126,24 +122,21 @@ function LoginCard() {
           </div>
         )}
 
-        {/* Forgot Password */}
         <a href="/" className="font-manjari text-white pt-1 hover:underline">
           Forgot password?
         </a>
       </div>
 
-        {/* Remember Me and Forgot Password */}
-        <div className="flex items-center justify-between text-sm mb-4">
-          {/* Remember Me */}
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              className="w-4 h-4 accent-[#2A4D89] border-2 border-gray-300 rounded"
-            />
-            <span className="text-white font-manjari select-none pt-1">
-              Remember me
-            </span>
-          </label>
+      {/* Login Button */}
+      <div className="mb-6">
+        <button
+          type="submit"
+          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white"
+        >
+          Login
+        </button>
+      </div>
+
       {/* Register Link */}
       <div className="flex justify-center items-center text-center">
         <a
@@ -154,23 +147,13 @@ function LoginCard() {
         </a>
       </div>
 
-        {/* Register Link */}
-        <div className="flex justify-center items-center text-center">
-          <a
-            href="/register"
-            className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300"
-          >
-            Register
-          </a>
-        </div>
-      </FormWrapper>
-      {/* Loader Animation */}
+      {/* Loader */}
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <LoaderAnimation />{" "}
+          <LoaderAnimation />
         </div>
       )}
-    </>
+    </FormWrapper>
   );
 }
 
