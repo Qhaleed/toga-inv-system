@@ -2,11 +2,8 @@ import EvaluationRows from "./EvaluationRows";
 import "../common/Table.css";
 
 const EvaluationTable = ({
-  isGrid,
   modifyTable,
-  value,
   setValue,
-  evalTab,
   setEvaluationTab,
 }) => {
   const mainContentHeight = "80vh";
