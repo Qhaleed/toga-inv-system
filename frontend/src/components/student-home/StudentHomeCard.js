@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SideBar from "../common/SideBar";
-import PendingApproval from "../userpending/UserPending";
-import ApprovedView from "../userapproved/UserApproved";
+import PendingApproval from "./UserPending";
+import ApprovedView from "./UserApproved";
 
 const Dashboard = () => {
   const [userStatus, setUserStatus] = useState(null); // null indicates loading
