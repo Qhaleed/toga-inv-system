@@ -4,7 +4,9 @@ import React from "react";
 const HoverPopup = ({ user }) => {
   if (!user) return null;
   return (
-    <div className="bg-white w-80 rounded-xl shadow-2xl p-0 animate-slide-up flex flex-col justify-center items-center border border-gray-200">
+    <div className="bg-white w-70 h-fit scale-90 rounded-xl shadow-2xl p-0 animate-slide-up flex flex-col justify-center items-center border border-gray-200">
+      <h5>PLACEHOLDER MUNA TO </h5>
+
       <h2 className="text-3xl font-bold text-center text-[#0C7E48] w-full mt-4">
         {user.studentname}
       </h2>

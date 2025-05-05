@@ -39,16 +39,17 @@ function LoginCard() {
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Login failed");
+        setError(errorData.message || "Wrong email or password nigga!");
         setLoading(false);
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError("error to fetch server nigga SERVER IS DOWN");
       setLoading(false);
     }
   };
 
   return (
+
     <FormWrapper
       title="Toga Inventory Management System"
       onSubmit={handleSubmit}
@@ -75,10 +76,10 @@ function LoginCard() {
                     focus:outline-none 
                     focus:border-primary
                     transition duration-200"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
       {/* Password */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 space-y-6  relative sm:gap-4 mb-6">
@@ -116,7 +117,7 @@ function LoginCard() {
           <span className="text-white font-manjari pt-1 select-none">
             Remember me
           </span>
-        </label>
+        </div>
 
         {/* Error Message */}
         {error && (
@@ -131,16 +132,18 @@ function LoginCard() {
         </a>
       </div>
 
-      {/* Submit Button */}
-      <div className="mb-6">
-        <button
-          type="submit"
-          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white"
-        >
-          Login
-        </button>
-      </div>
-
+        {/* Remember Me and Forgot Password */}
+        <div className="flex items-center justify-between text-sm mb-4">
+          {/* Remember Me */}
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              className="w-4 h-4 accent-[#2A4D89] border-2 border-gray-300 rounded"
+            />
+            <span className="text-white font-manjari select-none pt-1">
+              Remember me
+            </span>
+          </label>
       {/* Register Link */}
       <div className="flex justify-center items-center text-center">
         <a
@@ -151,13 +154,23 @@ function LoginCard() {
         </a>
       </div>
 
+        {/* Register Link */}
+        <div className="flex justify-center items-center text-center">
+          <a
+            href="/register"
+            className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300"
+          >
+            Register
+          </a>
+        </div>
+      </FormWrapper>
       {/* Loader Animation */}
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <LoaderAnimation />
+          <LoaderAnimation />{" "}
         </div>
       )}
-    </FormWrapper>
+    </>
   );
 }
 
