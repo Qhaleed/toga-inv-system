@@ -119,7 +119,9 @@ export default function RegisterForm() {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
+
           confirmPassword: formData.confirmPassword,
+
           first_name: formData.firstName,
           surname: formData.surname,
           middleInitial: formData.middleInitial,
@@ -145,7 +147,7 @@ export default function RegisterForm() {
       className="register-card"
     >
       {/* STEP 1 */}
-      <div>
+      <div className="mt-4">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
           STEP 1:
         </span>
@@ -439,6 +441,14 @@ export default function RegisterForm() {
       >
         Register and Verify Account
       </button>
+      <div className="flex justify-center items-center text-center">
+        <a
+          href="/"
+          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300 mb-6"
+        >
+          Return to Login
+        </a>
+      </div>
     </FormWrapper>
   );
 }
