@@ -8,11 +8,6 @@ const Dashboard = () => {
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // Example data for student status, date reserved, and date due
-  const studentStatus = "Active";
-  const dateReserved = "2025-05-10";
-  const dateDue = "2025-05-20";
-
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
@@ -41,18 +36,18 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="h-screen w-screen flex bg-[#EBEBEB] font-figtree font-medium">
+      {/* Sidebar */}
+      <div className="w-1/4 h-full bg-[#001C47] text-white hidden sm:block">
+        <SideBar alwaysShowOnLarge activeTab="dashboard" />
+      </div>
+
       {/* Main Content */}
-      <div className="flex flex-col sm:flex-row h-screen w-screen bg-[#001C47]">
-        <SideBar
-          studentStatus={studentStatus}
-          dateReserved={dateReserved}
-          dateDue={dateDue}
-        />
+      <div className="flex-1 h-full overflow-y-auto">
         {userStatus === "pending" && <PendingApproval name={userName} />}
         {userStatus === "approved" && <ApprovedView name={userName} />}
         {userStatus === "error" && (
-          <div className="flex-1 flex justify-center items-center text-white">
+          <div className="flex justify-center items-center text-red-500">
             <p>Failed to load user data. Please try again later.</p>
           </div>
         )}
