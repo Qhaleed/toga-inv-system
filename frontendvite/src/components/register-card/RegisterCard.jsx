@@ -113,7 +113,7 @@ export default function RegisterForm() {
     //send values to the backend
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5001/register", {
+      const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -163,11 +163,7 @@ export default function RegisterForm() {
           type="email"
           name="email"
           placeholder="example@email.com"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
+          className="w-full flex-1 border-b-2 border-white border-opacity-50 rounded-sm font-manjari text-white placeholder-gray-300 placeholder:font-manjari focus:outline-none focus:border-primary transition duration-200"
           value={formData.email}
           onChange={handleChange}
         />
@@ -182,11 +178,7 @@ export default function RegisterForm() {
           type={showPassword ? "text" : "password"}
           name="password"
           placeholder="•••••••••••"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
+          className="w-full flex-1 border-b-2 border-white border-opacity-50 rounded-sm font-manjari text-white placeholder-gray-300 placeholder:font-manjari focus:outline-none focus:border-primary transition duration-200"
           value={formData.password}
           onChange={handleChange}
         />
@@ -207,11 +199,7 @@ export default function RegisterForm() {
           type={showConfirmPassword ? "text" : "password"}
           name="confirmPassword"
           placeholder="•••••••••••"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                    text-white placeholder-gray-300 placeholder:font-manjari
-                    focus:outline-none 
-                    focus:border-primary
-                    transition duration-200"
+          className="w-full flex-1 border-b-2 border-white border-opacity-50 rounded-sm font-manjari text-white placeholder-gray-300 placeholder:font-manjari focus:outline-none focus:border-primary transition duration-200"
           value={formData.confirmPassword}
           onChange={handleChange}
         />
@@ -242,11 +230,7 @@ export default function RegisterForm() {
             type="text"
             name="firstName"
             placeholder="Juan Antonio"
-            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                        text-white placeholder-gray-300 placeholder:font-manjari
-                        focus:outline-none 
-                        focus:border-primary
-                        transition duration-200"
+            className="w-full flex-1 border-b-2 border-white border-opacity-50 rounded-sm font-manjari text-white placeholder-gray-300 placeholder:font-manjari focus:outline-none focus:border-primary transition duration-200"
             value={formData.firstName}
             onChange={handleChange}
           />
@@ -260,11 +244,7 @@ export default function RegisterForm() {
             type="text"
             name="middleInitial"
             placeholder="A."
-            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                        text-white placeholder-gray-300 placeholder:font-manjari
-                        focus:outline-none 
-                        focus:border-primary
-                        transition duration-200"
+            className="w-full flex-1 border-b-2 border-white border-opacity-50 rounded-sm font-manjari text-white placeholder-gray-300 placeholder:font-manjari focus:outline-none focus:border-primary transition duration-200"
             value={formData.middleInitial}
             onChange={handleChange}
           />
@@ -281,11 +261,7 @@ export default function RegisterForm() {
             type="text"
             name="surname"
             placeholder="Dela Cruz"
-            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                        text-white placeholder-gray-300 placeholder:font-manjari
-                        focus:outline-none 
-                        focus:border-primary
-                        transition duration-200"
+            className="w-full flex-1 border-b-2 border-white border-opacity-50 rounded-sm font-manjari text-white placeholder-gray-300 placeholder:font-manjari focus:outline-none focus:border-primary transition duration-200"
             value={formData.surname}
             onChange={handleChange}
           />
@@ -299,11 +275,7 @@ export default function RegisterForm() {
             type="text"
             name="idNumber"
             placeholder="123456"
-            className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
-                        text-white placeholder-gray-300 placeholder:font-manjari
-                        focus:outline-none 
-                        focus:border-primary
-                        transition duration-200"
+            className="w-full flex-1 border-b-2 border-white border-opacity-50 rounded-sm font-manjari text-white placeholder-gray-300 placeholder:font-manjari focus:outline-none focus:border-primary transition duration-200"
             value={formData.idNumber}
             onChange={handleChange}
           />
