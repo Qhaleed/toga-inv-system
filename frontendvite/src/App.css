@@ -1,0 +1,302 @@
+/* Manjari Thin */
+@font-face {
+  font-family: "Manjari";
+  src: url("./assets/fonts/Manjari-Thin.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* Manjari Regular */
+@font-face {
+  font-family: "Manjari";
+  src: url("./assets/fonts/Manjari-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Manjari Bold */
+@font-face {
+  font-family: "Manjari";
+  src: url("./assets/fonts/Manjari-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Figtree Font Faces */
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Italics */
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-SemiBoldItalic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-ExtraBoldItalic.ttf") format("truetype");
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("./assets/fonts/Figtree-BlackItalic.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic;
+}
+
+.scroll-style::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+.scroll-style::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 8px;
+}
+.scroll-style::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Fade-in animation to okay */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Bounce-in animation for toggle buttons */
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fade-in from bottom animation for column view */
+@keyframes fade-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-bottom {
+  animation: fade-in-bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Custom dropdown styles for all tables */
+select.table-dropdown {
+  position: absolute;
+  width: 70px;
+
+  border: 1px solid #808080 !important;
+
+  text-align: center !important;
+  padding-right: 18px !important; /* space for arrow */
+
+  box-shadow: none !important;
+  font-family: inherit;
+  font-size: inherit; /* Use the inherited font size, don't force a small size */
+  height: 23px;
+
+  border-radius: 15px !important;
+  transition: background 0.2s, border 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  background-image: none !important; /* Remove custom arrow */
+}
+
+select.table-dropdown:focus {
+  border-color: #808080 !important;
+  outline: 1.5px solid #808080 !important;
+  box-shadow: none !important;
+}
+
+select.table-dropdown:hover,
+select.table-dropdown:active {
+  background-color: #edb427 !important;
+  border-color: #edb427 !important;
+}
+
+select.table-dropdown option {
+  background: #fff;
+  color: #232323;
+  border-radius: 0 !important;
+  padding: 4px 8px;
+  text-align: center;
+  font-size: inherit; /* Inherit font size from select */
+  transition: background 0.2s, color 0.2s;
+}
+select.table-dropdown option:hover,
+select.table-dropdown option:checked {
+  background: #edb427 !important;
+  color: #232323 !important;
+}
+
+select.table-dropdown:disabled {
+  background: #f3f3f3 !important;
+  color: #bdbdbd !important;
+  cursor: not-allowed;
+}
+
+select.table-dropdown::-ms-expand {
+  display: none;
+}
+
+/* Sort button bounce animation */
+@keyframes sort-bounce {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1.08);
+  }
+  40% {
+    transform: scale(0.96);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  80% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-sort {
+  animation: fadeio 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-table-sort {
+  animation: fade-in 0.5s;
+}
