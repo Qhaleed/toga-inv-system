@@ -1,19 +1,21 @@
 const PendingApproval = ({ name, onLogout }) => (
-  <div className="flex-1 flex flex-col justify-center items-center text-white p-8 bg-login-bg h-screen w-full">
-    <h1 className="text-4xl font-bold">Welcome,</h1>
-    <h2 className="text-5xl font-extrabold my-2">{name}</h2>
-    <p className="text-lg mt-4">
-      Your request is still pending for review by our team.
-    </p>
-    <p className="text-md text-gray-300 mb-6">
-      Please return at a later time while we process your request.
-    </p>
-    <button
-      className="bg-[#10194C] hover:bg-[#1c2673] text-white py-2 px-6 rounded-full font-semibold"
-      onClick={onLogout}
-    >
-      Log Out
-    </button>
+  <div className="flex-1 h-screen w-full bg-login-bg bg-cover bg-center flex items-center">
+    <div className="text-white max-w-xl pl-10">
+      <h1 className="text-6xl font-light">Welcome,</h1>
+      <h2 className="text-8xl font-bold mt-2">{name}</h2>
+      <p className="text-xl mt-10">
+        Your request is still pending for review by our team.
+      </p>
+      <p className="text-xl mt-3 mb-10">
+        Please return at a later time while we process your request.
+      </p>
+      <button
+        className="w-full bg-[#10194C] hover:bg-[#1c2673] transition duration-200 text-white py-3 px-8 rounded-full font-semibold text-lg"
+        onClick={onLogout}
+      >
+        Log Out
+      </button>
+    </div>
   </div>
 );
 

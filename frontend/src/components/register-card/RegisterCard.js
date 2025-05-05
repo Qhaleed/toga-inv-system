@@ -109,32 +109,33 @@ export default function RegisterForm() {
     }));
   };
 
-  const handleSubmit = async (e) => { //send values to the backend
+  const handleSubmit = async (e) => {
+    //send values to the backend
     e.preventDefault();
     try {
-        const response = await fetch('http://localhost:5001/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                email: formData.email,
-                password: formData.password,
-                first_name: formData.firstName,
-                surname: formData.surname,
-                middleInitial: formData.middleInitial,
-                idNumber: formData.idNumber,
-                course: value
-            }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-            alert('Registration successful!');
-        } else {
-            alert(data.message || 'Registration failed');
-        }
+      const response = await fetch("http://localhost:5001/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          first_name: formData.firstName,
+          surname: formData.surname,
+          middleInitial: formData.middleInitial,
+          idNumber: formData.idNumber,
+          course: value,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Registration successful!");
+      } else {
+        alert(data.message || "Registration failed");
+      }
     } catch (error) {
-        console.error('Registration error:', error);
+      console.error("Registration error:", error);
     }
-};
+  };
 
   return (
     <FormWrapper
@@ -143,7 +144,7 @@ export default function RegisterForm() {
       className="register-card"
     >
       {/* STEP 1 */}
-      <div>
+      <div className="mt-4">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
           STEP 1:
         </span>
@@ -326,8 +327,9 @@ export default function RegisterForm() {
 
               {/* Dropdown Arrow */}
               <div
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
               >
                 ▼
               </div>
@@ -436,6 +438,14 @@ export default function RegisterForm() {
       >
         Register and Verify Account
       </button>
+      <div className="flex justify-center items-center text-center">
+        <a
+          href="/"
+          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300 mb-6"
+        >
+          Return to Login
+        </a>
+      </div>
     </FormWrapper>
   );
 }
