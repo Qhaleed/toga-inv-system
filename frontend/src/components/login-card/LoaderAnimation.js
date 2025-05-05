@@ -16,7 +16,7 @@ const LoaderAnimation = () => {
         </div>
 
         <p className="text-white text-lg font-semibold animate-pulse">
-          Loading, please wait...
+          Loading Niggas, please wait...
         </p>
 
         <div className="mt-4">
