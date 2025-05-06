@@ -20,6 +20,10 @@ const registerRoute = require("./routes/register");
 // Routes for db
 const accountsRoute = require("./routes/accounts");
 
+// Routes getting inventory from the database
+
+const inventoryRoute = require("./routes/inventory")
+
 app.use("/users", userRouter);
 app.use("/evaluation", evaluationRoute);
 app.use("/inventory", invenRoute);
