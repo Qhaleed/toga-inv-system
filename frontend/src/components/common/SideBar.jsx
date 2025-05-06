@@ -12,6 +12,8 @@ const SideBar = ({ setSortOrder, activeTab }) => {
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
+  const [adminFullName, setAdminFullName] = useState("");
+
   useEffect(() => {
     function handleResize() {
       const large = window.innerWidth >= 640;
@@ -24,19 +26,20 @@ const SideBar = ({ setSortOrder, activeTab }) => {
 
   // FETCHER TO NG NAME AND ROLE SA JSON SERVER
   useEffect(() => {
-    fetch("http://localhost:8000/admins")
+    fetch("http://localhost:5001/accounts")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setAdminName(data[0].adminname);
-          setAdminRole(data[0].adminrole);
+          const fullName = `${data[0].first_name} ${data[0].surname}`;
+          setAdminFullName(fullName);
+          setAdminRole(data[0].role);
         } else {
-          setAdminName("No admin found");
+          setAdminFullName("No admin found");
           setAdminRole("N/A");
         }
       })
       .catch(() => {
-        setAdminName("Fetch error");
+        setAdminFullName("Fetch error");
         setAdminRole("Fetch error");
       });
   }, []);
@@ -98,8 +101,8 @@ const SideBar = ({ setSortOrder, activeTab }) => {
               </div>
 
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
-                <p className="text-[16px] md:font-bold">{adminName}</p>
-                <p className="sm:text-[14px] text-[13px] md:text-xs font-light">
+                <p className="text-[16px] md:font-bold">{adminFullName}</p>
+                <p className="sm:text-[14px] text-[13px] md:text-xs uppercase">
                   {adminRole}
                 </p>
               </div>
