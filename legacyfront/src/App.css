@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(107, 107, 107);
+  border-radius: 4px;
+  transition: background-color 0.5s ease-in;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(42, 77, 137, 0.8);
+}
+/* Your custom CSS goes below (if needed) */
+
+* {
+  font-family: "figtree";
+}
