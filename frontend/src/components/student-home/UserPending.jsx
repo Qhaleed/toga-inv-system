@@ -1,5 +1,10 @@
+import LoginBg from "../../assets/images/loginbg.jpg";
+
 const PendingApproval = ({ name, onLogout }) => (
-  <div className="flex-1 h-screen w-full bg-login-bg bg-cover bg-center flex items-center">
+  <div
+    className="flex-1 h-screen w-full bg-cover bg-center flex items-center"
+    style={{ backgroundImage: `url(${LoginBg})` }}
+  >
     <div className="text-white max-w-xl pl-10">
       <h1 className="text-6xl font-light">Welcome,</h1>
       <h2 className="text-8xl font-bold mt-2">{name}</h2>
