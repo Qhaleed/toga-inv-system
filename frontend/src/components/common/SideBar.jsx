@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Profile from "../../assets/images/profilepicture.jpg";
 import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
-import CalendarIcon from "../../assets/icons/black-calendar.svg?react";
+import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
 const SideBar = ({ setSortOrder, activeTab }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -107,7 +107,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
 
             <div className="h-full flex justify-end items-center mr-4">
               <button className="bg-[#F3B51A] hover:bg-[#dc9f2d] scale-75 md:scale-100 hover:scale-105 h-12 w-12 rounded-full flex justify-center items-center border border-gray-700 transform-all ease-out duration-500">
-                <CalendarIcon className="w-6" />
+                <CalendarHeroIcon className="w-6" />
                 <div className="relative">
                   <div className="bg-[#0C7E48] rounded-full text-white text-xs absolute px-1 bottom-2">
                     4 {/* Notification counts logic adnkjasndkjasndkajsnd */}
@@ -258,7 +258,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
           {/* SIDE BAR NAVIGATION CONTAINER EN okay?*/}
 
           {/* CALENDAR */}
-          <div className="w-[90%] h-90 bg-[#102F5E] flex items-center rounded-xl md:mt-7">
+          <div className="min-w-[70%] w-[90%] h-[50%] bg-[#102F5E] flex items-center rounded-xl md:mt-7">
             <div className="w-full flex justify-center items-center">
               <Calendar
                 mode="single"
