@@ -152,11 +152,58 @@ const Rows = ({
 
   // Save changes sa dashboard state
   const handleSave = (id) => {
-    setDashboard((prev) =>
-      prev.map((item) => (item.id === id ? { ...editData } : item))
-    );
-    setEditId(null);
-    setEditData({});
+    console.log("Save button clicked for ID:", id);
+    console.log("Current editData:", editData);
+
+    // Get updated data from editData state
+    const updatedData = {
+      renters_name: editData.studentname,
+      course: editData.program,
+      tassel_color: editData.tassel,
+      hood_color: editData.hood,
+      toga_size: editData.gown,
+    };
+
+    console.log("Sending update to backend:", updatedData);
+
+    // Send updated data to the backend
+    fetch(`http://localhost:5001/inventory/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        // Ensuring no caching issues
+        "Cache-Control": "no-cache"
+      },
+      body: JSON.stringify(updatedData),
+    })
+      .then(response => {
+        console.log("Response status:", response.status);
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Update successful:", data);
+
+        // Update the dashboard and original data in local state
+        const updatedItem = { ...editData };
+        setDashboard(prev =>
+          prev.map(item => (item.id === id ? updatedItem : item))
+        );
+        setOriginalDashboard(prev =>
+          prev.map(item => (item.id === id ? updatedItem : item))
+        );
+        setEditId(null);
+        setEditData({});
+
+        // Show success message
+        alert("Changes saved successfully!");
+      })
+      .catch(error => {
+        console.error("Error updating inventory item:", error);
+        alert("Failed to save changes to the database: " + error.message);
+      });
   };
 
   // Cancel edit, balik sa dati
