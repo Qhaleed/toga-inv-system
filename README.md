@@ -19,14 +19,6 @@ npm install
 npm run dev
 ```
 
-## Start the OG CLA Frontend
-
-```sh
-cd frontend
-npm install
-npm start
-```
-
 - The app will be available at http://localhost:3000
 
 ## Start the Backend
@@ -49,9 +41,6 @@ npx json-server --watch sample.json --port 8000
 npx json-server --watch frontend/src/components/admin-dashboard/sample.json --port 8000
 
 
-# VITE
-npx json-server --watch frontendvite/src/components/admin-dashboard/sample.json --port 8000
-```
 
 ## Login Guide (Hardcoded Accounts)
 
@@ -68,3 +57,4 @@ npx json-server --watch frontendvite/src/components/admin-dashboard/sample.json 
 ---
 
 _Note: Tailwind setup is now improved in the Vite project._
+```
