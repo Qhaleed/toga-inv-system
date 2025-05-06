@@ -68,7 +68,7 @@ function LoginCard() {
           type="email"
           name="email"
           placeholder="example@email.com"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+          className="w-full flex-1 bg-transparent border-b-2 border-blue-50/50 font-manjari
                      text-white placeholder-gray-300 placeholder:font-manjari
                      focus:outline-none 
                      focus:border-primary
@@ -79,15 +79,15 @@ function LoginCard() {
       </div>
 
       {/* Password */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 space-y-6 relative sm:gap-4 mb-6">
-        <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold mt-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 space-y-6 relative sm:gap-4">
+        <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold">
           Password
         </label>
         <input
           type={showPassword ? "text" : "password"}
           name="password"
           placeholder="•••••••••••"
-          className="w-full flex-1 bg-white bg-opacity-0 border-b-2 border-white border-opacity-50 rounded-sm font-manjari
+          className="w-full flex-1 bg-transparent border-b-2 border-blue-50/50 font-manjari
                      text-white placeholder-gray-300 placeholder:font-manjari
                      focus:outline-none 
                      focus:border-primary
@@ -96,7 +96,7 @@ function LoginCard() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <span
-          className="absolute right-3 top-1/4 transform -translate-y-1/3 text-white-400 cursor-pointer select-none"
+          className="absolute right-3 top-1/4 transform -translate-y-1/2 text-white-400 cursor-pointer select-none"
           onClick={() => setShowPassword(!showPassword)}
         >
           {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -104,7 +104,7 @@ function LoginCard() {
       </div>
 
       {/* Remember Me and Forgot Password */}
-      <div className="flex flex-col sm:flex-row items-center justify-between text-sm mb-4">
+      <div className="flex flex-col sm:flex-row items-center justify-between text-sm mb-6">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
