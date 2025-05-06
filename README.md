@@ -35,7 +35,7 @@ npm start
 cd backend
 npm install
 npm install dotenv
-npm run startDev   # enables nodemon (hot reload)
+npm run devStart   # enables nodemon (hot reload)
 # or
 node server.js
 ```
