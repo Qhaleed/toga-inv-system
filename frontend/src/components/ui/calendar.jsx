@@ -9,11 +9,14 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-4 w-[80%] h-[full] py-7 max-w-[90%] ", className)}
+      className={cn(
+        "p-6 w-full max-w-xs mx-auto overflow-hidden py-5",
+        className
+      )}
       classNames={{
         months:
-          "flex flex-col sm:flex-row gap-2 bg-transparent w-[80%] max-w-[80%] mx-auto overflow-hidden",
-        month: "flex flex-col gap-4 bg-transparent w-full max-w-full",
+          "flex flex-col sm:flex-row gap-2 bg-transparent w-full max-w-xs mx-auto overflow-hidden",
+        month: "flex flex-col gap-4 bg-transparent w-full max-w-xs mx-auto",
         caption:
           "flex justify-center pt-1 relative items-center w-full bg-transparent",
         caption_label: "text-sm font-medium text-white",
@@ -28,7 +31,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         head_row: "flex bg-transparent w-full",
         head_cell:
           "text-white rounded-xl w-full font-normal text-[0.8rem] bg-transparent",
-        row: "flex w-full mt-3 bg-transparent overflow-hidden gap-[2px]",
+        row: "flex w-full mt-3 bg-transparent overflow-hidden gap-[1px]",
         cell: cn(
           "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent [&:has([aria-selected].day-range-end)]:rounded-r-md overflow-hidden w-full",
           props.mode === "range"
