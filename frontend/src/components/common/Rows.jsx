@@ -33,16 +33,36 @@ const Rows = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupUser, setPopupUser] = useState(null);
 
-
   // Function to fetch data for the dashboard
   useEffect(() => {
-    // kuha data sa JSON
+    // kuha data sa backend
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
-        setDashboard(data);
-        setOriginalDashboard(data);
-        console.log(data)
+        // Map API response properties to match the component's expected property names
+        const mappedData = data.map(item => ({
+          id: item.id,
+          studentname: item.renters_name,
+          program: item.course,
+          tassel: item.tassel_color,
+          hood: item.hood_color,
+          gown: item.toga_size,
+          dateofreservation: new Date(item.rent_date).toLocaleDateString(),
+          status: item.return_status,
+          // Keep other properties that might be needed
+          payment_status: item.payment_status,
+          evaluation_status: item.evaluation_status,
+          remarks: item.remarks,
+          return_date: item.return_date,
+          is_overdue: item.is_overdue,
+          has_cap: item.has_cap,
+          item_condition: item.item_condition
+        }));
+
+        setDashboard(mappedData);
+        setOriginalDashboard(mappedData);
+        console.log("Original data:", data);
+        console.log("Mapped data for display:", mappedData[0]);
       });
   }, []);
 
