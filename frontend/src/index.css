@@ -208,4 +208,25 @@ Legacy Tailwind config for reference:
   body {
     @apply bg-background text-foreground;
   }
-} */
+}
+
+/*
+  Universal button focus style for all buttons, including sidebar and navigation.
+  Applies a gold/yellow focus ring and outline for accessibility and visual consistency.
+*/
+button:focus,
+button:focus-visible,
+.sidebar-button:focus,
+.sidebar-button:focus-visible {
+  outline: 2px solid #f3b51a !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px #f3b51a33 !important;
+}
+
+/* For Tailwind utility classes, add a custom class for focus if needed */
+.focus-gold:focus,
+.focus-gold:focus-visible {
+  outline: 2px solid #f3b51a !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px #f3b51a33 !important;
+}
