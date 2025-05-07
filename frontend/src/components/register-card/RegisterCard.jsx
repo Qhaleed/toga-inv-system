@@ -327,8 +327,9 @@ export default function RegisterForm() {
 
               {/* Dropdown Arrow */}
               <div
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
               >
                 ▼
               </div>
