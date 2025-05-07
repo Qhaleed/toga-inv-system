@@ -7,6 +7,11 @@ const EvaluationTable = ({
   setValue,
 
   setEvaluationTab,
+  isAll,
+  isevalTab,
+  isnotevalTab,
+  isAZ,
+  isZA
 }) => {
   const mainContentHeight = "80vh";
   return (
@@ -45,6 +50,7 @@ const EvaluationTable = ({
                     maxWidth: "100%",
                   }}
                 >
+
                   <EvaluationRows
                     isGrid={false}
                     modifyTable={modifyTable}
@@ -53,6 +59,9 @@ const EvaluationTable = ({
                     setEvaluationTab={setEvaluationTab}
                   />
                 </table>
+
+               
+
               </div>
             </div>
           </div>

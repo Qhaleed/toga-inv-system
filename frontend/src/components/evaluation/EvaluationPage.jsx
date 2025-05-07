@@ -10,6 +10,7 @@ const EvaluationPage = () => {
   const [activeTab, setActiveTab] = useState("evaluation");
   const [value, setValue] = useState([]);
   const [evalTab, setEvaluationTab] = useState("hidden");
+
   const [sortOrder, setSortOrder] = useState(null); // add sort state
 
   return (
@@ -23,6 +24,7 @@ const EvaluationPage = () => {
               alwaysShowOnLarge
               setSortOrder={setSortOrder}
               activeTab={activeTab}
+
             />
           </div>
           {/* Main content: full width on mobile, right of sidebar on desktop */}
@@ -46,7 +48,10 @@ const EvaluationPage = () => {
                 modifyTable={modifyTable}
                 setValue={setValue}
                 setEvaluationTab={setEvaluationTab}
+
                 sortOrder={sortOrder}
+
+
               />
             </div>
           </div>

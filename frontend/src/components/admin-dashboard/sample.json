@@ -92,7 +92,7 @@
       "id": "3",
       "eye": "block",
       "trash": "hidden",
-      "evaluation": "Evaluated",
+      "evaluation": "No Evaluation",
       "gowncondition": "",
       "gownrepair": "",
       "gowndamage": "",
@@ -179,7 +179,7 @@
       "id": "6",
       "eye": "block",
       "trash": "hidden",
-      "evaluation": "Evaluated",
+      "evaluation": "No Evaluation",
       "gowncondition": "",
       "gownrepair": "",
       "gowndamage": "",
@@ -255,7 +255,7 @@
       "capremarks": ""
     },
     {
-      "studentname": "Joshua Guiritan",
+      "studentname": "Akosi Guiritan",
       "program": "BSCS",
       "cap": "Yellow",
       "tassel": "Blue",
@@ -266,7 +266,7 @@
       "id": "9",
       "eye": "block",
       "trash": "hidden",
-      "evaluation": "Evaluated",
+      "evaluation": "No Evaluation",
       "gowncondition": "",
       "gownrepair": "",
       "gowndamage": "",
@@ -371,7 +371,7 @@
       "capremarks": ""
     },
     {
-      "studentname": "Joshua Guiritan",
+      "studentname": "Bela Guiritan",
       "program": "BSCS",
       "cap": "Yellow",
       "tassel": "Blue",
@@ -458,7 +458,7 @@
       "capremarks": ""
     },
     {
-      "studentname": "Joshua Guiritan",
+      "studentname": "Mark Guiritan",
       "program": "BSCS",
       "cap": "Yellow",
       "tassel": "Blue",
