@@ -3,7 +3,15 @@ import Profile from "../../assets/images/profilepicture.jpg";
 import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
 import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
-const SideBar = ({ setSortOrder, activeTab, setIsAll, setIsEvaluationTab, setIsNotEvaluationTab, setIsAZ, setIsZA}) => {
+const SideBar = ({
+  setSortOrder,
+  activeTab,
+  setIsAll,
+  setIsEvaluationTab,
+  setIsNotEvaluationTab,
+  setIsAZ,
+  setIsZA,
+}) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
     typeof window !== "undefined" && window.innerWidth >= 640
@@ -58,31 +66,31 @@ const SideBar = ({ setSortOrder, activeTab, setIsAll, setIsEvaluationTab, setIsN
     setIsAll(true);
     setIsEvaluationTab(false);
     setIsNotEvaluationTab(false);
-  }
+  };
 
   const EvaluatedFilter = () => {
     setFocusedStatus("evaluated");
     setIsAll(false);
     setIsEvaluationTab(true);
     setIsNotEvaluationTab(false);
-  }
+  };
 
   const NotEvaluatedFilter = () => {
     setFocusedStatus("noeval");
     setIsAll(false);
     setIsEvaluationTab(false);
     setIsNotEvaluationTab(true);
-  }
+  };
 
   const showIsAZ = () => {
     setIsAZ(true);
     setIsZA(false);
-  }
+  };
 
   const showIsZA = () => {
     setIsAZ(false);
     setIsZA(true);
-  }
+  };
 
   console.log(activeTab);
 
