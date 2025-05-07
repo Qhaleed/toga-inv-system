@@ -302,32 +302,44 @@ const Rows = ({
               <thead className="bg-[#02327B] sticky top-0 z-30">
                 <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
                   <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
                       Student Name
                     </span>
                   </th>
                   <th className="w-[90px] min-w-[60px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">Program</span>
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Program
+                    </span>
                   </th>
                   <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">Tassel</span>
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Tassel
+                    </span>
                   </th>
                   <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">Hood</span>
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Hood
+                    </span>
                   </th>
                   <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">Gown</span>
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Gown
+                    </span>
                   </th>
                   <th className="w-[120px] min-w-[80px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
                       Date of Reservation
                     </span>
                   </th>
                   <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">Status</span>
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Status
+                    </span>
                   </th>
                   <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                    <span className="block w-full text-center ">Actions</span>
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Actions
+                    </span>
                   </th>
                 </tr>
               </thead>
