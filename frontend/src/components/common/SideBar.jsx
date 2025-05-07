@@ -12,9 +12,11 @@ const SideBar = ({ setSortOrder, activeTab }) => {
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
+
   const [focusedStatus, setFocusedStatus] = useState("all");
   // Add state to track which sort button is focused
   const [focusedSort, setFocusedSort] = useState("name-asc");
+
 
   useEffect(() => {
     function handleResize() {
@@ -28,19 +30,20 @@ const SideBar = ({ setSortOrder, activeTab }) => {
 
   // FETCHER TO NG NAME AND ROLE SA JSON SERVER
   useEffect(() => {
-    fetch("http://localhost:8000/admins")
+    fetch("http://localhost:5001/accounts")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setAdminName(data[0].adminname);
-          setAdminRole(data[0].adminrole);
+          const fullName = `${data[0].first_name} ${data[0].surname}`;
+          setAdminFullName(fullName);
+          setAdminRole(data[0].role);
         } else {
-          setAdminName("No admin found");
+          setAdminFullName("No admin found");
           setAdminRole("N/A");
         }
       })
       .catch(() => {
-        setAdminName("Fetch error");
+        setAdminFullName("Fetch error");
         setAdminRole("Fetch error");
       });
   }, []);
@@ -104,10 +107,12 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                 />
               </div>
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
+
                 <p className="text-[16px] md:font-bold truncate max-w-[100px] md:max-w-[140px]">
                   {adminName}
                 </p>
                 <p className="sm:text-[14px] text-[13px] md:text-xs font-light truncate max-w-[100px] md:max-w-[140px]">
+
                   {adminRole}
                 </p>
               </div>

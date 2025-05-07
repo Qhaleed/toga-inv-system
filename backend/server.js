@@ -30,6 +30,7 @@ app.use("/inventory", invenRoute);
 app.use("/auth", authRoute);
 app.use("/register", registerRoute);
 app.use("/accounts", accountsRoute);
+app.use("/inventory", inventoryRoute)
 
 // Root Test
 app.get("/", (req, res) => {

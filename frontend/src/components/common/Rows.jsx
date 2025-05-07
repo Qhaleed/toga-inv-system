@@ -33,13 +33,36 @@ const Rows = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupUser, setPopupUser] = useState(null);
 
+  // Function to fetch data for the dashboard
   useEffect(() => {
-    // kuha data sa JSON
-    fetch("http://localhost:8000/dashboard")
+    // kuha data sa backend
+    fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
-        setDashboard(data);
-        setOriginalDashboard(data);
+        // Map API response properties to match the component's expected property names
+        const mappedData = data.map(item => ({
+          id: item.id,
+          studentname: item.renters_name,
+          program: item.course,
+          tassel: item.tassel_color,
+          hood: item.hood_color,
+          gown: item.toga_size,
+          dateofreservation: new Date(item.rent_date).toLocaleDateString(),
+          status: item.return_status,
+          // Keep other properties that might be needed
+          payment_status: item.payment_status,
+          evaluation_status: item.evaluation_status,
+          remarks: item.remarks,
+          return_date: item.return_date,
+          is_overdue: item.is_overdue,
+          has_cap: item.has_cap,
+          item_condition: item.item_condition
+        }));
+
+        setDashboard(mappedData);
+        setOriginalDashboard(mappedData);
+        console.log("Original data:", data);
+        console.log("Mapped data for display:", mappedData[0]);
       });
   }, []);
 
@@ -64,6 +87,7 @@ const Rows = ({
 
   const prevModifyTable = useRef(modifyTable);
 
+  // function for???
   useEffect(() => {
     if (prevModifyTable.current && !modifyTable) {
       // Exiting modify mode, save changes
@@ -79,7 +103,7 @@ const Rows = ({
       if (changedRows.length > 0) {
         Promise.all(
           changedRows.map((row) =>
-            fetch(`http://localhost:8000/dashboard/${row.id}`, {
+            fetch(`http://localhost:5001/inventory/${row.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -109,10 +133,10 @@ const Rows = ({
       prev.map((item) =>
         db.id === item.id
           ? {
-              ...item,
-              eye: item.eye === "block" ? "hidden" : "block",
-              trash: item.trash === "hidden" ? "block" : "hidden",
-            }
+            ...item,
+            eye: item.eye === "block" ? "hidden" : "block",
+            trash: item.trash === "hidden" ? "block" : "hidden",
+          }
           : item
       )
     );
@@ -128,11 +152,58 @@ const Rows = ({
 
   // Save changes sa dashboard state
   const handleSave = (id) => {
-    setDashboard((prev) =>
-      prev.map((item) => (item.id === id ? { ...editData } : item))
-    );
-    setEditId(null);
-    setEditData({});
+    console.log("Save button clicked for ID:", id);
+    console.log("Current editData:", editData);
+
+    // Get updated data from editData state
+    const updatedData = {
+      renters_name: editData.studentname,
+      course: editData.program,
+      tassel_color: editData.tassel,
+      hood_color: editData.hood,
+      toga_size: editData.gown,
+    };
+
+    console.log("Sending update to backend:", updatedData);
+
+    // Send updated data to the backend
+    fetch(`http://localhost:5001/inventory/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        // Ensuring no caching issues
+        "Cache-Control": "no-cache"
+      },
+      body: JSON.stringify(updatedData),
+    })
+      .then(response => {
+        console.log("Response status:", response.status);
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Update successful:", data);
+
+        // Update the dashboard and original data in local state
+        const updatedItem = { ...editData };
+        setDashboard(prev =>
+          prev.map(item => (item.id === id ? updatedItem : item))
+        );
+        setOriginalDashboard(prev =>
+          prev.map(item => (item.id === id ? updatedItem : item))
+        );
+        setEditId(null);
+        setEditData({});
+
+        // Show success message
+        alert("Changes saved successfully!");
+      })
+      .catch(error => {
+        console.error("Error updating inventory item:", error);
+        alert("Failed to save changes to the database: " + error.message);
+      });
   };
 
   // Cancel edit, balik sa dati
@@ -152,20 +223,20 @@ const Rows = ({
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
-          if (sortOrder === "newest" || sortOrder === "oldest") {
-            const dateA = new Date(a.dateofreservation);
-            const dateB = new Date(b.dateofreservation);
-            if (sortOrder === "newest") return dateB - dateA;
-            if (sortOrder === "oldest") return dateA - dateB;
-          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = a.studentname.toLowerCase();
-            const nameB = b.studentname.toLowerCase();
-            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
-            return 0;
-          }
+        if (sortOrder === "newest" || sortOrder === "oldest") {
+          const dateA = new Date(a.dateofreservation);
+          const dateB = new Date(b.dateofreservation);
+          if (sortOrder === "newest") return dateB - dateA;
+          if (sortOrder === "oldest") return dateA - dateB;
+        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+          const nameA = a.studentname.toLowerCase();
+          const nameB = b.studentname.toLowerCase();
+          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
           return 0;
-        })
+        }
+        return 0;
+      })
       : dashboard;
 
   useEffect(() => {
@@ -327,8 +398,8 @@ const Rows = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "tassel", val)
                                     : handleEditChange({
-                                        target: { name: "tassel", value: val },
-                                      })
+                                      target: { name: "tassel", value: val },
+                                    })
                                 }
                                 disabled={false}
                               />
@@ -352,8 +423,8 @@ const Rows = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "hood", val)
                                     : handleEditChange({
-                                        target: { name: "hood", value: val },
-                                      })
+                                      target: { name: "hood", value: val },
+                                    })
                                 }
                                 disabled={false}
                               />
@@ -377,8 +448,8 @@ const Rows = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "gown", val)
                                     : handleEditChange({
-                                        target: { name: "gown", value: val },
-                                      })
+                                      target: { name: "gown", value: val },
+                                    })
                                 }
                                 disabled={false}
                               />
@@ -446,17 +517,16 @@ const Rows = ({
                                   onMouseLeave={() => setHoveredEyeId(null)}
                                 >
                                   <button
-                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
-                                      hoveredEyeId === db.id
-                                        ? "bg-blue-600"
-                                        : ""
-                                    }`}
+                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id
+                                      ? "bg-blue-600"
+                                      : ""
+                                      }`}
                                     style={{
                                       background: modifyTable
                                         ? "#bdbdbd"
                                         : hoveredEyeId === db.id
-                                        ? "#2563eb"
-                                        : "#0C7E48",
+                                          ? "#2563eb"
+                                          : "#0C7E48",
                                       cursor: modifyTable
                                         ? "not-allowed"
                                         : "pointer",
@@ -473,20 +543,18 @@ const Rows = ({
                                     }}
                                   >
                                     <EyeIcon
-                                      className={`w-5 transition-colors duration-200 ${
-                                        hoveredEyeId === db.id
-                                          ? "text-blue-200"
-                                          : "text-white"
-                                      }`}
+                                      className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
+                                        ? "text-blue-200"
+                                        : "text-white"
+                                        }`}
                                     />
                                   </button>
                                   {hoveredEyeId === db.id && (
                                     <div
-                                      className={`absolute right-2 -translate-x-1/2 z-50 w-80 h-fit   rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto ${
-                                        popupDirection === "up"
-                                          ? "bottom-10"
-                                          : "top-10"
-                                      }`}
+                                      className={`absolute right-2 -translate-x-1/2 z-50 w-80 h-fit   rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto ${popupDirection === "up"
+                                        ? "bottom-10"
+                                        : "top-10"
+                                        }`}
                                       style={
                                         popupDirection === "up"
                                           ? { bottom: "2.5rem" }
@@ -565,9 +633,8 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${
-        disabled ? "pointer-events-none opacity-60" : ""
-      }`}
+      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-60" : ""
+        }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -625,11 +692,10 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                  opt === value
-                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                    : ""
-                }`}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
+                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                  : ""
+                  }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",
