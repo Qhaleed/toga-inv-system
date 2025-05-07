@@ -2,15 +2,17 @@ import Table from "../../assets/icons/table.svg?react";
 import EyeIcon from "../../assets/icons/eye-icon.svg?react";
 import Trash from "../../assets/icons/black-trash.svg?react";
 import ChevronDown from "../../assets/icons/chevron-down.svg?react";
-
 import { useState, useEffect } from "react";
 
 const EvaluationRows = ({
   rowHeightClass = "h-16",
   setValue,
   setEvaluationTab,
+  isAll,
   isevalTab,
-  isnotevalTab
+  isnotevalTab,
+  isAZ,
+  isZA
 }) => {
   const [dashboard, setDashboard] = useState([]);
   const [All, setAll] = useState([]);
@@ -35,10 +37,10 @@ const EvaluationRows = ({
   };
 
   useEffect(() => {
-    if(){
+    if(isAll){
       setDashboard(All);
     }
-  })
+  }, [isAll]);
 
   useEffect(() => {
     if(isevalTab){
@@ -51,6 +53,20 @@ const EvaluationRows = ({
       setDashboard(filternoeval);
     }
   }, [isnotevalTab]);
+
+  useEffect(() => {
+    if(isAZ){
+     setDashboard(dashboard.sort((a, b) => (a.studentname > b.studentname ? -1 : a.studentname < b.studentname ? 1 : 0)));
+    }
+  }, [isAZ]);
+
+  useEffect(() => {
+    if(!isAZ){
+      setDashboard(dashboard.sort((a, b) => (a.studentname < b.studentname ? -1 : a.studentname > b.studentname ? 1 : 0)));
+    }
+  }, [isZA]);
+
+  
 
   // Table/column view with sticky header and scrollable table
   return (
@@ -93,8 +109,8 @@ const EvaluationRows = ({
           </tr>
         </thead>
         <tbody className="w-full">
-          {dashboard.map((db, idx) => {
-            const rowColor = db.id % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
+          {dashboard.map((db, index) => {
+            const rowColor = index % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
             return [
               <tr
                 className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-fixed`}
@@ -168,7 +184,7 @@ const EvaluationRows = ({
                   </div>
                 </td>
               </tr>,
-              idx < dashboard.length - 1 && (
+              index < dashboard.length - 1 && (
                 <tr key={`gap-${db.id}`} className="w-full">
                   <td
                     colSpan={7}

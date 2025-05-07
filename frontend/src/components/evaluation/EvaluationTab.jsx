@@ -127,140 +127,93 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b-2 border-bg-[#d6d6d6] text-[10px] sm:text-xs h-20 transition-all duration-200 ease-out">
-                  <td>
-                    <h3 className="ml-5">Hood</h3>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        In Good Condition
-                      </option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        For Repair
-                      </option>
-                      <option value="None">None</option>
-                      <option value="Tastas">Tastas</option>
-                      <option value="Run in cloth">Run in cloth</option>
-                      <option value="Missing parts">Missing parts</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        Damaged
-                      </option>
-                      <option value="None">None</option>
-                      <option value="Discolored">Discolored</option>
-                      <option value="Stained">Stained</option>
-                    </select>
-                  </td>
-                  <td>
-                    <div className="flex justify-center items-center">
-                      <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
-                      <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out" />
-                    </div>
-                  </td>
-                </tr>
-                <tr className="bg-[#bebebe] border-b-2 border-bg-[#d6d6d6] text-[10px] sm:text-xs h-20">
-                  <td>
-                    <h3 className="ml-5">Tassel</h3>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        In Good Condition
-                      </option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        Missing
-                      </option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        Damaged
-                      </option>
-                      <option value="None">None</option>
-                      <option value="Discolored">Discolored</option>
-                      <option value="Stained">Stained</option>
-                    </select>
-                  </td>
-                  <td>
-                    <div className="flex justify-center items-center">
-                      <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
-                      <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out" />
-                    </div>
-                  </td>
-                </tr>
-                <tr className="text-[10px] sm:text-xs h-20">
-                  <td>
-                    <h3 className="ml-5">Cap</h3>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        In Good Condition
-                      </option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue=""
-                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                    >
-                      <option value="" disabled hidden>
-                        Deformed
-                      </option>
-                      <option value="Yes">Yes</option>
-                      <option value="No">No</option>
-                    </select>
-                  </td>
-                  <td></td>
-                  <td>
-                    <div className="flex justify-center items-center">
-                      <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
-                      <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out" />
-                    </div>
-                  </td>
-                </tr>
+                {[
+                  {
+                    label: "Hood",
+                    selects: [
+                      {
+                        placeholder: "In Good Condition",
+                        options: ["Yes", "No"],
+                      },
+                      {
+                        placeholder: "For Repair",
+                        options: [
+                          "None",
+                          "Tastas",
+                          "Run in cloth",
+                          "Missing parts",
+                        ],
+                      },
+                      {
+                        placeholder: "Damaged",
+                        options: ["None", "Discolored", "Stained"],
+                      },
+                    ],
+                  },
+                  {
+                    label: "Tassel",
+                    selects: [
+                      {
+                        placeholder: "In Good Condition",
+                        options: ["Yes", "No"],
+                      },
+                      { placeholder: "Missing", options: ["Yes", "No"] },
+                      {
+                        placeholder: "Damaged",
+                        options: ["None", "Discolored", "Stained"],
+                      },
+                    ],
+                  },
+                  {
+                    label: "Cap",
+                    selects: [
+                      {
+                        placeholder: "In Good Condition",
+                        options: ["Yes", "No"],
+                      },
+                      { placeholder: "Deformed", options: ["Yes", "No"] },
+                      { placeholder: "", options: [] },
+                    ],
+                  },
+                ].map((row, idx) => (
+                  <tr
+                    key={row.label}
+                    className={`text-[10px] sm:text-xs h-20 transition-all duration-200 ease-out ${
+                      idx % 2 === 0 ? "bg-[#f3f3f3]" : "bg-[#bebebe]"
+                    }`}
+                  >
+                    <td>
+                      <h3 className="ml-5">{row.label}</h3>
+                    </td>
+                    {row.selects.map((select, sidx) => (
+                      <td key={sidx}>
+                        {select.options.length > 0 ? (
+                          <select
+                            defaultValue=""
+                            className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                          >
+                            <option value="" disabled hidden>
+                              {select.placeholder}
+                            </option>
+                            {select.options.map((opt) => (
+                              <option key={opt} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
+                          </select>
+                        ) : null}
+                      </td>
+                    ))}
+                    <td>
+                      <div className="flex justify-center items-center">
+                        <label className="mr-1 sm:mr-2 md:mr-3">
+                          Remarks:{" "}
+                        </label>
+                        <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <button

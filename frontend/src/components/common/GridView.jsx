@@ -327,7 +327,7 @@ const GridView = ({
                     {/* Small floating popup on hover */}
                     {popupMode === "hover" && hoveredEyeId === db.id && (
                       <div
-                        className="absolute left-1/2 -translate-x-1/2 bottom-12 z-50 w-64 bg-white rounded-lg shadow-lg opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto border border-gray-200"
+                        className="fixed left-1/2 top-1/2 z-50 w-80 h-fit rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto transform -translate-x-1/2 -translate-y-1/2  "
                         onMouseEnter={() => setPopupMode("hover")}
                         onMouseLeave={() => setPopupMode("none")}
                       >

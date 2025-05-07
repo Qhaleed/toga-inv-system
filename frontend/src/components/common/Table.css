@@ -1,3 +1,27 @@
 .scroll-style {
   scrollbar-color: #ffffff #001c47;
 }
+
+/* Hide scrollbars for horizontal scroll containers on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Responsive tweaks for table */
+@media (max-width: 640px) {
+  table {
+    font-size: 10px;
+  }
+  th,
+  td {
+    padding-left: 2px;
+    padding-right: 2px;
+    min-width: 40px;
+    max-width: 120px;
+    word-break: break-word;
+  }
+}

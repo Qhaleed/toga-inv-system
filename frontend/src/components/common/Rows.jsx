@@ -19,7 +19,6 @@ const Rows = ({
   rowHeightClass = "h-16",
   sortOrder,
 }) => {
-  const [popupDirection, setPopupDirection] = useState("down"); // "down" or "up" ung popup window
   const [dashboard, setDashboard] = useState([]);
   const [originalDashboard, setOriginalDashboard] = useState([]); // Track original data
   const [editId, setEditId] = useState(null);
@@ -40,7 +39,7 @@ const Rows = ({
       .then((res) => res.json())
       .then((data) => {
         // Map API response properties to match the component's expected property names
-        const mappedData = data.map(item => ({
+        const mappedData = data.map((item) => ({
           id: item.id,
           studentname: item.renters_name,
           program: item.course,
@@ -56,7 +55,7 @@ const Rows = ({
           return_date: item.return_date,
           is_overdue: item.is_overdue,
           has_cap: item.has_cap,
-          item_condition: item.item_condition
+          item_condition: item.item_condition,
         }));
 
         setDashboard(mappedData);
@@ -133,10 +132,10 @@ const Rows = ({
       prev.map((item) =>
         db.id === item.id
           ? {
-            ...item,
-            eye: item.eye === "block" ? "hidden" : "block",
-            trash: item.trash === "hidden" ? "block" : "hidden",
-          }
+              ...item,
+              eye: item.eye === "block" ? "hidden" : "block",
+              trash: item.trash === "hidden" ? "block" : "hidden",
+            }
           : item
       )
     );
@@ -172,27 +171,27 @@ const Rows = ({
       headers: {
         "Content-Type": "application/json",
         // Ensuring no caching issues
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
       },
       body: JSON.stringify(updatedData),
     })
-      .then(response => {
+      .then((response) => {
         console.log("Response status:", response.status);
         if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.status);
+          throw new Error("Network response was not ok: " + response.status);
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         console.log("Update successful:", data);
 
         // Update the dashboard and original data in local state
         const updatedItem = { ...editData };
-        setDashboard(prev =>
-          prev.map(item => (item.id === id ? updatedItem : item))
+        setDashboard((prev) =>
+          prev.map((item) => (item.id === id ? updatedItem : item))
         );
-        setOriginalDashboard(prev =>
-          prev.map(item => (item.id === id ? updatedItem : item))
+        setOriginalDashboard((prev) =>
+          prev.map((item) => (item.id === id ? updatedItem : item))
         );
         setEditId(null);
         setEditData({});
@@ -200,7 +199,7 @@ const Rows = ({
         // Show success message
         alert("Changes saved successfully!");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error updating inventory item:", error);
         alert("Failed to save changes to the database: " + error.message);
       });
@@ -223,20 +222,20 @@ const Rows = ({
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
-        if (sortOrder === "newest" || sortOrder === "oldest") {
-          const dateA = new Date(a.dateofreservation);
-          const dateB = new Date(b.dateofreservation);
-          if (sortOrder === "newest") return dateB - dateA;
-          if (sortOrder === "oldest") return dateA - dateB;
-        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-          const nameA = a.studentname.toLowerCase();
-          const nameB = b.studentname.toLowerCase();
-          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
+          if (sortOrder === "newest" || sortOrder === "oldest") {
+            const dateA = new Date(a.dateofreservation);
+            const dateB = new Date(b.dateofreservation);
+            if (sortOrder === "newest") return dateB - dateA;
+            if (sortOrder === "oldest") return dateA - dateB;
+          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+            const nameA = a.studentname.toLowerCase();
+            const nameB = b.studentname.toLowerCase();
+            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
+            return 0;
+          }
           return 0;
-        }
-        return 0;
-      })
+        })
       : dashboard;
 
   useEffect(() => {
@@ -260,23 +259,7 @@ const Rows = ({
   // Ito palang ung handleEyeMouseEnter para sa hover popup position niya
   function handleEyeMouseEnter(event, dbId) {
     setHoveredEyeId(dbId);
-    const tableContainer =
-      event.target.closest(".table-scroll-container") ||
-      document.querySelector(".table-scroll-container");
-    const buttonRect = event.target.getBoundingClientRect();
-    const popupHeight = 340; // Approximate height of popup (px)
-    let direction = "down";
-    if (tableContainer) {
-      const containerRect = tableContainer.getBoundingClientRect();
-      if (buttonRect.bottom + popupHeight > containerRect.bottom) {
-        direction = "up";
-      }
-    } else {
-      if (buttonRect.bottom + popupHeight > window.innerHeight) {
-        direction = "up";
-      }
-    }
-    setPopupDirection(direction);
+    // Removed popupDirection logic since popup is now fixed and centered
   }
 
   if (isGrid) {
@@ -318,32 +301,32 @@ const Rows = ({
             <table className="w-full table-fixed border-separate border-spacing-0 relative">
               <thead className="bg-[#02327B] sticky top-0 z-30">
                 <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
-                  <th className="md:w-[23%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[150px]">
+                  <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">
                       Student Name
                     </span>
                   </th>
-                  <th className="sm:w-[12%] md:w-[15%] md:pl-6 sm:pr-1 text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[100px]">
+                  <th className="w-[90px] min-w-[60px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">Program</span>
                   </th>
-                  <th className="w-[10%] sm:pr-2 md:w-[10%] md:pl-4 text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[80px]">
+                  <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">Tassel</span>
                   </th>
-                  <th className="sm:w-[8.5%] sm:pr-2 md:pr-6 md:pl-4 md:w-[10%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[80px]">
+                  <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">Hood</span>
                   </th>
-                  <th className="w-[10%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[80px]">
+                  <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">Gown</span>
                   </th>
-                  <th className="w-[15%] pl-2 text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[120px]">
+                  <th className="w-[120px] min-w-[80px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">
                       Date of Reservation
                     </span>
                   </th>
-                  <th className="w-[12.5%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[100px]">
+                  <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">Status</span>
                   </th>
-                  <th className="w-[13.5%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[100px]">
+                  <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                     <span className="block w-full text-center ">Actions</span>
                   </th>
                 </tr>
@@ -398,8 +381,8 @@ const Rows = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "tassel", val)
                                     : handleEditChange({
-                                      target: { name: "tassel", value: val },
-                                    })
+                                        target: { name: "tassel", value: val },
+                                      })
                                 }
                                 disabled={false}
                               />
@@ -423,8 +406,8 @@ const Rows = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "hood", val)
                                     : handleEditChange({
-                                      target: { name: "hood", value: val },
-                                    })
+                                        target: { name: "hood", value: val },
+                                      })
                                 }
                                 disabled={false}
                               />
@@ -448,8 +431,8 @@ const Rows = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "gown", val)
                                     : handleEditChange({
-                                      target: { name: "gown", value: val },
-                                    })
+                                        target: { name: "gown", value: val },
+                                      })
                                 }
                                 disabled={false}
                               />
@@ -517,16 +500,17 @@ const Rows = ({
                                   onMouseLeave={() => setHoveredEyeId(null)}
                                 >
                                   <button
-                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id
-                                      ? "bg-blue-600"
-                                      : ""
-                                      }`}
+                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
+                                      hoveredEyeId === db.id
+                                        ? "bg-blue-600"
+                                        : ""
+                                    }`}
                                     style={{
                                       background: modifyTable
                                         ? "#bdbdbd"
                                         : hoveredEyeId === db.id
-                                          ? "#2563eb"
-                                          : "#0C7E48",
+                                        ? "#2563eb"
+                                        : "#0C7E48",
                                       cursor: modifyTable
                                         ? "not-allowed"
                                         : "pointer",
@@ -543,23 +527,16 @@ const Rows = ({
                                     }}
                                   >
                                     <EyeIcon
-                                      className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
-                                        ? "text-blue-200"
-                                        : "text-white"
-                                        }`}
+                                      className={`w-5 transition-colors duration-200 ${
+                                        hoveredEyeId === db.id
+                                          ? "text-blue-200"
+                                          : "text-white"
+                                      }`}
                                     />
                                   </button>
                                   {hoveredEyeId === db.id && (
                                     <div
-                                      className={`absolute right-2 -translate-x-1/2 z-50 w-80 h-fit   rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto ${popupDirection === "up"
-                                        ? "bottom-10"
-                                        : "top-10"
-                                        }`}
-                                      style={
-                                        popupDirection === "up"
-                                          ? { bottom: "2.5rem" }
-                                          : { top: "2.5rem" }
-                                      }
+                                      className="fixed left-9/12 top-1/2 z-50 w-80 h-fit rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto transform -translate-x-1/2 -translate-y-1/2 "
                                       onMouseEnter={(e) =>
                                         handleEyeMouseEnter(e, db.id)
                                       }
@@ -633,8 +610,9 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-60" : ""
-        }`}
+      className={`relative w-[80%] flex justify-center items-center ${
+        disabled ? "pointer-events-none opacity-60" : ""
+      }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -692,10 +670,11 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
-                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                  : ""
-                  }`}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
+                  opt === value
+                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                    : ""
+                }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",
@@ -766,5 +745,5 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
 
 function getRowColor(index) {
   // Alternate row colors for better readability
-  return index % 2 === 0 ? "bg-white" : "bg-gray-50";
+  return index % 2 === 0 ? "bg-[#E9E9E9]" : "bg-[#D4D4D4]";
 }

@@ -9,6 +9,8 @@ import ProtectedRoute from "./components/protected-route/ProtectedRoute";
 import "./index.css";
 import "./App.css";
 import Evaluation from "./pages/evaluation-page/Evaluation";
+import InventoryPage from "./pages/inventory-page/InventoryPage";
+import PendingPage from "./pages/pending-page/PendingPage";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
             <Route path="/admin-home" element={<AdminHome />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/evaluation-page" element={<Evaluation />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/pending" element={<PendingPage />} />
           </Route>
 
           {/* Student only routes */}
