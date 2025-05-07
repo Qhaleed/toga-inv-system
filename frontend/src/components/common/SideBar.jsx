@@ -3,7 +3,7 @@ import Profile from "../../assets/images/profilepicture.jpg";
 import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
 import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
-const SideBar = ({ setSortOrder, activeTab }) => {
+const SideBar = ({ setSortOrder, activeTab, setIsAll, setIsEvaluationTab, setIsNotEvaluationTab, setIsAZ, setIsZA}) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
     typeof window !== "undefined" && window.innerWidth >= 640
@@ -52,6 +52,37 @@ const SideBar = ({ setSortOrder, activeTab }) => {
   const handleSortNameDesc = () => setSortOrder && setSortOrder("name-desc");
   const handleSortDateNewest = () => setSortOrder && setSortOrder("newest");
   const handleSortDateOldest = () => setSortOrder && setSortOrder("oldest");
+
+  const All = () => {
+    setFocusedStatus("all");
+    setIsAll(true);
+    setIsEvaluationTab(false);
+    setIsNotEvaluationTab(false);
+  }
+
+  const EvaluatedFilter = () => {
+    setFocusedStatus("evaluated");
+    setIsAll(false);
+    setIsEvaluationTab(true);
+    setIsNotEvaluationTab(false);
+  }
+
+  const NotEvaluatedFilter = () => {
+    setFocusedStatus("noeval");
+    setIsAll(false);
+    setIsEvaluationTab(false);
+    setIsNotEvaluationTab(true);
+  }
+
+  const showIsAZ = () => {
+    setIsAZ(true);
+    setIsZA(false);
+  }
+
+  const showIsZA = () => {
+    setIsAZ(false);
+    setIsZA(true);
+  }
 
   console.log(activeTab);
 
@@ -146,7 +177,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("all")}
+                      onClick={All}
                     >
                       <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-[#1E40AF] ml-3">
                         All
@@ -161,7 +192,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("evaluated")}
+                      onClick={EvaluatedFilter}
                     >
                       <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-[#15803D] ml-3">
                         Evaluated
@@ -178,7 +209,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
-                      onClick={() => setFocusedStatus("noeval")}
+                      onClick={NotEvaluatedFilter}
                     >
                       <p className="sm:text-[14px] text-[13px] font-bold text-[#B91C1C] ml-3">
                         No Evaluation
@@ -442,6 +473,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                     } hover:scale-105 transform-all ease-out duration-300`}
                     onClick={() => {
                       setFocusedSort("name-asc");
+                      showIsAZ();
                       handleSortNameAsc && handleSortNameAsc();
                     }}
                   >
@@ -457,6 +489,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                     } hover:scale-105 transform-all ease-out duration-300`}
                     onClick={() => {
                       setFocusedSort("name-desc");
+                      showIsZA();
                       handleSortNameDesc && handleSortNameDesc();
                     }}
                   >
