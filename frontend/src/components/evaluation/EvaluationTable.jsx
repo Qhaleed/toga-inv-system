@@ -2,11 +2,10 @@ import EvaluationRows from "./EvaluationRows";
 import "../common/Table.css";
 
 const EvaluationTable = ({
-  isGrid,
   modifyTable,
-  value,
+
   setValue,
-  evalTab,
+
   setEvaluationTab,
   isAll,
   isevalTab,
@@ -24,48 +23,47 @@ const EvaluationTable = ({
       >
         <div className="h-full w-full flex items-stretch justify-center">
           <div className="h-full w-full flex flex-col justify-start items-center">
+            <div
+              className="relative w-full flex flex-col min-h-[300px] max-w-full border border-black shadow outline-none bg-white rounded-lg"
+              style={{
+                maxHeight: mainContentHeight,
+                minHeight: 400,
+                minWidth: 300,
+                maxWidth: "100vw",
+                overflow: "visible",
+              }}
+            >
               <div
-                className="relative w-full flex flex-col min-h-[300px] max-w-full border border-black shadow outline-none bg-white rounded-lg"
+                className="w-full overflow-x-auto scrollbar-hide"
                 style={{
-                  maxHeight: mainContentHeight,
-                  minHeight: 400,
-                  minWidth: 300,
                   maxWidth: "100vw",
-                  overflow: "visible",
+                  position: "relative",
+                  width: "100%",
                 }}
               >
-                <div
-                  className="w-full overflow-x-auto scrollbar-hide"
+                <table
+                  className="table-auto border-none border-separate border-spacing-0 rounded-b-lg w-full min-w-0 max-w-full"
                   style={{
-                    maxWidth: "100vw",
-                    position: "relative",
+                    tableLayout: "fixed",
                     width: "100%",
+                    minWidth: 0,
+                    maxWidth: "100%",
                   }}
                 >
-                  <table
-                    className="table-auto border-none border-separate border-spacing-0 rounded-b-lg w-full min-w-0 max-w-full"
-                    style={{
-                      tableLayout: "fixed",
-                      width: "100%",
-                      minWidth: 0,
-                      maxWidth: "100%",
-                    }}
-                  >
-                    <EvaluationRows
-                      isGrid={false}
-                      modifyTable={modifyTable}
-                      rowHeightClass="h-16"
-                      setValue={setValue}
-                      setEvaluationTab={setEvaluationTab}
-                      isAll={isAll}
-                      isevalTab={isevalTab}
-                      isnotevalTab={isnotevalTab}
-                      isAZ={isAZ}
-                      isZA={isZA}
-                    />
-                  </table>
-                </div>
+
+                  <EvaluationRows
+                    isGrid={false}
+                    modifyTable={modifyTable}
+                    rowHeightClass="h-16"
+                    setValue={setValue}
+                    setEvaluationTab={setEvaluationTab}
+                  />
+                </table>
+
+               
+
               </div>
+            </div>
           </div>
         </div>
       </div>
