@@ -88,12 +88,12 @@ const SideBar = ({ setSortOrder, activeTab }) => {
             height: isLargeScreen ? "100vh" : "88%",
             transition: "transform ",
             animation: showSidebar ? "slide-in-top 2s" : "fade-in 0.8s",
-            maxWidth: "100%", // Prevent overflow
-            overflow: "auto", // Make sidebar scrollable if content overflows
+            minWidth: "100%", // Prevent overflow
+            overflow: "hidden", // Prevent child overflow
           }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
-          <div className="w-full md:w-full h-20 md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-hidden ">
+          <div className="w-full md:w-full h-20 md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-hidden rounded-t-xl">
             <div className="flex justify-center">
               <div className="h-full ml-1 w-16 flex justify-center items-center">
                 <img

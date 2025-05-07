@@ -41,8 +41,8 @@ function LoginCard() {
         setError(errorData.message || "Wrong email or password.");
         setLoading(false);
       }
-    } catch (err) {
-      setError("Error connecting to the server. Please try again later.");
+    } catch {
+      setError("Error connecting to the server. NO DATABASE NIGGAS .");
       setLoading(false);
     }
   };

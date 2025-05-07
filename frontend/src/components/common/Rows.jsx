@@ -293,10 +293,10 @@ const Rows = ({
     return (
       <div
         className={`w-fit h-80vh ${tableAnim}`}
-        style={{ minWidth: "80px", maxWidth: "100vw", height: "100%" }}
+        style={{ minWidth: "100px", maxWidth: "100vw", height: "100%" }}
       >
         {/* Outer scroll container */}
-        <div className="w-fit h-fit">
+        <div className="w-full h-full overflow-x-visible ">
           <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-1000 bg-white">
             <table className="w-full table-fixed border-separate border-spacing-0 relative">
               <thead className="bg-[#02327B] sticky top-0 z-30">
@@ -347,25 +347,19 @@ const Rows = ({
                     const isEditing = modifyTable || editId === db.id;
                     return (
                       <tr
-                        className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-fixed`}
+                        className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-columns`}
                         key={db.id}
                       >
                         <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                           <div className="h-full w-[100%] py-4 flex justify-center items-center">
                             <h3 className="truncate">{db.studentname}</h3>
-                            <span
-                              className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
-                              style={{ borderRadius: "2px" }}
-                            ></span>
+                            <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center">
                             <h3 className="truncate">{db.program}</h3>
-                            <span
-                              className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
-                              style={{ borderRadius: "2px" }}
-                            ></span>
+                            <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         {/* Tassel */}
@@ -389,10 +383,7 @@ const Rows = ({
                             ) : (
                               <h3 className="truncate">{db.tassel}</h3>
                             )}
-                            <span
-                              className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
-                              style={{ borderRadius: "2px" }}
-                            ></span>
+                            <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         {/* Hood */}
@@ -414,10 +405,7 @@ const Rows = ({
                             ) : (
                               <h3 className="truncate">{db.hood}</h3>
                             )}
-                            <span
-                              className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
-                              style={{ borderRadius: "2px" }}
-                            ></span>
+                            <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         {/* Gown */}
@@ -439,19 +427,13 @@ const Rows = ({
                             ) : (
                               <h3 className="truncate">{db.gown}</h3>
                             )}
-                            <span
-                              className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
-                              style={{ borderRadius: "2px" }}
-                            ></span>
+                            <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center">
                             <h3 className="truncate">{db.dateofreservation}</h3>
-                            <span
-                              className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
-                              style={{ borderRadius: "2px" }}
-                            ></span>
+                            <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         {/* Status */}
@@ -459,10 +441,7 @@ const Rows = ({
                           <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
                             {db.status}
                           </div>
-                          <span
-                            className="absolute right-0 top-[18px] h-7 w-0.5 bg-gray-600 opacity-50"
-                            style={{ borderRadius: "2px" }}
-                          ></span>
+                          <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </td>
                         {/* Actions */}
                         <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
@@ -536,7 +515,7 @@ const Rows = ({
                                   </button>
                                   {hoveredEyeId === db.id && (
                                     <div
-                                      className="fixed left-9/12 top-1/2 z-50 w-80 h-fit rounded-xl opacity-100 transition-all duration-300 animate-fade-in pointer-events-auto transform -translate-x-1/2 -translate-y-1/2 "
+                                      className="fixed left-9/12 top-1/2 z-50 w-80 h-fit rounded-xl opacity-200 transition-all duration-300 animate-fade-in pointer-events-auto transform -translate-x-1/2 -translate-y-1/2 "
                                       onMouseEnter={(e) =>
                                         handleEyeMouseEnter(e, db.id)
                                       }
@@ -611,7 +590,7 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
     <div
       ref={ref}
       className={`relative w-[80%] flex justify-center items-center ${
-        disabled ? "pointer-events-none opacity-60" : ""
+        disabled ? "pointer-events-none opacity-20" : ""
       }`}
       tabIndex={0}
       style={{
