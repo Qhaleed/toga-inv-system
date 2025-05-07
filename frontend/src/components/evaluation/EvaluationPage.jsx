@@ -10,6 +10,9 @@ const EvaluationPage = () => {
   const [activeTab, setActiveTab] = useState("evaluation");
   const [value, setValue] = useState([]);
   const [evalTab, setEvaluationTab] = useState("hidden");
+  const [isAll, setIsAll] = useState(false);
+  const [isevalTab, setIsEvaluationTab] = useState(false);
+  const [isnotevalTab, setIsNotEvaluationTab] = useState(false);
 
   return (
     <>
@@ -19,7 +22,7 @@ const EvaluationPage = () => {
           {/* Sidebar: full width above navbar on small screens, left on large screens */}
           <div className="w-full sm:col-span-1">
             {/* Always show sidebar on large screens, toggle on small screens */}
-            <SideBar alwaysShowOnLarge activeTab={activeTab} />
+            <SideBar alwaysShowOnLarge activeTab={activeTab} setIsEvaluationTab={setIsEvaluationTab} setIsNotEvaluationTab={setIsNotEvaluationTab}/>
           </div>
           {/* Main content: below sidebar on small screens, right of sidebar on large screens */}
           <div className="flex-1 sm:col-span-3 h-full">
@@ -42,6 +45,8 @@ const EvaluationPage = () => {
                 modifyTable={modifyTable}
                 setValue={setValue}
                 setEvaluationTab={setEvaluationTab}
+                isevalTab={isevalTab}
+                isnotevalTab={isnotevalTab}
               />
             </div>
           </div>

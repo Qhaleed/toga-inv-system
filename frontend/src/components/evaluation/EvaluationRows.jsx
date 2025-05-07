@@ -9,8 +9,13 @@ const EvaluationRows = ({
   rowHeightClass = "h-16",
   setValue,
   setEvaluationTab,
+  isevalTab,
+  isnotevalTab
 }) => {
   const [dashboard, setDashboard] = useState([]);
+  const [All, setAll] = useState([]);
+  const [filtereval, setFilterEval] = useState([]);
+  const [filternoeval, setFilterNoEval] = useState([]);
 
   useEffect(() => {
     // kuha data sa JSON
@@ -18,6 +23,9 @@ const EvaluationRows = ({
       .then((res) => res.json())
       .then((data) => {
         setDashboard(data);
+        setAll(data);
+        setFilterEval(data.filter((db) => db.evaluation === "Evaluated"));
+        setFilterNoEval(data.filter((db) => db.evaluation === "No Evaluation"));
       });
   }, []);
 
@@ -25,6 +33,24 @@ const EvaluationRows = ({
     setValue(db);
     setEvaluationTab("block");
   };
+
+  useEffect(() => {
+    if(){
+      setDashboard(All);
+    }
+  })
+
+  useEffect(() => {
+    if(isevalTab){
+      setDashboard(filtereval);
+    }
+  }, [isevalTab]);
+
+  useEffect(() => {
+    if(isnotevalTab){
+      setDashboard(filternoeval);
+    }
+  }, [isnotevalTab]);
 
   // Table/column view with sticky header and scrollable table
   return (

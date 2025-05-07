@@ -3,7 +3,7 @@ import Profile from "../../assets/images/profilepicture.jpg";
 import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
 import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
-const SideBar = ({ setSortOrder, activeTab }) => {
+const SideBar = ({ setSortOrder, activeTab, setIsEvaluationTab, setIsNotEvaluationTab}) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
     typeof window !== "undefined" && window.innerWidth >= 640
@@ -51,6 +51,16 @@ const SideBar = ({ setSortOrder, activeTab }) => {
   const handleSortNameDesc = () => setSortOrder && setSortOrder("name-desc");
   const handleSortDateNewest = () => setSortOrder && setSortOrder("newest");
   const handleSortDateOldest = () => setSortOrder && setSortOrder("oldest");
+
+  const EvaluatedFilter = () => {
+    setIsEvaluationTab(true);
+    setIsNotEvaluationTab(false);
+  }
+
+  const NotEvaluatedFilter = () => {
+    setIsEvaluationTab(false);
+    setIsNotEvaluationTab(true);
+  }
 
   console.log(activeTab);
 
@@ -143,7 +153,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                         123
                       </div>
                     </button>
-                    <button className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-100 hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300">
+                    <button className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-100 hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300" onClick={EvaluatedFilter}>
                       <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-black ml-3">
                         Evaluated
                       </p>
@@ -153,7 +163,7 @@ const SideBar = ({ setSortOrder, activeTab }) => {
                     </button>
                   </div>
                   <div className="w-full h-1/2 flex justify-between items-center ">
-                    <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105">
+                    <button className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-300 hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105" onClick={NotEvaluatedFilter}>
                       <p className="sm:text-[14px] text-[13px] font-bold text-black ml-3">
                         No Evaluation
                       </p>

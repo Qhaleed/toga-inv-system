@@ -8,6 +8,8 @@ const EvaluationTable = ({
   setValue,
   evalTab,
   setEvaluationTab,
+  isevalTab,
+  isnotevalTab
 }) => {
   const mainContentHeight = "80vh";
   return (
@@ -52,6 +54,8 @@ const EvaluationTable = ({
                       rowHeightClass="h-16"
                       setValue={setValue}
                       setEvaluationTab={setEvaluationTab}
+                      isevalTab={isevalTab}
+                      isnotevalTab={isnotevalTab}
                     />
                   </table>
                 </div>

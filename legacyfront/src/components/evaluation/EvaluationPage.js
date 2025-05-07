@@ -10,6 +10,8 @@ const EvaluationPage = () => {
   const [activeTab, setActiveTab] = useState("evaluation");
   const [value, setValue] = useState([]);
   const [evalTab, setEvaluationTab] = useState("hidden");
+  const [isevalFilter, setEvaluationFilter] = useState(false);
+  const [isnotevalFilter, setNotEvaluationFilter] = useState(false);
 
   return (
     <>
