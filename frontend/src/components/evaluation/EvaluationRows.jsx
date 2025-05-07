@@ -12,12 +12,10 @@ const EvaluationRows = ({
   isevalTab,
   isnotevalTab,
   isAZ,
-  isZA
+  isZA,
 }) => {
   const [dashboard, setDashboard] = useState([]);
-  const [All, setAll] = useState([]);
-  const [filtereval, setFilterEval] = useState([]);
-  const [filternoeval, setFilterNoEval] = useState([]);
+  const [allData, setAllData] = useState([]);
 
   useEffect(() => {
     // kuha data sa JSON
@@ -25,9 +23,7 @@ const EvaluationRows = ({
       .then((res) => res.json())
       .then((data) => {
         setDashboard(data);
-        setAll(data);
-        setFilterEval(data.filter((db) => db.evaluation === "Evaluated"));
-        setFilterNoEval(data.filter((db) => db.evaluation === "No Evaluation"));
+        setAllData(data);
       });
   }, []);
 
@@ -37,36 +33,26 @@ const EvaluationRows = ({
   };
 
   useEffect(() => {
-    if(isAll){
-      setDashboard(All);
+    let filtered = allData;
+    if (isevalTab) {
+      filtered = allData.filter((db) => db.evaluation === "Evaluated");
+    } else if (isnotevalTab) {
+      filtered = allData.filter((db) => db.evaluation === "No Evaluation");
+    } else if (isAll) {
+      filtered = allData;
     }
-  }, [isAll]);
-
-  useEffect(() => {
-    if(isevalTab){
-      setDashboard(filtereval);
+    // Sorting
+    if (isAZ) {
+      filtered = [...filtered].sort((a, b) =>
+        a.studentname.localeCompare(b.studentname)
+      );
+    } else if (isZA) {
+      filtered = [...filtered].sort((a, b) =>
+        b.studentname.localeCompare(a.studentname)
+      );
     }
-  }, [isevalTab]);
-
-  useEffect(() => {
-    if(isnotevalTab){
-      setDashboard(filternoeval);
-    }
-  }, [isnotevalTab]);
-
-  useEffect(() => {
-    if(isAZ){
-     setDashboard(dashboard.sort((a, b) => (a.studentname > b.studentname ? -1 : a.studentname < b.studentname ? 1 : 0)));
-    }
-  }, [isAZ]);
-
-  useEffect(() => {
-    if(!isAZ){
-      setDashboard(dashboard.sort((a, b) => (a.studentname < b.studentname ? -1 : a.studentname > b.studentname ? 1 : 0)));
-    }
-  }, [isZA]);
-
-  
+    setDashboard(filtered);
+  }, [isAll, isevalTab, isnotevalTab, isAZ, isZA, allData]);
 
   // Table/column view with sticky header and scrollable table
   return (
@@ -80,7 +66,7 @@ const EvaluationRows = ({
       }}
     >
       <table
-        className="w-full min-w-[600px] max-w-[100vw] table-auto border-separate border-spacing-0"
+        className="w-full min-w-[600px] max-w-[100vw] table-auto border-separate border-spacing-0 "
         style={{ tableLayout: "fixed" }}
       >
         <thead className="bg-[#02327B] sticky top-0 z-40">

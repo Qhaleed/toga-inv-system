@@ -3,20 +3,19 @@ import "../common/Table.css";
 
 const EvaluationTable = ({
   modifyTable,
-
   setValue,
-
   setEvaluationTab,
   isAll,
   isevalTab,
   isnotevalTab,
   isAZ,
-  isZA
+  isZA,
 }) => {
   const mainContentHeight = "80vh";
+
   return (
     <div className="w-full flex flex-col items-center justify-start mt-10">
-      <div className="w-full flex flex-col items-start justify-center mb-2 px-2" />
+      {/* Removed top sorting/filtering buttons, only sidebar buttons control filtering/sorting */}
       <div
         className="w-full flex justify-center items-start px-1 sm:px-2 md:px-5 lg:ml-0 lg:w-full"
         style={{ height: mainContentHeight, maxWidth: "100vw" }}
@@ -24,13 +23,9 @@ const EvaluationTable = ({
         <div className="h-full w-full flex items-stretch justify-center">
           <div className="h-full w-full flex flex-col justify-start items-center">
             <div
-              className="relative w-full flex flex-col min-h-[300px] max-w-full border border-black shadow outline-none bg-white rounded-lg"
+              className="relative w-full flex flex-col min-h-fit min-w-fit max-w-full border border-black shadow outline-none bg-white"
               style={{
                 maxHeight: mainContentHeight,
-                minHeight: 400,
-                minWidth: 300,
-                maxWidth: "100vw",
-                overflow: "visible",
               }}
             >
               <div
@@ -42,7 +37,7 @@ const EvaluationTable = ({
                 }}
               >
                 <table
-                  className="table-auto border-none border-separate border-spacing-0 rounded-b-lg w-full min-w-0 max-w-full"
+                  className="table-auto border-none border-separate border-spacing-0 w-full min-w-0 max-w-full"
                   style={{
                     tableLayout: "fixed",
                     width: "100%",
@@ -50,18 +45,19 @@ const EvaluationTable = ({
                     maxWidth: "100%",
                   }}
                 >
-
                   <EvaluationRows
                     isGrid={false}
                     modifyTable={modifyTable}
                     rowHeightClass="h-16"
                     setValue={setValue}
                     setEvaluationTab={setEvaluationTab}
+                    isAll={isAll}
+                    isevalTab={isevalTab}
+                    isnotevalTab={isnotevalTab}
+                    isAZ={isAZ}
+                    isZA={isZA}
                   />
                 </table>
-
-               
-
               </div>
             </div>
           </div>

@@ -11,7 +11,12 @@ const EvaluationPage = () => {
   const [value, setValue] = useState([]);
   const [evalTab, setEvaluationTab] = useState("hidden");
 
-  const [sortOrder, setSortOrder] = useState(null); // add sort state
+  // State for sidebar-driven filtering/sorting
+  const [isAll, setIsAll] = useState(true);
+  const [isEvaluationTab, setIsEvaluationTab] = useState(false);
+  const [isNotEvaluationTab, setIsNotEvaluationTab] = useState(false);
+  const [isAZ, setIsAZ] = useState(false);
+  const [isZA, setIsZA] = useState(false);
 
   return (
     <>
@@ -22,9 +27,12 @@ const EvaluationPage = () => {
           <div className="w-full sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 2xl:col-span-1 bg-[#001C47] text-white hidden sm:block h-full">
             <SideBar
               alwaysShowOnLarge
-              setSortOrder={setSortOrder}
               activeTab={activeTab}
-
+              setIsAll={setIsAll}
+              setIsEvaluationTab={setIsEvaluationTab}
+              setIsNotEvaluationTab={setIsNotEvaluationTab}
+              setIsAZ={setIsAZ}
+              setIsZA={setIsZA}
             />
           </div>
           {/* Main content: full width on mobile, right of sidebar on desktop */}
@@ -48,10 +56,11 @@ const EvaluationPage = () => {
                 modifyTable={modifyTable}
                 setValue={setValue}
                 setEvaluationTab={setEvaluationTab}
-
-                sortOrder={sortOrder}
-
-
+                isAll={isAll}
+                isevalTab={isEvaluationTab}
+                isnotevalTab={isNotEvaluationTab}
+                isAZ={isAZ}
+                isZA={isZA}
               />
             </div>
           </div>
