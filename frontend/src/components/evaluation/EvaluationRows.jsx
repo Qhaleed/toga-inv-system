@@ -2,7 +2,6 @@ import Table from "../../assets/icons/table.svg?react";
 import EyeIcon from "../../assets/icons/eye-icon.svg?react";
 import Trash from "../../assets/icons/black-trash.svg?react";
 import ChevronDown from "../../assets/icons/chevron-down.svg?react";
-
 import { useState, useEffect } from "react";
 
 const EvaluationRows = ({

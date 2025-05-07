@@ -43,7 +43,7 @@ function LoginCard() {
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Wrong email or password nigga!");
+        setError(errorData.message || "Wrong email or password.");
         setLoading(false);
       }
     } catch {

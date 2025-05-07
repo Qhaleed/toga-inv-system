@@ -21,7 +21,6 @@ const Navbar = ({
   modifyTable,
   setmodifyTable,
   activeTab,
-  setActiveTab,
 }) => {
   const editallClicked = () => {
     setmodifyTable((prev) => !prev);
@@ -90,7 +89,7 @@ const Navbar = ({
         </button>
 
         <button
-          onClick={() => setActiveTab("inventory")}
+          onClick={() => navigate("/inventory")}
           className={tabClass("inventory")}
         >
           <span className="w-3">
@@ -100,7 +99,7 @@ const Navbar = ({
         </button>
 
         <button
-          onClick={() => setActiveTab("pending")}
+          onClick={() => navigate("/pending")}
           className={tabClass("pending")}
         >
           <span className="w-3">

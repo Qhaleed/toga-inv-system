@@ -34,30 +34,25 @@ const Table = ({ isGrid, modifyTable, sortOrder }) => {
                   overflow: "visible",
                 }}
               >
-                <div
-                  className="w-full overflow-x-auto scrollbar-hide"
-                  style={{
-                    maxWidth: "100vw",
-                    position: "relative",
-                    width: "100%",
-                  }}
-                >
-                  <table
-                    className="table-auto border-none border-separate border-spacing-0 rounded-b-lg w-full min-w-0 max-w-full"
-                    style={{
-                      tableLayout: "fixed",
-                      width: "100%",
-                      minWidth: 0,
-                      maxWidth: "100%",
-                    }}
-                  >
-                    <Rows
-                      isGrid={false}
-                      modifyTable={modifyTable}
-                      rowHeightClass="h-16"
-                      sortOrder={internalSortOrder}
-                    />
-                  </table>
+                <div className="w-full overflow-x-auto scrollbar-hide">
+                  <div className="min-w-[600px] max-w-full">
+                    <table
+                      className="table-auto border-none border-separate border-spacing-0 rounded-b-lg w-full min-w-[600px] max-w-full"
+                      style={{
+                        tableLayout: "fixed",
+                        width: "100%",
+                        minWidth: 0,
+                        maxWidth: "100%",
+                      }}
+                    >
+                      <Rows
+                        isGrid={false}
+                        modifyTable={modifyTable}
+                        rowHeightClass="h-16"
+                        sortOrder={internalSortOrder}
+                      />
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
