@@ -97,7 +97,7 @@ Legacy Tailwind config for reference:
 }
 
 */
- 
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -209,7 +209,6 @@ Legacy Tailwind config for reference:
   * {
     @apply border-border outline-ring/50;
   }
-
 }
 
 /*
@@ -237,4 +236,4 @@ button:focus-visible,
   outline: 2px solid #91b0f4 !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 2px #a59c8533 !important;
-} */
+}

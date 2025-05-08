@@ -30,7 +30,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
       showOutsideDays={showOutsideDays}
       selected={selected}
       className={cn(
-        "p-6 w-full max-w-xs mx-auto overflow-hidden py-5",
+        "p-6 w-96 h-96 max-w-xs mx-auto overflow-hidden py-5", // Set fixed width and height for calendar container
         className
       )}
       classNames={{
@@ -39,11 +39,11 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         month: "flex flex-col gap-4 bg-transparent w-full max-w-xs mx-auto",
         caption:
           "flex justify-center pt-1 relative items-center w-full bg-transparent",
-        caption_label: "text-sm font-medium text-white",
+        caption_label: "text-sm font-medium ",
         nav: "flex items-center gap-1 bg-green",
         nav_button: cn(
           buttonVariants({ variant: "default" }),
-          "size-6  text-white p-2 opacity-100 hover:opacity-60 "
+          "size-6  p-2 opacity-100 hover:opacity-60 "
         ),
         nav_button_previous: "absolute right-10",
         nav_button_next: "absolute right-0 ",
@@ -53,27 +53,30 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
           "text-white rounded-xl w-full font-normal text-[0.8rem] bg-transparent",
         row: "flex w-full mt-3 bg-transparent overflow-hidden gap-[1px]",
         cell: cn(
-          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent [&:has([aria-selected].day-range-end)]:rounded-r-md overflow-hidden w-full",
+          "relative p-0 text-center text-sm flex items-center justify-center focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent [&:has([aria-selected].day-range-end)]:rounded-r-md overflow-hidden w-full",
           props.mode === "range"
             ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
             : "[&:has([aria-selected])]:rounded-sm bg-transparent"
         ),
         day: cn(
-          "size-8 p-0 font-normal aria-selected:opacity-100 bg-transparent text-white w-full hover:text-yellow-400 hover:bg-white/20"
+          "inline-flex items-center justify-center px-2 py-1 rounded-full font-thin aria-selected:opacity-100 bg-transparent text-white transition-colors duration-150 hover:bg-white/20 focus:bg-white/20 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
         ),
         day_range_start:
-          "day-range-start aria-selected:bg-transparent aria-selected:text-yellow-400",
+          "day-range-start aria-selected:bg-transparent aria-selected:text-yellow-500 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
         day_range_end:
-          "day-range-end aria-selected:bg-transparent aria-selected:text-yellow-400",
+          "day-range-end aria-selected:bg-transparent aria-selected:text-yellow-500 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
         day_selected:
-          "bg-Blcack text-white font-extrabold hover:bg-yellow-300 hover:text-white focus:bg-yellow-300 focus:text-white border-none outline-none ring-0",
-        day_today: " text-black font-extrabold hover:bg-[#EDB427]",
+          "bg-yellow-500 rounded-full text-black font-extrabold hover:bg-yellow-600 focus:bg-yellow-600 border-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
+        day_today:
+          "bg-yellow-500 text-black font-extrabold rounded-full px-2 py-1 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
         day_outside:
-          "day-outside text-gray-500 aria-selected:text-gray-500 bg-transparent",
-        day_disabled: "text-gray-700 opacity-50 bg-transparent",
+          "day-outside rounded-full text-black aria-selected:black opacity-20 cursor-default focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
+        day_disabled:
+          "text-gray-700 opacity-50 bg-transparent focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
         day_range_middle:
-          "aria-selected:bg-transparent aria-selected:text-yellow-400",
-        day_hidden: "invisible bg-transparent",
+          "aria-selected:bg-transparent aria-selected:text-yellow-500 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
+        day_hidden:
+          "invisible bg-transparent focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0",
         ...classNames,
       }}
       components={{
