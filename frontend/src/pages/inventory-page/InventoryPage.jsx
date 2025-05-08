@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SideBar from "../../components/common/SideBar";
 import NavBar from "../../components/common/NavBar";
-import Rows from "../../components/common/Rows";
+
 import MyChart from "../../components/ui/my-chart";
 import Profile from "../../assets/images/dump.jpg"; // Adjust the path as necessary
 
@@ -61,8 +61,6 @@ const InventoryPage = ({ activeTab, setActiveTab, setSortOrder }) => {
                 <div className="w-full flex justify-center items-center min-h-[250px] sm:min-h-[350px] overflow-x-auto">
                   <MyChart />
                 </div>
-                {/* Show table with searchResults if searching, otherwise show all */}
-                <Rows searchResults={searchResults} />
               </div>
             </div>
           </div>
