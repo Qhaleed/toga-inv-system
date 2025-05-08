@@ -6,13 +6,14 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
 
   const exit = () => {
     setEvaluationTab("hidden");
+
     formRef.current.reset();
   };
 
   return (
     <form ref={formRef}>
       <div
-        className={`absolute h-screen w-screen bg-[#000000a2] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${evalTab}`}
+        className={`absolute h-screen w-screen bg-[#000000a2] z-30 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${evalTab}`}
       >
         <div className="absolute h-[600px] w-[450px] bg-[#001C47] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-xl sm:w-[600px] md:w-[750px] lg:w-[1000px] transition-all duration-200 ease-out">
           <div className="mt-4 h-full w-full flex flex-col justify-start items-center">
@@ -26,7 +27,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
               </button>
             </div>
             <table className="table-auto h-[15%] w-[93%] bg-[#d6d6d6] mt-3 rounded-lg overflow-hidden">
-              <thead className="bg-[#02327B] h-[54%]">
+              <thead className="bg-[#02327B]  h-[54%]">
                 <tr className="text-white text-[10px] sm:text-xs md:text-sm">
                   <th>
                     <h3 className="border-r border-gray-300">Student Name</h3>

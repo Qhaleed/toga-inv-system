@@ -78,7 +78,7 @@ const Navbar = ({
         {/* Dashboard button */}
         <button
           onClick={() => navigate("/admin-dashboard")}
-          className={tabClass("dashboard")}
+          className={`${tabClass("dashboard")} removeEffect`}
         >
           <span className="w-3">
             <Home className="w-4" />
@@ -90,7 +90,7 @@ const Navbar = ({
 
         <button
           onClick={() => navigate("/inventory")}
-          className={tabClass("inventory")}
+          className={`${tabClass("inventory")} removeEffect`}
         >
           <span className="w-3">
             <Inventory className="w-4" />
@@ -100,7 +100,7 @@ const Navbar = ({
 
         <button
           onClick={() => navigate("/pending")}
-          className={tabClass("pending")}
+          className={`${tabClass("pending")} removeEffect`}
         >
           <span className="w-3">
             <Statistic className="w-4" />
@@ -112,7 +112,7 @@ const Navbar = ({
 
         <button
           onClick={() => navigate("/evaluation-page")}
-          className={tabClass("evaluation")}
+          className={`${tabClass("evaluation")} removeEffect`}
         >
           <span className="w-3">
             <Application className="w-4" />
@@ -149,7 +149,7 @@ const Navbar = ({
         >
           <button
             onClick={() => setIsGrid(false)}
-            className={`h-7 w-8 md:h-7 md:w-10  flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+            className={`h-7 w-8 md:h-7 md:w-10 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
               !isGrid
                 ? "bg-[#02327B] text-white"
                 : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
@@ -159,7 +159,7 @@ const Navbar = ({
           </button>
           <button
             onClick={() => setIsGrid(true)}
-            className={` h-7 w-8 md:h-7 md:w-10 flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+            className={` h-7 w-8 md:h-7 md:w-10 flex removeEffect justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
               isGrid
                 ? "bg-[#02327B] text-white"
                 : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
@@ -169,7 +169,7 @@ const Navbar = ({
           </button>
         </div>
         <button
-          className={`${isEvaluation} hover:scale-105 h-7 px-3  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+          className={`${isEvaluation} hover:scale-105 h-7 px-3 removeEffect  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
             modifyTable
               ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
               : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
