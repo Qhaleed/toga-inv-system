@@ -50,8 +50,8 @@ const InventoryPage = ({ activeTab, setActiveTab, setSortOrder }) => {
                 onSearch={setSearchResults}
               />
             </div>
-            <div className="flex-1 relative flex flex-col items-center justify-center p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
-              <div className="w-full  max-w-[90%] min-h-80% bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center overflow-x-auto min-w-0">
+            <div className="flex-1 relative flex  flex-col items-center justify-start p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
+              <div className="w-full mt-5 max-w-[95%] min-h-80% bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center overflow-x-auto min-w-0">
                 {/* Inventory tab content switching */}
                 {activeTab === "inventory" &&
                   (() => {
