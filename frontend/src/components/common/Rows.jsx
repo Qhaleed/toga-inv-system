@@ -18,6 +18,7 @@ const Rows = ({
   modifyTable,
   rowHeightClass = "h-16",
   sortOrder,
+  searchResults, // <-- add searchResults prop
 }) => {
   const [dashboard, setDashboard] = useState([]);
   const [originalDashboard, setOriginalDashboard] = useState([]); // Track original data
@@ -40,15 +41,16 @@ const Rows = ({
       .then((data) => {
         // Map API response properties to match the component's expected property names
         const mappedData = data.map((item) => ({
-          id: item.id,
+          id: item.inventory_id, // use inventory_id as unique id
           studentname: item.renters_name,
           program: item.course,
           tassel: item.tassel_color,
           hood: item.hood_color,
           gown: item.toga_size,
-          dateofreservation: new Date(item.rent_date).toLocaleDateString(),
+          dateofreservation: item.rent_date
+            ? new Date(item.rent_date).toLocaleDateString()
+            : "",
           status: item.return_status,
-          // Keep other properties that might be needed
           payment_status: item.payment_status,
           evaluation_status: item.evaluation_status,
           remarks: item.remarks,
@@ -57,7 +59,6 @@ const Rows = ({
           has_cap: item.has_cap,
           item_condition: item.item_condition,
         }));
-
         setDashboard(mappedData);
         setOriginalDashboard(mappedData);
         console.log("Original data:", data);
@@ -262,13 +263,15 @@ const Rows = ({
     // Removed popupDirection logic since popup is now fixed and centered
   }
 
+  const displayDashboard =
+    Array.isArray(searchResults) && searchResults.length > 0
+      ? searchResults
+      : sortedDashboard;
+
   if (isGrid) {
-    // Instead of rendering the grid view here, ni reuse ko nalang un grid view component
-    // cleaner code, send lang props sa gridview if may idadagdag
-    // bale gridview tapos props nalang like sa baba
     return (
       <GridView
-        dashboard={dashboard}
+        dashboard={displayDashboard}
         editId={editId}
         editData={editData}
         hoveredEyeId={hoveredEyeId}
@@ -289,7 +292,6 @@ const Rows = ({
       />
     );
   } else {
-    // Table/column view with sticky header and scrollable table
     return (
       <div
         className={`w-full max-h-[80vh] overflow-x-auto overflow-y-auto ${tableAnim}`}
@@ -342,7 +344,7 @@ const Rows = ({
               </tr>
             </thead>
             <tbody className="w-full">
-              {sortedDashboard.length === 0 ? (
+              {displayDashboard.length === 0 ? (
                 <tr>
                   <td
                     colSpan={8}
@@ -352,7 +354,7 @@ const Rows = ({
                   </td>
                 </tr>
               ) : (
-                sortedDashboard.map((db, idx) => {
+                displayDashboard.map((db, idx) => {
                   const rowColor = getRowColor(idx);
                   const isEditing = modifyTable || editId === db.id;
                   return (
