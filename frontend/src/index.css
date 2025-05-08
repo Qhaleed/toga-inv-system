@@ -51,6 +51,9 @@
 @utility accent-bg {
   background-color: #edb427;
 }
+@utility text-clr {
+  color: #edb427;
+}
 
 @layer base {
   :root {
@@ -236,4 +239,9 @@ button:focus-visible,
   outline: 2px solid #91b0f4 !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 2px #a59c8533 !important;
+}
+
+.recharts-bar-rectangle path {
+  /* Use currentColor so Bar fill prop works with a function */
+  fill: currentColor !important;
 }
