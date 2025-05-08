@@ -26,8 +26,8 @@ export function StocksTab() {
   return (
     <>
       {" "}
-      <div className="  left-25 2xl:top-50 lg:top-0 absolute text-xl sm:text-3xl font-bold text-[#0C7E48] mb-2 text-center">
-        <span className="opacity-20 hover:opacity-40 cursor-pointer text-black font-semibold">
+      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-3xl font-bold text-[#0C7E48] mb-2 text-center">
+        <span className="opacity-20 z-1000 hover:opacity-40 cursor-pointer text-black font-semibold">
           {" "}
           Inventory {">"}
         </span>
@@ -36,10 +36,10 @@ export function StocksTab() {
           Stocks
         </span>
       </div>
-      <div className="w-full p-8 flex flex-col items-center">
+      <div className="w-full h-screen p-8 flex flex-col items-center">
         <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center">
           <div className="flex-1 flex flex-col items-center">
-            <div className="bg-white rounded-2xl shadow-md flex items-center justify-center min-h-[420px] min-w-[420px] max-w-[520px] w-full mb-4">
+            <div className="bg-white rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[420px] max-w-[520px] w-full mb-4">
               <MyChart />
             </div>
             <span className="text-gray-400 text-sm">
@@ -47,13 +47,15 @@ export function StocksTab() {
             </span>
           </div>
           {/* Stock Summary Section */}
-          <div className="flex-1 w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex-1  shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
               </span>
               <span className="text-base text-gray-700 mt-1">Total Items</span>
             </div>
+
+            {/* Add more stock summary items here */}
             <div className="bg-[#DCFCE7] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#15803D]">
                 {totals.cap}
