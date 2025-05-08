@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Login from "./pages/login-page/Login";
 import Home from "./pages/home-page/Home";
 import Register from "./pages/register-page/Register";
@@ -13,6 +14,8 @@ import InventoryPage from "./pages/inventory-page/InventoryPage";
 import PendingPage from "./pages/pending-page/PendingPage";
 
 function App() {
+  const [activeTab, setActiveTab] = useState("dashboard");
+
   return (
     <div className="App">
       <Router>
@@ -33,8 +36,21 @@ function App() {
             <Route path="/admin-home" element={<AdminHome />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
             <Route path="/evaluation-page" element={<Evaluation />} />
-            <Route path="/inventory" element={<InventoryPage />} />
-            <Route path="/pending" element={<PendingPage />} />
+            <Route
+              path="/inventory"
+              element={
+                <InventoryPage
+                  activeTab="inventory"
+                  setActiveTab={setActiveTab}
+                />
+              }
+            />
+            <Route
+              path="/pending"
+              element={
+                <PendingPage activeTab="pending" setActiveTab={setActiveTab} />
+              }
+            />
           </Route>
 
           {/* Student only routes */}
