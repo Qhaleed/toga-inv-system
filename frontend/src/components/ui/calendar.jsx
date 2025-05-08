@@ -6,9 +6,29 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
+  // Get today's date (without time)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // If a selected day is not provided, always select today
+  let selected = props.selected;
+  if (!selected) {
+    selected = today;
+  }
+
+  // Always highlight today, even if another day is selected
+  // If selected is an array (range/multiple), add today if not present
+  if (Array.isArray(selected)) {
+    const hasToday = selected.some(
+      (d) => d && new Date(d).setHours(0, 0, 0, 0) === today.getTime()
+    );
+    if (!hasToday) selected = [...selected, today];
+  }
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      selected={selected}
       className={cn(
         "p-6 w-full max-w-xs mx-auto overflow-hidden py-5",
         className
@@ -20,13 +40,13 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         caption:
           "flex justify-center pt-1 relative items-center w-full bg-transparent",
         caption_label: "text-sm font-medium text-white",
-        nav: "flex items-center gap-1 bg-transparent",
+        nav: "flex items-center gap-1 bg-green",
         nav_button: cn(
-          buttonVariants({ variant: "outline" }),
-          "size-7 bg-transparent p-0 opacity-50 hover:opacity-100 text-yellow-400 border-gray-200"
+          buttonVariants({ variant: "default" }),
+          "size-6  text-white p-2 opacity-100 hover:opacity-60 "
         ),
-        nav_button_previous: "absolute left-5",
-        nav_button_next: "absolute right-5",
+        nav_button_previous: "absolute right-10",
+        nav_button_next: "absolute right-0 ",
         table: "w-full border-collapse bg-transparent overflow-hidden",
         head_row: "flex bg-transparent w-full",
         head_cell:
@@ -39,16 +59,15 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
             : "[&:has([aria-selected])]:rounded-sm bg-transparent"
         ),
         day: cn(
-          buttonVariants({ variant: "ghost" }),
-          "size-8 p-0 font-normal aria-selected:opacity-100 bg-transparent text-white w-full"
+          "size-8 p-0 font-normal aria-selected:opacity-100 bg-transparent text-white w-full hover:text-yellow-400 hover:bg-white/20"
         ),
         day_range_start:
           "day-range-start aria-selected:bg-transparent aria-selected:text-yellow-400",
         day_range_end:
           "day-range-end aria-selected:bg-transparent aria-selected:text-yellow-400",
         day_selected:
-          "bg-transparent text-yellow-400 hover:bg-transparent hover:text-yellow-400 focus:bg-transparent focus:text-yellow-400 border border-yellow-400",
-        day_today: "bg-transparent text-yellow-400 border border-yellow-400",
+          "bg-Blcack text-white font-extrabold hover:bg-yellow-300 hover:text-white focus:bg-yellow-300 focus:text-white border-none outline-none ring-0",
+        day_today: " text-black font-extrabold hover:bg-[#EDB427]",
         day_outside:
           "day-outside text-gray-500 aria-selected:text-gray-500 bg-transparent",
         day_disabled: "text-gray-700 opacity-50 bg-transparent",
@@ -60,13 +79,13 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
       components={{
         IconLeft: ({ className, ...props }) => (
           <ChevronLeft
-            className={cn("size-4 text-yellow-400", className)}
+            className={cn("size-4 text-white", className)}
             {...props}
           />
         ),
         IconRight: ({ className, ...props }) => (
           <ChevronRight
-            className={cn("size-4 text-yellow-400", className)}
+            className={cn("size-4 text-white", className)}
             {...props}
           />
         ),
