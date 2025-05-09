@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import Table from "../common/Table";
-import SideBar from "../common/SideBar";
-import NavBar from "../common/NavBar";
+import SideBar from "../../components/common/SideBar";
+import NavBar from "../../components/common/NavBar";
+import Table from "../../components/common/Table";
 
-const AdminDashboardCard = () => {
-  // States for grid and modifyTable
+const ReservationPage = () => {
+  // States for grid, modifyTable, and sortOrder
   const [isGrid, setIsGrid] = useState(false);
   const [modifyTable, setmodifyTable] = useState(false);
-  const [activeTab, setActiveTab] = useState("dashboard"); // State for active tab
+  const [sortOrder, setSortOrder] = useState(null);
+  const [activeTab, setActiveTab] = useState("reservation"); // State for active tab
 
   return (
     <div className="h-fit w-screen relative bg-[#EBEBEB] font-figtree font-medium">
@@ -15,12 +16,20 @@ const AdminDashboardCard = () => {
       <div className="max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 sm:gap-0 sm:top-0 sm:left-0 sm:h-screen sm:w-screen">
         {/* Sidebar: full width above on mobile, left on desktop */}
         <div className="w-full sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 2xl:col-span-1 bg-[#001C47] text-white hidden sm:block h-full">
-          <SideBar alwaysShowOnLarge />
+          <SideBar
+            alwaysShowOnLarge
+            setSortOrder={setSortOrder}
+            activeTab="reservation"
+            focusedSort={sortOrder}
+          />
         </div>
 
         {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full   flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
-          <div className="w-full h-screen  bg-white overflow-hidden flex flex-col items-center">
+        <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
+          <div
+            className="w-full h-screen overflow-hidden flex flex-col items-center"
+            style={{ maxWidth: "100vw" }}
+          >
             <div
               className="w-full"
               style={{ height: "60px", marginBottom: "10px" }}
@@ -34,9 +43,11 @@ const AdminDashboardCard = () => {
                 setActiveTab={setActiveTab}
               />
             </div>
-            <div className="w-full h-full mt-6 bg-black flex justify-center items-center  ">
-              <div className="bg-amber-400 w-[80%] rounded-sm h-[80%]"></div>
-            </div>
+            <Table
+              isGrid={isGrid}
+              modifyTable={modifyTable}
+              sortOrder={sortOrder}
+            />
           </div>
         </div>
       </div>
@@ -44,4 +55,4 @@ const AdminDashboardCard = () => {
   );
 };
 
-export default AdminDashboardCard;
+export default ReservationPage;

@@ -2,7 +2,7 @@ import Rows from "./Rows";
 import "./Table.css";
 import { useState, useEffect } from "react";
 
-const Table = ({ isGrid, modifyTable, sortOrder }) => {
+const Table = ({ isGrid, modifyTable, sortOrder, data }) => {
   const [internalSortOrder, setInternalSortOrder] = useState(sortOrder || null);
   useEffect(() => {
     setInternalSortOrder(sortOrder);
@@ -20,7 +20,7 @@ const Table = ({ isGrid, modifyTable, sortOrder }) => {
             {isGrid ? (
               <div className="flex-1 flex flex-col h-full">
                 <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-12 sm:p-2 md:p-4 h-full">
-                  <Rows isGrid hideActionButton />
+                  <Rows isGrid hideActionButton data={data} />
                 </div>
               </div>
             ) : (
@@ -50,6 +50,7 @@ const Table = ({ isGrid, modifyTable, sortOrder }) => {
                         modifyTable={modifyTable}
                         rowHeightClass="h-16"
                         sortOrder={internalSortOrder}
+                        data={data}
                       />
                     </table>
                   </div>

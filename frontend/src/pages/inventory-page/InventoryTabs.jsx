@@ -3,7 +3,16 @@ import Profile from "../../assets/images/dump.jpg";
 import MyChart from "../../components/ui/my-chart";
 
 export function StocksTab() {
-  const [totals, setTotals] = useState({ cap: 0, tassel: 0, gown: 0 });
+  const [totals, setTotals] = useState({
+    cap: 0,
+    tassel: 0,
+    gown: 0,
+    hood: 0,
+    capSizes: {},
+    tasselColors: {},
+    gownSizes: {},
+    hoodColors: {},
+  });
 
   useEffect(() => {
     fetch("http://localhost:5001/inventory")
@@ -11,22 +20,55 @@ export function StocksTab() {
       .then((data) => {
         let cap = 0,
           tassel = 0,
-          gown = 0;
+          gown = 0,
+          hood = 0;
+        let capSizes = {},
+          tasselColors = {},
+          gownSizes = {},
+          hoodColors = {};
         data.forEach((item) => {
-          if (item.has_cap === 1) cap += 1;
-          if (item.tassel_color) tassel += 1;
-          if (item.toga_size) gown += 1;
+          // Cap: count by size if has_cap is 1
+          if (item.has_cap === 1 && item.toga_size) {
+            cap += 1;
+            capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
+          }
+          // Tassel: count by color
+          if (item.tassel_color) {
+            tassel += 1;
+            tasselColors[item.tassel_color] =
+              (tasselColors[item.tassel_color] || 0) + 1;
+          }
+          // Gown: count by size
+          if (item.toga_size) {
+            gown += 1;
+            gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
+          }
+          // Hood: count by color
+          if (item.hood_color) {
+            hood += 1;
+            hoodColors[item.hood_color] =
+              (hoodColors[item.hood_color] || 0) + 1;
+          }
         });
-        setTotals({ cap, tassel, gown });
+        setTotals({
+          cap,
+          tassel,
+          gown,
+          hood,
+          capSizes,
+          tasselColors,
+          gownSizes,
+          hoodColors,
+        });
       });
   }, []);
 
-  const totalItems = totals.cap + totals.tassel + totals.gown;
+  const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
 
   return (
     <>
       {" "}
-      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-3xl font-bold text-[#0C7E48] mb-2 text-center">
+      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 text-center">
         <span className="opacity-20 z-1000 hover:opacity-40 cursor-pointer text-black font-semibold">
           {" "}
           Inventory {">"}
@@ -36,7 +78,7 @@ export function StocksTab() {
           Stocks
         </span>
       </div>
-      <div className="w-full h-screen p-8 flex flex-col items-center">
+      <div className="w-full relative h-screen p-8 flex flex-col items-center">
         <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center">
           <div className="flex-1 flex flex-col items-center">
             <div className="bg-white rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[420px] max-w-[520px] w-full mb-4">
@@ -47,7 +89,7 @@ export function StocksTab() {
             </span>
           </div>
           {/* Stock Summary Section */}
-          <div className="flex-1  shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex-1   shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
@@ -63,6 +105,11 @@ export function StocksTab() {
               <span className="text-base text-gray-700 mt-1">
                 Available Cap
               </span>
+              <span className="text-xs text-gray-500 mt-1">
+                {Object.entries(totals.capSizes || {})
+                  .map(([size, count]) => `${size}: ${count}`)
+                  .join(", ")}
+              </span>
             </div>
             <div className="bg-[#B6E0FE] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#2563eb]">
@@ -70,6 +117,11 @@ export function StocksTab() {
               </span>
               <span className="text-base text-gray-700 mt-1">
                 Available Tassel
+              </span>
+              <span className="text-xs text-gray-500 mt-1">
+                {Object.entries(totals.tasselColors || {})
+                  .map(([color, count]) => `${color}: ${count}`)
+                  .join(", ")}
               </span>
             </div>
             <div className="bg-[#F3E8FF] rounded-lg p-6 flex flex-col items-center shadow">
@@ -79,12 +131,30 @@ export function StocksTab() {
               <span className="text-base text-gray-700 mt-1">
                 Available Gown
               </span>
+              <span className="text-xs text-gray-500 mt-1">
+                {Object.entries(totals.gownSizes || {})
+                  .map(([size, count]) => `${size}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+            <div className="bg-[#FEF9C3] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#fbbf24]">
+                {totals.hood}
+              </span>
+              <span className="text-base text-gray-700 mt-1">
+                Available Hood
+              </span>
+              <span className="text-xs text-gray-500 mt-1">
+                {Object.entries(totals.hoodColors || {})
+                  .map(([color, count]) => `${color}: ${count}`)
+                  .join(", ")}
+              </span>
             </div>
           </div>
         </div>
         {/* Low Stock Alert Section */}
-        <div className="w-full max-w-3xl mt-10">
-          <h2 className="text-lg font-semibold text-[#B91C1C] mb-2">
+        <div className=" absolute  bottom-0 w-full max-w-3xl mt-10">
+          <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
             Low Stock Alerts
           </h2>
           <div className="bg-[#FFF3CD] border-l-4 border-[#B91C1C] text-[#B91C1C] p-2 rounded flex items-center gap-3">
@@ -111,22 +181,28 @@ export function StocksTab() {
     </>
   );
 }
-
+{
+  /*ITEM STATUS TAB */
+}
 export function ItemStatusTab() {
   return (
-    <div className="w-full p-8 text-center text-xl">Item Status Content</div>
+    <div className="w-full p-8 text-center text-white text-xl">
+      Item Status Content
+    </div>
   );
 }
 
 export function CheckReturnTab() {
   return (
-    <div className="w-full p-8 text-center text-xl">Check Return Content</div>
+    <div className="w-full p-8 text-center text-white text-xl">
+      Check Return Content
+    </div>
   );
 }
 
 export function ViewDamageTab() {
   return (
-    <div className="w-full p-8 text-center text-xl">
+    <div className="w-full p-8 text-center text-white text-2xl">
       View Damage Items Content
     </div>
   );
@@ -135,10 +211,10 @@ export function ViewDamageTab() {
 export function ViewRepairTab() {
   return (
     <div className="w-full p-8 flex flex-col items-center">
-      <h1 className="text-3xl sm:text-4xl font-bold text-[#0C7E48] mb-2 w-full text-center">
+      <h1 className="text-3xl sm:text-4xl font-bold text-[#ffffff] mb-2 w-full text-center">
         Repair Items
       </h1>
-      <h2 className="text-lg sm:text-xl font-semibold text-[#02327B] mb-4 w-full text-center">
+      <h2 className="text-lg sm:text-xl font-semibold text-[#ffffff] mb-4 w-full text-center">
         Track and manage items currently under repair
       </h2>
       <div className="w-full max-w-2xl flex flex-row items-center gap-2 mb-6">
