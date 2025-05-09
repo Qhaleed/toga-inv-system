@@ -11,9 +11,10 @@ import {
   ViewRepairTab,
 } from "./InventoryTabs";
 
-const InventoryPage = ({ activeTab, setActiveTab, setSortOrder }) => {
+const InventoryPage = ({ setSortOrder }) => {
   const [searchResults, setSearchResults] = useState(null);
   const [focusedStatus, setFocusedStatus] = useState("stocks");
+  const [activeTab, setActiveTab] = useState("inventory"); // Ensure activeTab defaults to "inventory" for this page
   const searchActive =
     searchResults && Array.isArray(searchResults) && searchResults.length > 0;
   return (
@@ -37,7 +38,7 @@ const InventoryPage = ({ activeTab, setActiveTab, setSortOrder }) => {
         {/* Main content: full width on mobile, right of sidebar on desktop */}
         <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-max-screen">
           <div
-            className="w-full h-screen overflow-hidden flex flex-col items-center"
+            className="w-full h-screen flex flex-col items-center"
             style={{ maxWidth: "100vw" }}
           >
             <div
@@ -51,7 +52,7 @@ const InventoryPage = ({ activeTab, setActiveTab, setSortOrder }) => {
               />
             </div>
             <div className="flex-1 relative flex  flex-col items-center justify-start p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
-              <div className="w-full mt-5 max-w-[95%] min-h-80% bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center overflow-x-auto min-w-0">
+              <div className="w-full mt-5 max-w-[95%] min-h-[80vh] bg-[#0B2950] overflow-x rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center min-w-0">
                 {/* Inventory tab content switching */}
                 {activeTab === "inventory" &&
                   (() => {

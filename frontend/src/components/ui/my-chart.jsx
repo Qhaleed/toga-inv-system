@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ChartTooltip,
   ChartTooltipContent,
@@ -13,72 +13,84 @@ import { ChartContainer } from "./chart";
 
 export default function MyChart() {
   const [chartData, setChartData] = useState([
-    { name: "Cap", count: 0 },
-    { name: "Tassel", count: 0 },
-    { name: "Gown", count: 0 },
+    { name: "Cap", count: 0, color: "#2563eb", inventorySizes: {} },
+    { name: "Tassel", count: 0, color: "#60a5fa", inventoryColors: {} },
+    { name: "Gown", count: 0, color: "#b6c2e0", inventorySizes: {} },
+    { name: "Hood", count: 0, color: "#fbbf24", inventoryColors: {} },
   ]);
+
+  // Color mapping for each category para ez
+  const colorMap = {
+    Cap: "#2563eb",
+    Tassel: "#60a5fa",
+    Gown: "#b6c2e0",
+    Hood: "#fbbf24", // yellow for hood to sya
+  };
 
   useEffect(() => {
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
-        // Count Cap, Tassel, Gown by size
-        const capSizes = {};
-        const tasselColors = {};
-        const gownSizes = {};
+        let cap = 0,
+          tassel = 0,
+          gown = 0,
+          hood = 0;
+        let capSizes = {},
+          tasselColors = {},
+          gownSizes = {},
+          hoodColors = {};
         data.forEach((item) => {
-          // Cap: count by toga_size if has_cap is 1
+          // Cap: count by size if has_cap is 1
           if (item.has_cap === 1 && item.toga_size) {
+            cap += 1;
             capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
           }
-          // Tassel: count by tassel_color
+          // Tassel: count by color
           if (item.tassel_color) {
+            tassel += 1;
             tasselColors[item.tassel_color] =
               (tasselColors[item.tassel_color] || 0) + 1;
           }
-          // Gown: count by toga_size
+          // Gown: count by size
           if (item.toga_size) {
+            gown += 1;
             gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
           }
+          // Hood: count by color
+          if (item.hood_color) {
+            hood += 1;
+            hoodColors[item.hood_color] =
+              (hoodColors[item.hood_color] || 0) + 1;
+          }
         });
-        // Prepare chart data for each category and size/color
-        const chartData = [];
-        Object.entries(capSizes).forEach(([size, count]) => {
-          chartData.push({ category: "Cap", name: size, count });
-        });
-        Object.entries(tasselColors).forEach(([color, count]) => {
-          chartData.push({ category: "Tassel", name: color, count });
-        });
-        Object.entries(gownSizes).forEach(([size, count]) => {
-          chartData.push({ category: "Gown", name: size, count });
-        });
-        setChartData(chartData);
+        setChartData([
+          {
+            name: "Cap",
+            count: cap,
+            color: colorMap.Cap,
+            inventorySizes: capSizes,
+          },
+          {
+            name: "Tassel",
+            count: tassel,
+            color: colorMap.Tassel,
+            inventoryColors: tasselColors,
+          },
+          {
+            name: "Gown",
+            count: gown,
+            color: colorMap.Gown,
+            inventorySizes: gownSizes,
+          },
+          {
+            name: "Hood",
+            count: hood,
+            color: colorMap.Hood,
+            inventoryColors: hoodColors,
+          },
+        ]);
       });
-  }, []);
-
-  // Count total for each category
-  const capTotal = chartData
-    .filter((d) => d.category === "Cap")
-    .reduce((sum, d) => sum + d.count, 0);
-  const tasselTotal = chartData
-    .filter((d) => d.category === "Tassel")
-    .reduce((sum, d) => sum + d.count, 0);
-  const gownTotal = chartData
-    .filter((d) => d.category === "Gown")
-    .reduce((sum, d) => sum + d.count, 0);
-
-  // Color mapping for each category
-  const colorMap = {
-    Cap: "#2563eb",
-    Tassel: "#60a5fa",
-    Gown: "#b6c2e0",
-  };
-
-  const summaryData = [
-    { name: "Cap", count: capTotal, color: colorMap.Cap },
-    { name: "Tassel", count: tasselTotal, color: colorMap.Tassel },
-    { name: "Gown", count: gownTotal, color: colorMap.Gown },
-  ];
+  }, [colorMap.Cap, colorMap.Tassel, colorMap.Gown, colorMap.Hood]);
 
   return (
     <ChartContainer
@@ -86,13 +98,14 @@ export default function MyChart() {
         Cap: { label: "Cap", color: colorMap.Cap },
         Tassel: { label: "Tassel", color: colorMap.Tassel },
         Gown: { label: "Gown", color: colorMap.Gown },
+        Hood: { label: "Hood", color: colorMap.Hood },
       }}
       className="min-h-[100px] w-full"
     >
       <BarChart
         width={undefined}
         height={420}
-        data={summaryData}
+        data={chartData}
         barCategoryGap={60}
         barGap={20}
         margin={{ left: 24, right: 24, top: 24, bottom: 24 }}
@@ -111,7 +124,7 @@ export default function MyChart() {
           tick={({ x, y, payload }) => (
             <text
               x={x}
-              y={y + 24}
+              y={y + 10}
               textAnchor="middle"
               fontSize="16"
               fill={colorMap[payload.value]}
@@ -121,15 +134,38 @@ export default function MyChart() {
             </text>
           )}
         />
+        {/* <YAxis domain={[10, "auto"]} /> */}
+        {/* Set minimum value of y-axis to 10 para estetik */}
         <ChartTooltip
           content={({ active, payload }) => {
             if (active && payload && payload.length) {
               const d = payload[0].payload;
+              let details = null;
+              if (d.name === "Cap" && d.inventorySizes) {
+                details = Object.entries(d.inventorySizes)
+                  .map(([size, count]) => `${size}: ${count} pcs`)
+                  .join(", ");
+              } else if (d.name === "Tassel" && d.inventoryColors) {
+                details = Object.entries(d.inventoryColors)
+                  .map(([color, count]) => `${color}: ${count} pcs`)
+                  .join(", ");
+              } else if (d.name === "Gown" && d.inventorySizes) {
+                details = Object.entries(d.inventorySizes)
+                  .map(([size, count]) => `${size}: ${count} pcs`)
+                  .join(", ");
+              } else if (d.name === "Hood" && d.inventoryColors) {
+                details = Object.entries(d.inventoryColors)
+                  .map(([color, count]) => `${color}: ${count} pcs`)
+                  .join(", ");
+              }
               return (
                 <div className="rounded-lg bg-white p-3 shadow text-sm border border-gray-200">
                   <div className="font-bold mb-1" style={{ color: d.color }}>
                     {d.name}
                   </div>
+                  {details && (
+                    <div className="text-gray-700 mb-1">{details}</div>
+                  )}
                   <div className="font-bold text-lg">{d.count} pcs</div>
                 </div>
               );
@@ -160,6 +196,13 @@ export default function MyChart() {
                   style={{ background: colorMap.Gown }}
                 ></span>
                 Gown
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className="inline-block w-4 h-4 rounded"
+                  style={{ background: colorMap.Hood }}
+                ></span>
+                Hood
               </div>
             </div>
           )}

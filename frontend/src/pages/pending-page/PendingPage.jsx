@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import Table from "../../components/common/Table";
+
 import SideBar from "../../components/common/SideBar";
 import NavBar from "../../components/common/NavBar";
 import Profile from "../../assets/images/profilepicture.jpg";
 
-const PendingPage = ({ activeTab = "pending", setActiveTab, setSortOrder }) => {
+const PendingPage = () => {
+  // States for grid, modifyTable, and sortOrder
+  const [isGrid, setIsGrid] = useState(false);
+  const [modifyTable, setmodifyTable] = useState(false);
+  const [sortOrder, setSortOrder] = useState(null);
+  const [activeButton, setActiveButton] = useState(null); // State to track the last clicked button
+  const [activeTab, setActiveTab] = useState("pending"); // State for active tab
+
+  const tableData = []; // Placeholder for table data
+
+  const handleButtonClick = (buttonName) => {
+    setActiveButton(buttonName);
+  };
+
   return (
     <div className="h-fit w-screen relative bg-[#EBEBEB] font-figtree font-medium">
       {/* Responsive grid: sidebar above on mobile, left on desktop */}
@@ -26,27 +41,19 @@ const PendingPage = ({ activeTab = "pending", setActiveTab, setSortOrder }) => {
               className="w-full"
               style={{ height: "60px", marginBottom: "10px" }}
             >
-              <NavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+              <NavBar
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                handleButtonClick={handleButtonClick} // Pass handler to update activeButton
+              />
             </div>
-            <div className="flex-1 flex flex-col items-center justify-center p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
-              <div className="w-full max-w-screen-lg bg-white rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center overflow-x-auto min-w-0">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#001C47] mb-4 w-full text-center">
-                  Pending Page (I'FEEgma layout ko muna hehe)
-                </h1>
-                <h2 className="text-lg sm:text-xl font-semibold text-[#02327B] mb-2 w-full text-center">
-                  OVERVIEW OF PENDING ITEMS
-                </h2>
-                <p className="text-gray-600 mb-6 text-center max-w-2xl w-full">
-                  dis page displays all items that are currently pending
-                  approval or action.
-                </p>
-                <div className="w-full flex rounded-4xl justify-center items-center min-h-[250px] sm:min-h-[350px] overflow-x-auto">
-                  {/* Add pending items chart or content here */}
-                  <span className="text-l w-80 border-8   text-gray-500 animate-spin">
-                    <img src={Profile} alt="" />
-                  </span>
-                </div>
-              </div>
+            <div className="flex-1 flex bg-amber-200 mt-6 flex-col items-center justify-center p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
+              <Table
+                isGrid={isGrid}
+                modifyTable={modifyTable}
+                sortOrder={sortOrder}
+                data={tableData}
+              />
             </div>
           </div>
         </div>

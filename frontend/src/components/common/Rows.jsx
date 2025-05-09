@@ -67,6 +67,60 @@ const Rows = ({
   }, []);
 
   useEffect(() => {
+    // Fetch data from the backend with sorting
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5001/inventory?sort=${sortOrder || ""}`
+        );
+        const data = await response.json();
+
+        // Map API response properties to match the component's expected property names
+        const mappedData = data.map((item) => ({
+          id: item.inventory_id, // use inventory_id as unique id
+          studentname: item.renters_name,
+          program: item.course,
+          tassel: item.tassel_color,
+          hood: item.hood_color,
+          gown: item.toga_size,
+          dateofreservation: item.rent_date
+            ? new Date(item.rent_date).toLocaleDateString()
+            : "",
+          status: item.return_status,
+          payment_status: item.payment_status,
+          evaluation_status: item.evaluation_status,
+          remarks: item.remarks,
+          return_date: item.return_date,
+          is_overdue: item.is_overdue,
+          has_cap: item.has_cap,
+          item_condition: item.item_condition,
+        }));
+        // Sorting logic based on sortOrder
+        const sortedData = mappedData.sort((a, b) => {
+          if (sortOrder === "newest" || sortOrder === "oldest") {
+            const dateA = new Date(a.dateofreservation);
+            const dateB = new Date(b.dateofreservation);
+            return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+            const nameA = a.studentname.toLowerCase();
+            const nameB = b.studentname.toLowerCase();
+            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
+            return 0;
+          }
+          return 0;
+        });
+        setDashboard(sortedData);
+        setOriginalDashboard(sortedData);
+      } catch (error) {
+        console.error("Error fetching inventory data:", error);
+      }
+    };
+
+    fetchData();
+  }, [sortOrder]);
+
+  useEffect(() => {
     if (modifyTable) {
       setDashboard((prev) =>
         prev.map((item) => ({ ...item, eye: "hidden", trash: "block" }))
