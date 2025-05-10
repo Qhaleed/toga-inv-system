@@ -57,7 +57,7 @@ const EvaluationRows = ({
   // Table/column view with sticky header and scrollable table
   return (
     <div
-      className="w-full h-full"
+      className="w-full max-h-[80vh]"
       style={{
         minWidth: "600px",
         maxWidth: "100vw",
@@ -66,10 +66,9 @@ const EvaluationRows = ({
       }}
     >
       <table
-        className="w-full min-w-[600px] max-w-[100vw] table-auto border-separate border-spacing-0 "
-        style={{ tableLayout: "fixed" }}
+        className="w-full min-w-[600px] max-w-[100vw] table-auto border-separate border-spacing-0"
       >
-        <thead className="bg-[#02327B] sticky top-0 z-40">
+        <thead className="top-0 z-40 sticky">
           <tr className="bg-[#02327B] h-16 xs:h-16 sm:h-16 md:h-16">
             <th className="md:w-[23%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[150px]">
               <span className="block w-full text-center ">Student Name</span>
@@ -99,7 +98,7 @@ const EvaluationRows = ({
             const rowColor = index % 2 !== 0 ? "bg-[#D4D4D4]" : "bg-[#E9E9E9]";
             return [
               <tr
-                className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-fixed`}
+                className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-auto overflow-auto`}
                 key={db.id}
                 style={{ maxWidth: "100%" }}
               >

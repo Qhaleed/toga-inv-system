@@ -76,8 +76,8 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                 <RedButton className="w-10 h-10 mr-4" />
               </button>
             </div>
-            <table className="table-auto h-[15%] w-[93%] bg-[#d6d6d6] mt-3 rounded-lg overflow-hidden">
-              <thead className="bg-[#02327B] h-[54%]">
+            <table className="table-fixed h-[15%] w-[93%] bg-[#d6d6d6] mt-3 rounded-lg overflow-hidden">
+              <thead className="bg-[#02327B] h-[54%] sticky">
                 <tr className="text-white text-[10px] sm:text-xs md:text-sm">
                   <th>
                     <h3 className="border-r border-gray-300">Student Name</h3>
