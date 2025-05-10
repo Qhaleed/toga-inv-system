@@ -18,7 +18,6 @@ const SideBar = ({
   dateDue,
   focusedStatus, // <-- add this prop
   setFocusedStatus, // <-- add this prop
-
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -463,82 +462,81 @@ const SideBar = ({
                 </div>
               )}
               {activeTab !== "student-home" ? (
-              {(activeTab === "reservation" ||
-                activeTab === "evaluation" ||
-                activeTab === "pending") && (
-                <>
-                  <h4 className="text-white text-xs mt-1 ml-4 md:scale-100">
-                    SORT BY
-                  </h4>
-                  <div className={`w-full h-[90px] md:scale-100`}>
-                    <div className="w-full h-1/2 flex justify-between items-center">
-                      <button
-                        className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
-                          focusedSort === "name-asc"
-                            ? "ring-2 ring-[#2563eb] scale-105"
-                            : ""
-                        } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={() => {
-                          setFocusedSort("name-asc");
-                          showIsAZ();
-                          handleSortNameAsc && handleSortNameAsc();
-                        }}
-                      >
-                        <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                          Name (A-Z)
-                        </p>
-                      </button>
-                      <button
-                        className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
-                          focusedSort === "name-desc"
-                            ? "ring-2 ring-[#2563eb] scale-105"
-                            : ""
-                        } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={() => {
-                          setFocusedSort("name-desc");
-                          showIsZA();
-                          handleSortNameDesc && handleSortNameDesc();
-                        }}
-                      >
-                        <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                          Name (Z-A)
-                        </p>
-                      </button>
+                activeTab === "reservation" || activeTab === "inventory" ? (
+                  <>
+                    <h4 className="text-white text-xs mt-1 ml-4 md:scale-100">
+                      SORT BY
+                    </h4>
+                    <div className={`w-full h-[90px] md:scale-100`}>
+                      <div className="w-full h-1/2 flex justify-between items-center">
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "name-asc"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("name-asc");
+                            showIsAZ();
+                            handleSortNameAsc && handleSortNameAsc();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Name (A-Z)
+                          </p>
+                        </button>
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "name-desc"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("name-desc");
+                            showIsZA();
+                            handleSortNameDesc && handleSortNameDesc();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Name (Z-A)
+                          </p>
+                        </button>
+                      </div>
+                      <div className="w-full h-1/2 flex justify-between items-center">
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "newest"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("newest");
+                            handleSortDateNewest && handleSortDateNewest();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Date (Newest)
+                          </p>
+                        </button>
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "oldest"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("oldest");
+                            handleSortDateOldest && handleSortDateOldest();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Date (Oldest)
+                          </p>
+                        </button>
+                      </div>
                     </div>
-                    <div className="w-full h-1/2 flex justify-between items-center">
-                      <button
-                        className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
-                          focusedSort === "newest"
-                            ? "ring-2 ring-[#2563eb] scale-105"
-                            : ""
-                        } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={() => {
-                          setFocusedSort("newest");
-                          handleSortDateNewest && handleSortDateNewest();
-                        }}
-                      >
-                        <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                          Date (Newest)
-                        </p>
-                      </button>
-                      <button
-                        className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
-                          focusedSort === "oldest"
-                            ? "ring-2 ring-[#2563eb] scale-105"
-                            : ""
-                        } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={() => {
-                          setFocusedSort("oldest");
-                          handleSortDateOldest && handleSortDateOldest();
-                        }}
-                      >
-                        <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                          Date (Oldest)
-                        </p>
-                      </button>
-                    </div>
-                  </div>
-                </>
+                  </>
+                ) : null
               ) : null}
             </div>
           </div>
