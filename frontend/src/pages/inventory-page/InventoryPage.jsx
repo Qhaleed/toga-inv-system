@@ -52,7 +52,7 @@ const InventoryPage = ({ setSortOrder }) => {
               />
             </div>
             <div className="flex-1 relative flex  flex-col items-center justify-start p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
-              <div className="w-full mt-5 max-w-[95%] min-h-[80vh] bg-[#0B2950] overflow-x rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center min-w-0">
+              <div className="w-full mt-5 max-w-[100%] min-h-[100%] bg-[#0B2950] overflow-x rounded-2xl shadow-lg p-4 sm:p-6 flex flex-col items-center min-w-0">
                 {/* Inventory tab content switching */}
                 {activeTab === "inventory" &&
                   (() => {
