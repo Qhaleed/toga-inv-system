@@ -206,7 +206,7 @@ const SideBar = ({
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
                         focusedStatusLocal === "all"
-                          ? "ring-2 ring-[#2563eb] scale-105"
+                          ? "ring-2 ring-[#282a30] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={All}

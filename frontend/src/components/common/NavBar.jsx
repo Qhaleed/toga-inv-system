@@ -38,7 +38,7 @@ const Navbar = ({
 
   const tabClass = (tabName) =>
     activeTab === tabName
-      ? "hover:scale-105 bg-blue-500 text-white border border-blue-700 flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6 lg:w-40 lg:h-6 w-18 h-4 text-xs rounded-lg transition-all ease-out duration-500"
+      ? "hover:scale-105 bg-blue-100 ring-0.5 border border-blue-700 flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6 lg:w-40 lg:h-6 w-18 h-4 text-xs rounded-lg transition-all ease-out duration-500"
       : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6 lg:w-40 lg:h-6 w-18 h-4 text-xs rounded-lg transition-all ease-out duration-500";
 
   const handleNavigation = (tabName, route) => {

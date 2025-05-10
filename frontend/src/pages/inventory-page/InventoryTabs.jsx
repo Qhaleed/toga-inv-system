@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Profile from "../../assets/images/dump.jpg";
 import MyChart from "../../components/ui/my-chart";
-
+import { CarouselPlugin } from "../../components/ui/my-carousel";
 export function StocksTab() {
   const [totals, setTotals] = useState({
     cap: 0,
@@ -210,68 +210,8 @@ export function ViewDamageTab() {
 
 export function ViewRepairTab() {
   return (
-    <div className="w-full p-8 flex flex-col items-center">
-      <h1 className="text-3xl sm:text-4xl font-bold text-[#ffffff] mb-2 w-full text-center">
-        Repair Items
-      </h1>
-      <h2 className="text-lg sm:text-xl font-semibold text-[#ffffff] mb-4 w-full text-center">
-        Track and manage items currently under repair
-      </h2>
-      <div className="w-full max-w-2xl flex flex-row items-center gap-2 mb-6">
-        <input
-          type="text"
-          placeholder="Search repair items..."
-          className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0C7E48] text-gray-800"
-        />
-        <button className="px-4 py-2 rounded-lg bg-[#0C7E48] text-white font-semibold hover:bg-[#15803D] transition-colors">
-          Search
-        </button>
-      </div>
-      <div className="w-full max-w-4xl bg-white rounded-xl shadow-md overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-[#0C7E48] text-white">
-              <th className="py-3 px-4">Item Name</th>
-              <th className="py-3 px-4">Issue</th>
-              <th className="py-3 px-4">Date Sent</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="even:bg-[#F3F4F6]">
-              <td className="py-2 px-4">Toga - Large</td>
-              <td className="py-2 px-4">Torn seam</td>
-              <td className="py-2 px-4">2025-05-01</td>
-              <td className="py-2 px-4 text-yellow-600 font-semibold">
-                In Repair
-              </td>
-              <td className="py-2 px-4">
-                <button className="px-3 py-1 rounded bg-[#F3B51A] text-white font-bold hover:bg-yellow-500 transition-colors text-xs">
-                  Mark as Fixed
-                </button>
-              </td>
-            </tr>
-            <tr className="even:bg-[#F3F4F6] ">
-              <td className="py-2 px-4">Cap - Medium</td>
-              <td className="py-2 px-4">Broken strap</td>
-              <td className="py-2 px-4">2025-05-03</td>
-              <td className="py-2 px-4 text-yellow-600 font-semibold">
-                In Repair
-              </td>
-              <td className="py-2 px-4">
-                <button className="px-3 py-1 rounded bg-[#F3B51A] text-white font-bold hover:bg-yellow-500 transition-colors text-xs">
-                  Mark as Fixed
-                </button>
-              </td>
-            </tr>
-            {/* Add more rows as needed */}
-          </tbody>
-        </table>
-      </div>
-      <button className="mt-8 px-6 py-3 rounded-lg bg-[#0C7E48] text-white font-bold text-lg shadow hover:bg-[#15803D] transition-colors">
-        Add Repair Item
-      </button>
+    <div className="h-fit w-fit">
+      <CarouselPlugin />
     </div>
   );
 }
