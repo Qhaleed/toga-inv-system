@@ -18,14 +18,22 @@ const EvaluationRows = ({
   const [allData, setAllData] = useState([]);
 
   useEffect(() => {
-    // kuha data sa JSON
-    fetch("http://localhost:5001/evaluation")
+    // Fetch dashboard data from the correct sample.json path
+    fetch("/src/components/admin-dashboard/sample.json")
       .then((res) => res.json())
       .then((data) => {
-        setDashboard(data);
-        setAllData(data);
+        setDashboard(data.dashboard);
+        setAllData(data.dashboard);
       });
   }, []);
+
+  // Map sample.json fields to table columns
+  const getStudentName = (db) => db.studentname || db.renters_name || "";
+  const getProgram = (db) => db.program || db.course || "";
+  const getTassel = (db) => db.tassel || db.tassel_color || "";
+  const getHood = (db) => db.hood || db.hood_color || "";
+  const getGown = (db) => db.gown || db.toga_size || "";
+  const getStatus = (db) => db.status || db.evaluation_status || "";
 
   const openTab = (db) => {
     setValue(db);
@@ -128,13 +136,13 @@ const EvaluationRows = ({
                   >
                     <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                       <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                        <h3 className="truncate">{db.renters_name}</h3>
+                        <h3 className="truncate">{getStudentName(db)}</h3>
                         {/* Removed the span that was under student name only */}
                       </div>
                     </td>
                     <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center">
-                        <h3 className="truncate">{db.course}</h3>
+                        <h3 className="truncate">{getProgram(db)}</h3>
                         <span
                           className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -144,7 +152,7 @@ const EvaluationRows = ({
                     {/* Tassel */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.tassel_color}</h3>
+                        <h3 className="truncate">{getTassel(db)}</h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -154,7 +162,7 @@ const EvaluationRows = ({
                     {/* Hood */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.hood_color}</h3>
+                        <h3 className="truncate">{getHood(db)}</h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -164,7 +172,7 @@ const EvaluationRows = ({
                     {/* Gown */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.toga_size}</h3>
+                        <h3 className="truncate">{getGown(db)}</h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -189,7 +197,7 @@ const EvaluationRows = ({
                     {/* Status */}
                     <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                       <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                        {db.evaluation_status}
+                        {getStatus(db)}
                       </div>
                     </td>
                   </tr>,
