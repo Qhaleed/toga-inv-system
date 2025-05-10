@@ -48,12 +48,6 @@
   --font-manjari-regular: "Manjari", sans-serif;
   --font-manjari-mediumitalic: "Manjari", sans-serif;
 }
-@utility accent-bg {
-  background-color: #edb427;
-}
-@utility text-clr {
-  color: #edb427;
-}
 
 @layer base {
   :root {
@@ -222,7 +216,7 @@ button:focus,
 button:focus-visible,
 .sidebar-button:focus,
 .sidebar-button:focus-visible {
-  outline: 2px solid #89c5ca !important;
+  outline: 2px solid #d8e3e4 !important;
   outline-offset: 2px !important;
 
   box-shadow: 0 0 0 2px #f3b51a33 !important;
@@ -244,4 +238,21 @@ button:focus-visible,
 .recharts-bar-rectangle path {
   /* Use currentColor so Bar fill prop works with a function */
   fill: currentColor !important;
+}
+
+@utility accent-bg {
+  background-color: #edb427;
+}
+@utility text-clr {
+  color: #edb427;
+}
+
+@utility dash-container {
+  background-color: #141552;
+  border-radius: 0.625rem;
+  padding: 1rem;
+  box-shadow: 0 0 0 2px #f3b51a33;
+  border: 1px solid #f3b51a33;
+  width: 30px;
+  height: 30px;
 }

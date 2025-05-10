@@ -83,25 +83,29 @@ const SideBar = ({
     setFocusedSort("oldest"); // Update focused sort state
   };
 
+  // Update setFocusedStatusLocal when a sidebar button is clicked
   const All = () => {
     setFocusedStatus("all");
-    setIsAll(true);
-    setIsEvaluationTab(false);
-    setIsNotEvaluationTab(false);
+    setFocusedStatusLocal("all");
+    setIsAll && setIsAll(true);
+    setIsEvaluationTab && setIsEvaluationTab(false);
+    setIsNotEvaluationTab && setIsNotEvaluationTab(false);
   };
 
   const EvaluatedFilter = () => {
     setFocusedStatus("evaluated");
-    setIsAll(false);
-    setIsEvaluationTab(true);
-    setIsNotEvaluationTab(false);
+    setFocusedStatusLocal("evaluated");
+    setIsAll && setIsAll(false);
+    setIsEvaluationTab && setIsEvaluationTab(true);
+    setIsNotEvaluationTab && setIsNotEvaluationTab(false);
   };
 
   const NotEvaluatedFilter = () => {
     setFocusedStatus("noeval");
-    setIsAll(false);
-    setIsEvaluationTab(false);
-    setIsNotEvaluationTab(true);
+    setFocusedStatusLocal("noeval");
+    setIsAll && setIsAll(false);
+    setIsEvaluationTab && setIsEvaluationTab(false);
+    setIsNotEvaluationTab && setIsNotEvaluationTab(true);
   };
 
   console.log(activeTab);
@@ -206,7 +210,7 @@ const SideBar = ({
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
                         focusedStatusLocal === "all"
-                          ? "ring-2 ring-[#282a30] scale-105"
+                          ? "ring-2 ring-[#f3ca91] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={All}
@@ -477,7 +481,6 @@ const SideBar = ({
                           } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("name-asc");
-                            showIsAZ();
                             handleSortNameAsc && handleSortNameAsc();
                           }}
                         >
@@ -493,7 +496,6 @@ const SideBar = ({
                           } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("name-desc");
-                            showIsZA();
                             handleSortNameDesc && handleSortNameDesc();
                           }}
                         >
