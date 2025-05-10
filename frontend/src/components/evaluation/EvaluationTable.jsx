@@ -14,7 +14,7 @@ const EvaluationTable = ({
   const mainContentHeight = "80vh";
 
   return (
-    <div className="w-full flex flex-col items-center justify-start mt-10">
+    <div className="w-full flex flex-col items-center justify-start mt-12">
       {/* Removed top sorting/filtering buttons, only sidebar buttons control filtering/sorting */}
       <div
         className="w-full flex justify-center items-start px-1 sm:px-2 md:px-5 lg:ml-0 lg:w-full"
@@ -29,7 +29,7 @@ const EvaluationTable = ({
               }}
             >
               <div
-                className="w-full overflow-x-auto scrollbar-hide"
+                className="w-full overflow--visible "
                 style={{
                   maxWidth: "100vw",
                   position: "relative",
@@ -39,8 +39,8 @@ const EvaluationTable = ({
                 <table
                   className="table-auto border-none border-separate border-spacing-0 w-full min-w-0 max-w-full"
                   style={{
-                    tableLayout: "fixed",
                     width: "100%",
+
                     minWidth: 0,
                     maxWidth: "100%",
                   }}

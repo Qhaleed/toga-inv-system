@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import LoaderAnimation from "./LoaderAnimation";
+import LoaderAnimation from "../login-card/LoaderAnimation";
 import FormWrapper from "../common/FormWrapper";
+import LoginLoaderAnimation from "./LoginLoaderAnimation";
 
 function LoginCard() {
   const [email, setEmail] = useState("");
@@ -150,7 +151,7 @@ function LoginCard() {
       {/* Loader */}
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <LoaderAnimation />
+          <LoginLoaderAnimation />
         </div>
       )}
     </FormWrapper>

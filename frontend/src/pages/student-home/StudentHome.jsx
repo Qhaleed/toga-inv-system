@@ -1,10 +1,8 @@
-import React from 'react';
-import StudentHomeCard from '../../components/student-home/StudentHomeCard';
+import React from "react";
+import StudentHomeCard from "../../components/student-home/StudentHomeCard";
 
 function StudentHome() {
-    return (
-        <StudentHomeCard />
-    );
+  return <StudentHomeCard />;
 }
 
 export default StudentHome;

@@ -8,6 +8,7 @@
   --color-primary: #141552;
   --color-secondary: #252779;
   --color-tertiary: #23105a;
+
   --color-fourtiary: #1c113a;
   --color-darkpurple: rgb(101 77 123 / <alpha-value>);
   --color-purple: rgb(154, 84, 186);
@@ -46,6 +47,12 @@
   --font-manjari-hairline: "Manjari", sans-serif;
   --font-manjari-regular: "Manjari", sans-serif;
   --font-manjari-mediumitalic: "Manjari", sans-serif;
+}
+@utility accent-bg {
+  background-color: #edb427;
+}
+@utility text-clr {
+  color: #edb427;
 }
 
 @layer base {
@@ -93,7 +100,7 @@ Legacy Tailwind config for reference:
 }
 
 */
-/* 
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -205,28 +212,36 @@ Legacy Tailwind config for reference:
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
 }
 
 /*
-  Universal button focus style for all buttons, including sidebar and navigation.
-  Applies a gold/yellow focus ring and outline for accessibility and visual consistency.
-*/
+  Universal button focus style for all buttons, including sidebar and navigation hehehe
+
+/* */
 button:focus,
 button:focus-visible,
 .sidebar-button:focus,
 .sidebar-button:focus-visible {
-  outline: 2px solid #f3b51a !important;
+  outline: 2px solid #89c5ca !important;
   outline-offset: 2px !important;
+
   box-shadow: 0 0 0 2px #f3b51a33 !important;
+}
+.removeEffect:focus,
+.removeEffect:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* For Tailwind utility classes, add a custom class for focus if needed */
 .focus-gold:focus,
 .focus-gold:focus-visible {
-  outline: 2px solid #f3b51a !important;
+  outline: 2px solid #91b0f4 !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 2px #f3b51a33 !important;
+  box-shadow: 0 0 0 2px #a59c8533 !important;
+}
+
+.recharts-bar-rectangle path {
+  /* Use currentColor so Bar fill prop works with a function */
+  fill: currentColor !important;
 }

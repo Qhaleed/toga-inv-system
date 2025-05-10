@@ -3,6 +3,8 @@ import Profile from "../../assets/images/profilepicture.jpg";
 import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
 import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
+import InventorySidebarButtons from "./InventorySidebarButtons";
+
 const SideBar = ({
   setSortOrder,
   activeTab,
@@ -11,6 +13,11 @@ const SideBar = ({
   setIsNotEvaluationTab,
   setIsAZ,
   setIsZA,
+  userStatus,
+  dateReserved,
+  dateDue,
+  focusedStatus, // <-- add this prop
+  setFocusedStatus, // <-- add this prop
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -20,7 +27,7 @@ const SideBar = ({
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
-  const [focusedStatus, setFocusedStatus] = useState("all");
+  const [focusedStatusLocal, setFocusedStatusLocal] = useState("all");
   // Add state to track which sort button is focused
   const [focusedSort, setFocusedSort] = useState("name-asc");
 
@@ -52,14 +59,29 @@ const SideBar = ({
         setAdminRole("Fetch error");
       });
   }, []);
-  // Responsivenesss show/hide sidebar on small screens, always show on large
+  // Responsivenesss show/hide sidebar on small screens, always show on large screens
   const visible = isLargeScreen ? true : showSidebar;
 
   // MGA HANDLER FOR SORTING
-  const handleSortNameAsc = () => setSortOrder && setSortOrder("name-asc");
-  const handleSortNameDesc = () => setSortOrder && setSortOrder("name-desc");
-  const handleSortDateNewest = () => setSortOrder && setSortOrder("newest");
-  const handleSortDateOldest = () => setSortOrder && setSortOrder("oldest");
+  const handleSortNameAsc = () => {
+    setSortOrder && setSortOrder("name-asc");
+    setFocusedSort("name-asc"); // Update focused sort state
+  };
+
+  const handleSortNameDesc = () => {
+    setSortOrder && setSortOrder("name-desc");
+    setFocusedSort("name-desc"); // Update focused sort state
+  };
+
+  const handleSortDateNewest = () => {
+    setSortOrder && setSortOrder("newest");
+    setFocusedSort("newest"); // Update focused sort state
+  };
+
+  const handleSortDateOldest = () => {
+    setSortOrder && setSortOrder("oldest");
+    setFocusedSort("oldest"); // Update focused sort state
+  };
 
   const All = () => {
     setFocusedStatus("all");
@@ -80,16 +102,6 @@ const SideBar = ({
     setIsAll(false);
     setIsEvaluationTab(false);
     setIsNotEvaluationTab(true);
-  };
-
-  const showIsAZ = () => {
-    setIsAZ(true);
-    setIsZA(false);
-  };
-
-  const showIsZA = () => {
-    setIsAZ(false);
-    setIsZA(true);
   };
 
   console.log(activeTab);
@@ -132,7 +144,7 @@ const SideBar = ({
           }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
-          <div className="w-full md:w-full h-20 md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-hidden rounded-t-xl">
+          <div className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden rounded-t-xl shrink-0">
             <div className="flex justify-center">
               <div className="h-full ml-1 w-16 flex justify-center items-center">
                 <img
@@ -164,14 +176,26 @@ const SideBar = ({
             </div>
           </div>
 
-          {/* SIDE BAR HERO CONTAINER EN okay?*/}
-          <div class=" hidden sm:flex w-full h-16 bg-gradient-to-l from-cyan-900 to-blue-950  shadow-[0px_1px_2px_0px_rgba(0,0,0,0.30)]">
+          {/* SIDE BAR HERO CONTAINER END okay?*/}
+          {/*TOGA TRACK */}
+          <div className="hidden shrink-0 sm:flex w-full mt-5 rounded-md h-16 bg-gradient-to-t from-[#224273] to-blue-950 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.10)] items-center justify-center">
             {/* toga design */}
+            <div className="w-fit  h-fit flex justify-center items-center">
+              <span
+                className="text-4xl font-extrabold font-Figtree tracking-widest bg-gradient-to-r from-[#224273] via-[#537fa5] to-[#b6c2e0] bg-clip-text text-transparent"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(150deg, rgba(34,66,115,1) -50%, rgba(83,127,165,1) 60%, rgba(182,194,224,1) 100%)",
+                }}
+              >
+                TogaTrack ®
+              </span>
+            </div>
           </div>
 
           {/* SIDE BAR NAVIGATION CONTAINER*/}
 
-          <div className=" min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-60 bg-[#102F5E] flex items-center rounded-xl md:mt-7">
+          <div className=" min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5">
             <div className="relative w-full flex flex-col justify-between md:w-full">
               <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
                 ITEM STATUS
@@ -181,8 +205,8 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
-                          ? "ring-2 ring-[#2563eb] scale-105"
+                        focusedStatusLocal === "all"
+                          ? "ring-2 ring-[#282a30] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={All}
@@ -196,7 +220,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${
-                        focusedStatus === "evaluated"
+                        focusedStatusLocal === "evaluated"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -213,7 +237,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${
-                        focusedStatus === "noeval"
+                        focusedStatusLocal === "noeval"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -233,7 +257,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
+                        focusedStatusLocal === "all"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -248,7 +272,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatus === "borrowed"
+                        focusedStatusLocal === "borrowed"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -265,7 +289,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatus === "returned"
+                        focusedStatusLocal === "returned"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -281,78 +305,16 @@ const SideBar = ({
                   </div>
                 </div>
               ) : activeTab === "inventory" ? (
-                <div className="w-full h-[90px] md:scale-100">
-                  <div className="w-full h-1/2 flex justify-between items-center ">
-                    <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("all")}
-                    >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[10px] md:text-[13px] font-figtree font-bold text-[#1E40AF] ml-3">
-                        All Items
-                      </p>
-                      <div className="right-0 absolute 2xl:text-[15px] sm:text-[10px] md:text-[12px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        200
-                      </div>
-                    </button>
-                    <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FECACA] ${
-                        focusedStatus === "lowstock"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("lowstock")}
-                    >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[13px] md:text-[13px] font-figtree font-bold text-[#B91C1C] ml-3">
-                        Low Stock
-                      </p>
-                      <div className="absolute right-0 2xl:text-[15px] sm:text-[10px] text-[13px] md:sm:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        8
-                      </div>
-                    </button>
-                  </div>
-                  <div className="w-full h-1/2 flex justify-between items-center ">
-                    <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FDE68A] ${
-                        focusedStatus === "checkedout"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
-                      onClick={() => setFocusedStatus("checkedout")}
-                    >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[13px] md:text-[12px] font-bold text-[#B45309] ml-3">
-                        Checked Out
-                      </p>
-                      <div className="absolute right-0 2xl:text-[15px] sm:text-[10px] text-[13px] md:sm:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        75
-                      </div>
-                    </button>
-                    <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#C7D2FE] ${
-                        focusedStatus === "requests"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
-                      onClick={() => setFocusedStatus("requests")}
-                    >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[13px] md:text-[13px] font-figtree font-bold text-[#3730A3] ml-3">
-                        Requests
-                      </p>
-                      <div className="absolute right-0 2xl:text-[15px] sm:text-[10px] text-[13px] md:sm:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        23
-                      </div>
-                    </button>
-                  </div>
-                </div>
+                <InventorySidebarButtons
+                  focusedStatus={focusedStatus}
+                  setFocusedStatus={setFocusedStatus}
+                />
               ) : activeTab === "pending" ? (
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
+                        focusedStatusLocal === "all"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -367,7 +329,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatus === "approved"
+                        focusedStatusLocal === "approved"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -384,7 +346,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatus === "pending"
+                        focusedStatusLocal === "pending"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -399,7 +361,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FECACA] ${
-                        focusedStatus === "rejected"
+                        focusedStatusLocal === "rejected"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -414,13 +376,44 @@ const SideBar = ({
                     </button>
                   </div>
                 </div>
+              ) : activeTab === "student-home" ? (
+                <div className="w-full h-[90px] md:scale-100">
+                  <div className="w-full h-1/2 flex justify-between items-center">
+                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Status
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {userStatus || "N/A"}
+                      </p>
+                    </div>
+                    <div className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Reserved
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {dateReserved || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-full h-1/2 flex justify-between items-center">
+                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Due
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {dateDue || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ) : (
                 // Dashboard buttons (default)
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
+                        focusedStatusLocal === "all"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -435,7 +428,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatus === "evaluated"
+                        focusedStatusLocal === "evaluated"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -452,7 +445,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${
-                        focusedStatus === "noeval"
+                        focusedStatusLocal === "noeval"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -468,84 +461,90 @@ const SideBar = ({
                   </div>
                 </div>
               )}
-              <h4 className="text-white text-xs mt-1 ml-4 md:scale-100">
-                SORT BY
-              </h4>
-              <div className={`w-full h-[90px] md:scale-100`}>
-                <div className="w-full h-1/2 flex justify-between items-center">
-                  <button
-                    className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
-                      focusedSort === "name-asc"
-                        ? "ring-2 ring-[#2563eb] scale-105"
-                        : ""
-                    } hover:scale-105 transform-all ease-out duration-300`}
-                    onClick={() => {
-                      setFocusedSort("name-asc");
-                      showIsAZ();
-                      handleSortNameAsc && handleSortNameAsc();
-                    }}
-                  >
-                    <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                      Name (A-Z)
-                    </p>
-                  </button>
-                  <button
-                    className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
-                      focusedSort === "name-desc"
-                        ? "ring-2 ring-[#2563eb] scale-105"
-                        : ""
-                    } hover:scale-105 transform-all ease-out duration-300`}
-                    onClick={() => {
-                      setFocusedSort("name-desc");
-                      showIsZA();
-                      handleSortNameDesc && handleSortNameDesc();
-                    }}
-                  >
-                    <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                      Name (Z-A)
-                    </p>
-                  </button>
-                </div>
-                <div className="w-full h-1/2 flex justify-between items-center">
-                  <button
-                    className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
-                      focusedSort === "newest"
-                        ? "ring-2 ring-[#2563eb] scale-105"
-                        : ""
-                    } hover:scale-105 transform-all ease-out duration-300`}
-                    onClick={() => {
-                      setFocusedSort("newest");
-                      handleSortDateNewest && handleSortDateNewest();
-                    }}
-                  >
-                    <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                      Date (Newest)
-                    </p>
-                  </button>
-                  <button
-                    className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
-                      focusedSort === "oldest"
-                        ? "ring-2 ring-[#2563eb] scale-105"
-                        : ""
-                    } hover:scale-105 transform-all ease-out duration-300`}
-                    onClick={() => {
-                      setFocusedSort("oldest");
-                      handleSortDateOldest && handleSortDateOldest();
-                    }}
-                  >
-                    <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                      Date (Oldest)
-                    </p>
-                  </button>
-                </div>
-              </div>
+              {activeTab !== "student-home" ? (
+                activeTab === "reservation" || activeTab === "inventory" ? (
+                  <>
+                    <h4 className="text-white text-xs mt-1 ml-4 md:scale-100">
+                      SORT BY
+                    </h4>
+                    <div className={`w-full h-[90px] md:scale-100`}>
+                      <div className="w-full h-1/2 flex justify-between items-center">
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "name-asc"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("name-asc");
+                            showIsAZ();
+                            handleSortNameAsc && handleSortNameAsc();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Name (A-Z)
+                          </p>
+                        </button>
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "name-desc"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("name-desc");
+                            showIsZA();
+                            handleSortNameDesc && handleSortNameDesc();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Name (Z-A)
+                          </p>
+                        </button>
+                      </div>
+                      <div className="w-full h-1/2 flex justify-between items-center">
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "newest"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("newest");
+                            handleSortDateNewest && handleSortDateNewest();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Date (Newest)
+                          </p>
+                        </button>
+                        <button
+                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
+                            focusedSort === "oldest"
+                              ? "ring-2 ring-[#2563eb] scale-105"
+                              : ""
+                          } hover:scale-105 transform-all ease-out duration-300`}
+                          onClick={() => {
+                            setFocusedSort("oldest");
+                            handleSortDateOldest && handleSortDateOldest();
+                          }}
+                        >
+                          <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                            Date (Oldest)
+                          </p>
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                ) : null
+              ) : null}
             </div>
           </div>
           {/* SIDE BAR NAVIGATION CONTAINER EN okay?*/}
 
           {/* CALENDAR */}
-          <div className="min-w-[70%] w-[90%] h-[50%] bg-[#102F5E] flex items-center rounded-xl md:mt-7">
-            <div className="w-full flex justify-center items-center">
+          <div className="min-w-[80%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-5">
+            <div className="w-full flex ">
               <Calendar
                 mode="single"
                 selected={date}

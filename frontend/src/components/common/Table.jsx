@@ -2,14 +2,14 @@ import Rows from "./Rows";
 import "./Table.css";
 import { useState, useEffect } from "react";
 
-const Table = ({ isGrid, modifyTable, sortOrder }) => {
+const Table = ({ isGrid, modifyTable, sortOrder, data }) => {
   const [internalSortOrder, setInternalSortOrder] = useState(sortOrder || null);
   useEffect(() => {
     setInternalSortOrder(sortOrder);
   }, [sortOrder]);
   const mainContentHeight = "80vh";
   return (
-    <div className="w-full flex flex-col items-center justify-start mt-10">
+    <div className="w-full flex flex-col items-center justify-start z-10 mt-10">
       <div className="w-full flex flex-col items-start justify-center mb-2 px-2" />
       <div
         className="w-full flex justify-center items-start px-1 sm:px-2 md:px-5 lg:ml-0 lg:w-full"
@@ -20,7 +20,7 @@ const Table = ({ isGrid, modifyTable, sortOrder }) => {
             {isGrid ? (
               <div className="flex-1 flex flex-col h-full">
                 <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-12 sm:p-2 md:p-4 h-full">
-                  <Rows isGrid hideActionButton />
+                  <Rows isGrid hideActionButton data={data} />
                 </div>
               </div>
             ) : (
@@ -50,6 +50,7 @@ const Table = ({ isGrid, modifyTable, sortOrder }) => {
                         modifyTable={modifyTable}
                         rowHeightClass="h-16"
                         sortOrder={internalSortOrder}
+                        data={data}
                       />
                     </table>
                   </div>
