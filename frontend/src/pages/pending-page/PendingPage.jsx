@@ -6,18 +6,11 @@ import NavBar from "../../components/common/NavBar";
 import Profile from "../../assets/images/profilepicture.jpg";
 
 const PendingPage = () => {
-  // States for grid, modifyTable, and sortOrder
-  const [isGrid, setIsGrid] = useState(false);
-  const [modifyTable, setmodifyTable] = useState(false);
+  // Removed isGrid, modifyTable, and activeButton states
   const [sortOrder, setSortOrder] = useState(null);
-  const [activeButton, setActiveButton] = useState(null); // State to track the last clicked button
   const [activeTab, setActiveTab] = useState("pending"); // State for active tab
 
   const tableData = []; // Placeholder for table data
-
-  const handleButtonClick = (buttonName) => {
-    setActiveButton(buttonName);
-  };
 
   return (
     <div className="h-fit w-screen relative bg-[#EBEBEB] font-figtree font-medium">
@@ -41,19 +34,10 @@ const PendingPage = () => {
               className="w-full"
               style={{ height: "60px", marginBottom: "10px" }}
             >
-              <NavBar
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                handleButtonClick={handleButtonClick} // Pass handler to update activeButton
-              />
+              <NavBar activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             <div className="flex-1 flex bg-amber-200 mt-6 flex-col items-center justify-center p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
-              <Table
-                isGrid={isGrid}
-                modifyTable={modifyTable}
-                sortOrder={sortOrder}
-                data={tableData}
-              />
+              <Table sortOrder={sortOrder} data={tableData} />
             </div>
           </div>
         </div>

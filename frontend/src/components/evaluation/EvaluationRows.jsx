@@ -19,7 +19,7 @@ const EvaluationRows = ({
 
   useEffect(() => {
     // kuha data sa JSON
-    fetch("http://localhost:5001/evaluation")
+    fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
         setDashboard(data);
