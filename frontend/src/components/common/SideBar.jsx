@@ -11,8 +11,14 @@ const SideBar = ({
   setIsAll,
   setIsEvaluationTab,
   setIsNotEvaluationTab,
+  setIsAZ,
+  setIsZA,
+  userStatus,
+  dateReserved,
+  dateDue,
   focusedStatus, // <-- add this prop
   setFocusedStatus, // <-- add this prop
+
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -371,6 +377,37 @@ const SideBar = ({
                     </button>
                   </div>
                 </div>
+              ) : activeTab === "student-home" ? (
+                <div className="w-full h-[90px] md:scale-100">
+                  <div className="w-full h-1/2 flex justify-between items-center">
+                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Status
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {userStatus || "N/A"}
+                      </p>
+                    </div>
+                    <div className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Reserved
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {dateReserved || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-full h-1/2 flex justify-between items-center">
+                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Due
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {dateDue || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ) : (
                 // Dashboard buttons (default)
                 <div className="w-full h-[90px] md:scale-100">
@@ -425,8 +462,7 @@ const SideBar = ({
                   </div>
                 </div>
               )}
-
-              {/* Show sort by only for reservation, evaluation, and pending tabs */}
+              {activeTab !== "student-home" ? (
               {(activeTab === "reservation" ||
                 activeTab === "evaluation" ||
                 activeTab === "pending") && (
@@ -442,7 +478,11 @@ const SideBar = ({
                             ? "ring-2 ring-[#2563eb] scale-105"
                             : ""
                         } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={handleSortNameAsc}
+                        onClick={() => {
+                          setFocusedSort("name-asc");
+                          showIsAZ();
+                          handleSortNameAsc && handleSortNameAsc();
+                        }}
                       >
                         <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
                           Name (A-Z)
@@ -454,7 +494,11 @@ const SideBar = ({
                             ? "ring-2 ring-[#2563eb] scale-105"
                             : ""
                         } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={handleSortNameDesc}
+                        onClick={() => {
+                          setFocusedSort("name-desc");
+                          showIsZA();
+                          handleSortNameDesc && handleSortNameDesc();
+                        }}
                       >
                         <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
                           Name (Z-A)
@@ -468,7 +512,10 @@ const SideBar = ({
                             ? "ring-2 ring-[#2563eb] scale-105"
                             : ""
                         } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={handleSortDateNewest}
+                        onClick={() => {
+                          setFocusedSort("newest");
+                          handleSortDateNewest && handleSortDateNewest();
+                        }}
                       >
                         <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
                           Date (Newest)
@@ -480,7 +527,10 @@ const SideBar = ({
                             ? "ring-2 ring-[#2563eb] scale-105"
                             : ""
                         } hover:scale-105 transform-all ease-out duration-300`}
-                        onClick={handleSortDateOldest}
+                        onClick={() => {
+                          setFocusedSort("oldest");
+                          handleSortDateOldest && handleSortDateOldest();
+                        }}
                       >
                         <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
                           Date (Oldest)
@@ -489,7 +539,7 @@ const SideBar = ({
                     </div>
                   </div>
                 </>
-              )}
+              ) : null}
             </div>
           </div>
           {/* SIDE BAR NAVIGATION CONTAINER EN okay?*/}
