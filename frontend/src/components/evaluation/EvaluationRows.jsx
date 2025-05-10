@@ -19,7 +19,7 @@ const EvaluationRows = ({
 
   useEffect(() => {
     // kuha data sa JSON
-    fetch("http://localhost:8000/dashboard")
+    fetch("http://localhost:5001/evaluation")
       .then((res) => res.json())
       .then((data) => {
         setDashboard(data);
@@ -44,11 +44,11 @@ const EvaluationRows = ({
     // Sorting
     if (isAZ) {
       filtered = [...filtered].sort((a, b) =>
-        a.studentname.localeCompare(b.studentname)
+        a.renters_name.localeCompare(b.renters_name)
       );
     } else if (isZA) {
       filtered = [...filtered].sort((a, b) =>
-        b.studentname.localeCompare(a.studentname)
+        b.renters_name.localeCompare(a.renters_name)
       );
     }
     setDashboard(filtered);
@@ -128,13 +128,13 @@ const EvaluationRows = ({
                   >
                     <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                       <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                        <h3 className="truncate">{db.studentname}</h3>
+                        <h3 className="truncate">{db.renters_name}</h3>
                         {/* Removed the span that was under student name only */}
                       </div>
                     </td>
                     <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center">
-                        <h3 className="truncate">{db.program}</h3>
+                        <h3 className="truncate">{db.course}</h3>
                         <span
                           className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -144,7 +144,7 @@ const EvaluationRows = ({
                     {/* Tassel */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.tassel}</h3>
+                        <h3 className="truncate">{db.tassel_color}</h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -154,7 +154,7 @@ const EvaluationRows = ({
                     {/* Hood */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.hood}</h3>
+                        <h3 className="truncate">{db.hood_color}</h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -164,7 +164,7 @@ const EvaluationRows = ({
                     {/* Gown */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.gown}</h3>
+                        <h3 className="truncate">{db.toga_size}</h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -189,7 +189,7 @@ const EvaluationRows = ({
                     {/* Status */}
                     <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                       <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                        {db.evaluation}
+                        {db.evaluation_status}
                       </div>
                     </td>
                   </tr>,
