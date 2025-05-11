@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SideBar from "../../components/common/SideBar";
-import NavBar from "../../components/common/NavBar";
+import SideBar from "../../components/navigations/SideBar";
+import Navbar from "../../components/navigations/NavBar";
 import Table from "../../components/common/Table";
 
 const ReservationPage = () => {
@@ -34,7 +34,7 @@ const ReservationPage = () => {
               className="w-full"
               style={{ height: "60px", marginBottom: "10px" }}
             >
-              <NavBar
+              <Navbar
                 isGrid={isGrid}
                 setIsGrid={setIsGrid}
                 modifyTable={modifyTable}

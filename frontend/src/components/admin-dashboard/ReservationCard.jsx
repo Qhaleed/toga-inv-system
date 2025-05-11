@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Table from "../common/Table";
-import SideBar from "../common/SideBar";
-import NavBar from "../common/NavBar";
+import SideBar from "../navigations/SideBar";
+import NavBar from "../navigations/NavBar";
 
 const ReservationCard = () => {
   // States for grid, modifyTable, and sortOrder
@@ -42,9 +42,10 @@ const ReservationCard = () => {
                 setIsGrid={setIsGrid}
                 modifyTable={modifyTable}
                 setmodifyTable={setmodifyTable}
-                activeTab="dashboard"
-                activeButton={activeButton} // Pass activeButton state
-                handleButtonClick={handleButtonClick} // Pass handler to update activeButton
+                activeTab={"dashboard"}
+                setActiveTab={() => {}}
+                activeButton={activeButton}
+                handleButtonClick={handleButtonClick}
               />
             </div>
             <Table

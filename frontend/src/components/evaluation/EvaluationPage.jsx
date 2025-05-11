@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SideBar from "../common/SideBar";
-import NavBar from "../common/NavBar";
+import SideBar from "../navigations/SideBar";
+import NavBar from "../navigations/NavBar";
 import EvaluationTable from "./EvaluationTable";
 import EvaluationTab from "./EvaluationTab";
 
@@ -17,10 +17,6 @@ const EvaluationPage = () => {
   const [isNotEvaluationTab, setIsNotEvaluationTab] = useState(false);
   const [isAZ, setIsAZ] = useState(false);
   const [isZA, setIsZA] = useState(false);
-
-  console.log(isAll);
-  console.log(isEvaluationTab);
-  console.log(isNotEvaluationTab);
 
   return (
     <>

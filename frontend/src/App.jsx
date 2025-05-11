@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/login-page/Login";
-import Home from "./pages/home-page/Home";
+
 import Register from "./pages/register-page/Register";
 import AdminHome from "./pages/admin-home/AdminHome";
 import AdminDashboard from "./pages/admin-dashboard/AdminDashboard";
@@ -26,7 +26,7 @@ function App() {
           <Route
             element={<ProtectedRoute allowedRoles={["admin", "student"]} />}
           >
-            <Route path="/home" element={<Home />} />
+            {/* Removed /home route */}
           </Route>
 
           {/* Admin only routes */}

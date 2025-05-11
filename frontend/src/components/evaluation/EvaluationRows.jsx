@@ -35,9 +35,9 @@ const EvaluationRows = ({
   useEffect(() => {
     let filtered = allData;
     if (isevalTab) {
-      filtered = allData.filter((db) => db.evaluation_status === "Evaluated");
+      filtered = allData.filter((db) => db.evaluation === "Evaluated");
     } else if (isnotevalTab) {
-      filtered = allData.filter((db) => db.evaluation_status === "Not Evaluated");
+      filtered = allData.filter((db) => db.evaluation === "No Evaluation");
     } else if (isAll) {
       filtered = allData;
     }

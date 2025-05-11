@@ -93,7 +93,6 @@ Legacy Tailwind config for reference:
   },
 }
 
-*/
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -245,14 +244,4 @@ button:focus-visible,
 }
 @utility text-clr {
   color: #edb427;
-}
-
-@utility dash-container {
-  background-color: #141552;
-  border-radius: 0.625rem;
-  padding: 1rem;
-  box-shadow: 0 0 0 2px #f3b51a33;
-  border: 1px solid #f3b51a33;
-  width: 30px;
-  height: 30px;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SideBar from "../common/SideBar";
+import SideBar from "../navigations/SideBar";
 import PendingApproval from "./UserPending";
 import ApprovedView from "./UserApproved";
 
