@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Table from "../common/Table";
-import SideBar from "../common/SideBar";
-import NavBar from "../common/NavBar";
+import SideBar from "../navigations/SideBar";
+import NavBar from "../navigations/NavBar";
+import AdminDashboard from "./AdminDashboard"; // Import the AdminDashboard component
 
 const AdminDashboardCard = () => {
   // States for grid and modifyTable
@@ -20,22 +21,22 @@ const AdminDashboardCard = () => {
 
         {/* Main content: full width on mobile, right of sidebar on desktop */}
         <div className="w-full   flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
-          <div className="w-full h-screen  bg-white overflow-hidden flex flex-col items-center">
-            <div
-              className="w-full"
-              style={{ height: "60px", marginBottom: "10px" }}
-            >
-              <NavBar
-                isGrid={isGrid}
-                setIsGrid={setIsGrid}
-                modifyTable={modifyTable}
-                setmodifyTable={setmodifyTable}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
-            </div>
-            <div className="w-full h-full mt-6 bg-black flex justify-center items-center  ">
-              <div className="bg-amber-400 w-[80%] rounded-sm h-[80%]"></div>
+          <div
+            className="w-full"
+            style={{ height: "60px", marginBottom: "10px" }}
+          >
+            <NavBar
+              isGrid={isGrid}
+              setIsGrid={setIsGrid}
+              modifyTable={modifyTable}
+              setmodifyTable={setmodifyTable}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          </div>
+          <div className="w-full h-screen fixed bg-black overflow-hidden flex ">
+            <div className=" bg-[#a44545] w-full h-full flex  ">
+              <AdminDashboard />
             </div>
           </div>
         </div>

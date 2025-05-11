@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SideBar from "../../components/common/SideBar";
-import NavBar from "../../components/common/NavBar";
+import SideBar from "../../components/navigations/SideBar";
+import Navbar from "../../components/navigations/NavBar";
 import MyChart from "../../components/ui/my-chart";
 import Rows from "../../components/common/Rows";
 import {
@@ -45,7 +45,7 @@ const InventoryPage = ({ setSortOrder }) => {
               className="w-full"
               style={{ height: "60px", marginBottom: "10px" }}
             >
-              <NavBar
+              <Navbar
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 onSearch={setSearchResults}

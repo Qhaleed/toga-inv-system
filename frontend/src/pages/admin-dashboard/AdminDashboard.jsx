@@ -1,10 +1,8 @@
-import React from 'react';
-import AdminDashboardCard from '../../components/admin-dashboard/AdminDashboardCard';
+import React from "react";
+import AdminDashboardCard from "../../components/admin-dashboard/AdminDashboardCard";
 
 function AdminDashboard() {
-    return (
-        <AdminDashboardCard />
-    );
+  return <AdminDashboardCard />;
 }
 
 export default AdminDashboard;
