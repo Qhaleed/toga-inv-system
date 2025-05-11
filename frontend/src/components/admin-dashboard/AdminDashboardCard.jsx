@@ -20,22 +20,26 @@ const AdminDashboardCard = () => {
         </div>
 
         {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full   flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
+        <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 col-span-1 h-full">
           <div
-            className="w-full"
-            style={{ height: "60px", marginBottom: "10px" }}
+            className="w-full min-h-screen flex flex-col items-center"
+            style={{ maxWidth: "100vw" }}
           >
-            <NavBar
-              isGrid={isGrid}
-              setIsGrid={setIsGrid}
-              modifyTable={modifyTable}
-              setmodifyTable={setmodifyTable}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-            />
-          </div>
-          <div className="w-full h-screen fixed bg-black overflow-hidden flex ">
-            <div className=" bg-[#a44545] w-full h-full flex  ">
+            <div
+              className="w-full"
+              style={{ height: "40px", marginBottom: "10px" }}
+            >
+              <NavBar
+                isGrid={isGrid}
+                setIsGrid={setIsGrid}
+                modifyTable={modifyTable}
+                setmodifyTable={setmodifyTable}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+              />
+            </div>
+            {/* Main dashboard content */}
+            <div className="bg-black w-full flex-1 flex sm:p-6 gap-8 min-w-0 overflow-x-visible overflow-y-visible">
               <AdminDashboard />
             </div>
           </div>
