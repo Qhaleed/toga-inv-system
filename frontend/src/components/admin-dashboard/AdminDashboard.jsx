@@ -16,8 +16,8 @@ function AdminDashboard() {
         <PieChartDash />
       </div>
       {/* Bar Graph or Large Content Box */}
-      <div className="col-span-1 md:col-span-3 flex justify-center items-center bg-amber-600">
-        <div className="bg-white w-full rounded-2xl shadow-2xl h-[40vh] flex items-center justify-center">
+      <div className="col-span-1 md:col-span-3 flex justify-center items-center">
+        <div className="bg-white w-full rounded-2xl shadow-2xl min-h-[200px] h-[40vh] flex items-center justify-center overflow-visible">
           bar graph div
         </div>
       </div>

@@ -39,7 +39,7 @@ const AdminDashboardCard = () => {
               />
             </div>
             {/* Main dashboard content */}
-            <div className="bg-black w-full h-full flex-1 flex  sm:p-6 gap-8 min-w-0 overflow-x-auto">
+            <div className="bg-black w-full flex-1 flex sm:p-6 gap-8 min-w-0 overflow-x-visible overflow-y-visible">
               <AdminDashboard />
             </div>
           </div>
