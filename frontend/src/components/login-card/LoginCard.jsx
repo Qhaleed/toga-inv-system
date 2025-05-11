@@ -68,7 +68,7 @@ function LoginCard() {
         <input
           type="email"
           name="email"
-          placeholder="example@email.com"
+          placeholder="co123456@adzu.edu.ph"
           className="w-full flex-1 bg-transparent border-b-2 border-blue-50/50 font-manjari
                      text-white placeholder-gray-300 placeholder:font-manjari
                      focus:outline-none 
