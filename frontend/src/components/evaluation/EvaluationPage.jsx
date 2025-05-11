@@ -18,6 +18,10 @@ const EvaluationPage = () => {
   const [isAZ, setIsAZ] = useState(false);
   const [isZA, setIsZA] = useState(false);
 
+  console.log(isAll);
+  console.log(isEvaluationTab);
+  console.log(isNotEvaluationTab);
+
   return (
     <>
       <div className="h-fit w-screen relative bg-[#EBEBEB] font-figtree font-medium">

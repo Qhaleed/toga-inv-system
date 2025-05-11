@@ -87,25 +87,25 @@ const SideBar = ({
   const All = () => {
     setFocusedStatus("all");
     setFocusedStatusLocal("all");
-    setIsAll && setIsAll(true);
-    setIsEvaluationTab && setIsEvaluationTab(false);
-    setIsNotEvaluationTab && setIsNotEvaluationTab(false);
+    setIsAll(true);
+    setIsEvaluationTab(false);
+    setIsNotEvaluationTab(false);
   };
 
   const EvaluatedFilter = () => {
     setFocusedStatus("evaluated");
     setFocusedStatusLocal("evaluated");
-    setIsAll && setIsAll(false);
-    setIsEvaluationTab && setIsEvaluationTab(true);
-    setIsNotEvaluationTab && setIsNotEvaluationTab(false);
+    setIsAll(false);
+    setIsEvaluationTab(true);
+    setIsNotEvaluationTab(false);
   };
 
   const NotEvaluatedFilter = () => {
     setFocusedStatus("noeval");
     setFocusedStatusLocal("noeval");
-    setIsAll && setIsAll(false);
-    setIsEvaluationTab && setIsEvaluationTab(false);
-    setIsNotEvaluationTab && setIsNotEvaluationTab(true);
+    setIsAll(false);
+    setIsEvaluationTab(false);
+    setIsNotEvaluationTab(true);
   };
 
   console.log(activeTab);
