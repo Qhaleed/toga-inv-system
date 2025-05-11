@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Table from "../../components/common/Table";
 
-import SideBar from "../../components/common/SideBar";
-import NavBar from "../../components/common/NavBar";
+import SideBar from "../../components/navigations/SideBar";
+import Navbar from "../../components/navigations/NavBar";
 import Profile from "../../assets/images/profilepicture.jpg";
 
 const PendingPage = () => {
@@ -34,7 +34,7 @@ const PendingPage = () => {
               className="w-full"
               style={{ height: "60px", marginBottom: "10px" }}
             >
-              <NavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+              <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             <div className="flex-1 flex bg-amber-200 mt-6 flex-col items-center justify-center p-2 sm:p-6 gap-8 min-w-0 overflow-x-auto w-full">
               <Table sortOrder={sortOrder} data={tableData} />

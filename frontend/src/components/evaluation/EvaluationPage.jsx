@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SideBar from "../common/SideBar";
-import NavBar from "../common/NavBar";
+import SideBar from "../navigations/SideBar";
+import NavBar from "../navigations/NavBar";
 import EvaluationTable from "./EvaluationTable";
 import EvaluationTab from "./EvaluationTab";
 

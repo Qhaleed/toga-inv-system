@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Table from "../../components/common/Table";
-import SideBar from "../../components/common/SideBar";
-import NavBar from "../../components/common/NavBar";
+import SideBar from "../../components/navigations/SideBar";
+import NavBar from "../../components/navigations/NavBar";
 
 const ReservationPage = () => {
   // States for grid, modifyTable, and sortOrder
