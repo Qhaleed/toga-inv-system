@@ -60,14 +60,13 @@ export function PieChartDash() {
   }, []);
 
   return (
-    <Card className="flex flex-col justify-center bg-white/90 relative shadow-lg rounded-3xl max-h-[400px] border  border-gray-200 w-100     -h-20 mx-auto">
+    <Card className="flex flex-col justify-center bg-white/90 relative shadow-lg rounded-3xl max-h-[400px] border border-gray-200 w-full max-w-md mx-auto">
       <CardHeader className="items-center pb-2">
         <CardTitle>Pie Chart - Donut with Text</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pt-0 pb-0">
         <ChartContainer config={chartConfig} className=" max-h-[220px]">
-          å
           <PieChart>
             <ChartTooltip
               cursor={false}
