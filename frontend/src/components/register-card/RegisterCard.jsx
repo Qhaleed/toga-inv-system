@@ -161,7 +161,7 @@ export default function RegisterForm() {
         <input
           type="email"
           name="email"
-          placeholder="example@email.com"
+          placeholder="co123456@adzu.edu.ph"
           className="w-full flex-1 bg-transparent border-b-2 border-blue-50/50 font-manjari
                      text-white placeholder-gray-300 placeholder:font-manjari
                      focus:outline-none 
@@ -376,11 +376,11 @@ export default function RegisterForm() {
       </div>
       {/* Upload ID Image Box */}
       <div
-        className="mt-3 w-full group p-4 sm:p-6 text-center cursor-pointer bg-gradient-to-b from-[#112047] to-[#2A4D89] rounded-[30px] transition-all duration-300 ease-in-out hover:opacity-100"
+        className="mt-3 w-full group p-4 sm:p-6 text-center cursor-pointer bg-gradient-to-b from-[#112047] to-[#2A4D89] rounded-3xl transition-all duration-300 ease-in-out hover:opacity-100"
         onDrop={handleImageChange}
         onDragOver={(e) => e.preventDefault()}
       >
-        <div className="border-2 border-dashed border-white border-opacity-50 rounded-[20px] p-4 sm:p-6">
+        <div className="border-2 border-dashed border-blue-50/50 rounded-2xl p-4 sm:p-6">
           <input
             type="file"
             name="idImage"
@@ -394,14 +394,14 @@ export default function RegisterForm() {
             <img
               src={UploadIcon}
               alt="Upload"
-              className="mx-auto transition-transform ease-in-out duration-300 group-hover:scale-110"
+              className="mx-auto pt-8 transition-transform ease-in-out duration-300 group-hover:scale-110"
             />
             <p className="text-sm mt-2 font-manjari text-white-400">
               Drag your images here or upload from computer
             </p>
             <button
               type="button"
-              className="font-manjari font-bold mt-2 px-4 pt-1 bg-white text-black rounded-full text-sm transition hover:bg-gray-300 user-select-none"
+              className="font-manjari font-bold mt-2 px-4 py-2 mb-8  bg-white text-black rounded-full text-sm transition hover:bg-gray-300 user-select-none"
               onClick={() => document.getElementById("upload").click()}
             >
               Browse Computer
