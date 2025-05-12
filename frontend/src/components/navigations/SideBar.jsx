@@ -278,7 +278,7 @@ const SideBar = ({
           {/* SIDE BAR NAVIGATION CONTAINER*/}
           <div
             key={activeTab}
-            className="min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="min-w-full md:w-11/12 md:scale-100 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <div className="relative w-full flex flex-col justify-between md:w-full">
               <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
@@ -298,7 +298,7 @@ const SideBar = ({
                       <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-[#1E40AF] ml-3">
                         All
                       </p>
-                      <div className="right-0 absolute sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="right-0 absolute sm:text-[10px] text-[11px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2  py-0.5 px-2">
                         123
                       </div>
                     </button>
@@ -310,10 +310,10 @@ const SideBar = ({
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={EvaluatedFilter}
                     >
-                      <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-[#15803D] ml-3">
+                      <p className="sm:text-[12px] text-[13px] md:text-[15px] font-figtree font-bold text-[#15803D] ml-3">
                         Evaluated
                       </p>
-                      <div className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
                         13
                       </div>
                     </button>
@@ -327,10 +327,10 @@ const SideBar = ({
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={NotEvaluatedFilter}
                     >
-                      <p className="sm:text-[14px] text-[13px] font-bold text-[#B91C1C] ml-3">
+                      <p className="sm:text-[13px] text-[13px] font-bold text-[#B91C1C] ml-3">
                         No Evaluation
                       </p>
-                      <div className="absolute right-0 sm:text-[14px] text-[13px] md:sm:text-[14px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
                         19
                       </div>
                     </button>
