@@ -41,22 +41,49 @@ const SideBar = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // FETCHER TO NG NAME AND ROLE SA JSON SERVER
+  // FETCHER TO NG NAME AND ROLE SA BACKEND (JWT-protected)
   useEffect(() => {
-    fetch("http://localhost:8000/admins")
-      .then((res) => res.json())
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setAdminName("Not logged in");
+      setAdminRole("N/A");
+      return;
+    }
+    fetch("http://localhost:5001/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          // Try to parse error message from backend
+          let errorMsg = `HTTP ${res.status}`;
+          try {
+            const errData = await res.json();
+            errorMsg += errData.error ? `: ${errData.error}` : "";
+          } catch {
+            // Not JSON, ignore
+          }
+          setAdminName("Fetch error");
+          setAdminRole(errorMsg);
+          console.error("Sidebar /users fetch error:", errorMsg);
+          return;
+        }
+        return res.json();
+      })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setAdminName(data[0].adminname);
-          setAdminRole(data[0].adminrole);
-        } else {
-          setAdminName("No admin found");
+        if (data && data.name && data.role) {
+          setAdminName(data.name);
+          setAdminRole(data.role);
+        } else if (data) {
+          setAdminName("No user found");
           setAdminRole("N/A");
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setAdminName("Fetch error");
-        setAdminRole("Fetch error");
+        setAdminRole("Network error");
+        console.error("Sidebar /users fetch network error:", err);
       });
   }, []);
   // Responsivenesss show/hide sidebar on small screens, always show on large screens
@@ -133,7 +160,8 @@ const SideBar = ({
       {/* Sidebar idea ->> above navbar on small screens, left on large screens */}
       {visible && (
         <div
-          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-30 sm:z-auto transition-all ${
+          // Always keep z-10 here so modals (z-[99999]) can overlay SideBar
+          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-10 sm:z-auto transition-all ${
             showSidebar
               ? "animate-slide-in-top duration-800"
               : "animate-fade-in duration-800"
@@ -144,7 +172,8 @@ const SideBar = ({
             transition: "transform ",
             animation: showSidebar ? "slide-in-top 2s" : "fade-in 0.8s",
             minWidth: "100%", // Prevent overflow
-            overflow: "hidden", // Prevent child overflow
+            overflow: "visible", // Allow overlays to extend outside
+            zIndex: 10, // Always keep z-10 for modal overlay
           }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
@@ -159,10 +188,52 @@ const SideBar = ({
                 />
               </div>
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
-                <p className="text-[16px] md:font-bold truncate max-w-[100px] md:max-w-[140px]">
+                <p
+                  className={`font-bold max-w-[100px] md:max-w-[140px] leading-tight  
+                    ${
+                      adminName.length > 24
+                        ? "text-[11px] md:text-[14px]"
+                        : adminName.length > 16
+                        ? "text-[13px] md:text-[16px]"
+                        : "text-[15px] md:text-[18px]"
+                    }
+                  `}
+                  style={{
+                    fontSize:
+                      window.innerWidth < 640
+                        ? adminName.length > 24
+                          ? "10px"
+                          : adminName.length > 16
+                          ? "12px"
+                          : "14px"
+                        : "",
+                  }}
+                  title={adminName}
+                >
                   {adminName}
                 </p>
-                <p className="sm:text-[14px] text-[13px] md:text-xs font-light truncate max-w-[100px] md:max-w-[140px]">
+                <p
+                  className={`font-light max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
+                    ${
+                      adminRole.length > 24
+                        ? "text-[10px] md:text-[12px]"
+                        : adminRole.length > 16
+                        ? "text-[12px] md:text-[14px]"
+                        : "text-[13px] md:text-[15px]"
+                    }
+                  `}
+                  style={{
+                    fontSize:
+                      window.innerWidth < 640
+                        ? adminRole.length > 24
+                          ? "9px"
+                          : adminRole.length > 16
+                          ? "11px"
+                          : "13px"
+                        : "",
+                  }}
+                  title={adminRole}
+                >
                   {adminRole}
                 </p>
               </div>

@@ -101,8 +101,9 @@ const Navbar = ({
     }
   };
 
+  // Always keep z-10 here so modals (z-[99999]) can overlay NavBar
   return (
-    <div className="h-24 relative">
+    <div className="h-24 relative z-10">
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <LoaderAnimation />

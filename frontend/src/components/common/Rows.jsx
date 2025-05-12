@@ -346,11 +346,22 @@ const Rows = ({
       />
     );
   } else {
+    // When popup is open, remove max-h and overflow restrictions
+    const containerClass = `w-full${
+      popupOpen ? " z-[99998]" : " max-h-[80vh] overflow-x-auto overflow-y-auto"
+    } ${tableAnim}`;
+    const containerStyle = popupOpen
+      ? {
+          minWidth: "100px",
+          maxWidth: "100vw",
+          height: "auto",
+          overflow: "visible",
+          maxHeight: "none",
+          zIndex: 99998, // Ensure table container is below modal
+        }
+      : { minWidth: "100px", maxWidth: "100vw", height: "auto" };
     return (
-      <div
-        className={`w-full max-h-[80vh] overflow-x-auto overflow-y-auto ${tableAnim}`}
-        style={{ minWidth: "100px", maxWidth: "100vw", height: "auto" }}
-      >
+      <div className={containerClass} style={containerStyle}>
         <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-1000 bg-red">
           <table className="w-full table-fixed border-separate border-spacing-0 relative">
             <thead className="bg-[#02327B] sticky top-0 z-30">

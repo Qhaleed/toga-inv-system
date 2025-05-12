@@ -1,8 +1,36 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
+const db = require("../database/db");
+require("dotenv").config();
 
-router.get('/', (req, res) => {
-    res.send("User List");
-})
+const SECRET_KEY = process.env.SECRET_KEY;
 
-module.exports = router
+// binago ko to here para mastore na yung token sa local storage for the user display sa sidebar-clyde
+router.get("/", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    // decoded contains id, email, role
+    // Fetch user details from DB for name
+    const [users] = await db.pool.query("SELECT * FROM accounts WHERE id = ?", [
+      decoded.id,
+    ]);
+    if (!users || users.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const user = users[0];
+    res.json({
+      name: user.first_name + " " + user.surname,
+      role: user.role,
+    });
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+module.exports = router;
