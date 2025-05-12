@@ -6,6 +6,7 @@ import RightArrow from "../../assets/icons/small-arrow.svg?react";
 import Profile from "../../assets/images/profilepicture.jpg";
 import Pin from "../../assets/icons/white-pin.svg?react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PopupWindow = ({
   open,
@@ -17,6 +18,11 @@ const PopupWindow = ({
 }) => {
   const [edit, setEdit] = useState(false);
   const [returnStatus, setReturnStatus] = useState("Returned");
+  const navigate = useNavigate();
+
+  const exitReset = () => {
+    setEdit(false);
+  }
 
   const EditMode = () => {
     if (!edit) {
@@ -60,7 +66,9 @@ const PopupWindow = ({
             <div className="h-full w-16 flex justify-end items-center ml-2">
               <button
                 className="w-12 h-12 bg-[#F3B51A] rounded-2xl flex justify-center items-center mr-2 cursor-pointer hover:bg-[#d99f0f] hover:scale-105 transition-all duration-200"
-                onClick={onClose}
+                onClick={() => {onClose();
+                                exitReset();
+                               }}
               >
                 {" "}
                 {/*Navbar buttons*/}
@@ -90,7 +98,7 @@ const PopupWindow = ({
                   !edit
                     ? "border border-green-400 text-green-400"
                     : "bg-green-400 text-white"
-                } hover:scale-105 transition-all duration-200`}
+                } hover:bg-green-400 hover:text-white hover:scale-105 transition-all duration-200`}
                 onClick={EditMode}
               >
                 <h3>EDIT</h3>
@@ -102,7 +110,8 @@ const PopupWindow = ({
               </button>
             </div>
             <div className="ps-2 h-10 w-28 border-l-2 flex justify-center items-center border-gray-500 mr-7 text-sm">
-              <button className="bg-[#0C7E48] text-white w-24 h-8 rounded-lg hover:bg-[#0A6F40] hover:scale-105 transition-all duration-200">
+              <button className="bg-[#0C7E48] text-white w-24 h-8 rounded-lg hover:bg-[#0A6F40] hover:scale-105 transition-all duration-200"
+              onClick={() => navigate("/evaluation-page")}>
                 <h3>Evaluate</h3>
               </button>
             </div>
