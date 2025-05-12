@@ -258,7 +258,7 @@ const SideBar = ({
           {/*TOGA TRACK */}
           <div
             key={activeTab + "-toga-track"}
-            className="hidden shrink-0 sm:flex w-full mt-5 rounded-md h-16 bg-gradient-to-t from-[#224273] to-blue-950 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.10)] items-center justify-center transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="hidden shrink-0 sm:flex w-full mt-5 rounded-md h-16 bg-gradient-to-t from-[#224273] to-blue-950 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.10)] items-center justify-center transition-opacity duration-500 ease-in-out opacity-100 "
           >
             <div className="w-fit  h-fit flex justify-center items-center">
               <span
@@ -274,7 +274,6 @@ const SideBar = ({
           </div>
 
           {/* SIDE BAR NAVIGATION CONTAINER*/}
-
           <div
             key={activeTab}
             className="min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"

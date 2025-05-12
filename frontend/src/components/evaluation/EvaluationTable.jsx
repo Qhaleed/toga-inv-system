@@ -14,7 +14,7 @@ const EvaluationTable = ({
   const mainContentHeight = "80vh";
 
   return (
-    <div className="w-full flex flex-col items-center justify-start mt-12">
+    <div className="w-full animate-fade-in flex flex-col items-center justify-start mt-12">
       {/* Removed top sorting/filtering buttons, only sidebar buttons control filtering/sorting */}
       <div
         className="w-full flex justify-center items-start px-1 sm:px-2 md:px-5 lg:ml-0 lg:w-full"

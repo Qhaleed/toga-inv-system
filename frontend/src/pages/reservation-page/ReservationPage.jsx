@@ -73,13 +73,13 @@ const ReservationPage = () => {
         </div>
 
         {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
+        <div className="w-full animate-fade-in flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
           <div
-            className="w-full h-screen overflow-hidden flex flex-col items-center"
+            className="w-full h-screen overflow-hidden flex  flex-col items-center animate-fade-in"
             style={{ maxWidth: "100vw" }}
           >
             <div
-              className="w-full"
+              className="w-full "
               style={{ height: "60px", marginBottom: "10px" }}
             >
               <NavBar
