@@ -101,142 +101,143 @@ const Navbar = ({
     }
   };
 
-  // Always keep z-10 here so modals (z-[99999]) can overlay NavBar
   return (
-    <div className="h-24 relative z-10">
+    <>
       {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <LoaderAnimation />
         </div>
       )}
-      {/* Top Navigation */}
-      <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 mr-2">
-        {/* Dashboard button */}
-        <button
-          onClick={() => navigate("/admin-dashboard")}
-          className={`${tabClass("dashboard")} removeEffect`}
-        >
-          <span className="w-3">
-            <Home className="w-4" />
-          </span>
-          <span className="text-[12px] mx-1 md:mx-6 content-center ">
-            Dashboard
-          </span>
-        </button>
-
-        <button
-          onClick={() => handleNavigation("inventory", "/inventory")}
-          className={`${tabClass("inventory")} removeEffect`}
-        >
-          <span className="w-3">
-            <Inventory className="w-4" />
-          </span>
-          <span className="text-[12px] mx-2 md:mx-4">Inventory</span>
-        </button>
-
-        <button
-          onClick={() => handleNavigation("pending", "/pending")}
-          className={`${tabClass("pending")} removeEffect`}
-        >
-          <span className="w-3">
-            <Statistic className="w-4" />
-          </span>
-          <span className="text-[12px] mx-2 md:mx-6 content-center">
-            Pending
-          </span>
-        </button>
-
-        <button
-          onClick={() => navigate("/evaluation-page")}
-          className={`${tabClass("evaluation")} removeEffect`}
-        >
-          <span className="w-3">
-            <Application className="w-4" />
-          </span>
-          <span className="text-[12px]  mx-1  md:mx-4">Evaluation</span>
-        </button>
-
-        <button
-          onClick={() => navigate("/reservation")}
-          className={`${tabClass("reservation")} removeEffect`}
-        >
-          <span className="w-3">
-            <Application className="w-4" />
-          </span>
-          <span className="text-[12px] mx-1 md:mx-4">Reservation</span>
-        </button>
-
-        {/* Logout button at top right */}
-        <div className="relative ml-auto mr-5 ">
+      <div className="h-24 relative z-[10]">
+        {/* Top Navigation */}
+        <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 mr-2">
+          {/* Dashboard button */}
           <button
-            onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded-2xl shadow transition-all duration-500"
-            style={{ minWidth: 20 }}
+            onClick={() => navigate("/admin-dashboard")}
+            className={`${tabClass("dashboard")} removeEffect`}
           >
-            Logout
+            <span className="w-3">
+              <Home className="w-4" />
+            </span>
+            <span className="text-[12px] mx-1 md:mx-6 content-center ">
+              Dashboard
+            </span>
           </button>
-        </div>
-      </div>
 
-      {/* Bottom Navigation */}
-      {/* Removed bottom navigation for dashboard as requested */}
-      {activeTab !== "inventory" &&
-        activeTab !== "pending" &&
-        activeTab !== "dashboard" && (
-          <div className="h-1/2 flex justify-start items-center">
-            <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[800px]">
-              <div className="relative lg:ml-14 md:ml-10 ml-8 mr-2">
-                <Search className="absolute w-5 top-1 left-2" />
-                <input
-                  className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500 w-full px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
-                  type="text"
-                  placeholder="Search student..."
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onKeyDown={handleSearch}
-                />
-              </div>
-            </div>
-            <div
-              className={`h-7 w-22 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
-            >
-              <button
-                onClick={() => setIsGrid(false)}
-                className={`h-7 w-8 md:h-7 md:w-10 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
-                  !isGrid
-                    ? "bg-[#02327B] text-white"
-                    : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-                } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-                disabled={searchActive}
-              >
-                {rowIcon}
-              </button>
-              <button
-                onClick={() => setIsGrid(true)}
-                className={`h-7 w-8 md:h-7 md:w-10 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
-                  isGrid
-                    ? "bg-[#02327B] text-white"
-                    : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-                } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-                disabled={searchActive}
-              >
-                {gridIcon}
-              </button>
-            </div>
+          <button
+            onClick={() => handleNavigation("inventory", "/inventory")}
+            className={`${tabClass("inventory")} removeEffect`}
+          >
+            <span className="w-3">
+              <Inventory className="w-4" />
+            </span>
+            <span className="text-[12px] mx-2 md:mx-4">Inventory</span>
+          </button>
+
+          <button
+            onClick={() => handleNavigation("pending", "/pending")}
+            className={`${tabClass("pending")} removeEffect`}
+          >
+            <span className="w-3">
+              <Statistic className="w-4" />
+            </span>
+            <span className="text-[12px] mx-2 md:mx-6 content-center">
+              Pending
+            </span>
+          </button>
+
+          <button
+            onClick={() => navigate("/evaluation-page")}
+            className={`${tabClass("evaluation")} removeEffect`}
+          >
+            <span className="w-3">
+              <Application className="w-4" />
+            </span>
+            <span className="text-[12px]  mx-1  md:mx-4">Evaluation</span>
+          </button>
+
+          <button
+            onClick={() => navigate("/reservation")}
+            className={`${tabClass("reservation")} removeEffect`}
+          >
+            <span className="w-3">
+              <Application className="w-4" />
+            </span>
+            <span className="text-[12px] mx-1 md:mx-4">Reservation</span>
+          </button>
+
+          {/* Logout button at top right */}
+          <div className="relative ml-auto mr-5 ">
             <button
-              className={`${isEvaluation} hover:scale-105 h-7 px-3 removeEffect  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
-                modifyTable
-                  ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
-                  : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
-              } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={editallClicked}
-              disabled={searchActive}
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded-2xl shadow transition-all duration-500"
+              style={{ minWidth: 20 }}
             >
-              {modifyTable ? "Save Table" : "Modify Table"}
+              Logout
             </button>
           </div>
-        )}
-    </div>
+        </div>
+
+        {/* Bottom Navigation */}
+        {/* Removed bottom navigation for dashboard as requested */}
+        {activeTab !== "inventory" &&
+          activeTab !== "pending" &&
+          activeTab !== "dashboard" && (
+            <div className="h-1/2 flex justify-start items-center">
+              <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[800px]">
+                <div className="relative lg:ml-14 md:ml-10 ml-8 mr-2">
+                  <Search className="absolute w-5 top-1 left-2" />
+                  <input
+                    className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500 w-full px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
+                    type="text"
+                    placeholder="Search student..."
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyDown={handleSearch}
+                  />
+                </div>
+              </div>
+              <div
+                className={`h-7 w-22 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
+              >
+                <button
+                  onClick={() => setIsGrid(false)}
+                  className={`h-7 w-8 md:h-7 md:w-10 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+                    !isGrid
+                      ? "bg-[#02327B] text-white"
+                      : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
+                  } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={searchActive}
+                >
+                  {rowIcon}
+                </button>
+                <button
+                  onClick={() => setIsGrid(true)}
+                  className={`h-7 w-8 md:h-7 md:w-10 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+                    isGrid
+                      ? "bg-[#02327B] text-white"
+                      : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
+                  } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                  disabled={searchActive}
+                >
+                  {gridIcon}
+                </button>
+              </div>
+              <button
+                className={`${isEvaluation} hover:scale-105 h-7 px-3 removeEffect  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+                  modifyTable
+                    ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
+                    : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
+                } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                onClick={editallClicked}
+                disabled={searchActive}
+              >
+                {modifyTable ? "Save Table" : "Modify Table"}
+              </button>
+            </div>
+          )}
+      </div>
+    </>
   );
 };
 

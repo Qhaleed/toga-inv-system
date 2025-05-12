@@ -25,13 +25,13 @@ const Table = ({ isGrid, modifyTable, sortOrder, data }) => {
               </div>
             ) : (
               <div
-                className="relative w-full flex flex-col min-h-fit max-w-full border border-black shadow outline-none bg-white "
+                className="relative w-full flex flex-col min-h-fit max-w-full border border-black shadow outline-none bg-white z-0"
                 style={{
                   maxHeight: mainContentHeight,
-
                   minWidth: 300,
                   maxWidth: "100vw",
                   overflow: "visible",
+                  zIndex: 0, // Ensure table is always below overlays
                 }}
               >
                 <div className="w-full overflow-x-auto scrollbar-hide">
