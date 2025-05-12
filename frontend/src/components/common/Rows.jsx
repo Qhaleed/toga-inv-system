@@ -537,7 +537,7 @@ const Rows = ({
                                 <Trash className="w-4" />
                               </button>
                               {/* Floating Save/Cancel absolute container at the bottom sa edit view inline */}
-                              <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
+                              <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 ">
                                 <button
                                   className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
                                   onClick={() => handleSave(db.id)}

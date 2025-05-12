@@ -35,7 +35,7 @@ const SideBar = ({
     function handleResize() {
       const large = window.innerWidth >= 640;
       setIsLargeScreen(large);
-      if (large) setShowSidebar(true); // transition for mga big screens
+      if (large) setShowSidebar(true); // transition  mga big screens
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -216,7 +216,7 @@ const SideBar = ({
                   {adminName}
                 </p>
                 <p
-                  className={`font-light max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
+                  className={`font-light italic mt-1 max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
                     ${
                       adminRole.length > 24
                         ? "text-[10px] md:text-[12px]"
@@ -237,7 +237,7 @@ const SideBar = ({
                   }}
                   title={adminRole}
                 >
-                  {adminRole}
+                  {adminRole.charAt(0).toUpperCase() + adminRole.slice(1)}
                 </p>
               </div>
             </div>

@@ -61,10 +61,9 @@ const EvaluationRows = ({
       style={{
         minWidth: "600px",
         maxWidth: "100vw",
-        position: "relative",
       }}
     >
-      <div className="min-w-[300px] max-w-[120vw] overflow-visible top-0 z-0 bg-white">
+      <div className="min-w-[300px] max-w-[120vw] overflow-visible top-0 z-10 bg-white">
         <table className="w-full ">
           <thead
             className="bg-[#02327B] sticky top-0 z-20"
