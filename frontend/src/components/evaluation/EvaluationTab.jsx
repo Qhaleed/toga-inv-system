@@ -173,7 +173,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                       {value.toga_size}
                     </h3>
                   </td>
-                  <td>{value.dateofreservation}</td>
+                  <td>{value.updated_at}</td>
                 </tr>
               </tbody>
             </table>
