@@ -192,7 +192,7 @@ const SideBar = ({
               </div>
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
                 <p
-                  className={`font-bold max-w-[100px] md:max-w-[140px] leading-tight  
+                  className={`font-figtree font-bold max-w-[100px] md:max-w-[140px] leading-tight  
                     ${
                       adminName.length > 24
                         ? "text-[11px] md:text-[14px]"
@@ -215,8 +215,9 @@ const SideBar = ({
                 >
                   {adminName}
                 </p>
-                <p
-                  className={`font-light italic mt-1 max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
+
+                  className={`font-manjari max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
+
                     ${
                       adminRole.length > 24
                         ? "text-[10px] md:text-[12px]"
@@ -236,8 +237,10 @@ const SideBar = ({
                         : "",
                   }}
                   title={adminRole}
-                >
-                  {adminRole.charAt(0).toUpperCase() + adminRole.slice(1)}
+
+                  {adminRole.charAt(0).toUpperCase() +
+                    adminRole.slice(1).toLowerCase()}
+
                 </p>
               </div>
             </div>
