@@ -15,17 +15,19 @@ router.get("/", async (req, res) => {
   const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
-    // decoded contains id, email, role
-    // Fetch user details from DB for name
+
     const [users] = await db.pool.query("SELECT * FROM accounts WHERE id = ?", [
       decoded.id,
     ]);
     if (!users || users.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
+    // added firstname query for user side display
     const user = users[0];
+    const firstOnly = req.query.firstOnly === "true";
+
     res.json({
-      name: user.first_name + " " + user.surname,
+      name: firstOnly ? user.first_name : `${user.first_name} ${user.surname}`,
       role: user.role,
     });
   } catch (err) {
