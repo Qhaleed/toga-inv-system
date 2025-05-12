@@ -26,7 +26,7 @@ export function RadialChart() {
     cap: { label: "Cap", color: "hsl(var(--chart-1))" },
     tassel: { label: "Tassel", color: "hsl(var(--chart-2))" },
     gown: { label: "Gown", color: "hsl(var(--chart-3))" },
-    hood: { label: "Hood", color: "hsl(var(--chart-4))" },
+    hood: { label: "Hood", color: "hsl(var(--chart-4 ))" },
   };
 
   useEffect(() => {
