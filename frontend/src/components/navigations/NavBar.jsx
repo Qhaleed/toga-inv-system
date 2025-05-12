@@ -108,7 +108,7 @@ const Navbar = ({
           <LoaderAnimation />
         </div>
       )}
-      <div className="h-24 relative z-[10]">
+      <div className="h-24 relative ">
         {/* Top Navigation */}
         <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 mr-2">
           {/* Dashboard button */}
