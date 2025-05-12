@@ -183,7 +183,7 @@ const Navbar = ({
         {activeTab !== "inventory" &&
           activeTab !== "pending" &&
           activeTab !== "dashboard" && (
-            <div className="h-1/2 flex justify-start items-center">
+            <div className="h-1/2  animate-fade-in flex justify-start items-center">
               <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[800px]">
                 <div className="relative lg:ml-14 md:ml-10 ml-8 mr-2">
                   <Search className="absolute w-5 top-1 left-2" />
