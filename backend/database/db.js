@@ -96,7 +96,7 @@ async function fullEvaluationPage() {
           i.inventory_id, i.renters_name, i.course,
           i.toga_size,i.tassel_color, i.hood_color, i.has_cap,
           i.rent_date,i.return_date,i.is_overdue,i.return_status,
-          i.payment_status,i.evaluation_status,
+          i.payment_status,i.evaluation_status,i.updated_at,
   
           e.gown_condition, e.gown_repair, e.gown_damage, e.gown_remarks,
           e.hood_condition, e.hood_repair, e.hood_damage, e.hood_remarks,

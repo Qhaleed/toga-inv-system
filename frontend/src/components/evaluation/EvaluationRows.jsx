@@ -19,7 +19,7 @@ const EvaluationRows = ({
 
   useEffect(() => {
     // kuha data sa JSON
-    fetch("http://localhost:5001/evaluation")
+    fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
         setDashboard(data);
@@ -61,12 +61,14 @@ const EvaluationRows = ({
       style={{
         minWidth: "600px",
         maxWidth: "100vw",
-        position: "relative",
       }}
     >
-      <div className="min-w-[300px] max-w-[120vw]  overflow-visible top-0 z-1000 bg-white">
+      <div className="min-w-[300px] max-w-[120vw] overflow-visible top-0 z-10 bg-white">
         <table className="w-full ">
-          <thead className="bg-[#02327B] sticky top-0 z-30">
+          <thead
+            className="bg-[#02327B] sticky top-0 z-20"
+            style={{ zIndex: 20, position: "sticky" }}
+          >
             <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
               <th className="md:w-[23%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[150px]">
                 <span className="block text-[10px] md:text-[15px] w-full text-center ">

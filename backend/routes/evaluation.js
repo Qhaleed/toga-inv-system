@@ -4,14 +4,23 @@ const router = express.Router();
 const db = require('../database/db');
 require('dotenv').config();
 
-router.get('/',async (req, res) => {
-try {
+router.get('/', async (req, res) => {
+  try {
     const fullTable = await db.fullEvaluationPage();
-    res.status(200).json(fullTable); //sends the data of the joined eval and iventory table to the frontend
 
-} catch (error) {
-    console.log("Evaluation Table database error: ", error)
-}
+    // loops each row and split the updated_at date to get only the date
+    const formattedTable = fullTable.map(row => ({
+      ...row,
+      updated_at: row.updated_at 
+        ? row.updated_at.toISOString().split('T')[0] //remove time part
+        : null
+    }));
+
+    res.status(200).json(formattedTable);
+  } catch (error) {
+    console.log("Evaluation Table database error: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.post('/', async (req, res) => {

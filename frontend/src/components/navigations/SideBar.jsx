@@ -35,28 +35,55 @@ const SideBar = ({
     function handleResize() {
       const large = window.innerWidth >= 640;
       setIsLargeScreen(large);
-      if (large) setShowSidebar(true); // transition for mga big screens
+      if (large) setShowSidebar(true); // transition  mga big screens
     }
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // FETCHER TO NG NAME AND ROLE SA JSON SERVER
+  // FETCHER TO NG NAME AND ROLE SA BACKEND (JWT-protected)
   useEffect(() => {
-    fetch("http://localhost:8000/admins")
-      .then((res) => res.json())
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setAdminName("Not logged in");
+      setAdminRole("N/A");
+      return;
+    }
+    fetch("http://localhost:5001/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          // Try to parse error message from backend
+          let errorMsg = `HTTP ${res.status}`;
+          try {
+            const errData = await res.json();
+            errorMsg += errData.error ? `: ${errData.error}` : "";
+          } catch {
+            // Not JSON, ignore
+          }
+          setAdminName("Fetch error");
+          setAdminRole(errorMsg);
+          console.error("Sidebar /users fetch error:", errorMsg);
+          return;
+        }
+        return res.json();
+      })
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setAdminName(data[0].adminname);
-          setAdminRole(data[0].adminrole);
-        } else {
-          setAdminName("No admin found");
+        if (data && data.name && data.role) {
+          setAdminName(data.name);
+          setAdminRole(data.role);
+        } else if (data) {
+          setAdminName("No user found");
           setAdminRole("N/A");
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setAdminName("Fetch error");
-        setAdminRole("Fetch error");
+        setAdminRole("Network error");
+        console.error("Sidebar /users fetch network error:", err);
       });
   }, []);
   // Responsivenesss show/hide sidebar on small screens, always show on large screens
@@ -133,7 +160,8 @@ const SideBar = ({
       {/* Sidebar idea ->> above navbar on small screens, left on large screens */}
       {visible && (
         <div
-          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-30 sm:z-auto transition-all ${
+          // Always keep z-10 here so modals (z-[99999]) can overlay SideBar
+          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-10 sm:z-auto transition-all ${
             showSidebar
               ? "animate-slide-in-top duration-800"
               : "animate-fade-in duration-800"
@@ -144,11 +172,15 @@ const SideBar = ({
             transition: "transform ",
             animation: showSidebar ? "slide-in-top 2s" : "fade-in 0.8s",
             minWidth: "100%", // Prevent overflow
-            overflow: "hidden", // Prevent child overflow
+            overflow: "visible", // Allow overlays to extend outside
+            zIndex: 10, // Always keep z-10 for modal overlay
           }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
-          <div className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden rounded-t-xl shrink-0">
+          <div
+            key={activeTab + "-navbar"}
+            className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden rounded-t-xl shrink-0"
+          >
             <div className="flex justify-center">
               <div className="h-full ml-1 w-16 flex justify-center items-center">
                 <img
@@ -159,11 +191,55 @@ const SideBar = ({
                 />
               </div>
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
-                <p className="text-[16px] md:font-bold truncate max-w-[100px] md:max-w-[140px]">
+                <p
+                  className={`font-figtree font-bold max-w-[100px] md:max-w-[140px] leading-tight  
+                    ${
+                      adminName.length > 24
+                        ? "text-[11px] md:text-[14px]"
+                        : adminName.length > 16
+                        ? "text-[13px] md:text-[16px]"
+                        : "text-[15px] md:text-[18px]"
+                    }
+                  `}
+                  style={{
+                    fontSize:
+                      window.innerWidth < 640
+                        ? adminName.length > 24
+                          ? "10px"
+                          : adminName.length > 16
+                          ? "12px"
+                          : "14px"
+                        : "",
+                  }}
+                  title={adminName}
+                >
                   {adminName}
                 </p>
-                <p className="sm:text-[14px] text-[13px] md:text-xs font-light truncate max-w-[100px] md:max-w-[140px]">
-                  {adminRole}
+
+                <p
+                  className={`font-manjari max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
+                    ${
+                      adminRole.length > 24
+                        ? "text-[10px] md:text-[12px]"
+                        : adminRole.length > 16
+                        ? "text-[12px] md:text-[14px]"
+                        : "text-[13px] md:text-[15px]"
+                    }
+                  `}
+                  style={{
+                    fontSize:
+                      window.innerWidth < 640
+                        ? adminRole.length > 24
+                          ? "9px"
+                          : adminRole.length > 16
+                          ? "11px"
+                          : "13px"
+                        : "",
+                  }}
+                  title={adminRole}
+                >
+                  {adminRole.charAt(0).toUpperCase() +
+                    adminRole.slice(1).toLowerCase()}
                 </p>
               </div>
             </div>
@@ -182,8 +258,10 @@ const SideBar = ({
 
           {/* SIDE BAR HERO CONTAINER END okay?*/}
           {/*TOGA TRACK */}
-          <div className="hidden shrink-0 sm:flex w-full mt-5 rounded-md h-16 bg-gradient-to-t from-[#224273] to-blue-950 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.10)] items-center justify-center">
-            {/* toga design */}
+          <div
+            key={activeTab + "-toga-track"}
+            className="hidden shrink-0 sm:flex w-full mt-5 rounded-md h-16 bg-gradient-to-t from-[#224273] to-blue-950 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.10)] items-center justify-center transition-opacity duration-500 ease-in-out opacity-100 "
+          >
             <div className="w-fit  h-fit flex justify-center items-center">
               <span
                 className="text-4xl font-extrabold font-Figtree tracking-widest bg-gradient-to-r from-[#224273] via-[#537fa5] to-[#b6c2e0] bg-clip-text text-transparent"
@@ -198,8 +276,10 @@ const SideBar = ({
           </div>
 
           {/* SIDE BAR NAVIGATION CONTAINER*/}
-
-          <div className=" min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5">
+          <div
+            key={activeTab}
+            className="min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+          >
             <div className="relative w-full flex flex-col justify-between md:w-full">
               <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
                 ITEM STATUS
@@ -465,8 +545,9 @@ const SideBar = ({
                   </div>
                 </div>
               )}
-              {activeTab !== "student-home" ? (
-                activeTab === "reservation" || activeTab === "inventory" ? (
+              {/* REMOVE SORT BY BUTTONS FOR INVENTORY TAB */}
+              {activeTab !== "student-home" && activeTab !== "inventory" ? (
+                activeTab === "reservation" ? (
                   <>
                     <h4 className="text-white text-xs mt-1 ml-4 md:scale-100">
                       SORT BY
@@ -545,7 +626,10 @@ const SideBar = ({
           {/* SIDE BAR NAVIGATION CONTAINER EN okay?*/}
 
           {/* CALENDAR */}
-          <div className="min-w-[80%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-5">
+          <div
+            key={activeTab + "-calendar"}
+            className="min-w-[80%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+          >
             <div className="w-full flex ">
               <Calendar
                 mode="single"
