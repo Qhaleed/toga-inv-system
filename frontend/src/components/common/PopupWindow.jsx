@@ -79,7 +79,7 @@ const PopupWindow = ({
             <div className="h-full w-32 hidden md:flex justify-center items-center">
               <button className="border border-white w-28 h-6 rounded-md flex justify-center items-center text-white text-[10px]">
                 <User className="w-4 mr-2" />
-                <h5>1</h5>
+                <h5>{user.studentname.split(" ")[0]}</h5>
               </button>
             </div>
           </div>

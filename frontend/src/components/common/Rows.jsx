@@ -31,7 +31,7 @@ const Rows = ({
   const [hoveredEyeId, setHoveredEyeId] = useState(null);
   // PopupWindow state
   const [popupOpen, setPopupOpen] = useState(false);
-  const [popupUser, setPopupUser] = useState(null);
+  const [popupUser, setPopupUser] = useState(false);
 
   // Function to fetch data for the dashboard
   useEffect(() => {
