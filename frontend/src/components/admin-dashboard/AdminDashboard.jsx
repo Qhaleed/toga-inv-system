@@ -2,7 +2,7 @@ import React from "react";
 import { PieChartDash } from "../ui/pie-chart";
 function AdminDashboard() {
   return (
-    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-2">
       {/* Pie Chart 1 */}
       <div className="flex justify-center">
         <PieChartDash />
