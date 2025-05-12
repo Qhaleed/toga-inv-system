@@ -22,7 +22,7 @@ const PopupWindow = ({
 
   const exitReset = () => {
     setEdit(false);
-  }
+  };
 
   const EditMode = () => {
     if (!edit) {
@@ -66,9 +66,10 @@ const PopupWindow = ({
             <div className="h-full w-16 flex justify-end items-center ml-2">
               <button
                 className="w-12 h-12 bg-[#F3B51A] rounded-2xl flex justify-center items-center mr-2 cursor-pointer hover:bg-[#d99f0f] hover:scale-105 transition-all duration-200"
-                onClick={() => {onClose();
-                                exitReset();
-                               }}
+                onClick={() => {
+                  onClose();
+                  exitReset();
+                }}
               >
                 {" "}
                 {/*Navbar buttons*/}
@@ -77,16 +78,16 @@ const PopupWindow = ({
             </div>
             <div className="h-full w-32 hidden md:flex justify-center items-center">
               <button className="border border-white w-28 h-6 rounded-md flex justify-center items-center text-white text-[10px]">
-                <Inventory className="w-3 mr-2" />
+                <Inventory className="w-4 mr-2" />
                 <h5>Reservation</h5>
               </button>
             </div>
             <div className="h-full w-3 hidden md:flex justify-center items-center">
               <RightArrow className="w-3" />
             </div>
-            <div className="h-full w-32 hidden md:flex justify-center items-center">
-              <button className="border border-white w-28 h-6 rounded-md flex justify-center items-center text-white text-[10px]">
-                <User className="w-4 mr-2" />
+            <div className="h-full w-fit pl-2 hidden md:flex justify-center items-center">
+              <button className="border border-white w-fit px-2 h-6 rounded-md flex justify-center items-center text-white text-[10px]">
+                <User className="w-5 mr-2" />
                 <h5>{user.studentname}</h5>
               </button>
             </div>
@@ -110,8 +111,10 @@ const PopupWindow = ({
               </button>
             </div>
             <div className="ps-2 h-10 w-28 border-l-2 flex justify-center items-center border-gray-500 mr-7 text-sm">
-              <button className="bg-[#0C7E48] text-white w-24 h-8 rounded-lg hover:bg-[#0A6F40] hover:scale-105 transition-all duration-200"
-              onClick={() => navigate("/evaluation-page")}>
+              <button
+                className="bg-[#0C7E48] text-white w-24 h-8 rounded-lg hover:bg-[#0A6F40] hover:scale-105 transition-all duration-200"
+                onClick={() => navigate("/evaluation-page")}
+              >
                 <h3>Evaluate</h3>
               </button>
             </div>

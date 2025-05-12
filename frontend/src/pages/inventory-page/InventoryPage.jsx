@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SideBar from "../../components/navigations/SideBar";
 import Navbar from "../../components/navigations/NavBar";
-import MyChart from "../../components/ui/my-chart";
+
 import Rows from "../../components/common/Rows";
 import {
   StocksTab,
