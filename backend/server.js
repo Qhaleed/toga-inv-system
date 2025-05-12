@@ -22,7 +22,7 @@ const accountsRoute = require("./routes/accounts");
 
 // Routes getting inventory from the database
 
-const inventoryRoute = require("./routes/inventory")
+const inventoryRoute = require("./routes/inventory");
 
 app.use("/users", userRouter);
 app.use("/evaluation", evaluationRoute);
@@ -30,7 +30,6 @@ app.use("/inventory", invenRoute);
 app.use("/auth", authRoute);
 app.use("/register", registerRoute);
 app.use("/accounts", accountsRoute);
-app.use("/inventory", inventoryRoute)
 
 // Root Test
 app.get("/", (req, res) => {
