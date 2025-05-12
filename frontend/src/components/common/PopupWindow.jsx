@@ -86,7 +86,11 @@ const PopupWindow = ({
           <div className="h-full w-80 flex justify-end items-center">
             <div className="h-full w-24 flex justify-center items-center text-sm pr-1">
               <button
-                className={`w-20 h-10 rounded-lg text-xs ${!edit ? "border border-green-400 text-green-400" : "bg-green-400 text-white"} hover:scale-105 transition-all duration-200`}
+                className={`w-20 h-10 rounded-lg text-xs ${
+                  !edit
+                    ? "border border-green-400 text-green-400"
+                    : "bg-green-400 text-white"
+                } hover:scale-105 transition-all duration-200`}
                 onClick={EditMode}
               >
                 <h3>EDIT</h3>
@@ -272,7 +276,9 @@ const PopupWindow = ({
               </div>
             </div>
             <div
-              className={`h-20 w-full flex justify-center items-center ${!edit && "opacity-50"}`}
+              className={`h-20 w-full flex justify-center items-center ${
+                !edit && "opacity-50"
+              }`}
             >
               <div className="bg-[#40407888] h-[45px] w-[85%] rounded-2xl flex justify-start items-center">
                 <div className="h-6 w-32 border-r-2 border-gray-400 flex justify-start items-center text-white text-lg">
@@ -314,7 +320,9 @@ const PopupWindow = ({
               </div>
             </div>
             <div
-              className={`w-full h-20 flex justify-end items-center ${!edit && "hidden"}`}
+              className={`w-full h-20 flex justify-end items-center ${
+                !edit && "hidden"
+              }`}
             >
               <button className="w-28 h-10 bg-[#86E4A1] mr-8 rounded-2xl text-black text-lg hover:scale-105 hover:bg-[#57b27f] transition-all duration-200 ">
                 SAVE
