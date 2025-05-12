@@ -177,7 +177,10 @@ const SideBar = ({
           }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
-          <div className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden rounded-t-xl shrink-0">
+          <div
+            key={activeTab + "-navbar"}
+            className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden rounded-t-xl shrink-0"
+          >
             <div className="flex justify-center">
               <div className="h-full ml-1 w-16 flex justify-center items-center">
                 <img
@@ -254,8 +257,10 @@ const SideBar = ({
 
           {/* SIDE BAR HERO CONTAINER END okay?*/}
           {/*TOGA TRACK */}
-          <div className="hidden shrink-0 sm:flex w-full mt-5 rounded-md h-16 bg-gradient-to-t from-[#224273] to-blue-950 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.10)] items-center justify-center">
-            {/* toga design */}
+          <div
+            key={activeTab + "-toga-track"}
+            className="hidden shrink-0 sm:flex w-full mt-5 rounded-md h-16 bg-gradient-to-t from-[#224273] to-blue-950 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.10)] items-center justify-center transition-opacity duration-500 ease-in-out opacity-100 "
+          >
             <div className="w-fit  h-fit flex justify-center items-center">
               <span
                 className="text-4xl font-extrabold font-Figtree tracking-widest bg-gradient-to-r from-[#224273] via-[#537fa5] to-[#b6c2e0] bg-clip-text text-transparent"
@@ -270,8 +275,10 @@ const SideBar = ({
           </div>
 
           {/* SIDE BAR NAVIGATION CONTAINER*/}
-
-          <div className=" min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5">
+          <div
+            key={activeTab}
+            className="min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+          >
             <div className="relative w-full flex flex-col justify-between md:w-full">
               <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
                 ITEM STATUS
@@ -537,8 +544,9 @@ const SideBar = ({
                   </div>
                 </div>
               )}
-              {activeTab !== "student-home" ? (
-                activeTab === "reservation" || activeTab === "inventory" ? (
+              {/* REMOVE SORT BY BUTTONS FOR INVENTORY TAB */}
+              {activeTab !== "student-home" && activeTab !== "inventory" ? (
+                activeTab === "reservation" ? (
                   <>
                     <h4 className="text-white text-xs mt-1 ml-4 md:scale-100">
                       SORT BY
@@ -617,7 +625,10 @@ const SideBar = ({
           {/* SIDE BAR NAVIGATION CONTAINER EN okay?*/}
 
           {/* CALENDAR */}
-          <div className="min-w-[80%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-5">
+          <div
+            key={activeTab + "-calendar"}
+            className="min-w-[80%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+          >
             <div className="w-full flex ">
               <Calendar
                 mode="single"

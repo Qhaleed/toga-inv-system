@@ -18,7 +18,7 @@ const PopupWindow = ({
     return null;
   }
   return (
-    <div className="fixed inset-0 w-screen h-screen flex items-center justify-center bg-black/40 z-[99999]">
+    <div className="fixed inset-0 w-screen h-screen flex items-center justify-center bg-black/40 z-[150] backdrop-blur-sm">
       <div className="flex flex-col items-center justify-center p-0 bg-[#001C47] border border-white w-3xl h-[630px] rounded-2xl shadow-2xl relative animate-slide-up">
         <div className="h-12 w-full flex justify-between mt-6">
           <div className="h-full flex flex-row items-center gap-2 ml-3">

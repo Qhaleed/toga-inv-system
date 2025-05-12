@@ -210,7 +210,7 @@ export function ViewDamageTab() {
 
 export function ViewRepairTab() {
   return (
-    <div className="h-fit w-fit">
+    <div className="h-full flex justify-center w-full">
       <CarouselPlugin />
     </div>
   );

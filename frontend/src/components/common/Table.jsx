@@ -9,7 +9,7 @@ const Table = ({ isGrid, modifyTable, sortOrder, data }) => {
   }, [sortOrder]);
   const mainContentHeight = "80vh";
   return (
-    <div className="w-full flex flex-col items-center justify-start z-10 mt-10">
+    <div className="w-full animate-fade-in flex flex-col items-center justify-start z-10 mt-10">
       <div className="w-full flex flex-col items-start justify-center mb-2 px-2" />
       <div
         className="w-full flex justify-center items-start px-1 sm:px-2 md:px-5 lg:ml-0 lg:w-full"
@@ -25,13 +25,13 @@ const Table = ({ isGrid, modifyTable, sortOrder, data }) => {
               </div>
             ) : (
               <div
-                className="relative w-full flex flex-col min-h-fit max-w-full border border-black shadow outline-none bg-white "
+                className="relative w-full flex flex-col min-h-fit max-w-full border border-black shadow outline-none bg-white z-0"
                 style={{
                   maxHeight: mainContentHeight,
-
                   minWidth: 300,
                   maxWidth: "100vw",
                   overflow: "visible",
+                  zIndex: 0, // Ensure table is always below overlays
                 }}
               >
                 <div className="w-full overflow-x-auto scrollbar-hide">
