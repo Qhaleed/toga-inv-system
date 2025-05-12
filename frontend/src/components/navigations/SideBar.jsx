@@ -216,8 +216,8 @@ const SideBar = ({
                   {adminName}
                 </p>
 
+                <p
                   className={`font-manjari max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
-
                     ${
                       adminRole.length > 24
                         ? "text-[10px] md:text-[12px]"
@@ -237,10 +237,9 @@ const SideBar = ({
                         : "",
                   }}
                   title={adminRole}
-
+                >
                   {adminRole.charAt(0).toUpperCase() +
                     adminRole.slice(1).toLowerCase()}
-
                 </p>
               </div>
             </div>
