@@ -79,7 +79,7 @@ const PopupWindow = ({
             <div className="h-full w-32 hidden md:flex justify-center items-center">
               <button className="border border-white w-28 h-6 rounded-md flex justify-center items-center text-white text-[10px]">
                 <User className="w-4 mr-2" />
-                <h5>1</h5>
+                <h5>{user.studentname}</h5>
               </button>
             </div>
           </div>
@@ -114,7 +114,7 @@ const PopupWindow = ({
               <div className="w-full h-full">
                 <div className="h-[57%] w-full flex justify-start items-end">
                   <h1 className="text-white font-figtree-extrabold text-[35px] ml-12">
-                    1
+                    {user.studentname}
                   </h1>
                 </div>
                 <div className="h-[43%] w-full">
@@ -135,7 +135,7 @@ const PopupWindow = ({
                   <h3>FULL NAME</h3>
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
-                  <h3>1</h3>
+                  <h3>{user.studentname}</h3>
                 </div>
               </div>
               <div className="w-full h-8 flex justify-center">
