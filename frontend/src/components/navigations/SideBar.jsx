@@ -278,7 +278,7 @@ const SideBar = ({
           {/* SIDE BAR NAVIGATION CONTAINER*/}
           <div
             key={activeTab}
-            className="min-w-full md:w-11/12 md:scale-100 scale-90 sm:min-w-24 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="min-w-full md:w-11/12 md:scale-100 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <div className="relative w-full flex flex-col justify-between md:w-full">
               <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">

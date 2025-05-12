@@ -52,7 +52,7 @@ const PendingPage = () => {
                 setActiveTab={setActiveTab}
               />
             </div>
-            <div className="flex-1 flex mx-auto min-w-fit  animate-fade-in    overflow-hidden  ">
+            <div className="flex-1 flex mx-auto min-w-fit  animate-fade-in    overflow-hidden ">
               <Table
                 isGrid={isGrid}
                 modifyTable={modifyTable}
