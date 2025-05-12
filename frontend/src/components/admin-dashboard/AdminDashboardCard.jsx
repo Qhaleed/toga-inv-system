@@ -20,7 +20,7 @@ const AdminDashboardCard = () => {
         </div>
 
         {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 col-span-1 h-full">
+        <div className="w-full flex-1 md:col-span-3 xl:col-span-3 overflow-hidden 2xl:col-span-4 sm:col-span-3 col-span-1 h-full">
           <div
             className="w-full min-h-screen flex flex-col items-center"
             style={{ maxWidth: "100vw" }}
