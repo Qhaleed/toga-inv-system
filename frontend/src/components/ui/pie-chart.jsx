@@ -58,8 +58,10 @@ export function PieChartDash() {
   return (
     <Card className="flex flex-col justify-center bg-white/90 relative shadow-lg rounded-3xl max-h-[400px] border border-gray-200 w-full max-w-md mx-auto">
       <CardHeader className="items-center pb-2">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>Current Inventory</CardDescription>
+        <CardTitle>Available Stocks Left</CardTitle>
+        <CardDescription>
+          Breakdown of all remaining inventory items
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pt-0 pb-0">
         <ChartContainer config={chartConfig} className=" max-h-[220px]">
@@ -72,8 +74,8 @@ export function PieChartDash() {
               data={chartData}
               dataKey="visitors"
               nameKey="browser"
-              innerRadius={60}
-              strokeWidth={5}
+              innerRadius={50}
+              strokeWidth={3}
             >
               <Label
                 content={({ viewBox }) => {
@@ -97,7 +99,7 @@ export function PieChartDash() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Stocks Left
+                          Stocks Left{" "}
                         </tspan>
                       </text>
                     );
@@ -110,10 +112,11 @@ export function PieChartDash() {
       </CardContent>
       <CardFooter className="flex-col gap-1 text-sm pt-2 pb-3">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          {/* You can update this to show a real trend if you have the data */}
+          Inventory status updated <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total stocks left in inventory
+          Showing the total available stocks left in inventory
         </div>
       </CardFooter>
     </Card>

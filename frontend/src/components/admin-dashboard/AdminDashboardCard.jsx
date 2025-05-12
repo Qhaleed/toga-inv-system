@@ -11,7 +11,7 @@ const AdminDashboardCard = () => {
   const [activeTab, setActiveTab] = useState("dashboard"); // State for active tab
 
   return (
-    <div className="h-fit w-screen relative bg-[#EBEBEB] font-figtree font-medium">
+    <div className="h-fit w-screen relative bg-[#F3F9FF] font-figtree font-medium">
       {/* Responsive grid: sidebar above on mobile, left on desktop */}
       <div className="max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols- lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 sm:gap-0 sm:top-0 sm:left-0 sm:h-screen sm:w-screen">
         {/* Sidebar: full width above on mobile, left on desktop */}
@@ -39,7 +39,7 @@ const AdminDashboardCard = () => {
               />
             </div>
             {/* Main dashboard content */}
-            <div className="bg-black w-full flex-1 flex sm:p-6 gap-8 min-w-0 overflow-x-visible overflow-y-visible">
+            <div className="w-full flex-1 flex sm:p-6   overflow-hidden">
               <AdminDashboard />
             </div>
           </div>
