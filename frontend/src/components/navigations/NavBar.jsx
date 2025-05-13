@@ -108,66 +108,106 @@ const Navbar = ({
           <LoaderAnimation />
         </div>
       )}
-      <div className="h-24 relative ">
+      <div className="h-full bg-amber-100 flex justify-between overflow-hidden  w-full">
         {/* Top Navigation */}
-        <div className="h-1/2 flex justify-start items-center ml-14 md:ml-10 mr-2">
-          {/* Dashboard button */}
-          <button
-            onClick={() => navigate("/admin-dashboard")}
-            className={`${tabClass("dashboard")} removeEffect`}
-          >
-            <span className="w-3">
-              <Home className="w-4" />
-            </span>
-            <span className="text-[12px] mx-1 md:mx-6 content-center ">
-              Dashboard
-            </span>
+        {/* Mobile: Only big icons, no text, small logout icon at end */}
+        <div className="flex items-center w-full justify-around  md:hidden">
+          <button onClick={() => navigate("/admin-dashboard")} className="p-2">
+            <Home className="w-6 mx-1 h-6" />
           </button>
-
-          <button
-            onClick={() => handleNavigation("inventory", "/inventory")}
-            className={`${tabClass("inventory")} removeEffect`}
-          >
-            <span className="w-3">
-              <Inventory className="w-4" />
-            </span>
-            <span className="text-[12px] mx-2 md:mx-4">Inventory</span>
+          <button onClick={() => handleNavigation("inventory", "/inventory")}>
+            <Inventory className="w-6 mx-1  h-6" />
           </button>
-
-          <button
-            onClick={() => handleNavigation("pending", "/pending")}
-            className={`${tabClass("pending")} removeEffect`}
-          >
-            <span className="w-3">
-              <Statistic className="w-4" />
-            </span>
-            <span className="text-[12px] mx-2 md:mx-6 content-center">
-              Pending
-            </span>
+          <button onClick={() => handleNavigation("pending", "/pending")}>
+            <Statistic className="w-6 mx-1 h-6" />
           </button>
-
-          <button
-            onClick={() => navigate("/evaluation-page")}
-            className={`${tabClass("evaluation")} removeEffect`}
-          >
-            <span className="w-3">
-              <Application className="w-4" />
-            </span>
-            <span className="text-[12px]  mx-1  md:mx-4">Evaluation</span>
+          <button onClick={() => navigate("/evaluation-page")} className="p-2">
+            <Application className="w-6 mx-1 h-6" />
           </button>
-
-          <button
-            onClick={() => navigate("/reservation")}
-            className={`${tabClass("reservation")} removeEffect`}
-          >
-            <span className="w-3">
-              <Application className="w-4" />
-            </span>
-            <span className="text-[12px] mx-1 md:mx-4">Reservation</span>
+          <button onClick={() => navigate("/reservation")} className="p-2">
+            <Application className="w-6 mx-1 h-6" />
           </button>
-
-          {/* Logout button at top right */}
-          <div className="relative ml-auto mr-5 ">
+          {/* Small logout icon */}
+          <button onClick={handleLogout} className="p-2 ml-15">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-7 h-7"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        </div>
+        {/* Desktop/Tablet: Full nav with text and logout */}
+        <div className="hidden md:flex h-full justify-between items-center w-full ml-14 md:ml-10 mr-2 min-w-0 overflow-hidden">
+          <div className="flex items-center flex-nowrap min-w-0">
+            {/* Dashboard button */}
+            <button
+              onClick={() => navigate("/admin-dashboard")}
+              className={`${tabClass("dashboard")} removeEffect`}
+            >
+              <span className="w-3">
+                <Home className="w-4" />
+              </span>
+              <span className=" text-[7px] md:text-[12px] mx-1 md:mx-6 content-center ">
+                Dashboard
+              </span>
+            </button>
+            <button
+              onClick={() => handleNavigation("inventory", "/inventory")}
+              className={`${tabClass("inventory")} removeEffect`}
+            >
+              <span className="w-3">
+                <Inventory className="w-4" />
+              </span>
+              <span className=" text-[7px] md:text-[12px] mx-2 md:mx-4">
+                Inventory
+              </span>
+            </button>
+            <button
+              onClick={() => handleNavigation("pending", "/pending")}
+              className={`${tabClass("pending")} removeEffect`}
+            >
+              <span className="w-3">
+                <Statistic className="w-4" />
+              </span>
+              <span className=" text-[7px] md:text-[12px] mx-2 md:mx-6 content-center">
+                Pending
+              </span>
+            </button>
+            <button
+              onClick={() => navigate("/evaluation-page")}
+              className={`${tabClass("evaluation")} removeEffect`}
+            >
+              <span className="w-3">
+                <Application className="w-4" />
+              </span>
+              <span className=" text-[7px] md:text-[12px]  mx-1  md:mx-4">
+                Evaluation
+              </span>
+            </button>
+            <button
+              onClick={() => navigate("/reservation")}
+              className={`${tabClass("reservation")} removeEffect`}
+            >
+              <span className="w-3">
+                <Application className="w-4" />
+              </span>
+              <span className=" text-[7px] md:text-[12px] mx-1 md:mx-4">
+                Reservation
+              </span>
+            </button>
+          </div>
+          {/* Logout button at far right */}
+          <div className="relative">
             <button
               onClick={handleLogout}
               className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded-2xl shadow transition-all duration-500"
@@ -183,7 +223,7 @@ const Navbar = ({
         {activeTab !== "inventory" &&
           activeTab !== "pending" &&
           activeTab !== "dashboard" && (
-            <div className="h-1/2  animate-fade-in flex justify-start items-center">
+            <div className="h-20  animate-fade-in flex justify-start items-center">
               <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[800px]">
                 <div className="relative lg:ml-14 md:ml-10 ml-8 mr-2">
                   <Search className="absolute w-5 top-1 left-2" />
@@ -224,7 +264,7 @@ const Navbar = ({
                 </button>
               </div>
               <button
-                className={`${isEvaluation} hover:scale-105 h-7 px-3 removeEffect  w-20 text-[10px] whitespace-nowrap md:w-28 rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+                className={`${isEvaluation} hover:scale-105 h-7 px-3 removeEffect  md:w-20 text-[10px] whitespace-nowrap rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
                   modifyTable
                     ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
                     : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"

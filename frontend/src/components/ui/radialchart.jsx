@@ -54,9 +54,12 @@ export function RadialChart() {
     chartData[0].hood;
   window.chartConfig = chartConfig;
   return (
-    <Card className="flex p-0 absolute z-20  w-full h-full  ">
-      <CardContent className="w-full p-0 mt-11 relative flex  flex-col h-35 ">
-        <ChartContainer config={chartConfig} className="w-full flex  h-full">
+    <Card className="flex absolute p-0 w-full h-full">
+      <CardContent className="w-full p-0 z-100 relative flex flex-col h-1000">
+        <ChartContainer
+          config={chartConfig}
+          className="w-full flex h-full items-center justify-center"
+        >
           <RadialBarChart
             data={chartData}
             endAngle={180}
@@ -74,7 +77,7 @@ export function RadialChart() {
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) - 16}
-                          className=" text-2xl  font-bold"
+                          className="text-2xl font-bold "
                         >
                           {totalVisitors.toLocaleString()}
                         </tspan>
