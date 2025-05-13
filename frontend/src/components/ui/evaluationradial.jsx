@@ -37,6 +37,7 @@ export function EvaluationRadial() {
             data={chartData}
             endAngle={180}
             innerRadius={55}
+            className="hover:scale-110 transition-transform duration-300 ease-in-out"
             outerRadius={90}
           >
             <ChartTooltip cursor={false} content={<CustomRadialTooltip />} />

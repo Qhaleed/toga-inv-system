@@ -31,13 +31,14 @@ export function CheckedOutRadial() {
   const totalCheckedOut = chartData[0].checkedout;
   window.chartConfig = chartConfig;
   return (
-    <Card className="flex p-0 absolute w-full h-full">
+    <Card className="flex p-0 absolute  z-20 w-full h-full">
       <CardContent className="w-full p-0 mt-11 flex flex-col h-35">
         <ChartContainer config={chartConfig} className="w-full flex h-full">
           <RadialBarChart
             data={chartData}
             endAngle={180}
             innerRadius={55}
+            className="hover:scale-110 transition-transform duration-300 ease-in-out"
             outerRadius={90}
           >
             <ChartTooltip cursor={false} content={<CustomRadialTooltip />} />

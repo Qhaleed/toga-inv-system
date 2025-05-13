@@ -47,6 +47,7 @@ const SideBar = ({
     if (!token) {
       setAdminName("Not logged in");
       setAdminRole("N/A");
+      if (typeof setAdminName === "function") setAdminName("Not logged in");
       return;
     }
     fetch("http://localhost:5001/users", {
@@ -66,6 +67,7 @@ const SideBar = ({
           }
           setAdminName("Fetch error");
           setAdminRole(errorMsg);
+          if (typeof setAdminName === "function") setAdminName("Fetch error");
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }
@@ -75,14 +77,17 @@ const SideBar = ({
         if (data && data.name && data.role) {
           setAdminName(data.name);
           setAdminRole(data.role);
+          if (typeof setAdminName === "function") setAdminName(data.name);
         } else if (data) {
           setAdminName("No user found");
           setAdminRole("N/A");
+          if (typeof setAdminName === "function") setAdminName("No user found");
         }
       })
       .catch((err) => {
         setAdminName("Fetch error");
         setAdminRole("Network error");
+        if (typeof setAdminName === "function") setAdminName("Fetch error");
         console.error("Sidebar /users fetch network error:", err);
       });
   }, []);
