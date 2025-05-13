@@ -18,6 +18,7 @@ const SideBar = ({
   dateDue,
   focusedStatus, // <-- add this prop
   setFocusedStatus, // <-- add this prop
+  setAdminName: setAdminNameProp, // <-- receive prop for lifting state
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -47,7 +48,8 @@ const SideBar = ({
     if (!token) {
       setAdminName("Not logged in");
       setAdminRole("N/A");
-      if (typeof setAdminName === "function") setAdminName("Not logged in");
+      if (typeof setAdminNameProp === "function")
+        setAdminNameProp("Not logged in");
       return;
     }
     fetch("http://localhost:5001/users", {
@@ -67,7 +69,8 @@ const SideBar = ({
           }
           setAdminName("Fetch error");
           setAdminRole(errorMsg);
-          if (typeof setAdminName === "function") setAdminName("Fetch error");
+          if (typeof setAdminNameProp === "function")
+            setAdminNameProp("Fetch error");
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }
@@ -77,20 +80,23 @@ const SideBar = ({
         if (data && data.name && data.role) {
           setAdminName(data.name);
           setAdminRole(data.role);
-          if (typeof setAdminName === "function") setAdminName(data.name);
+          if (typeof setAdminNameProp === "function")
+            setAdminNameProp(data.name);
         } else if (data) {
           setAdminName("No user found");
           setAdminRole("N/A");
-          if (typeof setAdminName === "function") setAdminName("No user found");
+          if (typeof setAdminNameProp === "function")
+            setAdminNameProp("No user found");
         }
       })
       .catch((err) => {
         setAdminName("Fetch error");
         setAdminRole("Network error");
-        if (typeof setAdminName === "function") setAdminName("Fetch error");
+        if (typeof setAdminNameProp === "function")
+          setAdminNameProp("Fetch error");
         console.error("Sidebar /users fetch network error:", err);
       });
-  }, []);
+  }, [setAdminNameProp]);
   // Responsivenesss show/hide sidebar on small screens, always show on large screens
   const visible = isLargeScreen ? true : showSidebar;
 
