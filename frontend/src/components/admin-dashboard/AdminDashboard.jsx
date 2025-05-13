@@ -5,13 +5,15 @@ import { PendingRadial } from "../ui/pendingradial";
 import { EvaluationRadial } from "../ui/evaluationradial";
 import { CheckedOutRadial } from "../ui/checkedoutradial";
 
-function AdminDashboard() {
+function AdminDashboard({ adminName }) {
   return (
-    <div className="grid grid-cols-1 animate-fade-in gap-2 sm:grid-cols-1 lg:grid-cols-3 grid-rows-2 h-[88vh] min-h-[800px]  max-h-[820px] w-full overflow-x-hidden">
+    <div className="grid grid-cols-1 relative animate-fade-in gap-4 sm:grid-cols-1 lg:grid-cols-3 grid-rows-2 h-[88vh] min-h-[800px]  max-h-[820px] w-full overflow-hidden">
       {/* Row 1 */}
-
-      <div className=" flex  h-[350px] md:h-[400px] ">
-        <div className="grid grid-cols-2 gap-5 h-full  grid-rows-2  pt-15  px-2 w-100">
+      <div className=" flex bg-amber-300  pl-8 h-[350px] md:h-[400px] ">
+        <p className="absolute fle text-3xl">
+          Hello, {adminName || "Kenneth "}{" "}
+        </p>
+        <div className="grid grid-cols-2 gap-5 h-full  grid-rows-2  pt-12   w-full">
           {/* First cell in row 1, spans two columns and two rows */}
           <div className="dashboard-card relative flex rounded-[30px]  w-full h-full">
             <p className="w-10 text-[12px] font-bold ml-4 mt-2">
@@ -32,21 +34,20 @@ function AdminDashboard() {
             <EvaluationRadial />
           </div>
           <div className="dashboard-card  relative rounded-[30px] shadow-lg w-full h-full flex ">
-            {" "}
             <p className="w-10 text-[13px] font-bold ml-4 mt-2">Checked Out</p>
             <CheckedOutRadial />
           </div>
         </div>
       </div>
-
-      <div className=" md:h-[400px] pt-15 px-3 flex  ">
-        <div className="flex w-full h-full bg-white rounded-[30px] shadow-lg  "></div>
+      <div className=" md:h-[400px] bg-red-50 pt-12 w-fill flex  ">
+        <div className="flex w-full h-full bg-white rounded-[30px] shadow-lg  ">
+          asdsds
+        </div>
       </div>
       {/* Vertically connected column for three and six */}
-      <div className="bg-gradient-to-b flex flex-col items-center justify-between row-span-2 rounded-tr-[30px] lg:rounded-r-[30px] rounded-br-[30px] text-xs font-bold max-h-[840px] shadow-lg">
+      <div className="bg-gradient-to-b flex flex-col items-center justify-between row-span-2 rounded-tr-[30px] lg:rounded-r-[30px] rounded-br-[30px] text-xs font-bold max-h-[840px]">
         <div className="flex-1 flex  w-full">
           <div className="bg-white rounded-[30px]  w-full h-full shadow-lg">
-            {" "}
             asdas
           </div>
         </div>

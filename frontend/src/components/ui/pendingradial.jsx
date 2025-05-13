@@ -30,7 +30,7 @@ export function PendingRadial() {
   const totalPending = chartData[0].pending;
   window.chartConfig = chartConfig;
   return (
-    <Card className="flex absolute p-0  w-full h-full">
+    <Card className="flex absolute p-0  z-20 w-full h-full">
       <CardContent className="w-full p-0 mt-11 flex flex-col h-35">
         <ChartContainer config={chartConfig} className="w-full flex h-full">
           <RadialBarChart
