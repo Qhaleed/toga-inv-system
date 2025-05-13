@@ -67,7 +67,7 @@ const SideBar = ({
           } catch {
             // Not JSON, ignore
           }
-          setAdminName("Fetch error");
+          setAdminName("Admin");
           setAdminRole(errorMsg);
           if (typeof setAdminNameProp === "function")
             setAdminNameProp("Fetch error");
@@ -83,15 +83,15 @@ const SideBar = ({
           if (typeof setAdminNameProp === "function")
             setAdminNameProp(data.name);
         } else if (data) {
-          setAdminName("No user found");
-          setAdminRole("N/A");
+          setAdminName("Admin");
+          setAdminRole("");
           if (typeof setAdminNameProp === "function")
             setAdminNameProp("No user found");
         }
       })
       .catch((err) => {
-        setAdminName("Fetch error");
-        setAdminRole("Network error");
+        setAdminName("Admin");
+        setAdminRole("");
         if (typeof setAdminNameProp === "function")
           setAdminNameProp("Fetch error");
         console.error("Sidebar /users fetch network error:", err);
