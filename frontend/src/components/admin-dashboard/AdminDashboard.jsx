@@ -1,6 +1,9 @@
 import React from "react";
 import { GroupBarChart } from "@/components/ui/GroupBarChart";
 import { RadialChart } from "../ui/radialchart";
+import { PendingRadial } from "../ui/pendingradial";
+import { EvaluationRadial } from "../ui/evaluationradial";
+import { CheckedOutRadial } from "../ui/checkedoutradial";
 
 function AdminDashboard() {
   return (
@@ -16,9 +19,23 @@ function AdminDashboard() {
             </p>
             <RadialChart />
           </div>
-          <div className="dashboard-card flex rounded-[30px] shadow-lg items-center justify-center w-full h-full"></div>
-          <div className="dashboard-card  rounded-[30px] shadow-lg"> asds</div>
-          <div className="dashboard-card  rounded-[30px] shadow-lg"> asds</div>
+          <div className="dashboard-card relative flex rounded-[30px] shadow-lg  w-full h-full">
+            <p className="w-10 text-[12px] font-bold ml-4 mt-2">
+              Pending Status
+            </p>
+            <PendingRadial />
+          </div>
+          <div className="dashboard-card relative flex z-10 rounded-[30px] shadow-lg  w-full h-full">
+            <p className="w-10 text-[13px] font-bold ml-4 mt-2">
+              Evaluation Status
+            </p>
+            <EvaluationRadial />
+          </div>
+          <div className="dashboard-card  relative rounded-[30px] shadow-lg w-full h-full flex ">
+            {" "}
+            <p className="w-10 text-[13px] font-bold ml-4 mt-2">Checked Out</p>
+            <CheckedOutRadial />
+          </div>
         </div>
       </div>
 
@@ -35,7 +52,7 @@ function AdminDashboard() {
         </div>
       </div>
       {/* Row 2 */}
-      <div className=" block mt-1 rounded-bl-[30px] text-xs font-bold min-h-[80px]  shrink-0 h-fill col-span-2">
+      <div className=" flex mt-1 rounded-bl-[30px] text-xs font-bold min-h-[80px]  shrink-0 h-fill col-span-2">
         <div className=" w-full h-full">
           <div className="bg-white relative rounded-[30px] flex items-center justify-center w-full h-full">
             <GroupBarChart />

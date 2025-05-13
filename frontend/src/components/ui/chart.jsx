@@ -206,7 +206,7 @@ function CustomRadialTooltip({ active, payload }) {
     hood: { label: "Hood", color: "hsl(var(--chart-4))" },
   };
   return (
-    <div className="bg-white border rounded-lg px-2 animate-fade-in py-2 t mt-12 text-xs shadow-xl min-w-[8rem]">
+    <div className="bg-white flex relative z-[9999] border rounded-lg px-2 animate-fade-in py-2 t mt-12 text-xs shadow-xl min-w-[8rem]">
       <ul className="space-y-3">
         {Object.keys(config).map((key) => (
           <li key={key} className="flex items-center gap-2">
