@@ -6,12 +6,14 @@ import { EvaluationRadial } from "../ui/evaluationradial";
 import { CheckedOutRadial } from "../ui/checkedoutradial";
 
 function AdminDashboard({ adminName }) {
+  // Only show the first word (before the first space)
+  const firstName = adminName ? adminName.split(" ")[0] : "Admin";
   return (
     <div className="grid grid-cols-1 relative animate-fade-in gap-4 sm:grid-cols-1 lg:grid-cols-3 grid-rows-2 h-[88vh] min-h-[800px]  max-h-[820px] w-full overflow-hidden">
       {/* Row 1 */}
       <div className=" flex bg-amber-300  pl-8 h-[350px] md:h-[400px] ">
-        <p className="absolute fle text-3xl">
-          Hello, {adminName || "Kenneth "}{" "}
+        <p className="absolute flex  text-lg md:text-2xl font-semibold mt-2 ml-2">
+          {`Welcome, ${firstName}! 👋🏻`}
         </p>
         <div className="grid grid-cols-2 gap-5 h-full  grid-rows-2  pt-12   w-full">
           {/* First cell in row 1, spans two columns and two rows */}
