@@ -38,8 +38,8 @@ const Navbar = ({
 
   const tabClass = (tabName) =>
     activeTab === tabName
-      ? "hover:scale-105 bg-blue-100 ring-0.5 border border-blue-700 flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6 lg:w-40 lg:h-6 w-18 h-4 text-xs rounded-lg transition-all ease-out duration-500"
-      : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6 lg:w-40 lg:h-6 w-18 h-4 text-xs rounded-lg transition-all ease-out duration-500";
+      ? "hover:scale-105 bg-blue-100 ring-0.5 border border-blue-700 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-28 lg:w-36 2xl:w-48 h-6 text-[10px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500"
+      : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-28 lg:w-36 2xl:w-48 h- text-[10px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500";
 
   const handleNavigation = (tabName, route) => {
     if (activeTab !== tabName) {
@@ -108,7 +108,7 @@ const Navbar = ({
           <LoaderAnimation />
         </div>
       )}
-      <div className="h-full bg-amber-100 flex justify-between overflow-hidden  w-full">
+      <div className="h-full bg-amber-100 flex justify-between w-full">
         {/* Top Navigation */}
         {/* Mobile: Only big icons, no text, small logout icon at end */}
         <div className="flex items-center w-full justify-around  md:hidden">
@@ -147,9 +147,9 @@ const Navbar = ({
           </button>
         </div>
         {/* Desktop/Tablet: Full nav with text and logout */}
-        <div className="hidden md:flex h-full flex-col w-full ml-14 md:ml-10 mr-2 min-w-0 overflow-hidden">
+        <div className="hidden md:flex h-full flex-col bg-amber-950 w-full">
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center flex-nowrap min-w-0">
+            <div className="flex items-center flex-nowrap ">
               {/* Dashboard button */}
               <button
                 onClick={() => navigate("/admin-dashboard")}
@@ -158,7 +158,7 @@ const Navbar = ({
                 <span className="w-3">
                   <Home className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-1 md:mx-6 content-center ">
+                <span className=" text-[7px] md:text-[12px] mx-1 md:mx-3 content-center ">
                   Dashboard
                 </span>
               </button>
@@ -227,11 +227,11 @@ const Navbar = ({
             },
             (
               <div className="flex flex-row  justify-between items-center w-full mt-2 animate-fade-in bg-amber-900">
-                <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] ">
-                  <div className="relative  lg:ml-14 md:ml-10 ml-8 mr-2">
+                <div className="w-full">
+                  <div className="relative  ">
                     <Search className="absolute w-5 top-1 left-2" />
                     <input
-                      className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500  md:w-100 lg:w-130 px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
+                      className="bg-[#E2E2E2] shadow-inner h- shadow-gray-500  md:w-100 lg:w-130 px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
                       type="text"
                       placeholder="Search student..."
                       value={searchValue}
@@ -241,7 +241,7 @@ const Navbar = ({
                   </div>
                 </div>
                 {/* Grid/Row toggle and modify table button */}
-                <div className="flex bg-green-400 items-center ml-auto mr-2 md:mr-0">
+                <div className="flex bg-green-400 items-center mr-90 ">
                   <div
                     className={`h-fit w-fit bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
                   >
@@ -271,7 +271,7 @@ const Navbar = ({
                   </div>
                   <div>
                     <button
-                      className={`${isEvaluation} hover:scale-105 h-8  px-3 md:w-fit text-[10px] whitespace-nowrap rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+                      className={`${isEvaluation} hover:scale-105 h-  px-3 md:w-fit text-[10px] whitespace-nowrap rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
                         modifyTable
                           ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
                           : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"

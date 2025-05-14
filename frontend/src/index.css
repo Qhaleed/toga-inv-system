@@ -220,6 +220,9 @@ Legacy Tailwind config for reference:
 @utility accent-bg {
   background-color: #edb427;
 }
+@utility bg-orig {
+  background-color: #001d47;
+}
 
 @utility dashboard-card {
   background-color: white;
