@@ -35,23 +35,12 @@ router.get('/', async (req, res) => {
 // Add PATCH endpoint to update inventory items
 router.patch("/:id", async (req, res) => {
   const { id } = req.params;
-  const { renters_name, course, tassel_color, hood, toga_size } =
-    req.body;
+  const { tassel_color, hood_color, toga_size } = req.body;
 
   try {
     // Build dynamic query based on provided fields
     let updateFields = [];
     let queryParams = [];
-
-    if (renters_name !== undefined) {
-      updateFields.push("renters_name = ?");
-      queryParams.push(renters_name);
-    }
-
-    if (course !== undefined) {
-      updateFields.push("course = ?");
-      queryParams.push(course);
-    }
 
     if (tassel_color !== undefined) {
       updateFields.push("tassel_color = ?");
@@ -76,9 +65,7 @@ router.patch("/:id", async (req, res) => {
     // Add the ID parameter to queryParams array
     queryParams.push(id);
 
-    const query = `UPDATE inventory SET ${updateFields.join(
-      ", "
-    )} WHERE account_id = ?`;
+    const query = `UPDATE inventory SET ${updateFields.join(", ")} WHERE inventory_id = ?`;
 
     const [result] = await db.pool.query(query, queryParams);
 
@@ -86,9 +73,12 @@ router.patch("/:id", async (req, res) => {
       return res.status(404).json({ error: "Inventory item not found" });
     }
 
-    // Fetch the updated record
+    // Fetch the updated record with all the joined information
     const [updatedItem] = await db.pool.query(
-      "SELECT * FROM inventory WHERE id = ?",
+      `SELECT a.*, i.*
+       FROM accounts a
+       LEFT JOIN inventory i ON a.account_id = i.account_id
+       WHERE i.inventory_id = ?`,
       [id]
     );
 
