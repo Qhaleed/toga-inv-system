@@ -110,18 +110,29 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
-      {/* New box after the 4 boxes */}
-      <div className="bg-blue-200 rounded-xl shadow-lg px-4 py-8 mx-4 lg:mx-6 flex items-center justify-center min-h-[220px]">
-        {/* New content here */}
-        <span className="text-black font-bold text-lg">
-          fixing pa responsiveness desktop to mobile ahhahahah
-        </span>
+      {/* 2nd row: 2 columns */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 lg:px-6">
+        <div className="bg-blue-200 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px]">
+          <span className="text-black font-bold text-lg">
+            fixing pa responsiveness desktop to mobile ahhahahah
+          </span>
+        </div>
+        <div className="bg-blue-300 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px]">
+          <span className="text-black font-bold text-lg">
+            2nd column content
+          </span>
+        </div>
       </div>
-      {/* Chart area or other content */}
-      <div className="px-4 lg:px-6">
-        {/* ChartAreaInteractive or other content here */}
-        <div className="bg-green-800 w-full h-40 flex items-center justify-center text-white">
+      {/* 3rd row: 3 columns */}
+      <div className="grid grid-cols-1 md:grid-cols-3 min-h-[200px]  gap-4 px-4 lg:px-6 mt-2">
+        <div className="bg-green-800 w-full  flex items-center justify-center text-white rounded-xl">
           inayos ko ulit grid system pero admindashboard pa lng
+        </div>
+        <div className="bg-green-700 w-full flex items-center justify-center text-white rounded-xl">
+          2nd col
+        </div>
+        <div className="bg-green-600 w-fullflex items-center justify-center text-white rounded-xl">
+          3rd col
         </div>
       </div>
     </div>
