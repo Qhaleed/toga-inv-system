@@ -2,69 +2,59 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import LoginBg from "../../assets/images/loginbg.jpg";
 import LoaderAnimation from "../login-card/LoaderAnimation";
+import FormWrapper from "../common/FormWrapper";
 
-const PendingApproval = ({ onLogout }) => {
-  const [firstName, setFirstName] = useState("");
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+const UserApproved = () => {
+  const [shoulderWidth, setShoulderWidth] = useState("");
+  const [recommendedSize, setRecommendedSize] = useState("");
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setFirstName("Guest");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const width = parseFloat(shoulderWidth);
+    if (isNaN(width)) {
+      setRecommendedSize("Invalid measurement");
       return;
     }
 
-    fetch("http://localhost:5001/users?firstOnly=true", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          setFirstName("Guest");
-          return;
-        }
-        const data = await res.json();
-        console.log("Fetched data:", data);
-        setFirstName(data.name);
-      })
-      .catch(() => setFirstName("Guest"));
-  }, []);
-
-  const handleLogout = () => {
-    setIsLoggingOut(true);
-    setTimeout(() => {
-      localStorage.removeItem("token");
-      navigate("/login"); // Redirect to login page
-      setIsLoggingOut(false);
-    }, 1000); // Optional 1-second delay for logout animation
+    if (width < 16) setRecommendedSize("XS");
+    else if (width < 18) setRecommendedSize("S");
+    else if (width < 20) setRecommendedSize("M");
+    else if (width < 22) setRecommendedSize("L");
+    else if (width < 24) setRecommendedSize("XL");
+    else if (width < 26) setRecommendedSize("2XL");
+    else if (width < 28) setRecommendedSize("3XL");
+    else setRecommendedSize("4XL");
   };
 
   return (
-    <div
-      className="flex-1 h-screen w-full bg-cover bg-center flex items-center"
-      style={{ backgroundImage: `url(${LoginBg})` }}
-    >
-      {isLoggingOut && <LoaderAnimation isLogin={false} />}
-      <div className="text-white max-w-xl pl-10">
-        <h1 className="text-6xl font-manjari font-light">Welcome,</h1>
-        <h2 className="text-8xl font-figtree font-bold mt-2">{firstName}</h2>
-        <p className="text-xl font-manjari mt-10">
-          Your request is still pending for review by our team.
-        </p>
-        <p className="text-xl font-manjari mt-3 mb-10">
-          Please return at a later time while we process your request.
-        </p>
+    <FormWrapper title="Measure Your Shoulder Width" onSubmit={handleSubmit}>
+      <div className="space-y-4">
+        <label htmlFor="shoulderWidth" className="block text-lg font-semibold">
+          Enter your shoulder width (in inches):
+        </label>
+        <input
+          type="text"
+          id="shoulderWidth"
+          value={shoulderWidth}
+          onChange={(e) => setShoulderWidth(e.target.value)}
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="e.g., 18"
+        />
         <button
-          className="w-full bg-[#10194C] hover:bg-[#1c2673] font-manjari transition duration-200 text-white py-3 px-8 rounded-full font-semibold text-lg"
-          onClick={handleLogout}
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
         >
-          Log Out
+          Get Recommended Size
         </button>
+        {recommendedSize && (
+          <p className="mt-4 text-lg font-bold text-center">
+            Recommended Size: {recommendedSize}
+          </p>
+        )}
       </div>
-    </div>
+    </FormWrapper>
   );
 };
 
-export default PendingApproval;
+export default UserApproved;

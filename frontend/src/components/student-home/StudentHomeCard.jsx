@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SideBar from "../navigations/SideBar";
 import PendingApproval from "./UserPending";
-import ApprovedView from "./UserApproved";
+import UserApproved from "./UserApproved";
 
 const Dashboard = () => {
   const [userStatus, setUserStatus] = useState(null); // null indicates loading
@@ -16,7 +16,7 @@ const Dashboard = () => {
       setLoading(true);
       try {
         // Simulate pending or approved status
-        const data = { status: "pending", name: "John Doe" };
+        const data = { status: "approved", name: "John Doe" };
         setUserStatus(data.status);
         setUserName(data.name);
       } catch (error) {
@@ -54,7 +54,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
         {userStatus === "pending" && <PendingApproval name={userName} />}
-        {userStatus === "approved" && <ApprovedView name={userName} />}
+        {userStatus === "approved" && <UserApproved name={userName} />}
         {userStatus === "error" && (
           <div className="flex justify-center items-center text-red-500">
             <p>Failed to load user data. Please try again later.</p>
