@@ -16,8 +16,9 @@ const SideBar = ({
   userStatus,
   dateReserved,
   dateDue,
-  focusedStatus, // <-- add this prop
-  setFocusedStatus, // <-- add this prop
+  focusedStatus, //setter kada click ng button
+  setFocusedStatus, // hover effects to
+  onAdminName, // adminname passere this
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -47,6 +48,7 @@ const SideBar = ({
     if (!token) {
       setAdminName("Not logged in");
       setAdminRole("N/A");
+      onAdminName && onAdminName("Not logged in");
       return;
     }
     fetch("http://localhost:5001/users", {
@@ -66,6 +68,7 @@ const SideBar = ({
           }
           setAdminName("Fetch error");
           setAdminRole(errorMsg);
+          onAdminName && onAdminName("Fetch error");
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }
@@ -75,14 +78,17 @@ const SideBar = ({
         if (data && data.name && data.role) {
           setAdminName(data.name);
           setAdminRole(data.role);
+          onAdminName && onAdminName(data.name);
         } else if (data) {
           setAdminName("No user found");
           setAdminRole("N/A");
+          onAdminName && onAdminName("No user found");
         }
       })
       .catch((err) => {
         setAdminName("Fetch error");
         setAdminRole("Network error");
+        onAdminName && onAdminName("Fetch error");
         console.error("Sidebar /users fetch network error:", err);
       });
   }, []);

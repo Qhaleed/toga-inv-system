@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Table from "../common/Table";
 import SideBar from "../navigations/SideBar";
 import NavBar from "../navigations/NavBar";
@@ -10,13 +10,15 @@ const AdminDashboardCard = () => {
   const [isGrid, setIsGrid] = useState(false);
   const [modifyTable, setmodifyTable] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard"); // State for active tab
-  const [adminName, setAdminName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true); // Sidebar toggle state
-  const firstName = adminName ? adminName.split(" ")[0] : "Admin";
+  const [adminName, setAdminName] = useState("Admin");
+
+  const handleAdminName = useCallback((name) => setAdminName(name), []);
+  const firstName = adminName.split(" ")[0];
 
   return (
     <div
-      className={`w-screen h-screen md:overflow-y-hidden grid grid-rows-1 md:grid-rows-1  transition-transform duration-500 ease-in-out ${
+      className={`w-screen h-screen overflow-x-hidden n grid grid-rows-1 md:grid-rows-1  transition-transform duration-500 ease-in-out ${
         sidebarOpen
           ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr] trans"
           : "md:grid-cols-1"
@@ -27,15 +29,15 @@ const AdminDashboardCard = () => {
         <div className="max-md:hidden md:block  w-full relative transition-transform duration-500 ease-in-out">
           <SideBar
             alwaysShowOnLarge
-            setAdminName={setAdminName}
             activeTab="dashboard"
+            onAdminName={handleAdminName}
           />
         </div>
       )}
       {/* Main content dito */}
-      <div className="bg-[#F3F9FF] w-full h-full">
-        <div className="w-full relative h-full  flex flex-col">
-          <div className="w-full z-50 h-15 bg-amber-100 flex items-center ">
+      <div className="bg-[#F3F9FF]   w-full h-full">
+        <div className="w-full relative h-full  overflow-hidden  flex flex-col">
+          <div className="w-full  z-50 h-15 bg-amber-100 flex items-center ">
             <button
               className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-50 bg-white border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
               onClick={() => setSidebarOpen((open) => !open)}
@@ -61,7 +63,7 @@ const AdminDashboardCard = () => {
               <p className="md:ml-6 font-semibold md:text-2xl">{`Welcome, ${firstName}! 👋🏻`}</p>
             </div>
 
-            <AdminDashboard />
+            <AdminDashboard adminName={adminName} />
           </div>
         </div>
       </div>
