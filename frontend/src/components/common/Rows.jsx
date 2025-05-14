@@ -587,7 +587,33 @@ const Rows = ({
         </div>
         <PopupWindow
           open={popupOpen}
-          onClose={() => setPopupOpen(false)}
+          onClose={(updatedData) => {
+            setPopupOpen(false);
+            if (updatedData) {
+              // Map the updated data to match our component's format
+              const mappedData = updatedData.map((item) => ({
+                id: item.inventory_id,
+                studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                course: item.course,
+                tassel_color: item.tassel_color,
+                hood_color: item.hood_color,
+                toga_size: item.toga_size,
+                dateofreservation: item.rent_date
+                  ? new Date(item.rent_date).toLocaleDateString()
+                  : "",
+                status: item.return_status,
+                payment_status: item.payment_status,
+                evaluation_status: item.evaluation_status,
+                remarks: item.remarks,
+                return_date: item.return_date,
+                is_overdue: item.is_overdue,
+                has_cap: item.has_cap,
+                item_condition: item.item_condition
+              }));
+              setDashboard(mappedData);
+              setOriginalDashboard(mappedData);
+            }
+          }}
           user={popupUser}
           showBackButton={false}
           fullScreen={true}

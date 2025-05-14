@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
 // Add PATCH endpoint to update inventory items
 router.patch("/:id", async (req, res) => {
   const { id } = req.params;
-  const { tassel_color, hood_color, toga_size } = req.body;
+  const { tassel_color, hood_color, toga_size, return_status, has_cap } = req.body;
 
   try {
     // Build dynamic query based on provided fields
@@ -57,6 +57,16 @@ router.patch("/:id", async (req, res) => {
       queryParams.push(toga_size);
     }
 
+    if (return_status !== undefined) {
+      updateFields.push("return_status = ?");
+      queryParams.push(return_status);
+    }
+
+    if (has_cap !== undefined) {
+      updateFields.push("has_cap = ?");
+      queryParams.push(has_cap);
+    }
+
     // If no fields to update, return error
     if (updateFields.length === 0) {
       return res.status(400).json({ error: "No fields to update" });
@@ -67,6 +77,8 @@ router.patch("/:id", async (req, res) => {
 
     const query = `UPDATE inventory SET ${updateFields.join(", ")} WHERE inventory_id = ?`;
 
+    console.log("Executing query:", query, "with params:", queryParams);
+
     const [result] = await db.pool.query(query, queryParams);
 
     if (result.affectedRows === 0) {
@@ -74,7 +86,7 @@ router.patch("/:id", async (req, res) => {
     }
 
     // Fetch the updated record with all the joined information
-    const [updatedItem] = await db.pool.query(
+    const [updatedItems] = await db.pool.query(
       `SELECT a.*, i.*
        FROM accounts a
        LEFT JOIN inventory i ON a.account_id = i.account_id
@@ -82,10 +94,14 @@ router.patch("/:id", async (req, res) => {
       [id]
     );
 
-    res.json(updatedItem[0]);
+    if (!updatedItems || updatedItems.length === 0) {
+      return res.status(404).json({ error: "Updated item not found" });
+    }
+
+    res.json(updatedItems[0]);
   } catch (error) {
     console.error("Error updating inventory item:", error);
-    res.status(500).json({ error: "Failed to update inventory item" });
+    res.status(500).json({ error: "Failed to update inventory item: " + error.message });
   }
 });
 

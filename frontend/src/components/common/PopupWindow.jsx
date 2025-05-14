@@ -12,55 +12,120 @@ const PopupWindow = ({
   open,
   onClose,
   user,
-  showBackButton,
-  onBack,
-  fullScreen,
+  // showBackButton,
+  // onBack,
+  // fullScreen,
 }) => {
   const [edit, setEdit] = useState(false);
-  const [returnStatus, setReturnStatus] = useState("Returned");
+  const [formData, setFormData] = useState({
+    toga_size: "",
+    hood_color: "",
+    tassel_color: "",
+    has_cap: null,
+    return_status: "",
+  });
   const navigate = useNavigate();
 
-  const exitReset = () => {
-    setEdit(false);
+  React.useEffect(() => {
+    if (user) {
+      setFormData({
+        toga_size: user.toga_size || "",
+        hood_color: user.hood_color || "",
+        tassel_color: user.tassel_color || "",
+        has_cap: user.has_cap,
+        return_status: user.return_status || "Returned",
+      });
+    }
+  }, [user, edit]);
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
-  const EditMode = () => {
-    if (!edit) {
-      setEdit(true);
-    } else {
+  const handleSave = async () => {
+    try {
+      const updatedData = {
+        toga_size: formData.toga_size,
+        hood_color: formData.hood_color,
+        tassel_color: formData.tassel_color,
+        has_cap: formData.has_cap === "Yes" ? 1 : 0,
+        return_status: formData.return_status,
+      };
+
+      console.log("Sending update to backend:", updatedData);
+
+      const response = await fetch(
+        `http://localhost:5001/inventory/${user.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+          },
+          body: JSON.stringify(updatedData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok: " + response.status);
+      }
+
+      const data = await response.json();
+      console.log("Update successful:", data);
+
+      // Refetch the latest data
+      const refetchResponse = await fetch("http://localhost:5001/inventory");
+      const refetchedData = await refetchResponse.json();
+
+      // Update the local state with the new data
       setEdit(false);
+      if (onClose) {
+        // Pass the updated and refetched data back to the parent component
+        onClose(refetchedData);
+      }
+      alert("Changes saved successfully!");
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      alert("Failed to save changes: " + error.message);
     }
   };
 
-  const ClickBorrowed = () => {
-    setReturnStatus("Borrowed");
+  const exitReset = () => {
+    setEdit(false);
+    if (user) {
+      setFormData({
+        toga_size: user.toga_size || "",
+        hood_color: user.hood_color || "",
+        tassel_color: user.tassel_color || "",
+        has_cap: user.has_cap,
+        return_status: user.return_status || "Returned",
+      });
+    }
   };
 
-  const ClickReturned = () => {
-    setReturnStatus("Returned");
+  const EditMode = () => {
+    setEdit((prev) => !prev);
   };
 
-  let ToggleBorrowed =
-    returnStatus === "Borrowed"
-      ? "bg-[#86E4A1] w-[55%] h-[75%] ml-1 rounded-md text-black text-sm"
-      : "bg-[#1B1B42] w-[45%] h-[75%] mr-1 rounded-md text-gray-500 text-sm";
-  let ToggleReturned =
-    returnStatus === "Returned"
-      ? "bg-[#86E4A1] w-[55%] h-[75%] mr-1 rounded-md text-black text-sm"
-      : "bg-[#1B1B42] w-[45%] h-[75%] ml-1 rounded-md text-gray-500 text-sm";
+  const handleStatusChange = (status) => {
+    setFormData((prev) => ({
+      ...prev,
+      return_status: status,
+    }));
+  };
 
   return (
     <div
-      className={`fixed left-0 top-0 right-0 bottom-0 z-[9999] w-full h-full flex justify-center items-center transition-all duration-500 ${
-        open
-          ? "opacity-100 pointer-events-auto backdrop-blur-sm"
-          : "opacity-0 pointer-events-none"
-      }`}
+      className={`fixed left-0 top-0 right-0 bottom-0 z-[9999] w-full h-full flex justify-center items-center transition-all duration-500 ${open
+        ? "opacity-100 pointer-events-auto backdrop-blur-sm"
+        : "opacity-0 pointer-events-none"
+        }`}
       style={{ background: "rgba(0,0,0,0.4)" }}
     >
       <div className="bg-[#001C47] border border-white w-[450px] md:w-3xl h-[630px] rounded-2xl shadow-2xl p-0 relative animate-slide-up overflow-x-hidden overflow-auto transition-all duration-300">
-        {" "}
-        {/*Pop up container*/}
         <div className="h-12 w-full flex justify-between mt-6">
           <div className="h-full w-96 flex justify-start ml-3 ">
             <div className="h-full w-16 flex justify-end items-center ml-2">
@@ -71,8 +136,6 @@ const PopupWindow = ({
                   exitReset();
                 }}
               >
-                {" "}
-                {/*Navbar buttons*/}
                 <BackIcon className="w-5" />
               </button>
             </div>
@@ -95,11 +158,10 @@ const PopupWindow = ({
           <div className="h-full w-80 flex justify-end items-center">
             <div className="h-full w-24 flex justify-center items-center text-sm pr-1">
               <button
-                className={`w-20 h-10 rounded-lg text-xs ${
-                  !edit
-                    ? "border border-green-400 text-green-400"
-                    : "bg-green-400 text-white"
-                } hover:bg-green-400 hover:text-white hover:scale-105 transition-all duration-200`}
+                className={`w-20 h-10 rounded-lg text-xs ${!edit
+                  ? "border border-green-400 text-green-400"
+                  : "bg-green-400 text-white"
+                  } hover:bg-green-400 hover:text-white hover:scale-105 transition-all duration-200`}
                 onClick={EditMode}
               >
                 <h3>EDIT</h3>
@@ -121,11 +183,7 @@ const PopupWindow = ({
           </div>
         </div>
         <div className="w-full h-[545px] mt-1 grid grid-cols-1 md:grid-cols-5">
-          {" "}
-          {/*Main Content*/}
           <div className="col-span-1 md:col-span-3 w-full h-full">
-            {" "}
-            {/*Left Container*/}
             <div className="w-full h-28 flex justify-start items-center">
               <div className="w-full h-full">
                 <div className="h-[57%] w-full flex justify-start items-end">
@@ -156,10 +214,10 @@ const PopupWindow = ({
               </div>
               <div className="w-full h-8 flex justify-center">
                 <div className="w-3/8 h-full flex items-center text-xs text-gray-400 font-extralight">
-                  <h3>PROGRAM</h3>
+                  <h3>COURSE</h3>
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
-                  <h3>{user.program}</h3>
+                  <h3>{user.course}</h3>
                 </div>
               </div>
               <div className="w-full h-8 flex justify-center">
@@ -167,7 +225,7 @@ const PopupWindow = ({
                   <h3>EMAIL</h3>
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
-                  <h3>N/A</h3>
+                  <h3>{user.email || "N/A"}</h3>
                 </div>
               </div>
               <div className="w-full h-8 flex justify-center">
@@ -175,7 +233,7 @@ const PopupWindow = ({
                   <h3>ID NUMBER</h3>
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
-                  <h3>{user.id}</h3>
+                  <h3>{user.id_number}</h3>
                 </div>
               </div>
             </div>
@@ -189,24 +247,22 @@ const PopupWindow = ({
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
                   {!edit ? (
-                    <h3>{user.gown}</h3>
+                    <h3>{formData.toga_size}</h3>
                   ) : (
                     <select
                       className="w-20 h-5 bg-[#404078] rounded-full text-center"
-                      defaultValue=""
-                      required
-                      value=""
+                      value={formData.toga_size}
+                      onChange={(e) =>
+                        handleInputChange("toga_size", e.target.value)
+                      }
                     >
-                      <option value="" disabled hidden>
-                        {user.gown}
-                      </option>
-                      <option>XS</option>
-                      <option>S</option>
-                      <option>M</option>
-                      <option>L</option>
-                      <option>XL</option>
-                      <option>2XL</option>
-                      <option>3XL</option>
+                      <option value="XS">XS</option>
+                      <option value="S">S</option>
+                      <option value="M">M</option>
+                      <option value="L">L</option>
+                      <option value="XL">XL</option>
+                      <option value="2XL">2XL</option>
+                      <option value="3XL">3XL</option>
                     </select>
                   )}
                 </div>
@@ -217,22 +273,20 @@ const PopupWindow = ({
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
                   {!edit ? (
-                    <h3>{user.hood}</h3>
+                    <h3>{formData.hood_color}</h3>
                   ) : (
                     <select
                       className="w-20 h-5 bg-[#404078] rounded-full text-center"
-                      defaultValue=""
-                      required
-                      value=""
+                      value={formData.hood_color}
+                      onChange={(e) =>
+                        handleInputChange("hood_color", e.target.value)
+                      }
                     >
-                      <option value="" disabled hidden>
-                        {user.hood}
-                      </option>
-                      <option>Blue</option>
-                      <option>Maroon</option>
-                      <option>Orange</option>
-                      <option>White</option>
-                      <option>Yellow</option>
+                      <option value="Blue">Blue</option>
+                      <option value="Maroon">Maroon</option>
+                      <option value="Orange">Orange</option>
+                      <option value="White">White</option>
+                      <option value="Yellow">Yellow</option>
                     </select>
                   )}
                 </div>
@@ -243,22 +297,20 @@ const PopupWindow = ({
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
                   {!edit ? (
-                    <h3>{user.tassel}</h3>
+                    <h3>{formData.tassel_color}</h3>
                   ) : (
                     <select
                       className="w-20 h-5 bg-[#404078] rounded-full text-center"
-                      defaultValue=""
-                      required
-                      value=""
+                      value={formData.tassel_color}
+                      onChange={(e) =>
+                        handleInputChange("tassel_color", e.target.value)
+                      }
                     >
-                      <option value="" disabled hidden>
-                        {user.tassel}
-                      </option>
-                      <option>Blue</option>
-                      <option>Maroon</option>
-                      <option>Orange</option>
-                      <option>White</option>
-                      <option>Yellow</option>
+                      <option value="Blue">Blue</option>
+                      <option value="Maroon">Maroon</option>
+                      <option value="Orange">Orange</option>
+                      <option value="White">White</option>
+                      <option value="Yellow">Yellow</option>
                     </select>
                   )}
                 </div>
@@ -269,28 +321,28 @@ const PopupWindow = ({
                 </div>
                 <div className="w-3/8 h-full flex items-center text-xs text-white font-extralight">
                   {!edit ? (
-                    <h3>{user.has_cap ? "Yes" : "No"}</h3>
+                    <h3>{formData.has_cap ? "Yes" : "No"}</h3>
                   ) : (
                     <select
                       className="w-20 h-5 bg-[#404078] rounded-full text-center"
-                      defaultValue=""
-                      required
-                      value=""
+                      value={formData.has_cap ? "Yes" : "No"}
+                      onChange={(e) =>
+                        handleInputChange(
+                          "has_cap",
+                          e.target.value === "Yes"
+                        )
+                      }
                     >
-                      <option value="" disabled hidden>
-                        {user.has_cap ? "Yes" : "No"}
-                      </option>
-                      <option>Yes</option>
-                      <option>No</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
                     </select>
                   )}
                 </div>
               </div>
             </div>
             <div
-              className={`h-20 w-full flex justify-center items-center ${
-                !edit && "opacity-50"
-              }`}
+              className={`h-20 w-full flex justify-center items-center ${!edit && "opacity-50"
+                }`}
             >
               <div className="bg-[#40407888] h-[45px] w-[85%] rounded-2xl flex justify-start items-center">
                 <div className="h-6 w-32 border-r-2 border-gray-400 flex justify-start items-center text-white text-lg">
@@ -298,16 +350,22 @@ const PopupWindow = ({
                 </div>
                 <div className="bg-[#1B1B42] w-50 h-8 ml-6 rounded-lg flex justify-center items-center">
                   <button
-                    className={ToggleBorrowed}
+                    className={`${formData.return_status === "Borrowed"
+                      ? "bg-[#86E4A1] w-[55%] h-[75%] ml-1 rounded-md text-black text-sm"
+                      : "bg-[#1B1B42] w-[45%] h-[75%] mr-1 rounded-md text-gray-500 text-sm"
+                      }`}
                     disabled={!edit}
-                    onClick={ClickBorrowed}
+                    onClick={() => handleStatusChange("Borrowed")}
                   >
                     <h4>Borrowed</h4>
                   </button>
                   <button
-                    className={ToggleReturned}
+                    className={`${formData.return_status === "Returned"
+                      ? "bg-[#86E4A1] w-[55%] h-[75%] mr-1 rounded-md text-black text-sm"
+                      : "bg-[#1B1B42] w-[45%] h-[75%] ml-1 rounded-md text-gray-500 text-sm"
+                      }`}
                     disabled={!edit}
-                    onClick={ClickReturned}
+                    onClick={() => handleStatusChange("Returned")}
                   >
                     <h4>Returned</h4>
                   </button>
@@ -316,15 +374,13 @@ const PopupWindow = ({
             </div>
           </div>
           <div className="col-span-1 md:col-span-2 w-full h-full">
-            {" "}
-            {/*Right Container*/}
             <div className="w-full h-52 md:mt-20 flex items-center md:items-start flex-col">
               <div className="w-full h-12 text-white flex items-center justify-center md:justify-start text-lg">
                 <h3>Reservation Date</h3>
               </div>
               <div className="w-64 h-32 bg-[#4040783a] rounded-2xl flex justify-center items-center">
                 <div className="w-56 h-24 bg-[#1B1B42] rounded-xl flex justify-center items-center text-4xl text-white">
-                  {user.dateofreservation}
+                  {user.dateofreservation || "N/A"}
                 </div>
               </div>
               <div className="relative">
@@ -332,11 +388,13 @@ const PopupWindow = ({
               </div>
             </div>
             <div
-              className={`w-full h-20 flex justify-end items-center ${
-                !edit && "hidden"
-              }`}
+              className={`w-full h-20 flex justify-end items-center ${!edit && "hidden"
+                }`}
             >
-              <button className="w-28 h-10 bg-[#86E4A1] mr-8 rounded-2xl text-black text-lg hover:scale-105 hover:bg-[#57b27f] transition-all duration-200 ">
+              <button
+                className="w-28 h-10 bg-[#86E4A1] mr-8 rounded-2xl text-black text-lg hover:scale-105 hover:bg-[#57b27f] transition-all duration-200"
+                onClick={handleSave}
+              >
                 SAVE
               </button>
             </div>
