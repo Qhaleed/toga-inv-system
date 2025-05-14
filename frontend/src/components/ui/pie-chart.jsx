@@ -56,14 +56,11 @@ export function PieChartDash() {
   };
 
   return (
-    <Card className="flex flex-col justify-center bg-white/90 relative shadow-lg rounded-3xl max-h-[400px] border border-gray-200 w-full max-w-md mx-auto">
-      <CardHeader className="items-center pb-2">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>Current Inventory</CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1 pt-0 pb-0">
-        <ChartContainer config={chartConfig} className=" max-h-[220px]">
-          <PieChart>
+    <Card className="flex flex-col justify-center bg-white/90 scale- relative shadow-lg rounded-3xl border border-gray-200 h-fit w-fit">
+      <CardHeader className="items-center pb-2"></CardHeader>
+      <CardContent className="flex-1 flex items-center justify-center p-0">
+        <ChartContainer config={chartConfig} className="w-full h-[220px]">
+          <PieChart className="w-20 h-[1 0px]">
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
@@ -72,8 +69,12 @@ export function PieChartDash() {
               data={chartData}
               dataKey="visitors"
               nameKey="browser"
-              innerRadius={60}
-              strokeWidth={5}
+              innerRadius={30}
+              outerRadius={45}
+              strokeWidth={3}
+              cx="50%"
+              cy="50%"
+              className="w-8 h10"
             >
               <Label
                 content={({ viewBox }) => {
@@ -88,16 +89,16 @@ export function PieChartDash() {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-foreground text-2xl font-bold"
                         >
                           {totalStocks.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
+                          className="text-[2px] fill-muted-foreground"
                         >
-                          Stocks Left
+                          Stocks Left{" "}
                         </tspan>
                       </text>
                     );
@@ -110,10 +111,8 @@ export function PieChartDash() {
       </CardContent>
       <CardFooter className="flex-col gap-1 text-sm pt-2 pb-3">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total stocks left in inventory
+          {/* You can update this to show a real trend if you have the data */}
+          Inventory status updated <TrendingUp className="h-4 w-4" />
         </div>
       </CardFooter>
     </Card>

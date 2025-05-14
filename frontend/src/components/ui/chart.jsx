@@ -192,6 +192,38 @@ function getPayloadConfigFromPayload(config, payload, key) {
   return configLabelKey in config ? config[configLabelKey] : config[key];
 }
 
+// Custom tooltip for RadialBarChart (for use in RadialChart)
+function CustomRadialTooltip({ active, payload }) {
+  if (!active || !payload || !payload.length) return null;
+  // The data object for the current segment (all categories)
+  const data = payload[0]?.payload;
+  if (!data) return null;
+  // Support for cap, tassel, gown, hood
+  const config = {
+    cap: { label: "Cap", color: "hsl(var(--chart-1))" },
+    tassel: { label: "Tassel", color: "hsl(var(--chart-2))" },
+    gown: { label: "Gown", color: "hsl(var(--chart-3))" },
+    hood: { label: "Hood", color: "hsl(var(--chart-4))" },
+  };
+  return (
+    <div className="bg-white flex relative z-[9999] border rounded-lg px-2 animate-fade-in py-2 t mt-12 text-xs shadow-xl min-w-[8rem]">
+      <ul className="space-y-3">
+        {Object.keys(config).map((key) => (
+          <li key={key} className="flex items-center gap-2">
+            <span
+              className="inline-block w-2 h-2 rounded-full"
+              style={{ background: config[key].color }}
+            ></span>
+            <span className="font-semibold text-gray-900">
+              {config[key].label}: {data[key]?.toLocaleString() || 0} pcs
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export {
   ChartContainer,
   ChartTooltip,
@@ -199,4 +231,5 @@ export {
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  CustomRadialTooltip,
 };
