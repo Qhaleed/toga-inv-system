@@ -42,7 +42,7 @@ const Rows = ({
         // Map API response properties to match the component's expected property names
         const mappedData = data.map((item) => ({
           id: item.inventory_id, // use inventory_id as unique id
-          studentname: item.renters_name,
+          studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
           program: item.course,
           tassel: item.tassel_color, // fix: use item.tassel_color
           hood: item.hood_color, // fix: use item.hood_color
@@ -78,7 +78,7 @@ const Rows = ({
         // Map API response properties to match the component's expected property names
         const mappedData = data.map((item) => ({
           id: item.inventory_id, // use inventory_id as unique id
-          studentname: item.renters_name,
+          studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
           program: item.course,
           tassel: item.tassel_color, // fix: use item.tassel_color
           hood: item.hood_color, // fix: use item.hood_color
