@@ -10,23 +10,23 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
     formRef.current.reset();
   };
 
-  const [gown, setGown] = useState({
+  const [toga_size, setTogaSize] = useState({
     condition: "",
     repair: "",
     damage: "",
-    remarks: ""
+    remarks: "",
   });
-  const [hood, setHood] = useState({
+  const [hood_color, setHoodColor] = useState({
     condition: "",
     repair: "",
     damage: "",
-    remarks: ""
+    remarks: "",
   });
-  const [tassel, setTassel] = useState({
+  const [tassel_color, setTasselColor] = useState({
     condition: "",
     missing: "",
     damage: "",
-    remarks: ""
+    remarks: "",
   });
   const [cap, setCap] = useState({
     condition: "",
@@ -41,18 +41,18 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        gowncondition: gown.condition,
-        gownrepair: gown.repair,
-        gowndamage: gown.damage,
-        gownremarks: gown.remarks,
-        hoodcondition: hood.condition,
-        hoodrepair: hood.repair,
-        hooddamage: hood.damage,
-        hoodremarks: hood.remarks,
-        tasselcondition: tassel.condition,
-        tasselmissing: tassel.missing,
-        tasseldamage: tassel.damage,
-        tasselremarks: tassel.remarks,
+        toga_size_condition: toga_size.condition,
+        toga_size_repair: toga_size.repair,
+        toga_size_damage: toga_size.damage,
+        toga_size_remarks: toga_size.remarks,
+        hood_color_condition: hood_color.condition,
+        hood_color_repair: hood_color.repair,
+        hood_color_damage: hood_color.damage,
+        hood_color_remarks: hood_color.remarks,
+        tassel_color_condition: tassel_color.condition,
+        tassel_color_missing: tassel_color.missing,
+        tassel_color_damage: tassel_color.damage,
+        tassel_color_remarks: tassel_color.remarks,
         capcondition: cap.condition,
         capdeform: cap.deform,
         capremarks: cap.remarks,
@@ -91,7 +91,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                   <th>Last Update</th>
                 </tr>
               </thead>
-              <tbody> 
+              <tbody>
                 <tr className="text-center h-[46%] text-[10px] sm:text-xs">
                   <td>
                     <h3 className="border-r border-gray-700">
@@ -122,242 +122,242 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                 </tr>
               </tbody>
             </table>
-            
+
             <table className="table-auto w-[93%] h-[300px] bg-[#d6d6d6] text-center rounded-lg overflow-hidden mt-4">
-                <thead>
-                  <tr className="bg-[#bebebe] text-[10px] sm:text-xs border-b-2 border-bg-[#d6d6d6] h-20">
-                    <td>
-                      <h3 className="ml-5">Gown</h3>
-                    </td>
-                    <td> {/* Gown Condition */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
-                        required
-                        value = {gown.condition}
-                        onChange = {(e) => setGown({...gown, condition: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          In Good Condition
-                        </option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </td>
-                    <td> {/* Gown Repair */}
-                      <select 
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                        required
-                        value = {gown.repair}
-                        onChange = {(e) => setGown({...gown, repair: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          For Repair
-                        </option>
-                        <option value="None">None</option>
-                        <option value="Tastas">Tastas</option>
-                        <option value="Run in cloth">Run in cloth</option>
-                        <option value="Missing parts">Missing parts</option>
-                      </select>
-                    </td>
-                    <td> {/* Gown Damaged */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                        required
-                        value = {gown.damage}
-                        onChange = {(e) => setGown({...gown, damage: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          Damaged
-                        </option>
-                        <option value="None">None</option>
-                        <option value="Discolored">Discolored</option>
-                        <option value="Stained">Stained</option>
-                      </select>
-                    </td>
-                    <td> {/* Gown Remarks */}
-                      <div className="flex justify-center items-center">
-                        <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
-                        <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3" 
-                        value = {gown.remarks}
-                        onChange = {(e) => setGown({...gown, remarks: e.target.value})}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b-2 border-bg-[#d6d6d6] text-[10px] sm:text-xs h-20 transition-all duration-200 ease-out">
-                    <td>
-                      <h3 className="ml-5">Hood</h3>
-                    </td>
-                    <td> {/* Hood Condition */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
-                        required
-                        value = {hood.condition}
-                        onChange = {(e) => setHood({...hood, condition: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          In Good Condition
-                        </option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </td>
-                    <td> {/* Gown Repair */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                        required
-                        value = {hood.repair}
-                        onChange = {(e) => setHood({...hood, repair: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          For Repair
-                        </option>
-                        <option value="None">None</option>
-                        <option value="Tastas">Tastas</option>
-                        <option value="Run in cloth">Run in cloth</option>
-                        <option value="Missing parts">Missing parts</option>
-                      </select>
-                    </td>
-                    <td> {/* Gown Damage */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                        required
-                        value = {hood.damage}
-                        onChange = {(e) => setHood({...hood, damage: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          Damaged
-                        </option>
-                        <option value="None">None</option>
-                        <option value="Discolored">Discolored</option>
-                        <option value="Stained">Stained</option>
-                      </select>
-                    </td>
-                    <td> {/* Gown Remarks */}
-                      <div className="flex justify-center items-center">
-                        <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
-                        <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out"
-                        value = {hood.remarks}
-                        onChange = {(e) => setHood({...hood, remarks: e.target.value})}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="bg-[#bebebe] border-b-2 border-bg-[#d6d6d6] text-[10px] sm:text-xs h-20">
-                    <td>
-                      <h3 className="ml-5">Tassel</h3>
-                    </td>
-                    <td> {/* Tassel Condition */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
-                        required
-                        value = {tassel.condition}
-                        onChange = {(e) => setTassel({...tassel, condition: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          In Good Condition
-                        </option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </td>
-                    <td> {/* Tassel Missing */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                        required
-                        value = {tassel.missing}
-                        onChange = {(e) => setTassel({...tassel, missing: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          Missing
-                        </option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </td>
-                    <td> {/* Tassel Damage */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                        required
-                        value = {tassel.damage}
-                        onChange = {(e) => setTassel({...tassel, damage: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          Damaged
-                        </option>
-                        <option value="None">None</option>
-                        <option value="Discolored">Discolored</option>
-                        <option value="Stained">Stained</option>
-                      </select>
-                    </td> 
-                    <td> {/* Tassel Remarks */}
-                      <div className="flex justify-center items-center">
-                        <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
-                        <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out" 
-                        value = {tassel.remarks}
-                        onChange = {(e) => setTassel({...tassel, remarks: e.target.value})}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="text-[10px] sm:text-xs h-20">
-                    <td>
-                      <h3 className="ml-5">Cap</h3>
-                    </td>
-                    <td> {/* Cap Condition */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
-                        required
-                        value = {cap.condition}
-                        onChange = {(e) => setCap({...cap, condition: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          In Good Condition
-                        </option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </td>
-                    <td> {/* Cap Deformed */}
-                      <select
-                        defaultValue=""
-                        className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
-                        required
-                        value = {cap.deform}
-                        onChange = {(e) => setCap({...cap, deform: e.target.value})}
-                      >
-                        <option value="" disabled hidden>
-                          Deformed
-                        </option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </td> {/* Cap Remarks */}
-                    <td></td>
-                    <td>
-                      <div className="flex justify-center items-center">
-                        <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
-                        <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out" 
-                       value = {cap.remarks}
-                       onChange = {(e) => setCap({...cap, remarks: e.target.value})}
-                       />
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <thead>
+                <tr className="bg-[#bebebe] text-[10px] sm:text-xs border-b-2 border-bg-[#d6d6d6] h-20">
+                  <td>
+                    <h3 className="ml-5">Toga Size</h3>
+                  </td>
+                  <td> {/* Toga Size Condition */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
+                      required
+                      value={toga_size.condition}
+                      onChange={(e) => setTogaSize({ ...toga_size, condition: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        In Good Condition
+                      </option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </td>
+                  <td> {/* Toga Size Repair */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                      required
+                      value={toga_size.repair}
+                      onChange={(e) => setTogaSize({ ...toga_size, repair: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        For Repair
+                      </option>
+                      <option value="None">None</option>
+                      <option value="Tastas">Tastas</option>
+                      <option value="Run in cloth">Run in cloth</option>
+                      <option value="Missing parts">Missing parts</option>
+                    </select>
+                  </td>
+                  <td> {/* Toga Size Damaged */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                      required
+                      value={toga_size.damage}
+                      onChange={(e) => setTogaSize({ ...toga_size, damage: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        Damaged
+                      </option>
+                      <option value="None">None</option>
+                      <option value="Discolored">Discolored</option>
+                      <option value="Stained">Stained</option>
+                    </select>
+                  </td>
+                  <td> {/* Toga Size Remarks */}
+                    <div className="flex justify-center items-center">
+                      <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
+                      <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3"
+                        value={toga_size.remarks}
+                        onChange={(e) => setTogaSize({ ...toga_size, remarks: e.target.value })}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b-2 border-bg-[#d6d6d6] text-[10px] sm:text-xs h-20 transition-all duration-200 ease-out">
+                  <td>
+                    <h3 className="ml-5">Hood Color</h3>
+                  </td>
+                  <td> {/* Hood Color Condition */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
+                      required
+                      value={hood_color.condition}
+                      onChange={(e) => setHoodColor({ ...hood_color, condition: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        In Good Condition
+                      </option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </td>
+                  <td> {/* Hood Color Repair */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                      required
+                      value={hood_color.repair}
+                      onChange={(e) => setHoodColor({ ...hood_color, repair: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        For Repair
+                      </option>
+                      <option value="None">None</option>
+                      <option value="Tastas">Tastas</option>
+                      <option value="Run in cloth">Run in cloth</option>
+                      <option value="Missing parts">Missing parts</option>
+                    </select>
+                  </td>
+                  <td> {/* Hood Color Damage */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                      required
+                      value={hood_color.damage}
+                      onChange={(e) => setHoodColor({ ...hood_color, damage: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        Damaged
+                      </option>
+                      <option value="None">None</option>
+                      <option value="Discolored">Discolored</option>
+                      <option value="Stained">Stained</option>
+                    </select>
+                  </td>
+                  <td> {/* Hood Color Remarks */}
+                    <div className="flex justify-center items-center">
+                      <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
+                      <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out"
+                        value={hood_color.remarks}
+                        onChange={(e) => setHoodColor({ ...hood_color, remarks: e.target.value })}
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr className="bg-[#bebebe] border-b-2 border-bg-[#d6d6d6] text-[10px] sm:text-xs h-20">
+                  <td>
+                    <h3 className="ml-5">Tassel Color</h3>
+                  </td>
+                  <td> {/* Tassel Color Condition */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
+                      required
+                      value={tassel_color.condition}
+                      onChange={(e) => setTasselColor({ ...tassel_color, condition: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        In Good Condition
+                      </option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </td>
+                  <td> {/* Tassel Color Missing */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                      required
+                      value={tassel_color.missing}
+                      onChange={(e) => setTasselColor({ ...tassel_color, missing: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        Missing
+                      </option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </td>
+                  <td> {/* Tassel Color Damage */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                      required
+                      value={tassel_color.damage}
+                      onChange={(e) => setTasselColor({ ...tassel_color, damage: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        Damaged
+                      </option>
+                      <option value="None">None</option>
+                      <option value="Discolored">Discolored</option>
+                      <option value="Stained">Stained</option>
+                    </select>
+                  </td>
+                  <td> {/* Tassel Color Remarks */}
+                    <div className="flex justify-center items-center">
+                      <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
+                      <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out"
+                        value={tassel_color.remarks}
+                        onChange={(e) => setTasselColor({ ...tassel_color, remarks: e.target.value })}
+                      />
+                    </div>
+                  </td>
+                </tr>
+                <tr className="text-[10px] sm:text-xs h-20">
+                  <td>
+                    <h3 className="ml-5">Cap</h3>
+                  </td>
+                  <td> {/* Cap Condition */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-32 lg:w-36"
+                      required
+                      value={cap.condition}
+                      onChange={(e) => setCap({ ...cap, condition: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        In Good Condition
+                      </option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </td>
+                  <td> {/* Cap Deformed */}
+                    <select
+                      defaultValue=""
+                      className="bg-[#0C7E48] text-white text-[8px] sm:text-xs text-center rounded-full hover:bg-[#1a6643] transition-all duration-200 ease-out md:w-28 lg:w-36"
+                      required
+                      value={cap.deform}
+                      onChange={(e) => setCap({ ...cap, deform: e.target.value })}
+                    >
+                      <option value="" disabled hidden>
+                        Deformed
+                      </option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                    </select>
+                  </td> {/* Cap Remarks */}
+                  <td></td>
+                  <td>
+                    <div className="flex justify-center items-center">
+                      <label className="mr-1 sm:mr-2 md:mr-3">Remarks: </label>
+                      <textarea className="rounded-lg p-1 w-20 sm:w-28 md:w-36 lg:w-44 mr-3 transition-all duration-200 ease-out"
+                        value={cap.remarks}
+                        onChange={(e) => setCap({ ...cap, remarks: e.target.value })}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <button
               type="submit"
               className="mt-6 bg-[#F3B51A] w-52 h-12 text-lg font-medium rounded-xl hover:scale-105 transition-all duration-200 ease-out hover:bg-[#588dd3] active:bg-white"
