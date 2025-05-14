@@ -30,14 +30,14 @@ export function PendingRadial() {
   const totalPending = chartData[0].pending;
   window.chartConfig = chartConfig;
   return (
-    <Card className="flex absolute p-0  z-20 w-full h-full">
-      <CardContent className="w-full p-0 mt-11 flex flex-col h-35">
-        <ChartContainer config={chartConfig} className="w-full flex h-full">
+    <Card className="flex absolute p-0 w-full   h-full">
+      <CardContent className="w-full p-0 z-100 relative  flex  h-full">
+        <ChartContainer config={chartConfig} className="w-full  h-50 ">
           <RadialBarChart
             data={chartData}
             endAngle={180}
-            innerRadius={55}
-            outerRadius={90}
+            innerRadius={50}
+            outerRadius={80}
             className="hover:scale-110 transition-transform duration-300 ease-in-out"
           >
             <ChartTooltip cursor={false} content={<CustomRadialTooltip />} />
