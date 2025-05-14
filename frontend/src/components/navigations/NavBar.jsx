@@ -226,12 +226,12 @@ const Navbar = ({
               /* Search bar and grid/row toggle */
             },
             (
-              <div className="flex flex-row  justify-between items-center w-full mt-2 pb-1 animate-fade-in bg-amber-900">
-                <div className="w-full max-w-[150px] shadow-2xl sm:max-w-[500px] md:max-w-[700px] ">
-                  <div className="relative mr-5">
+              <div className="flex flex-row  justify-between items-center w-full mt-2 animate-fade-in bg-amber-900">
+                <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] ">
+                  <div className="relative  lg:ml-14 md:ml-10 ml-8 mr-2">
                     <Search className="absolute w-5 top-1 left-2" />
                     <input
-                      className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500  w-full px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
+                      className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500  md:w-100 lg:w-130 px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
                       type="text"
                       placeholder="Search student..."
                       value={searchValue}
@@ -241,7 +241,7 @@ const Navbar = ({
                   </div>
                 </div>
                 {/* Grid/Row toggle and modify table button */}
-                <div className="flex bg-green-400 items-center mr-auto">
+                <div className="flex bg-green-400 items-center ml-auto mr-2 md:mr-0">
                   <div
                     className={`h-fit w-fit bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
                   >

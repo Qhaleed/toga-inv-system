@@ -38,15 +38,15 @@ export default function InventorySidebarButtons({
   setFocusedStatus,
 }) {
   return (
-    <div className="w-full h-auto md:scale-100 flex flex-col gap-4 px-3 py-2">
+    <div className="w-full h-fill md:scale-100 flex flex-col gap-4 px-3 py-2">
       {buttonConfigs.map((btn) => (
         <button
           key={btn.key}
-          className={`w-full h-7 rounded-xl flex justify-center items-center ${
+          className={`w-full h-fit rounded-xl flex justify-center items-center ${
             btn.bg
           } ${btn.text} font-bold text-md transition-all duration-300 ${
             focusedStatus === btn.key
-              ? "ring-4 ring-[#2563eb] scale-105"
+              ? "ring-2 ring-[#3645efbd] scale-105"
               : "hover:scale-105"
           }`}
           onClick={() => setFocusedStatus(btn.key)}
