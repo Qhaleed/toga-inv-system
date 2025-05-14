@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 router.get('/', async (req, res) => {
   try {
@@ -102,6 +103,33 @@ router.patch("/:id", async (req, res) => {
   } catch (error) {
     console.error("Error updating inventory item:", error);
     res.status(500).json({ error: "Failed to update inventory item: " + error.message });
+  }
+});
+
+// Add endpoint to check if user has submitted toga size
+router.get('/check-toga-size', async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+    // Check if user has a toga size entry
+    const [existingEntry] = await db.pool.query(
+      "SELECT toga_size FROM inventory WHERE account_id = ?",
+      [decoded.id]
+    );
+
+    res.json({
+      hasSubmitted: existingEntry.length > 0 && existingEntry[0].toga_size !== null,
+      togaSize: existingEntry.length > 0 ? existingEntry[0].toga_size : null
+    });
+  } catch (error) {
+    console.error("Error checking toga size:", error);
+    res.status(500).json({ error: "Failed to check toga size status" });
   }
 });
 
