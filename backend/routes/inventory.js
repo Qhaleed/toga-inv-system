@@ -8,13 +8,19 @@ router.get('/', async (req, res) => {
   try {
     const fullTable = await db.getAllTable();
 
+    // Check if fullTable is undefined or null before proceeding
+    if (!fullTable) {
+      console.log("Database returned no data");
+      return res.status(500).json({ error: "Database connection error" });
+    }
+
     // filter only students lang ang isend sa query
     const filteredTable = fullTable.filter(row => row.role === 'student');
 
     // loops each row and split the updated_at date to get only the date
     const formattedTable = filteredTable.map(row => ({
       ...row,
-      updated_at: row.updated_at 
+      updated_at: row.updated_at
         ? row.updated_at.toISOString().split('T')[0] //remove time part
         : null
     }));
@@ -29,7 +35,7 @@ router.get('/', async (req, res) => {
 // Add PATCH endpoint to update inventory items
 router.patch("/:id", async (req, res) => {
   const { id } = req.params;
-  const { renters_name, course, tassel_color, hood_color, toga_size } =
+  const { renters_name, course, tassel_color, hood, toga_size } =
     req.body;
 
   try {
@@ -72,7 +78,7 @@ router.patch("/:id", async (req, res) => {
 
     const query = `UPDATE inventory SET ${updateFields.join(
       ", "
-    )} WHERE id = ?`;
+    )} WHERE account_id = ?`;
 
     const [result] = await db.pool.query(query, queryParams);
 

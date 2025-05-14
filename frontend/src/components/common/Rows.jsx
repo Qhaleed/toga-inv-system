@@ -187,10 +187,10 @@ const Rows = ({
       prev.map((item) =>
         db.id === item.id
           ? {
-              ...item,
-              eye: item.eye === "block" ? "hidden" : "block",
-              trash: item.trash === "hidden" ? "block" : "hidden",
-            }
+            ...item,
+            eye: item.eye === "block" ? "hidden" : "block",
+            trash: item.trash === "hidden" ? "block" : "hidden",
+          }
           : item
       )
     );
@@ -277,20 +277,20 @@ const Rows = ({
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
-          if (sortOrder === "newest" || sortOrder === "oldest") {
-            const dateA = new Date(a.dateofreservation);
-            const dateB = new Date(b.dateofreservation);
-            if (sortOrder === "newest") return dateB - dateA;
-            if (sortOrder === "oldest") return dateA - dateB;
-          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = (a.studentname || "").toLowerCase();
-            const nameB = (b.studentname || "").toLowerCase();
-            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
-            return 0;
-          }
+        if (sortOrder === "newest" || sortOrder === "oldest") {
+          const dateA = new Date(a.dateofreservation);
+          const dateB = new Date(b.dateofreservation);
+          if (sortOrder === "newest") return dateB - dateA;
+          if (sortOrder === "oldest") return dateA - dateB;
+        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+          const nameA = (a.studentname || "").toLowerCase();
+          const nameB = (b.studentname || "").toLowerCase();
+          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
           return 0;
-        })
+        }
+        return 0;
+      })
       : dashboard;
 
   useEffect(() => {
@@ -418,6 +418,7 @@ const Rows = ({
                     >
                       <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                         <div className="h-full w-[100%] py-4 flex justify-center items-center">
+                          {/* Why this shi not defined */}
                           <h3 className="truncate">{db.studentname}</h3>
                           <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
@@ -439,8 +440,8 @@ const Rows = ({
                                 modifyTable
                                   ? handleCellChange(db.id, "tassel", val)
                                   : handleEditChange({
-                                      target: { name: "tassel", value: val },
-                                    })
+                                    target: { name: "tassel", value: val },
+                                  })
                               }
                               disabled={false}
                             />
@@ -461,8 +462,8 @@ const Rows = ({
                                 modifyTable
                                   ? handleCellChange(db.id, "hood", val)
                                   : handleEditChange({
-                                      target: { name: "hood", value: val },
-                                    })
+                                    target: { name: "hood", value: val },
+                                  })
                               }
                               disabled={false}
                             />
@@ -483,8 +484,8 @@ const Rows = ({
                                 modifyTable
                                   ? handleCellChange(db.id, "gown", val)
                                   : handleEditChange({
-                                      target: { name: "gown", value: val },
-                                    })
+                                    target: { name: "gown", value: val },
+                                  })
                               }
                               disabled={false}
                             />
@@ -543,15 +544,14 @@ const Rows = ({
                                 onMouseLeave={() => setHoveredEyeId(null)}
                               >
                                 <button
-                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
-                                    hoveredEyeId === db.id ? "bg-blue-600" : ""
-                                  }`}
+                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id ? "bg-blue-600" : ""
+                                    }`}
                                   style={{
                                     background: modifyTable
                                       ? "#bdbdbd"
                                       : hoveredEyeId === db.id
-                                      ? "#2563eb"
-                                      : "#0C7E48",
+                                        ? "#2563eb"
+                                        : "#0C7E48",
                                     cursor: modifyTable
                                       ? "not-allowed"
                                       : "pointer",
@@ -568,11 +568,10 @@ const Rows = ({
                                   }}
                                 >
                                   <EyeIcon
-                                    className={`w-5 transition-colors duration-200 ${
-                                      hoveredEyeId === db.id
-                                        ? "text-blue-200"
-                                        : "text-white"
-                                    }`}
+                                    className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
+                                      ? "text-blue-200"
+                                      : "text-white"
+                                      }`}
                                   />
                                 </button>
                                 {hoveredEyeId === db.id && (
@@ -650,9 +649,8 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${
-        disabled ? "pointer-events-none opacity-20" : ""
-      }`}
+      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
+        }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -710,11 +708,10 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                  opt === value
-                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                    : ""
-                }`}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
+                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                  : ""
+                  }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",
