@@ -102,8 +102,8 @@ const Rows = ({
             const dateB = new Date(b.dateofreservation);
             return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
           } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = a.studentname.toLowerCase();
-            const nameB = b.studentname.toLowerCase();
+            const nameA = (a.studentname || "").toLowerCase();
+            const nameB = (b.studentname || "").toLowerCase();
             if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
             if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
             return 0;
@@ -283,8 +283,8 @@ const Rows = ({
             if (sortOrder === "newest") return dateB - dateA;
             if (sortOrder === "oldest") return dateA - dateB;
           } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = a.studentname.toLowerCase();
-            const nameB = b.studentname.toLowerCase();
+            const nameA = (a.studentname || "").toLowerCase();
+            const nameB = (b.studentname || "").toLowerCase();
             if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
             if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
             return 0;

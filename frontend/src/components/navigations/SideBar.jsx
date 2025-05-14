@@ -18,7 +18,6 @@ const SideBar = ({
   dateDue,
   focusedStatus, // <-- add this prop
   setFocusedStatus, // <-- add this prop
-  setAdminName: setAdminNameProp, // <-- receive prop for lifting state
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -48,8 +47,6 @@ const SideBar = ({
     if (!token) {
       setAdminName("Not logged in");
       setAdminRole("N/A");
-      if (typeof setAdminNameProp === "function")
-        setAdminNameProp("Not logged in");
       return;
     }
     fetch("http://localhost:5001/users", {
@@ -67,10 +64,8 @@ const SideBar = ({
           } catch {
             // Not JSON, ignore
           }
-          setAdminName("Admin");
+          setAdminName("Fetch error");
           setAdminRole(errorMsg);
-          if (typeof setAdminNameProp === "function")
-            setAdminNameProp("Fetch error");
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }
@@ -80,23 +75,17 @@ const SideBar = ({
         if (data && data.name && data.role) {
           setAdminName(data.name);
           setAdminRole(data.role);
-          if (typeof setAdminNameProp === "function")
-            setAdminNameProp(data.name);
         } else if (data) {
-          setAdminName("Admin");
-          setAdminRole("");
-          if (typeof setAdminNameProp === "function")
-            setAdminNameProp("No user found");
+          setAdminName("No user found");
+          setAdminRole("N/A");
         }
       })
       .catch((err) => {
-        setAdminName("Admin");
-        setAdminRole("");
-        if (typeof setAdminNameProp === "function")
-          setAdminNameProp("Fetch error");
+        setAdminName("Fetch error");
+        setAdminRole("Network error");
         console.error("Sidebar /users fetch network error:", err);
       });
-  }, [setAdminNameProp]);
+  }, []);
   // Responsivenesss show/hide sidebar on small screens, always show on large screens
   const visible = isLargeScreen ? true : showSidebar;
 
@@ -292,16 +281,9 @@ const SideBar = ({
             className="min-w-full md:w-11/12 md:scale-100 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <div className="relative w-full flex flex-col justify-between md:w-full">
-              {activeTab !== "student-home" && (
-                <>
-                  <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
-                    ITEM STATUS
-                  </h4>
-                  <div className="w-full h-[90px] md:scale-100">
-                    {/* Existing ITEM STATUS buttons */}
-                  </div>
-                </>
-              )}
+              <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
+                ITEM STATUS
+              </h4>
               {activeTab === "evaluation" ? (
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
@@ -328,7 +310,7 @@ const SideBar = ({
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={EvaluatedFilter}
                     >
-                      <p className="sm:text-[12px] text-[13px] md:text-[15px] font-figtree font-bold text-[#15803D] ml-3">
+                      <p className="sm:text-[11px] text-[9px] md:text-[14px] font-figtree font-bold text-[#15803D] ml-3">
                         Evaluated
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
@@ -345,7 +327,7 @@ const SideBar = ({
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={NotEvaluatedFilter}
                     >
-                      <p className="sm:text-[13px] text-[13px] font-bold text-[#B91C1C] ml-3">
+                      <p className="sm:text-[12px] text-[13px] font-bold text-[#B91C1C] ml-3">
                         No Evaluation
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
@@ -479,53 +461,33 @@ const SideBar = ({
                   </div>
                 </div>
               ) : activeTab === "student-home" ? (
-                <div className="w-full max-w-sm bg-[#0C2A66] text-white p-4 rounded-lg shadow-md space-y-4">
-                  <div>
-                    <p className="text-sm font-semibold">CURRENT STATUS</p>
-                    <div className="mt-1 bg-white text-black rounded-md px-3 py-2 flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <span className="w-3 h-3 rounded-full bg-[#F4C430]"></span>
-                        <span className="text-sm">
-                          {userStatus || "Pending Approval"}
-                        </span>
-                      </div>
+                <div className="w-full h-[90px] md:scale-100">
+                  <div className="w-full h-1/2 flex justify-between items-center">
+                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Status
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {userStatus || "N/A"}
+                      </p>
+                    </div>
+                    <div className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Reserved
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {dateReserved || "N/A"}
+                      </p>
                     </div>
                   </div>
-
-                  <div>
-                    <p className="text-sm font-semibold">DATE APPROVED</p>
-                    <div className="mt-1 bg-white text-black rounded-md px-3 py-2 flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <span className="w-3 h-3 rounded-full bg-[#F4C430]"></span>
-                        <span className="text-sm">{dateReserved || "N/A"}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-semibold">DATE DUE</p>
-                    <div className="mt-1 bg-white text-black rounded-md px-3 py-2 flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <span className="w-3 h-3 rounded-full bg-[#F4C430]"></span>
-                        <span className="text-sm">
-                          {dateDue || "May 2, 2026"}
-                        </span>
-                      </div>
-                      {/* Notification bell icon (you can use Heroicons or Lucide) */}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                        />
-                      </svg>
+                  <div className="w-full h-1/2 flex justify-between items-center">
+                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
+                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
+                        Due
+                      </p>
+                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                        {dateDue || "N/A"}
+                      </p>
                     </div>
                   </div>
                 </div>
