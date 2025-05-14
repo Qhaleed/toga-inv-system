@@ -61,7 +61,7 @@ const PendingPage = () => {
           <SideBar alwaysShowOnLarge />
         </div>
         {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full flex-1  col-span-1 md:col-span-2  lg:col-span-4 sm:col-span-4 overflow-x-auto sm:overflow-x-visible  h-max-screen">
+        <div className="w-full flex-1  col-span-1 md:col-span-2  lg:col-span-4 sm:col-span-5 overflow-x-auto sm:overflow-x-visible  h-max-screen">
           <div className="w-full h-screen overflow-hidden flex flex-col items-center">
             <div
               className="w-full"
