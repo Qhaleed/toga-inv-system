@@ -600,16 +600,9 @@ const SideBar = ({
           {/* CALENDAR */}
           <div
             key={activeTab + "-calendar"}
-            className="min-w-[90%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-2 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="min-w-[80%] w-[90%] relative h-70 bg-[#102F5E] flex justify-center items-center rounded-xl mt-4 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
-            <div className="w-full flex ">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="rounded-md border"
-              />
-            </div>
+            <Calendar mode="single" selected={date} onSelect={setDate} />
           </div>
         </div>
       )}
