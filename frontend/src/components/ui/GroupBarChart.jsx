@@ -178,7 +178,7 @@ export function GroupBarChart() {
 
   return (
     <Card className="flex overflow-hidden  flex-col w-full h-full">
-      <CardHeader className="flex flex-col w-full p-0 mt-4">
+      <CardHeader className="flex flex-col w-full p-0 ">
         <div className="flex w-full">
           {["desktop", "mobile"].map((key) => {
             const chart = key;

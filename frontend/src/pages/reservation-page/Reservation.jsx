@@ -52,7 +52,11 @@ const ReservationPage = () => {
       <div className="flex-1 max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-5   sm:gap-0 sm:top-0 sm:left-0 sm:h-full sm:w-screen">
         {/* Sidebar: full width above on mobile, left on desktop */}
         <div className="w-full sm:col-span-2 relative md:col-span-1 lg:col-span-1   bg-[#001C47] text-white hidden md:block ">
-          <SideBar alwaysShowOnLarge />
+          <SideBar
+            alwaysShowOnLarge
+            setSortOrder={setSortOrder}
+            activeTab="reservation"
+          />
         </div>
 
         {/* Main content: full width on mobile, right of sidebar on desktop */}

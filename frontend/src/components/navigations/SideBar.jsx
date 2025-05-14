@@ -139,42 +139,14 @@ const SideBar = ({
 
   return (
     <>
-      {/* Optional to for small screen */}
-      <div className="sm:hidden w-full flex justify-start items-center bg-[#001C47] p-21">
-        <button
-          className="p-1 rounded-full fill-white hover:scale-105 transform-all ease-out duration-300"
-          onClick={() => setShowSidebar((prev) => !prev)}
-        >
-          <div className="flex justify-center items-center">
-            <MenuIcon
-              className={`w-7 h-7 transition-colors duration-300 ${
-                showSidebar
-                  ? "text-color-[#000] fill-[#000]"
-                  : "text-[#000] fill-[#000]"
-              }`}
-            />
-          </div>
-        </button>
-      </div>
-
-      {/* Sidebar idea ->> above navbar on small screens, left on large screens */}
       {visible && (
         <div
           // Always keep z-10 here so modals (z-[99999]) can overlay SideBar
-          className={`sm:col-span-2 w-full sm:w-auto overflow-hidden whitespace-nowrap h-full flex flex-col justify-start items-center bg-[#001C47] sm:static fixed top-0 left-0 z-10 sm:z-auto transition-all ${
+          className={`sm:col-span-2 w-full sm:w-auto min-w-[220px] overflow-visible  h-fill flex flex-col justify-start items-center bg-[#001C47] sm:static   transition-all ${
             showSidebar
               ? "animate-slide-in-top duration-800"
               : "animate-fade-in duration-800"
           }`}
-          style={{
-            position: "static",
-            height: isLargeScreen ? "100vh" : "88%",
-            transition: "transform ",
-            animation: showSidebar ? "slide-in-top 2s" : "fade-in 0.8s",
-            minWidth: "100%", // Prevent overflow
-            overflow: "visible", // Allow overlays to extend outside
-            zIndex: 10, // Always keep z-10 for modal overlay
-          }}
         >
           {/* SIDE BAR HERO CONTAINER*/}
           <div
@@ -394,7 +366,7 @@ const SideBar = ({
                   setFocusedStatus={setFocusedStatus}
                 />
               ) : activeTab === "pending" ? (
-                <div className="w-full h-[90px] md:scale-100">
+                <div className="w-full h-[100px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
@@ -628,7 +600,7 @@ const SideBar = ({
           {/* CALENDAR */}
           <div
             key={activeTab + "-calendar"}
-            className="min-w-[80%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="min-w-[90%] w-[90%] relative h-80 bg-[#102F5E] flex justify-center items-center rounded-xl mt-2 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <div className="w-full flex ">
               <Calendar

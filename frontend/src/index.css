@@ -211,28 +211,6 @@ Legacy Tailwind config for reference:
   Universal button focus style for all buttons, including sidebar and navigation hehehe
 
 /* */
-button:focus,
-button:focus-visible,
-.sidebar-button:focus,
-.sidebar-button:focus-visible {
-  outline: 2px solid #d8e3e4 !important;
-  outline-offset: 2px !important;
-
-  box-shadow: 0 0 0 2px #f3b51a33 !important;
-}
-.removeEffect:focus,
-.removeEffect:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* For Tailwind utility classes, add a custom class for focus if needed */
-.focus-gold:focus,
-.focus-gold:focus-visible {
-  outline: 2px solid #91b0f4 !important;
-  outline-offset: 2px !important;
-  box-shadow: 0 0 0 2px #a59c8533 !important;
-}
 
 .recharts-bar-rectangle path {
   /* Use currentColor so Bar fill prop works with a function */
@@ -242,9 +220,7 @@ button:focus-visible,
 @utility accent-bg {
   background-color: #edb427;
 }
-@utility text-clr {
-  color: #edb427;
-}
+
 @utility dashboard-card {
   background-color: white;
   width: 100%;

@@ -13,7 +13,7 @@ const AdminDashboardCard = () => {
   const [adminName, setAdminName] = useState("");
 
   return (
-    <div className="flex flex-row overflow-hidden h-screen w-screen bg-[#F3F9FF] font-figtree font-medium">
+    <div className="flex flex-row overflow-hidden h-screen w-full bg-[#F3F9FF] font-figtree font-medium">
       {/* Mobile vertical sidebar with icons (profile + sorting), only on mobile */}
       <div className="w-20 bg-[#001C47] h-full flex flex-col items-center py-4 gap-6 md:hidden">
         {/* Profile picture icon */}
@@ -50,13 +50,13 @@ const AdminDashboardCard = () => {
         {/* Add more icons/buttons as needed */}
       </div>
       {/* Main grid container, full width on sm and up, shrinks on mobile */}
-      <div className="flex-1 max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-5   sm:gap-0 sm:top-0 sm:left-0 sm:h-full sm:w-screen">
+      <div className="flex-1 max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:gap-0 sm:top-0 sm:left-0 sm:h-full sm:w-screen">
         {/* Sidebar: full width above on mobile, left on desktop */}
-        <div className="w-full sm:col-span-2 relative md:col-span-1 lg:col-span-1   bg-[#001C47] text-white hidden md:block ">
+        <div className="sm:col-span-2 relative md:col-span-1 lg:col-span-1 bg-[#001C47] text-white hidden md:block min-w-[220px]">
           <SideBar alwaysShowOnLarge setAdminName={setAdminName} />
         </div>
         {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full md:col-span-2 lg:col-span-4  overflow-visible sm:col-span-5 col-span-1 h-screen">
+        <div className="w-full md:col-span-2 lg:col-span-3  overflow-visible sm:col-span-5 col-span-1 h-screen">
           <div className="w-full h-full flex flex-col">
             <div className="w-full z-50 h-15 bg-amber-300">
               <NavBar
