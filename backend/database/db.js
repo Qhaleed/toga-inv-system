@@ -161,7 +161,69 @@ async function fullEvaluationPage() {
     }
   }
   
-  
+  async function getAllTable() {
+    try {
+        const [result] = await pool.query(`
+          SELECT 
+            a.account_id,
+            a.first_name,
+            a.surname,
+            a.middle_initial,
+            a.id_number,
+            a.course,
+            a.role,
+            a.status,
+            
+            i.inventory_id,
+            i.toga_size,
+            i.tassel_color,
+            i.hood_color,
+            i.has_cap,
+            i.rent_date,
+            i.is_overdue,
+            i.return_status,
+            i.payment_status,
+            i.evaluation_status,
+            i.updated_at,
+
+            e.evaluation_id,
+            e.gown_condition,
+            e.gown_repair,
+            e.gown_damage,
+            e.gown_remarks,
+            e.hood_condition,
+            e.hood_repair,
+            e.hood_damage,
+            e.hood_remarks,
+            e.tassel_condition,
+            e.tassel_missing,
+            e.tassel_damage,
+            e.tassel_remarks,
+            e.cap_condition,
+            e.cap_deform,
+            e.cap_remarks
+
+          FROM accounts a
+          LEFT JOIN inventory i ON a.account_id = i.account_id
+          LEFT JOIN evaluation e ON i.inventory_id = e.inventory_id;
+          `);
+        return result;
+    } catch (err) {
+        console.error('Database error in getAllTable:', err);
+    }
+  }
+
+  async function updateEvaluationStatus(inventory_id, evaluation_status) {
+    try {
+        const [result] = await pool.query(
+            `UPDATE inventory SET evaluation_status = ? WHERE inventory_id = ?`,
+            [evaluation_status, inventory_id]
+        );
+        return result;
+    } catch (err) {
+        console.error('Database error in updateEvaluationStatus:', err);
+    }
+  }
 
 module.exports = {
     pool,
@@ -170,5 +232,7 @@ module.exports = {
     evalForm,
     fullEvaluationPage,
     evalPage,
-    updateEval
+    updateEval,
+    getAllTable,
+    updateEvaluationStatus
 };
