@@ -19,7 +19,7 @@ const EvaluationRows = ({
 
   useEffect(() => {
     // kuha data sa JSON
-    fetch("http://localhost:5001/inventory")
+    fetch("http://localhost:5001/evaluation")
       .then((res) => res.json())
       .then((data) => {
         setDashboard(data);
@@ -130,7 +130,7 @@ const EvaluationRows = ({
                   >
                     <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                       <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                        <h3 className="truncate">{db.renters_name}</h3>
+                        <h3 className="truncate">{db.surname + ", " + db.first_name + " " + db.middle_initial + "."}</h3>
                         {/* Removed the span that was under student name only */}
                       </div>
                     </td>
