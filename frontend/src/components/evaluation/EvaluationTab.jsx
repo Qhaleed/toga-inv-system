@@ -62,6 +62,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    exit(); 
     try {
       const response = await fetch("http://localhost:5001/evaluation", {
         method: "POST",
@@ -88,11 +89,6 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
           inventory_id: value.inventory_id,
         }),
       });
-      await response.json();
-      console.log("Submitting:", evaluationData); //debug
-      setEvaluationTab("hidden");
-
-      resetEvaluationTab();
     } catch (error) {
       console.error("Evaluation error:", error);
     }
@@ -142,7 +138,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                 <tr className="text-center h-[46%] text-[10px] sm:text-xs">
                   <td>
                     <h3 className="border-r border-gray-700">
-                      {value.renters_name}
+                      {value.surname + ", " + value.first_name + " " + value.middle_initial + "."}
                     </h3>
                   </td>
                   <td>
@@ -150,7 +146,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                   </td>
                   <td>
                     <h3 className="border-r border-gray-700">
-                      {value.inventory_id}
+                      {value.id_number}
                     </h3>
                   </td>
                   <td>

@@ -4,13 +4,25 @@ const router = express.Router();
 const db = require("../database/db");
 require("dotenv").config();
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const [rows] = await db.pool.query("SELECT * FROM inventory");
-    res.json(rows);
+    const fullTable = await db.getAllTable();
+
+    // filter only students lang ang isend sa query
+    const filteredTable = fullTable.filter(row => row.role === 'student');
+
+    // loops each row and split the updated_at date to get only the date
+    const formattedTable = filteredTable.map(row => ({
+      ...row,
+      updated_at: row.updated_at 
+        ? row.updated_at.toISOString().split('T')[0] //remove time part
+        : null
+    }));
+
+    res.status(200).json(formattedTable);
   } catch (error) {
-    console.error("Unable to fetch inventory:", error);
-    res.status(500).json({ error: "Failed to fetch inventory data" });
+    console.log("Inventory Table database error: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
