@@ -17,7 +17,7 @@ const PendingPage = () => {
   const handleSortDateOldest = () => setSortOrder("oldest");
 
   return (
-    <div className="h-fit w-screen relative bg-[#EBEBEB] font-figtree font-medium">
+    <div className="h-fit w-screen relative bg-[#F3F9FF] font-figtree font-medium">
       {/* Responsive grid: sidebar above on mobile, left on desktop */}
       <div className="max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 sm:gap-0 sm:top-0 sm:left-0 sm:h-screen sm:w-screen">
         {/* Sidebar: full width above on mobile, left on desktop */}
@@ -52,7 +52,7 @@ const PendingPage = () => {
                 setActiveTab={setActiveTab}
               />
             </div>
-            <div className="flex-1 flex animate-fade-in mx-auto min-w-fit overflow-hidden bg-amber-300 ">
+            <div className="flex-1 flex mx-auto min-w-fit  animate-fade-in    overflow-hidden ">
               <Table
                 isGrid={isGrid}
                 modifyTable={modifyTable}

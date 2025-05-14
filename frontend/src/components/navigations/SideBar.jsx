@@ -18,6 +18,7 @@ const SideBar = ({
   dateDue,
   focusedStatus, // <-- add this prop
   setFocusedStatus, // <-- add this prop
+  setAdminName: setAdminNameProp, // <-- receive prop for lifting state
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -47,6 +48,8 @@ const SideBar = ({
     if (!token) {
       setAdminName("Not logged in");
       setAdminRole("N/A");
+      if (typeof setAdminNameProp === "function")
+        setAdminNameProp("Not logged in");
       return;
     }
     fetch("http://localhost:5001/users", {
@@ -64,8 +67,10 @@ const SideBar = ({
           } catch {
             // Not JSON, ignore
           }
-          setAdminName("Fetch error");
+          setAdminName("Admin");
           setAdminRole(errorMsg);
+          if (typeof setAdminNameProp === "function")
+            setAdminNameProp("Fetch error");
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }
@@ -75,17 +80,23 @@ const SideBar = ({
         if (data && data.name && data.role) {
           setAdminName(data.name);
           setAdminRole(data.role);
+          if (typeof setAdminNameProp === "function")
+            setAdminNameProp(data.name);
         } else if (data) {
-          setAdminName("No user found");
-          setAdminRole("N/A");
+          setAdminName("Admin");
+          setAdminRole("");
+          if (typeof setAdminNameProp === "function")
+            setAdminNameProp("No user found");
         }
       })
       .catch((err) => {
-        setAdminName("Fetch error");
-        setAdminRole("Network error");
+        setAdminName("Admin");
+        setAdminRole("");
+        if (typeof setAdminNameProp === "function")
+          setAdminNameProp("Fetch error");
         console.error("Sidebar /users fetch network error:", err);
       });
-  }, []);
+  }, [setAdminNameProp]);
   // Responsivenesss show/hide sidebar on small screens, always show on large screens
   const visible = isLargeScreen ? true : showSidebar;
 
@@ -318,6 +329,7 @@ const SideBar = ({
                       onClick={EvaluatedFilter}
                     >
                       <p className="sm:text-[12px] text-[13px] md:text-[15px] font-figtree font-bold text-[#15803D] ml-3">
+
                         Evaluated
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
@@ -335,6 +347,7 @@ const SideBar = ({
                       onClick={NotEvaluatedFilter}
                     >
                       <p className="sm:text-[13px] text-[13px] font-bold text-[#B91C1C] ml-3">
+
                         No Evaluation
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
@@ -411,10 +424,10 @@ const SideBar = ({
                       } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={() => setFocusedStatus("all")}
                     >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[10px] md:text-[13px] font-figtree font-bold text-[#1E40AF] ml-3">
+                      <p className="sm:text-[14px] xl:text-[13px] text-[10px] md:text-[13px] font-figtree font-bold text-[#1E40AF] ml-3">
                         All Requests
                       </p>
-                      <div className="right-0 absolute 2xl:text-[15px] sm:text-[10px] md:text-[12px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="right-0 absolute 2xl:text-[11px] sm:text-[10px] md:text-[12px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
                         50
                       </div>
                     </button>
@@ -426,10 +439,10 @@ const SideBar = ({
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={() => setFocusedStatus("approved")}
                     >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[13px] md:text-[13px] font-figtree font-bold text-[#047857] ml-3">
+                      <p className="sm:text-[14px] 2xl:text-[14px] text-[13px] md:text-[13px] font-figtree font-bold text-[#047857]  ml-3">
                         Approved
                       </p>
-                      <div className="absolute right-0 2xl:text-[15px] sm:text-[10px] text-[13px] md:sm:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="absolute right-0 2xl:text-[11px] sm:text-[10px] text-[8px] md:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
                         30
                       </div>
                     </button>
@@ -443,10 +456,10 @@ const SideBar = ({
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={() => setFocusedStatus("pending")}
                     >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[13px] md:text-[12px] font-bold text-[#B45309] ml-3">
+                      <p className="sm:text-[14px] 2xl:text-[14px] text-[13px] md:text-[12px] font-bold text-[#B45309] ml-3">
                         Pending
                       </p>
-                      <div className="absolute right-0 2xl:text-[15px] sm:text-[10px] text-[13px] md:sm:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="absolute right-0 2xl:text-[11px] sm:text-[10px] text-[8px] md:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
                         15
                       </div>
                     </button>
@@ -458,10 +471,10 @@ const SideBar = ({
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={() => setFocusedStatus("rejected")}
                     >
-                      <p className="sm:text-[14px] 2xl:text-[15px] text-[13px] md:text-[13px] font-figtree font-bold text-[#B91C1C] ml-3">
+                      <p className="sm:text-[14px] 2xl:text-[14px] text-[13px] md:text-[13px] font-figtree font-bold text-[#B91C1C] ml-3">
                         Rejected
                       </p>
-                      <div className="absolute right-0 2xl:text-[15px] sm:text-[10px] text-[13px] md:sm:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="absolute right-0 2xl:text-[11px] sm:text-[10px] text-[8px] md:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
                         5
                       </div>
                     </button>
@@ -562,7 +575,7 @@ const SideBar = ({
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={() => setFocusedStatus("noeval")}
                     >
-                      <p className="sm:text-[14px] text-[13px] font-bold text-[#B91C1C] ml-3">
+                      <p className="sm:text-[12px] text-[13px] font-bold text-[#B91C1C] ml-3">
                         No Evaluation
                       </p>
                       <div className="absolute right-0 sm:text-[14px] text-[13px] md:sm:text-[14px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">

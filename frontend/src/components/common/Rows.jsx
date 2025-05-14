@@ -31,7 +31,7 @@ const Rows = ({
   const [hoveredEyeId, setHoveredEyeId] = useState(null);
   // PopupWindow state
   const [popupOpen, setPopupOpen] = useState(false);
-  const [popupUser, setPopupUser] = useState(null);
+  const [popupUser, setPopupUser] = useState(false);
 
   // Function to fetch data for the dashboard
   useEffect(() => {
@@ -346,30 +346,14 @@ const Rows = ({
       />
     );
   } else {
-    // When popup is open, remove max-h and overflow restrictions
-    const containerClass = `w-full${
-      popupOpen
-        ? " z-[998]"
-        : " max-h-[80vh] overflow-x-auto overflow-y-auto z-0"
-    } ${tableAnim}`;
-    const containerStyle = popupOpen
-      ? {
-          minWidth: "100px",
-          maxWidth: "100vw",
-          height: "auto",
-          overflow: "visible",
-          maxHeight: "none",
-          zIndex: 998, // Ensure table container is below modal
-        }
-      : { minWidth: "100px", maxWidth: "100vw", height: "auto", zIndex: 0 };
     return (
-      <div className={containerClass} style={containerStyle}>
-        <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-0 bg-white">
-          <table
-            className="w-full table border-separate border-spacing-0 relative"
-            style={{ position: "relative", zIndex: 0 }}
-          >
-            <thead className="bg-[#02327B] sticky top-0 z-10">
+      <div
+        className={`w-full max-h-[80vh] overflow-x-auto overflow-y-auto ${tableAnim}`}
+        style={{ minWidth: "100px", maxWidth: "100vw", height: "auto" }}
+      >
+        <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-1000 bg-red">
+          <table className="w-full table-fixed border-separate border-spacing-0 relative">
+            <thead className="bg-[#02327B] sticky top-0 z-30">
               <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
                 <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                   <span className="block text-[10px] md:text-[15px] w-full text-center ">
