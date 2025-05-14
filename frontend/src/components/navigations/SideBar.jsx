@@ -328,7 +328,7 @@ const SideBar = ({
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={EvaluatedFilter}
                     >
-                      <p className="sm:text-[11px] text-[9px] md:text-[14px] font-figtree font-bold text-[#15803D] ml-3">
+                      <p className="sm:text-[12px] text-[13px] md:text-[15px] font-figtree font-bold text-[#15803D] ml-3">
                         Evaluated
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
@@ -345,7 +345,7 @@ const SideBar = ({
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={NotEvaluatedFilter}
                     >
-                      <p className="sm:text-[12px] text-[13px] font-bold text-[#B91C1C] ml-3">
+                      <p className="sm:text-[13px] text-[13px] font-bold text-[#B91C1C] ml-3">
                         No Evaluation
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
