@@ -329,7 +329,6 @@ const SideBar = ({
                       onClick={EvaluatedFilter}
                     >
                       <p className="sm:text-[12px] text-[13px] md:text-[15px] font-figtree font-bold text-[#15803D] ml-3">
-
                         Evaluated
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
@@ -347,7 +346,6 @@ const SideBar = ({
                       onClick={NotEvaluatedFilter}
                     >
                       <p className="sm:text-[13px] text-[13px] font-bold text-[#B91C1C] ml-3">
-
                         No Evaluation
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
