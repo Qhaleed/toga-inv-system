@@ -6,10 +6,13 @@ require('dotenv').config();
 
 router.get('/', async (req, res) => {
   try {
-    const fullTable = await db.fullEvaluationPage();
+    const fullTable = await db.getAllTable();
+
+    // filter only students lang ang isend sa query
+    const filteredTable = fullTable.filter(row => row.role === 'student');
 
     // loops each row and split the updated_at date to get only the date
-    const formattedTable = fullTable.map(row => ({
+    const formattedTable = filteredTable.map(row => ({
       ...row,
       updated_at: row.updated_at 
         ? row.updated_at.toISOString().split('T')[0] //remove time part
@@ -22,6 +25,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 router.post('/', async (req, res) => {
     const {
@@ -56,6 +60,7 @@ router.post('/', async (req, res) => {
             cap_condition, cap_deform, cap_remarks
           });
         }
+        const updateEvaluationStatus = await db.updateEvaluationStatus(inventory_id, "evaluated");
         console.log("Evaluation saved successfully.");
     } catch (error) {
         console.log("error in evaluation table: ", error); //debug error
