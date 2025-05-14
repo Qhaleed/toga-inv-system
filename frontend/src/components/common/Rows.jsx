@@ -35,7 +35,11 @@ const Rows = ({
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
-        const mappedData = data.map((item) => ({
+        // Filter out entries without toga_size
+        // This is because no toga size = no form submitted yet
+        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+        const mappedData = filteredData.map((item) => ({
           id: item.inventory_id,
           studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
           course: item.course,
@@ -69,7 +73,10 @@ const Rows = ({
         );
         const data = await response.json();
 
-        const mappedData = data.map((item) => ({
+        // Filter out entries without toga_size before mapping
+        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+        const mappedData = filteredData.map((item) => ({
           id: item.inventory_id,
           studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
           course: item.course,
@@ -168,7 +175,7 @@ const Rows = ({
       }
     }
     prevModifyTable.current = modifyTable;
-  }, [modifyTable]);
+  }, [modifyTable, dashboard, originalDashboard]);
 
   const handleEditClick = (db) => {
     setDashboard((prev) =>
