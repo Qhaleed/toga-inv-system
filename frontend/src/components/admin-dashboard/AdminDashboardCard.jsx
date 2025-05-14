@@ -12,10 +12,11 @@ const AdminDashboardCard = () => {
   const [activeTab, setActiveTab] = useState("dashboard"); // State for active tab
   const [adminName, setAdminName] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true); // Sidebar toggle state
+  const firstName = adminName ? adminName.split(" ")[0] : "Admin";
 
   return (
     <div
-      className={`w-screen h-screen md:overflow-y-hidden grid grid-rows-[100px_1fr] md:grid-rows-1  transition-transform duration-500 ease-in-out ${
+      className={`w-screen h-screen md:overflow-y-hidden grid grid-rows-1 md:grid-rows-1  transition-transform duration-500 ease-in-out ${
         sidebarOpen
           ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr] trans"
           : "md:grid-cols-1"
@@ -23,7 +24,7 @@ const AdminDashboardCard = () => {
     >
       {/* Sidebar: left on desktop, hidden on mobile */}
       {sidebarOpen && (
-        <div className="max-md:hidden md:block bg-red-300 w-full relative  transition-transform duration-500 ease-in-out">
+        <div className="max-md:hidden md:block  w-full relative transition-transform duration-500 ease-in-out">
           <SideBar
             alwaysShowOnLarge
             setAdminName={setAdminName}
@@ -32,9 +33,9 @@ const AdminDashboardCard = () => {
         </div>
       )}
       {/* Main content dito */}
-      <div className="bg-black w-full h-full">
-        <div className="w-full h-full flex flex-col">
-          <div className="w-full z-50 h-15 bg-amber-300 flex items-center relative">
+      <div className="bg-[#F3F9FF] w-full h-full">
+        <div className="w-full relative h-full  flex flex-col">
+          <div className="w-full z-50 h-15  bg-amber-300 flex items-center ">
             <button
               className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-50 bg-white border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
               onClick={() => setSidebarOpen((open) => !open)}
@@ -54,8 +55,13 @@ const AdminDashboardCard = () => {
               setActiveTab={setActiveTab}
             />
           </div>
-          <div className="w-full h-full overflow-visible bg-green-900 flex-col flex">
-            <AdminDashboard adminName={adminName} />
+
+          <div className="w-full h-full overflow-visible  flex flex-col flex-1">
+            <div className="bg-blue-200 md:h-10 hidden items-center md:flex  ">
+              <p className="md:ml-6 font-semibold md:text-2xl">{`Welcome, ${firstName}! 👋🏻`}</p>
+            </div>
+
+            <AdminDashboard />
           </div>
         </div>
       </div>

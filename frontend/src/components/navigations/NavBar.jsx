@@ -38,8 +38,8 @@ const Navbar = ({
 
   const tabClass = (tabName) =>
     activeTab === tabName
-      ? "hover:scale-105 bg-blue-100 ring-0.5 border border-blue-700 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-28 lg:w-36 2xl:w-48 h-6 text-[10px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500"
-      : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-28 lg:w-36 2xl:w-48 h- text-[10px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500";
+      ? "hover:scale-105 bg-blue-100 ring-0.5 border border-blue-700 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-30 lg:w-34 2xl:w-48 h-6 text-[12px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500"
+      : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-25 lg:w-34 xl:w4  2xl:w-48 h-6 text-[10px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500";
 
   const handleNavigation = (tabName, route) => {
     if (activeTab !== tabName) {
@@ -108,33 +108,33 @@ const Navbar = ({
           <LoaderAnimation />
         </div>
       )}
-      <div className="h-full bg-amber-100 flex justify-between w-full">
+      <div className="h-full bg-[#102F5E] flex w-full">
         {/* Top Navigation */}
         {/* Mobile: Only big icons, no text, small logout icon at end */}
-        <div className="flex items-center w-full justify-around  md:hidden">
+        <div className="flex  gap-20 w-full  md:hidden">
           <button onClick={() => navigate("/admin-dashboard")} className="p-2">
-            <Home className="w-6 mx-1 h-6" />
+            <Home className="w-6 mx-1 h-6 text-white bg- fill-white" />
           </button>
           <button onClick={() => handleNavigation("inventory", "/inventory")}>
-            <Inventory className="w-6 mx-1  h-6" />
+            <Inventory className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => handleNavigation("pending", "/pending")}>
-            <Statistic className="w-6 mx-1 h-6" />
+            <Statistic className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => navigate("/evaluation-page")} className="p-2">
-            <Application className="w-6 mx-1 h-6" />
+            <Application className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => navigate("/reservation")} className="p-2">
-            <Application className="w-6 mx-1 h-6" />
+            <Application className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           {/* Small logout icon */}
-          <button onClick={handleLogout} className="p-2 ml-15">
+          <button onClick={handleLogout} className="p-3 ml-auto">
             <svg
               width="22"
               height="22"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#ef4444"
+              stroke="#fff"
               strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -148,17 +148,17 @@ const Navbar = ({
         </div>
         {/* Desktop/Tablet: Full nav with text and logout */}
         <div className="hidden md:flex h-full flex-col bg-amber-950 w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center flex-nowrap ">
+          <div className="flex items-center relative w-full">
+            <div className="flex items-center relative mt-5 w-full">
               {/* Dashboard button */}
               <button
                 onClick={() => navigate("/admin-dashboard")}
                 className={`${tabClass("dashboard")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Home className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-1 md:mx-3 content-center ">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3">
                   Dashboard
                 </span>
               </button>
@@ -166,10 +166,10 @@ const Navbar = ({
                 onClick={() => handleNavigation("inventory", "/inventory")}
                 className={`${tabClass("inventory")} removeEffect`}
               >
-                <span className="w-3">
-                  <Inventory className="w-4" />
+                <span className="w-2">
+                  <Inventory className="w-4 " />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-2 md:mx-4">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3">
                   Inventory
                 </span>
               </button>
@@ -177,10 +177,10 @@ const Navbar = ({
                 onClick={() => handleNavigation("pending", "/pending")}
                 className={`${tabClass("pending")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Statistic className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-2 md:mx-6 content-center">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3 content-center">
                   Pending
                 </span>
               </button>
@@ -188,10 +188,10 @@ const Navbar = ({
                 onClick={() => navigate("/evaluation-page")}
                 className={`${tabClass("evaluation")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Application className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px]  mx-1  md:mx-4">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px]  mx21  md:m3-4">
                   Evaluation
                 </span>
               </button>
@@ -199,22 +199,35 @@ const Navbar = ({
                 onClick={() => navigate("/reservation")}
                 className={`${tabClass("reservation")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Application className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-1 md:mx-4">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3">
                   Reservation
                 </span>
               </button>
             </div>
             {/* Logout button at far right */}
-            <div className="relative">
+            <div className="absolute right-2 top-1/3">
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded-2xl shadow transition-all duration-500"
-                style={{ minWidth: 20 }}
+                className=" text-white font-semibold  md:text-[13px] text-[9px]  duration-500"
               >
-                Logout
+                <svg
+                  width="10"
+                  height="10-"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#ef4444"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-7 h-7"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
               </button>
             </div>
           </div>
@@ -226,7 +239,7 @@ const Navbar = ({
               /* Search bar and grid/row toggle */
             },
             (
-              <div className="flex flex-row  justify-between items-center w-full mt-2 animate-fade-in bg-amber-900">
+              <div className="flex flex-row  items-center w-full mt-2 animate-fade-in bg-amber-900">
                 <div className="w-full">
                   <div className="relative  ">
                     <Search className="absolute w-5 top-1 left-2" />

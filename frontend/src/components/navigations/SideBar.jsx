@@ -151,7 +151,7 @@ const SideBar = ({
           {/* SIDE BAR HERO CONTAINER*/}
           <div
             key={activeTab + "-navbar"}
-            className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden rounded-t-xl shrink-0"
+            className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden "
           >
             <div className="flex justify-center">
               <div className="h-full ml-1 w-16 flex justify-center items-center">
