@@ -22,7 +22,7 @@ const PopupWindow = ({
     hood_color: "",
     tassel_color: "",
     has_cap: null,
-    return_status: "",
+    return_status: "Returned",
   });
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const PopupWindow = ({
         hood_color: user.hood_color || "",
         tassel_color: user.tassel_color || "",
         has_cap: user.has_cap,
-        return_status: user.return_status || "Returned",
+        return_status: user.return_status || "Not Returned",
       });
     }
   }, [user, edit]);
@@ -101,7 +101,7 @@ const PopupWindow = ({
         hood_color: user.hood_color || "",
         tassel_color: user.tassel_color || "",
         has_cap: user.has_cap,
-        return_status: user.return_status || "Returned",
+        return_status: user.return_status || "Not Returned",
       });
     }
   };
@@ -350,14 +350,14 @@ const PopupWindow = ({
                 </div>
                 <div className="bg-[#1B1B42] w-50 h-8 ml-6 rounded-lg flex justify-center items-center">
                   <button
-                    className={`${formData.return_status === "Borrowed"
+                    className={`${formData.return_status === "Not Returned"
                       ? "bg-[#86E4A1] w-[55%] h-[75%] ml-1 rounded-md text-black text-sm"
                       : "bg-[#1B1B42] w-[45%] h-[75%] mr-1 rounded-md text-gray-500 text-sm"
                       }`}
                     disabled={!edit}
-                    onClick={() => handleStatusChange("Borrowed")}
+                    onClick={() => handleStatusChange("Not Returned")}
                   >
-                    <h4>Borrowed</h4>
+                    <h4>Not Returned</h4>
                   </button>
                   <button
                     className={`${formData.return_status === "Returned"
