@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
 
-    const [users] = await db.pool.query("SELECT * FROM accounts WHERE id = ?", [
+    const [users] = await db.pool.query("SELECT * FROM accounts WHERE account_id = ?", [
       decoded.id,
     ]);
     if (!users || users.length === 0) {

@@ -44,9 +44,9 @@ const Rows = ({
           id: item.inventory_id, // use inventory_id as unique id
           studentname: item.renters_name,
           program: item.course,
-          tassel: item.tassel_color,
-          hood: item.hood_color,
-          gown: item.toga_size,
+          tassel: item.tassel_color, // fix: use item.tassel_color
+          hood: item.hood_color, // fix: use item.hood_color
+          gown: item.toga_size, // fix: use item.toga_size
           dateofreservation: item.rent_date
             ? new Date(item.rent_date).toLocaleDateString()
             : "",
@@ -80,9 +80,9 @@ const Rows = ({
           id: item.inventory_id, // use inventory_id as unique id
           studentname: item.renters_name,
           program: item.course,
-          tassel: item.tassel_color,
-          hood: item.hood_color,
-          gown: item.toga_size,
+          tassel: item.tassel_color, // fix: use item.tassel_color
+          hood: item.hood_color, // fix: use item.hood_color
+          gown: item.toga_size, // fix: use item.toga_size
           dateofreservation: item.rent_date
             ? new Date(item.rent_date).toLocaleDateString()
             : "",
