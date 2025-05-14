@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SideBar from "../navigations/SideBar";
 import NavBar from "../navigations/NavBar";
+import profilePic from "@/assets/images/profilepicture.jpg";
 import EvaluationTable from "./EvaluationTable";
 import EvaluationTab from "./EvaluationTab";
 
@@ -19,59 +20,78 @@ const EvaluationPage = () => {
   const [isZA, setIsZA] = useState(false);
 
   return (
-    <>
-      <div className="h-fit w-screen relative bg-[#F3F9FF] font-figtree font-medium">
-        {/* Responsive grid: sidebar above on mobile, left on desktop */}
-        <div className="max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 sm:gap-0 sm:top-0 sm:left-0 sm:h-screen sm:w-screen">
-          {/* Sidebar: full width above on mobile, left on desktop */}
-          <div className="w-full stik sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 2xl:col-span-1 bg-[#001C47] text-white hidden sm:block h-full">
-            <SideBar
-              alwaysShowOnLarge
-              activeTab={activeTab}
-              setIsAll={setIsAll}
-              setIsEvaluationTab={setIsEvaluationTab}
-              setIsNotEvaluationTab={setIsNotEvaluationTab}
-              setIsAZ={setIsAZ}
-              setIsZA={setIsZA}
-            />
-          </div>
-          {/* Main content: full width on mobile, right of sidebar on desktop */}
-          <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
-            <div
-              className="w-full h-screen overflow-hidden flex flex-col items-center "
-              style={{ maxWidth: "100vw" }}
-            >
-              <div
-                className="w-full "
-                style={{ height: "60px", marginBottom: "10px" }}
-              >
-                <NavBar
-                  modifyTable={modifyTable}
-                  setmodifyTable={setmodifyTable}
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
-                />
-              </div>
-              <EvaluationTable
+    <div className="flex flex-row overflow-hidden h-screen w-screen bg-[#F3F9FF] font-figtree font-medium">
+      {/* Mobile vertical sidebar with icons (profile + sorting), only on mobile */}
+      <div className="w-20 bg-[#001C47] h-full flex flex-col items-center py-4 gap-6 md:hidden">
+        {/* Profile picture icon */}
+        <img
+          src={profilePic}
+          alt="Profile"
+          className="w-10 h-10 rounded-full object-cover border-2 border-white mb-2"
+        />
+        {/* Sorting icons (replace with your actual icons as needed) */}
+        <button className="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full hover:bg-opacity-30">
+          <svg
+            width="20"
+            height="20"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M3 6h18M3 12h12M3 18h6" />
+          </svg>
+        </button>
+        <button className="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full hover:bg-opacity-30">
+          <svg
+            width="20"
+            height="20"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        {/* Add more icons/buttons as needed */}
+      </div>
+      {/* Main grid container, full width on sm and up, shrinks on mobile */}
+      <div className="flex-1 max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-5   sm:gap-0 sm:top-0 sm:left-0 sm:h-full sm:w-screen">
+        {/* Sidebar: full width above on mobile, left on desktop */}
+        <div className="w-full sm:col-span-2 relative md:col-span-1 lg:col-span-1   bg-[#001C47] text-white hidden md:block ">
+          <SideBar alwaysShowOnLarge />
+        </div>
+        {/* Main content: full width on mobile, right of sidebar on desktop */}
+        <div className="w-full flex-1  col-span-1 md:col-span-2  lg:col-span-4 sm:col-span-4 overflow-x-auto sm:overflow-x-visible  h-max-screen">
+          <div className="w-full h-screen overflow-hidden flex flex-col items-center">
+            <div className="w-full ">
+              <NavBar
                 modifyTable={modifyTable}
-                setValue={setValue}
-                setEvaluationTab={setEvaluationTab}
-                isAll={isAll}
-                isevalTab={isEvaluationTab}
-                isnotevalTab={isNotEvaluationTab}
-                isAZ={isAZ}
-                isZA={isZA}
+                setmodifyTable={setmodifyTable}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
               />
             </div>
+            <EvaluationTable
+              modifyTable={modifyTable}
+              setValue={setValue}
+              setEvaluationTab={setEvaluationTab}
+              isAll={isAll}
+              isevalTab={isEvaluationTab}
+              isnotevalTab={isNotEvaluationTab}
+              isAZ={isAZ}
+              isZA={isZA}
+            />
           </div>
         </div>
+        <EvaluationTab
+          value={value}
+          evalTab={evalTab}
+          setEvaluationTab={setEvaluationTab}
+        />
       </div>
-      <EvaluationTab
-        value={value}
-        evalTab={evalTab}
-        setEvaluationTab={setEvaluationTab}
-      />
-    </>
+    </div>
   );
 };
 
