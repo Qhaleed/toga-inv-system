@@ -56,7 +56,7 @@ const ReservationPage = () => {
         </div>
 
         {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full flex-1 md:col-span-2 lg:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
+        <div className="w-full flex-1 md:col-span-2 lg:col-span-4 sm:col-span-5 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
           <div
             className="w-full h-screen overflow-hidden flex flex-col items-center"
             style={{ maxWidth: "100vw" }}

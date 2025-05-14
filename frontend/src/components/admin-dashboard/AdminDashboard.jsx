@@ -42,21 +42,22 @@ function AdminDashboard({ adminName }) {
         </div>
       </div>
       <div className=" h-full bg-green-300 pt-12 w-full flex  ">
-        {/* <div className="flex w-full h-full  bg-white rounded-[30px] shadow-lg  ">
+        <div className="flex w-full h-full  bg-white rounded-[30px] shadow-lg  ">
           asdsds
-        </div> */}
+        </div>
       </div>
       {/* Vertically connected column for three and six */}
       <div className="  row-span-2  h-full min-h-0 bg-amber-500 text-xs font-bold ">
-        {/* <div className="  h-full flex  justify-center w-full">
+        <div className="  h-full flex  justify-center w-full">
           <div className="bg-white rounded-[30px] w-30 h-30 shadow-lg">
             asdas
           </div>
-        </div> */}
+        </div>
       </div>
       {/* Row 2 */}
-      <div className=" flex mt-1  text-xs font-bold  bg-amber-600   h-full col-span-2">
+      <div className=" flex mt-1  text-xs font-bold  bg-amber-600   h-fit col-span-2">
         {/* <div className=" bg-yellow-800 w-full h-full">asdasd</div> */}
+        <GroupBarChart />
       </div>
       {/* The third cell in row 2 is now merged above */}
     </div>
