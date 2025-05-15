@@ -112,7 +112,7 @@ const Navbar = ({
       <div className="h-full flex w-full">
         {/* Top Navigation */}
         {/* Mobile: Only big icons, no text, small logout icon at end */}
-        <div className="flex  gap-7 w-full  md:hidden">
+        <div className="flex  gap-7 w-full bg-[#102F5E] md:hidden">
           <button className="p-2 transition-all duration-200 hover:bg-blue-900/40 hover:scale-110 rounded-full">
             <MenuIcon className="w-6 mx-1 h-6 text-white fill-white" />
           </button>

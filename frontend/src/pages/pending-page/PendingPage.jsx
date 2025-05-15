@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import Table from "../../components/common/Table";
 import SideBar from "../../components/navigations/SideBar";
 import Navbar from "../../components/navigations/NavBar";
-import profilePic from "@/assets/images/profilepicture.jpg";
 
 const PendingPage = () => {
-  // States for grid, modifyTable, sortOrder, and activeTab
   const [isGrid, setIsGrid] = useState(false);
   const [modifyTable, setmodifyTable] = useState(false);
-  const [sortOrder, setSortOrder] = useState("name-asc");
   const [activeTab, setActiveTab] = useState("pending");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sortOrder, setSortOrder] = useState("name-asc");
 
   // Handler functions for sort buttons (for SideBar)
   const handleSortNameAsc = () => setSortOrder("name-asc");
@@ -18,46 +17,16 @@ const PendingPage = () => {
   const handleSortDateOldest = () => setSortOrder("oldest");
 
   return (
-    <div className="flex flex-row overflow-hidden h-screen w-screen bg-[#F3F9FF] font-figtree font-medium">
-      {/* Mobile vertical sidebar with icons (profile + sorting), only on mobile */}
-      <div className="w-20 bg-[#001C47] h-full flex flex-col items-center py-4 gap-6 md:hidden">
-        {/* Profile picture icon */}
-        <img
-          src={profilePic}
-          alt="Profile"
-          className="w-10 h-10 rounded-full object-cover border-2 border-white mb-2"
-        />
-        {/* Sorting icons (replace with your actual icons as needed) */}
-        <button className="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full hover:bg-opacity-30">
-          <svg
-            width="20"
-            height="20"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path d="M3 6h18M3 12h12M3 18h6" />
-          </svg>
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center bg-white bg-opacity-10 rounded-full hover:bg-opacity-30">
-          <svg
-            width="20"
-            height="20"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-        </button>
-        {/* Add more icons/buttons as needed */}
-      </div>
-      {/* Main grid container, full width on sm and up, shrinks on mobile */}
-      <div className="flex-1 max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:gap-0 sm:top-0 sm:left-0 sm:h-full sm:w-screen">
-        {/* Sidebar: full width above on mobile, left on desktop */}
-        <div className="sm:col-span-2 relative md:col-span-1 lg:col-span-1 bg-[#001C47] text-white hidden md:block min-w-[220px]">
+    <div
+      className={`w-screen h-screen overflow-x-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
+        sidebarOpen
+          ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
+          : "md:grid-cols-1"
+      }`}
+    >
+      {/* Sidebar: left on desktop, hidden on mobile */}
+      {sidebarOpen && (
+        <div className="max-md:hidden md:block w-full relative transition-transform duration-500 ease-in-out">
           <SideBar
             alwaysShowOnLarge
             setSortOrder={setSortOrder}
@@ -69,23 +38,32 @@ const PendingPage = () => {
             handleSortDateOldest={handleSortDateOldest}
           />
         </div>
-        {/* Main content: full width on mobile, right of sidebar on desktop */}
-        <div className="w-full flex-1  col-span-1 md:col-span-2  lg:col-span-3 sm:col-span-5 overflow-x-auto sm:overflow-x-visible  h-max-screen">
-          <div className="w-full h-screen overflow-hidden flex flex-col items-center">
-            <div
-              className="w-full"
-              style={{ height: "60px", marginBottom: "10px" }}
+      )}
+      {/* Main content */}
+      <div className="bg-[#F3F9FF] w-full h-full">
+        <div className="w-full relative h-full overflow-hidden flex flex-col">
+          <div className="w-full z-10 h-15 flex items-center ">
+            <button
+              className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
+              onClick={() => setSidebarOpen((open) => !open)}
+              aria-label={sidebarOpen ? "Minimize sidebar" : "Open sidebar"}
+              style={{ marginLeft: 10 }}
             >
-              <Navbar
-                isGrid={isGrid}
-                setIsGrid={setIsGrid}
-                modifyTable={modifyTable}
-                setmodifyTable={setmodifyTable}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
-            </div>
-            <div className="flex-1 flex mx-auto min-w-fit  animate-fade-in    overflow-hidden ">
+              <span className="text-xl text-[#2840A1]">
+                {sidebarOpen ? "\u2190" : "\u2192"}
+              </span>
+            </button>
+            <Navbar
+              isGrid={isGrid}
+              setIsGrid={setIsGrid}
+              modifyTable={modifyTable}
+              setmodifyTable={setmodifyTable}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          </div>
+          <div className="w-full h-full overflow-visible flex flex-col flex-1">
+            <div className="flex-1 flex mx-auto min-w-fit animate-fade-in overflow-hidden">
               <Table
                 isGrid={isGrid}
                 modifyTable={modifyTable}
