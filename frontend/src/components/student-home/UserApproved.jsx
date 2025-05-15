@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import LoginBg from "../../assets/images/loginbg.jpg";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 import FormWrapper from "../common/FormWrapper";
 

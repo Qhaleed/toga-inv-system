@@ -71,7 +71,7 @@ const Dashboard = () => {
       });
 
       if (response.ok) {
-        setUserStatus("approved");
+        setUserStatus("pending");
         setShowForm(false);
       }
     } catch (error) {
@@ -140,7 +140,7 @@ const Dashboard = () => {
         ) : (
           <>
             {userStatus === "pending" && <PendingApproval name={userName} />}
-            {userStatus === "approved" && <ApprovedView name={userName} />}
+            {userStatus === "approved" && <UserApproved name={userName} />}
             {userStatus === "error" && (
               <div className="flex justify-center items-center text-red-500">
                 <p>Failed to load user data. Please try again later.</p>
