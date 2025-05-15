@@ -41,7 +41,7 @@ const EvaluationPage = () => {
       )}
       {/* Main content */}
       <div className="bg-[#F3F9FF] w-full h-full">
-        <div className="w-full relative h-full overflow-hidden flex flex-col">
+        <div className="w-full relative h-full flex flex-col">
           <div className="w-full z-10 h-15 flex items-center ">
             <button
               className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
@@ -60,9 +60,9 @@ const EvaluationPage = () => {
               setActiveTab={setActiveTab}
             />
           </div>
-          <div className="w-full h-full overflow-visible flex flex-col flex-1">
+          <div className="w-full h-full overflow-hidden flex flex-col flex-1">
             {/* Main evaluation table and tab */}
-            <div className="flex-1 flex mx-auto min-w-fit animate-fade-in overflow-hidden">
+            <div className="flex-1 overflow-hidden flex mx-auto w-full animate-fade-in ">
               <EvaluationTable
                 modifyTable={modifyTable}
                 setValue={setValue}
