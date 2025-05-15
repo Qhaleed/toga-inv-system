@@ -59,10 +59,6 @@ const AdminDashboardCard = () => {
           </div>
 
           <div className="w-full h-full overflow-visible  flex flex-col flex-1">
-            <div className=" md:h-10 hidden items-center md:flex  ">
-              <p className="md:ml-6 font-semibold md:text-2xl">{`Welcome, ${firstName}! 👋🏻`}</p>
-            </div>
-
             <AdminDashboard adminName={adminName} />
           </div>
         </div>
