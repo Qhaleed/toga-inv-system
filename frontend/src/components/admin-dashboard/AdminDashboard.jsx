@@ -100,7 +100,7 @@ function AdminDashboard() {
                   Current Stock
                 </p>
               </div>
-              <div className="h-20 text-3xl font-black text-black w-full">
+              <div className="h-20 text-3xl font-black  text-[#102F5E] w-full">
                 12
               </div>
               <div className="flex justify-end items-end pr-4 h-0">
@@ -120,7 +120,7 @@ function AdminDashboard() {
         <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] h-[20rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white cursor-pointer outline-none">
           <div className="flex w-full h-full ">
             {/* 2nd box */}
-            <div className="h-full flex flex-col w-40 text-black">
+            <div className="h-full flex flex-col w-40 text-[#102F5E]">
               <button
                 className="bg-[#CFE1FF] flex justify-center items-center ml-3 mt-5 rounded-xl w-12 h-12 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
                 onClick={() => navigate("/reservation")}
@@ -138,9 +138,7 @@ function AdminDashboard() {
               <div className="h-10 items-center flex w-full">
                 <p className="text-sm text-gray-500 font-semibold">Reserved</p>
               </div>
-              <div className="h-20 text-3xl font-black text-black w-full">
-                51
-              </div>
+              <div className="h-20 text-3xl font-black text-[#102F5E]">51</div>
               <div className="flex justify-end items-end pr-4 h-0">
                 <button
                   className="self-end mt-1 text-xs text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
@@ -176,7 +174,7 @@ function AdminDashboard() {
               <div className="h-10 items-center flex w-full">
                 <p className="text-sm text-gray-500 font-semibold">Pending</p>
               </div>
-              <div className="h-20 text-3xl font-black text-black w-full">
+              <div className="h-20 text-3xl font-black text-[#102F5E] w-full">
                 143
               </div>
               <div className="flex justify-end items-end pr-4 h-0">
@@ -214,7 +212,7 @@ function AdminDashboard() {
               <div className="h-10 items-center flex w-full">
                 <p className="text-sm text-gray-500 font-semibold">Evaluated</p>
               </div>
-              <div className="h-20 text-3xl font-black text-black w-full">
+              <div className="h-20 text-3xl font-black text-[#102F5E] w-full">
                 4
               </div>
               <div className="flex justify-end items-end pr-4 h-0">
@@ -311,11 +309,11 @@ function AdminDashboard() {
             Approval Requests
             <button
               onClick={() => navigate("/pending")}
-              className="relative group bg-blue-50 border border-blue-200 rounded-full p-2 shadow hover:bg-blue-100 focus:bg-blue-100 transition-all duration-300 ml-2"
+              className="relative rounded-full p-2 shadow hover:bg-blue-100 focus:bg-blue-100 transition-all duration-300 ml-2"
               aria-label="Go to Pending Page"
               tabIndex={0}
             >
-              <ArrowRight className="w-5 h-5 text-blue-700" />
+              <ArrowRight className="w-5 h-5 text-[#102F5E]" />
               <span className="absolute right-0 top-full mt-2 w-max px-2 py-1 rounded bg-gray-900 text-white text-xs opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity pointer-events-none z-50">
                 Go to Pending Page
               </span>
