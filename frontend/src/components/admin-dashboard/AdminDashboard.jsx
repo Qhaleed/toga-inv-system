@@ -180,12 +180,12 @@ function AdminDashboard() {
 
       {/* 2nd row: 2 columns */}
       <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-4 px-4 lg:px-6">
-        <div className="bg-blue-200 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px] transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:scale-105 focus:shadow-2xl cursor-pointer outline-none">
+        <div className="bg-blue-200 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px] transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl cursor-pointer outline-none">
           <span className="text-black font-semibold text-lg">
             fixing pa responsiveness desktop to mobile ahhahahah
           </span>
         </div>
-        <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:scale-105 focus:shadow-2xl cursor-pointer outline-none">
+        <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl cursor-pointer outline-none">
           <p className="text-xl font-semibold pl-5 h-10 flex items-center text-start">
             Overview of Items
           </p>
@@ -196,14 +196,62 @@ function AdminDashboard() {
       </div>
       {/* 3rd row: 3 columns */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr_1.3fr_1.8fr] min-h-[200px] gap-4 px-4 lg:px-6 ">
-        <div className="bg-green-800 w-full flex items-center justify-center text-white rounded-xl transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:scale-105 focus:shadow-2xl cursor-pointer outline-none">
-          inayos ko ulit grid system pero admindashboard pa lng
+        {/* 1st col: New Users Registered (moved here) */}
+        <div className="bg-green-800 w-full flex flex-col rounded-xl shadow-lg p-4 min-h-[200px] text-white">
+          <h3 className="text-lg font-bold text-white mb-2">New Users Registered</h3>
+          <ul className="flex flex-col gap-2">
+            <li className="flex items-center gap-2">
+              <span className="inline-block w-2 h-2 rounded-full bg-green-300"></span>
+              <span className="font-semibold">Donald Lee</span>
+              <span className="text-xs text-gray-200 ml-auto">2 min ago</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="inline-block w-2 h-2 rounded-full bg-green-300"></span>
+              <span className="font-semibold">Magang Magang</span>
+              <span className="text-xs text-gray-200 ml-auto">10 min ago</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="inline-block w-2 h-2 rounded-full bg-green-300"></span>
+              <span className="font-semibold">Gold Neger</span>
+              <span className="text-xs text-gray-200 ml-auto">1 hr ago</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="inline-block w-2 h-2 rounded-full bg-green-300"></span>
+              <span className="font-semibold">Johnny Sins</span>
+              <span className="text-xs text-gray-200 ml-auto">2 hr ago</span>
+            </li>
+          </ul>
         </div>
-        <div className="bg-green-700 w-full flex items-center justify-center text-white rounded-xl transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:scale-105 focus:shadow-2xl cursor-pointer outline-none">
-          2nd col
+        {/* 2nd col: (empty or placeholder) */}
+        <div className="bg-white w-full flex flex-col rounded-xl shadow-lg p-4 min-h-[200px]">
+          {/* Placeholder for future content */}
         </div>
-        <div className="bg-green-600 w-full flex items-center justify-center text-white rounded-xl transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl focus:scale-105 focus:shadow-2xl cursor-pointer outline-none">
-          3rd col
+        {/* 3rd col: Student Concerns Results */}
+        <div className="bg-white w-full flex flex-col rounded-xl shadow-lg p-4 min-h-[200px]">
+          <h3 className="text-lg font-bold text-gray-700 mb-2">Student Concerns</h3>
+          <ul className="flex flex-col gap-3">
+            {/* Only show 2 rows for min height fit */}
+            <li className="flex flex-col gap-1 border-b pb-2 last:border-b-0">
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+                <span className="font-semibold text-gray-800">Lost Gown</span>
+                <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">Resolved</span>
+              </div>
+              <div className="text-xs text-gray-500 ml-4">Student: Donald Lee</div>
+              <div className="text-xs text-gray-600 ml-4">"I lost my gown after the event. What should I do?"</div>
+              <div className="text-xs text-gray-400 ml-4">Response: Please visit the admin office for assistance.</div>
+            </li>
+            <li className="flex flex-col gap-1 border-b pb-2 last:border-b-0">
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+                <span className="font-semibold text-gray-800">Damaged Cap</span>
+                <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Pending</span>
+              </div>
+              <div className="text-xs text-gray-500 ml-4">Student: Magang Magang</div>
+              <div className="text-xs text-gray-600 ml-4">"My cap is broken, can I get a replacement?"</div>
+              <div className="text-xs text-gray-400 ml-4">Response: Awaiting admin review.</div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
