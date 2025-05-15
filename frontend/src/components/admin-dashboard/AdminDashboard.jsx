@@ -4,7 +4,7 @@ import { RadialChart } from "../ui/radialchart";
 import { PendingRadial } from "../ui/pendingradial";
 import { EvaluationRadial } from "../ui/evaluationradial";
 import { CheckedOutRadial } from "../ui/checkedoutradial";
-import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import { PieChart, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import BoxIcon from "@/assets/icons/box.svg?react";
 import Upstats from "@/assets/icons/upstat.svg?react";
@@ -12,6 +12,8 @@ import Downstats from "@/assets/icons/downstat.svg?react";
 import List from "@/assets/icons/list.svg?react";
 import Eval from "@/assets/icons/eval.svg?react";
 import Time from "@/assets/icons/time.svg?react";
+import PieChartDash from "../ui/pie-chart";
+import { DashboardPie } from "../ui/dashboardpie";
 
 function AdminDashboard() {
   return (
@@ -140,20 +142,23 @@ function AdminDashboard() {
       </div>
 
       {/* 2nd row: 2 columns */}
-      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-4 px-4 lg:px-6">
+      <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-4 px-4 lg:px-6">
         <div className="bg-blue-200 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px]">
           <span className="text-black font-semibold text-lg">
             fixing pa responsiveness desktop to mobile ahhahahah
           </span>
         </div>
-        <div className="bg-blue-300 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px]">
-          <span className="text-black font-semibold text-lg">
-            2nd column content
-          </span>
+        <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px]">
+          <p className="text-xl font-semibold pl-5 h-10 flex items-center text-start">
+            Overview of Items
+          </p>
+          <div className=" w-full flex justify-start  min-h-[180px] max-h-[200px] overflow-hidden">
+            <DashboardPie />
+          </div>
         </div>
       </div>
       {/* 3rd row: 3 columns */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr_1.5fr] min-h-[250px]  gap-4 px-4 lg:px-6 ">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_1.3fr_1.8fr] min-h-[200px]  gap-4 px-4 lg:px-6 ">
         <div className="bg-green-800 w-full  flex items-center justify-center text-white rounded-xl">
           inayos ko ulit grid system pero admindashboard pa lng
         </div>

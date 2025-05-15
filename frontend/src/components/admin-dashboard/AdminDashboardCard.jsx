@@ -39,12 +39,12 @@ const AdminDashboardCard = () => {
         <div className="w-full relative h-full  overflow-hidden  flex flex-col">
           <div className="w-full  z-50 h-15 flex items-center ">
             <button
-              className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-50 bg-white border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
+              className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
               onClick={() => setSidebarOpen((open) => !open)}
               aria-label={sidebarOpen ? "Minimize sidebar" : "Open sidebar"}
               style={{ marginLeft: 10 }}
             >
-              <span className="text-xl">
+              <span className="text-xl text-[#2840A1]">
                 {sidebarOpen ? "\u2190" : "\u2192"}
               </span>
             </button>
