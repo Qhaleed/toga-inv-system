@@ -597,8 +597,11 @@ const Rows = ({
           onClose={(updatedData) => {
             setPopupOpen(false);
             if (updatedData) {
-              // Map the updated data to match our component's format
-              const mappedData = updatedData.map((item) => ({
+              // Filter out entries without toga_size before mapping
+              const filteredData = updatedData.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+              // Map the filtered data to match our component's format
+              const mappedData = filteredData.map((item) => ({
                 id: item.inventory_id,
                 studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
                 course: item.course,
