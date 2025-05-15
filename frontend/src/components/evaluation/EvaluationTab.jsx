@@ -62,7 +62,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    exit(); 
+    exit();
     try {
       const response = await fetch("http://localhost:5001/evaluation", {
         method: "POST",
@@ -106,7 +106,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
       <div
-        className={`absolute h-screen w-screen bg-[#000000a2] z-40 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${evalTab}`}
+        className={`fixed inset-0 flex items-center justify-center bg-black/40 z-[9999] ${evalTab}`}
       >
         <div className="absolute h-[600px] w-[450px] bg-[#001C47] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-xl sm:w-[600px] md:w-[750px] lg:w-[1000px] transition-all duration-200 ease-out">
           <div className="mt-4 h-full w-full flex flex-col justify-start items-center">
@@ -138,7 +138,12 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                 <tr className="text-center h-[46%] text-[10px] sm:text-xs">
                   <td>
                     <h3 className="border-r border-gray-700">
-                      {value.surname + ", " + value.first_name + " " + value.middle_initial + "."}
+                      {value.surname +
+                        ", " +
+                        value.first_name +
+                        " " +
+                        value.middle_initial +
+                        "."}
                     </h3>
                   </td>
                   <td>
