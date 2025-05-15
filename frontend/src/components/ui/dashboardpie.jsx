@@ -96,10 +96,10 @@ const total = coloredChartData.reduce((acc, d) => acc + d.value, 0);
 export function DashboardPie() {
   return (
     <>
-      <div className="flex flex-row items-center gap-4">
+      <div className="flex flex-row items-center  gap-4">
         <ChartContainer
           config={chartConfig}
-          className="aspect-square  h-50 max-h-[230px]"
+          className="aspect-square  transition-all duration-700 ease-in-out hover:scale-110 focus:scale-102  h-50 max-h-[230px]"
         >
           <PieChart>
             <ChartTooltip cursor={false} content={<DashboardPieTooltip />} />
