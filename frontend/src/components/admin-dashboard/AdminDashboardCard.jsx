@@ -37,7 +37,7 @@ const AdminDashboardCard = () => {
       {/* Main content dito */}
       <div className="bg-[#F3F9FF]   w-full h-full">
         <div className="w-full relative h-full  overflow-hidden  flex flex-col">
-          <div className="w-full  z-50 h-15 flex items-center ">
+          <div className="w-full  z-10 h-15 flex items-center ">
             <button
               className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
               onClick={() => setSidebarOpen((open) => !open)}

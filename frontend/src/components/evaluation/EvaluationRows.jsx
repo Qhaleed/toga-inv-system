@@ -28,7 +28,9 @@ const EvaluationRows = ({
       .then((res) => res.json())
       .then((data) => {
         // Filter out entries without toga_size
-        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+        const filteredData = data.filter(
+          (item) => item.toga_size !== null && item.toga_size !== undefined
+        );
         setDashboard(filteredData);
         setAllData(filteredData);
       });
@@ -47,11 +49,15 @@ const EvaluationRows = ({
     // Sorting
     if (isAZ) {
       filtered = [...filtered].sort((a, b) =>
-        (a.surname + ", " + a.first_name).localeCompare(b.surname + ", " + b.first_name)
+        (a.surname + ", " + a.first_name).localeCompare(
+          b.surname + ", " + b.first_name
+        )
       );
     } else if (isZA) {
       filtered = [...filtered].sort((a, b) =>
-        (b.surname + ", " + b.first_name).localeCompare(a.surname + ", " + a.first_name)
+        (b.surname + ", " + b.first_name).localeCompare(
+          a.surname + ", " + a.first_name
+        )
       );
     }
     setDashboard(filtered);
@@ -66,12 +72,9 @@ const EvaluationRows = ({
         maxWidth: "100vw",
       }}
     >
-      <div className="min-w-[300px] max-w-[120vw] overflow-visible top-0 z-10 bg-white">
+      <div className="min-w-[300px] max-w-[120vw] overflow-visible relative bg-white">
         <table className="w-full ">
-          <thead
-            className="bg-[#02327B] sticky top-0 z-20"
-            style={{ zIndex: 20, position: "sticky" }}
-          >
+          <thead className="bg-[#02327B]  top-0 sticky">
             <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
               <th className="md:w-[23%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[150px]">
                 <span className="block text-[10px] md:text-[15px] w-full text-center ">
@@ -133,7 +136,14 @@ const EvaluationRows = ({
                   >
                     <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                       <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                        <h3 className="truncate">{db.surname + ", " + db.first_name + " " + db.middle_initial + "."}</h3>
+                        <h3 className="truncate">
+                          {db.surname +
+                            ", " +
+                            db.first_name +
+                            " " +
+                            db.middle_initial +
+                            "."}
+                        </h3>
                         {/* Removed the span that was under student name only */}
                       </div>
                     </td>
