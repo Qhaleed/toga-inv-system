@@ -153,7 +153,7 @@ const Navbar = ({
         {/* Desktop/Tablet: Full nav with text and logout */}
         <div className="hidden md:flex h-full flex-col w-full">
           <div className="flex items-center relative w-full">
-            <div className="flex items-center relative mt-5 w-full">
+            <div className="flex items-center relative mt-2 w-full">
               {/* Dashboard button */}
               <button
                 onClick={() => navigate("/admin-dashboard")}

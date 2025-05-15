@@ -315,7 +315,7 @@ const SideBar = ({
                   </div>
                 </div>
               ) : activeTab === "dashboard" ? (
-                <div className="w-full bg-amber-800 h-[90px] md:scale-100">
+                <div className="w-full  h-[90px] md:scale-100">
                   <div className="w-full h-1/2 gap-2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
