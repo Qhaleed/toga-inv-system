@@ -237,11 +237,11 @@ function AdminDashboard() {
             Graph to becontinued hahahahahhahahaha
           </span>
         </div>
-        <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl  outline-none">
+        <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] outline-none">
           <p className="text-lg  font-extrabold !font-manjari  pl-5 pt-5 h-10 flex items-center text-start">
             Overview of Items
           </p>
-          <div className="w-full flex justify-start min-h-[180px] max-h-[200px] overflow-hidden">
+          <div className="w-full  flex justify-start min-h-[180px] max-h-[200px] overflow-hidden">
             <DashboardPie />
           </div>
         </div>
