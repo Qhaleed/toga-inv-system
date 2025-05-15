@@ -99,7 +99,7 @@ export function DashboardPie() {
       <div className="flex flex-row items-center gap-4">
         <ChartContainer
           config={chartConfig}
-          className="aspect-square  h-60 max-h-[230px]"
+          className="aspect-square  h-50 max-h-[230px]"
         >
           <PieChart>
             <ChartTooltip cursor={false} content={<DashboardPieTooltip />} />
