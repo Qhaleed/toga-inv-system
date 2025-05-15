@@ -19,7 +19,7 @@ export function PendingRadial() {
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
-        let pending = 2; //hardcoded for testing muna
+        let pending = 1; //hardcoded for testing muna
         data.forEach((item) => {
           if (item.return_status === "pending") pending += 1;
         });

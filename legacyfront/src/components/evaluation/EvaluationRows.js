@@ -27,7 +27,14 @@ const EvaluationRows = ({
     fetch("http://localhost:8000/dashboard")
       .then((res) => res.json())
       .then((data) => {
-        setDashboard(data);
+        setDashboard(
+          data.map((db) => ({
+            ...db,
+            tassel_color: db.tassel,
+            hood_color: db.hood,
+            toga_size: db.gown,
+          }))
+        );
         setOriginalDashboard(data);
       });
   }, []);
@@ -61,13 +68,13 @@ const EvaluationRows = ({
               <span className="block w-full text-center ">Program</span>
             </th>
             <th className="w-[10%] sm:pr-2 md:w-[10%] md:pl-4 text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[80px]">
-              <span className="block w-full text-center ">Tassel</span>
+              <span className="block w-full text-center ">Tassel Color</span>
             </th>
             <th className="sm:w-[8.5%] sm:pr-2 md:pr-6 md:pl-4 md:w-[10%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[80px]">
-              <span className="block w-full text-center ">Hood</span>
+              <span className="block w-full text-center ">Hood Color</span>
             </th>
             <th className="w-[10%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[80px]">
-              <span className="block w-full text-center ">Gown</span>
+              <span className="block w-full text-center ">Toga Size</span>
             </th>
             <th className="w-[15%] pl-2 text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[120px]">
               <span className="block w-full text-center ">Evaluation</span>
@@ -101,30 +108,30 @@ const EvaluationRows = ({
                     ></span>
                   </div>
                 </td>
-                {/* Tassel */}
+                {/* Tassel Color */}
                 <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                   <div className="h-full w-full py-2 flex justify-center items-center relative">
-                    <h3 className="truncate">{db.tassel}</h3>
+                    <h3 className="truncate">{db.tassel_color}</h3>
                     <span
                       className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                       style={{ borderRadius: "2px" }}
                     ></span>
                   </div>
                 </td>
-                {/* Hood */}
+                {/* Hood Color */}
                 <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                   <div className="h-full w-full py-2 flex justify-center items-center relative">
-                    <h3 className="truncate">{db.hood}</h3>
+                    <h3 className="truncate">{db.hood_color}</h3>
                     <span
                       className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                       style={{ borderRadius: "2px" }}
                     ></span>
                   </div>
                 </td>
-                {/* Gown */}
+                {/* Toga Size */}
                 <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                   <div className="h-full w-full py-2 flex justify-center items-center relative">
-                    <h3 className="truncate">{db.gown}</h3>
+                    <h3 className="truncate">{db.toga_size}</h3>
                     <span
                       className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                       style={{ borderRadius: "2px" }}

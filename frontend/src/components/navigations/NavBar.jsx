@@ -14,6 +14,7 @@ import Grid from "../../assets/icons/white-grid.svg?react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import LoaderAnimation from "../login-card/LoaderAnimation";
+import MenuIcon from "@/assets/icons/menu.svg?react";
 
 const Navbar = ({
   isGrid,
@@ -38,8 +39,8 @@ const Navbar = ({
 
   const tabClass = (tabName) =>
     activeTab === tabName
-      ? "hover:scale-105 bg-blue-100 ring-0.5 border border-blue-700 flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6 lg:w-40 lg:h-6 w-18 h-4 text-xs rounded-lg transition-all ease-out duration-500"
-      : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center md:w-30 lg:h-6 lg:w-40 lg:h-6 w-18 h-4 text-xs rounded-lg transition-all ease-out duration-500";
+      ? "hover:scale-105 bg-blue-100 ring-0.5 border border-blue-700 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-30 lg:w-34 2xl:w-48 h-6 text-[12px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500"
+      : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-25 lg:w-34 xl:w4  2xl:w-48 h-6 text-[10px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500";
 
   const handleNavigation = (tabName, route) => {
     if (activeTab !== tabName) {
@@ -108,33 +109,36 @@ const Navbar = ({
           <LoaderAnimation />
         </div>
       )}
-      <div className="h-full bg-amber-100 flex justify-between overflow-hidden  w-full">
+      <div className="h-full flex w-full">
         {/* Top Navigation */}
         {/* Mobile: Only big icons, no text, small logout icon at end */}
-        <div className="flex items-center w-full justify-around  md:hidden">
+        <div className="flex  gap-7 w-full  md:hidden">
+          <button className="p-2 transition-all duration-200 hover:bg-blue-900/40 hover:scale-110 rounded-full">
+            <MenuIcon className="w-6 mx-1 h-6 text-white fill-white" />
+          </button>
           <button onClick={() => navigate("/admin-dashboard")} className="p-2">
-            <Home className="w-6 mx-1 h-6" />
+            <Home className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => handleNavigation("inventory", "/inventory")}>
-            <Inventory className="w-6 mx-1  h-6" />
+            <Inventory className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => handleNavigation("pending", "/pending")}>
-            <Statistic className="w-6 mx-1 h-6" />
+            <Statistic className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => navigate("/evaluation-page")} className="p-2">
-            <Application className="w-6 mx-1 h-6" />
+            <Application className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => navigate("/reservation")} className="p-2">
-            <Application className="w-6 mx-1 h-6" />
+            <Application className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           {/* Small logout icon */}
-          <button onClick={handleLogout} className="p-2 ml-15">
+          <button onClick={handleLogout} className="p-3 ml-auto">
             <svg
               width="22"
               height="22"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#ef4444"
+              stroke="#fff"
               strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -147,18 +151,18 @@ const Navbar = ({
           </button>
         </div>
         {/* Desktop/Tablet: Full nav with text and logout */}
-        <div className="hidden md:flex h-full flex-col w-full ml-14 md:ml-10 mr-2 min-w-0 overflow-hidden">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center flex-nowrap min-w-0">
+        <div className="hidden md:flex h-full flex-col w-full">
+          <div className="flex items-center relative w-full">
+            <div className="flex items-center relative mt-5 w-full">
               {/* Dashboard button */}
               <button
                 onClick={() => navigate("/admin-dashboard")}
                 className={`${tabClass("dashboard")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Home className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-1 md:mx-6 content-center ">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3">
                   Dashboard
                 </span>
               </button>
@@ -166,10 +170,10 @@ const Navbar = ({
                 onClick={() => handleNavigation("inventory", "/inventory")}
                 className={`${tabClass("inventory")} removeEffect`}
               >
-                <span className="w-3">
-                  <Inventory className="w-4" />
+                <span className="w-2">
+                  <Inventory className="w-4 " />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-2 md:mx-4">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3">
                   Inventory
                 </span>
               </button>
@@ -177,10 +181,10 @@ const Navbar = ({
                 onClick={() => handleNavigation("pending", "/pending")}
                 className={`${tabClass("pending")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Statistic className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-2 md:mx-6 content-center">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3 content-center">
                   Pending
                 </span>
               </button>
@@ -188,10 +192,10 @@ const Navbar = ({
                 onClick={() => navigate("/evaluation-page")}
                 className={`${tabClass("evaluation")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Application className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px]  mx-1  md:mx-4">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px]  mx21  md:m3-4">
                   Evaluation
                 </span>
               </button>
@@ -199,22 +203,35 @@ const Navbar = ({
                 onClick={() => navigate("/reservation")}
                 className={`${tabClass("reservation")} removeEffect`}
               >
-                <span className="w-3">
+                <span className="w">
                   <Application className="w-4" />
                 </span>
-                <span className=" text-[7px] md:text-[12px] mx-1 md:mx-4">
+                <span className=" text-[7px] md:text-[10px] lg:text-[12px] mx-2 md:mx-3">
                   Reservation
                 </span>
               </button>
             </div>
             {/* Logout button at far right */}
-            <div className="relative">
+            <div className="absolute right-2 top-1/3">
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white font-semibold  md:text-[13px] text-[9px]  sm:py-1 md:py-2 md:px-6 md:mt-1 sm:px-5 py-1 px-3 mb-1 sm:mb-0 rounded-2xl shadow transition-all duration-500"
-                style={{ minWidth: 20 }}
+                className=" text-white font-semibold  md:text-[13px] text-[9px]  duration-500"
               >
-                Logout
+                <svg
+                  width="10"
+                  height="10-"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#ef4444"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-7 h-7"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
               </button>
             </div>
           </div>
@@ -226,12 +243,12 @@ const Navbar = ({
               /* Search bar and grid/row toggle */
             },
             (
-              <div className="flex flex-row  justify-between items-center w-full mt-2 animate-fade-in bg-amber-900">
-                <div className="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[300px] ">
-                  <div className="relative  lg:ml-14 md:ml-10 ml-8 mr-2">
-                    <Search className="absolute w-5 top-1 left-2" />
+              <div className="flex flex-row  items-center w-full mt-5 animate-fade-in">
+                <div className="w-full">
+                  <div className="relative ml-6  ">
+                    <Search className="absolute w-5 top-1/5 left-2" />
                     <input
-                      className="bg-[#E2E2E2] shadow-inner h-8 shadow-gray-500  md:w-100 lg:w-130 px-10 py-1 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
+                      className="bg-[#E2E2E2] shadow-inner  shadow-gray-500 h-8 md:w-100 lg:w-130 px-10 py-2 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
                       type="text"
                       placeholder="Search student..."
                       value={searchValue}
@@ -241,13 +258,13 @@ const Navbar = ({
                   </div>
                 </div>
                 {/* Grid/Row toggle and modify table button */}
-                <div className="flex bg-green-400 items-center ml-auto mr-2 md:mr-0">
+                <div className="flex bg-green-400 items-center mr-90 ">
                   <div
-                    className={`h-fit w-fit bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
+                    className={`h-8 w-23 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
                   >
                     <button
                       onClick={() => setIsGrid(false)}
-                      className={`h-7 w-8 md:h-7 md:w-10 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+                      className={`h-7 w-8 md:h-8 md:w-14 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
                         !isGrid
                           ? "bg-[#02327B] text-white"
                           : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
@@ -259,7 +276,7 @@ const Navbar = ({
                     {/*Modify Table button this */}
                     <button
                       onClick={() => setIsGrid(true)}
-                      className={`h-7 w-8 md:h-7 md:w-10 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+                      className={`h-7 w-8 md:h-7 md:w-13 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
                         isGrid
                           ? "bg-[#02327B] text-white"
                           : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"

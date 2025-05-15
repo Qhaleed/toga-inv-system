@@ -16,8 +16,9 @@ const SideBar = ({
   userStatus,
   dateReserved,
   dateDue,
-  focusedStatus, // <-- add this prop
-  setFocusedStatus, // <-- add this prop
+  focusedStatus, //setter kada click ng button
+  setFocusedStatus, // hover effects to
+  onAdminName, // adminname passere this
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -47,6 +48,7 @@ const SideBar = ({
     if (!token) {
       setAdminName("Not logged in");
       setAdminRole("N/A");
+      onAdminName && onAdminName("Not logged in");
       return;
     }
     fetch("http://localhost:5001/users", {
@@ -66,6 +68,7 @@ const SideBar = ({
           }
           setAdminName("Fetch error");
           setAdminRole(errorMsg);
+          onAdminName && onAdminName("Fetch error");
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }
@@ -75,14 +78,17 @@ const SideBar = ({
         if (data && data.name && data.role) {
           setAdminName(data.name);
           setAdminRole(data.role);
+          onAdminName && onAdminName(data.name);
         } else if (data) {
           setAdminName("No user found");
           setAdminRole("N/A");
+          onAdminName && onAdminName("No user found");
         }
       })
       .catch((err) => {
         setAdminName("Fetch error");
         setAdminRole("Network error");
+        onAdminName && onAdminName("Fetch error");
         console.error("Sidebar /users fetch network error:", err);
       });
   }, []);
@@ -142,7 +148,7 @@ const SideBar = ({
       {visible && (
         <div
           // Always keep z-10 here so modals (z-[99999]) can overlay SideBar
-          className={`sm:col-span-2 w-full sm:w-auto min-w-[220px] overflow-visible  h-fill flex flex-col justify-start items-center bg-[#001C47] sm:static   transition-all ${
+          className={`sm:col-span-2 w-full sm:w-auto min-w-[220px] overflow-visible  h-full flex flex-col justify-start items-center bg-[#001C47] sm:static   transition-all ${
             showSidebar
               ? "animate-slide-in-top duration-800"
               : "animate-fade-in duration-800"
@@ -151,7 +157,7 @@ const SideBar = ({
           {/* SIDE BAR HERO CONTAINER*/}
           <div
             key={activeTab + "-navbar"}
-            className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden rounded-t-xl shrink-0"
+            className="w-full md:w-full h-20  md:h-24 bg-[#102F5E] bg-center flex justify-between overflow-x-hidden "
           >
             <div className="flex justify-center">
               <div className="h-full ml-1 w-16 flex justify-center items-center">
@@ -236,7 +242,7 @@ const SideBar = ({
           >
             <div className="w-fit  h-fit flex justify-center items-center">
               <span
-                className="text-4xl font-extrabold font-Figtree tracking-widest bg-gradient-to-r from-[#224273] via-[#537fa5] to-[#b6c2e0] bg-clip-text text-transparent"
+                className="md:text-3xl lg:text-4xl font-extrabold font-Figtree tracking-widest bg-gradient-to-r from-[#224273] via-[#537fa5] to-[#b6c2e0] bg-clip-text text-transparent"
                 style={{
                   backgroundImage:
                     "linear-gradient(150deg, rgba(34,66,115,1) -50%, rgba(83,127,165,1) 60%, rgba(182,194,224,1) 100%)",
@@ -309,8 +315,8 @@ const SideBar = ({
                   </div>
                 </div>
               ) : activeTab === "dashboard" ? (
-                <div className="w-full h-[90px] md:scale-100">
-                  <div className="w-full h-1/2 flex justify-between items-center ">
+                <div className="w-full bg-amber-800 h-[90px] md:scale-100">
+                  <div className="w-full h-1/2 gap-2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
                         focusedStatusLocal === "all"
@@ -319,25 +325,25 @@ const SideBar = ({
                       } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={() => setFocusedStatus("all")}
                     >
-                      <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-[#1E40AF] ml-3">
+                      <p className=":text-[14px] md:text-[12px] lg:text-[13px] font-figtree font-bold text-[#1E40AF] ml-3">
                         All
                       </p>
-                      <div className="right-0 absolute sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="right-0 absolute lg:text-[12px] md:text-[10px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
                         123
                       </div>
                     </button>
                     <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FEF9C3] ${
+                      className={`relative w-[43%] h-7 rounded-md md:mr-2 lg:mr-4 flex justify-between items-center bg-[#FEF9C3] ${
                         focusedStatusLocal === "borrowed"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={() => setFocusedStatus("borrowed")}
                     >
-                      <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-[#B45309] ml-3">
+                      <p className="md:text-[10px] sm:text-[13px] lg:text-[13px] font-figtree font-bold text-[#B45309] ml-3">
                         Borrowed
                       </p>
-                      <div className="absolute right-0 sm:text-[14px] text-[13px] bg-[#F3B51A] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="absolute right-0 lg:text-[12px] md:text-[10px] bg-[#F3B51A] rounded-lg text-white mr-1 sm:mr-2 px-2">
                         45
                       </div>
                     </button>
@@ -351,10 +357,10 @@ const SideBar = ({
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={() => setFocusedStatus("returned")}
                     >
-                      <p className="sm:text-[14px] text-[13px] font-bold text-[#047857] ml-3">
+                      <p className="md:text-[10px] sm:text-[13px] lg:text-[13px] font-figtree font-bold text-[#B45309] ml-3">
                         Returned
                       </p>
-                      <div className="absolute right-0 sm:text-[14px] text-[13px] md:sm:text-[14px] bg-[#102F5E] rounded-lg text-white mr-1 sm:mr-2 px-2">
+                      <div className="absolute right-0 lg:text-[12px] md:text-[10px] bg-[#102F5E] rounded-lg text-white mr-1 sm:mr-2 px-2">
                         78
                       </div>
                     </button>

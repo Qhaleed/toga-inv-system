@@ -17,22 +17,25 @@ const EvaluationRows = ({
   const [dashboard, setDashboard] = useState([]);
   const [allData, setAllData] = useState([]);
 
-  useEffect(() => {
-    // kuha data sa JSON
-    fetch("http://localhost:5001/evaluation")
-      .then((res) => res.json())
-      .then((data) => {
-        setDashboard(data);
-        setAllData(data);
-      });
-  }, []);
-
   const openTab = (db) => {
     setValue(db);
     setEvaluationTab("block");
   };
 
   useEffect(() => {
+    // kuha data sa JSON
+    fetch("http://localhost:5001/evaluation")
+      .then((res) => res.json())
+      .then((data) => {
+        // Filter out entries without toga_size
+        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+        setDashboard(filteredData);
+        setAllData(filteredData);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Start with filtered data (no null toga_size)
     let filtered = allData;
     if (isevalTab) {
       filtered = allData.filter((db) => db.evaluation === "Evaluated");
@@ -44,11 +47,11 @@ const EvaluationRows = ({
     // Sorting
     if (isAZ) {
       filtered = [...filtered].sort((a, b) =>
-        a.renters_name.localeCompare(b.renters_name)
+        (a.surname + ", " + a.first_name).localeCompare(b.surname + ", " + b.first_name)
       );
     } else if (isZA) {
       filtered = [...filtered].sort((a, b) =>
-        b.renters_name.localeCompare(a.renters_name)
+        (b.surname + ", " + b.first_name).localeCompare(a.surname + ", " + a.first_name)
       );
     }
     setDashboard(filtered);

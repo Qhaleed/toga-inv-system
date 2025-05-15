@@ -8,9 +8,9 @@ import GridView from "./GridView";
 
 import { useState, useEffect, useRef } from "react";
 
-const tasselOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
-const hoodOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
-const gownOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
+const tasselColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
+const hoodColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
+const togaSizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
 const Rows = ({
   isGrid,
@@ -18,35 +18,34 @@ const Rows = ({
   modifyTable,
   rowHeightClass = "h-16",
   sortOrder,
-  searchResults, // <-- add searchResults prop
+  searchResults,
 }) => {
   const [dashboard, setDashboard] = useState([]);
-  const [originalDashboard, setOriginalDashboard] = useState([]); // Track original data
+  const [originalDashboard, setOriginalDashboard] = useState([]);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
-  // Animation state for table
   const [tableAnim, setTableAnim] = useState("");
   const prevSortOrder = useRef(sortOrder);
-  const [popupMode, setPopupMode] = useState("none"); // "none" | "hover" | "full"
+  const [popupMode, setPopupMode] = useState("none");
   const [hoveredEyeId, setHoveredEyeId] = useState(null);
-  // PopupWindow state
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupUser, setPopupUser] = useState(false);
 
-  // Function to fetch data for the dashboard
   useEffect(() => {
-    // kuha data sa backend
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
-        // Map API response properties to match the component's expected property names
-        const mappedData = data.map((item) => ({
-          id: item.inventory_id, // use inventory_id as unique id
-          studentname: item.renters_name,
-          program: item.course,
-          tassel: item.tassel_color, // fix: use item.tassel_color
-          hood: item.hood_color, // fix: use item.hood_color
-          gown: item.toga_size, // fix: use item.toga_size
+        // Filter out entries without toga_size
+        // This is because no toga size = no form submitted yet
+        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+        const mappedData = filteredData.map((item) => ({
+          id: item.inventory_id,
+          studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+          course: item.course,
+          tassel_color: item.tassel_color,
+          hood_color: item.hood_color,
+          toga_size: item.toga_size,
           dateofreservation: item.rent_date
             ? new Date(item.rent_date).toLocaleDateString()
             : "",
@@ -67,7 +66,6 @@ const Rows = ({
   }, []);
 
   useEffect(() => {
-    // Fetch data from the backend with sorting
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -75,14 +73,16 @@ const Rows = ({
         );
         const data = await response.json();
 
-        // Map API response properties to match the component's expected property names
-        const mappedData = data.map((item) => ({
-          id: item.inventory_id, // use inventory_id as unique id
-          studentname: item.renters_name,
-          program: item.course,
-          tassel: item.tassel_color, // fix: use item.tassel_color
-          hood: item.hood_color, // fix: use item.hood_color
-          gown: item.toga_size, // fix: use item.toga_size
+        // Filter out entries without toga_size before mapping
+        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+        const mappedData = filteredData.map((item) => ({
+          id: item.inventory_id,
+          studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+          course: item.course,
+          tassel_color: item.tassel_color,
+          hood_color: item.hood_color,
+          toga_size: item.toga_size,
           dateofreservation: item.rent_date
             ? new Date(item.rent_date).toLocaleDateString()
             : "",
@@ -95,7 +95,6 @@ const Rows = ({
           has_cap: item.has_cap,
           item_condition: item.item_condition,
         }));
-        // Sorting logic based on sortOrder
         const sortedData = mappedData.sort((a, b) => {
           if (sortOrder === "newest" || sortOrder === "oldest") {
             const dateA = new Date(a.dateofreservation);
@@ -141,17 +140,15 @@ const Rows = ({
 
   const prevModifyTable = useRef(modifyTable);
 
-  // function for???
   useEffect(() => {
     if (prevModifyTable.current && !modifyTable) {
-      // Exiting modify mode, save changes
       const changedRows = dashboard.filter((row) => {
         const orig = originalDashboard.find((o) => o.id === row.id);
         return (
           orig &&
-          (row.tassel !== orig.tassel ||
-            row.hood !== orig.hood ||
-            row.gown !== orig.gown)
+          (row.tassel_color !== orig.tassel_color ||
+            row.hood_color !== orig.hood_color ||
+            row.toga_size !== orig.toga_size)
         );
       });
       if (changedRows.length > 0) {
@@ -161,9 +158,9 @@ const Rows = ({
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                tassel: row.tassel,
-                hood: row.hood,
-                gown: row.gown,
+                tassel_color: row.tassel_color,
+                hood_color: row.hood_color,
+                toga_size: row.toga_size,
               }),
             })
           )
@@ -178,54 +175,47 @@ const Rows = ({
       }
     }
     prevModifyTable.current = modifyTable;
-    // eslint-disable-next-line
-  }, [modifyTable]);
+  }, [modifyTable, dashboard, originalDashboard]);
 
-  // Para sa grid/column view: pag click ng edit icon, mag-edit mode
   const handleEditClick = (db) => {
     setDashboard((prev) =>
       prev.map((item) =>
         db.id === item.id
           ? {
-              ...item,
-              eye: item.eye === "block" ? "hidden" : "block",
-              trash: item.trash === "hidden" ? "block" : "hidden",
-            }
+            ...item,
+            eye: item.eye === "block" ? "hidden" : "block",
+            trash: item.trash === "hidden" ? "block" : "hidden",
+          }
           : item
       )
     );
     setEditId(db.id);
-    setEditData({ ...db }); // copy current data
+    setEditData({ ...db });
   };
 
-  // Pag change ng input/select sa edit mode
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Save changes sa dashboard state
   const handleSave = (id) => {
     console.log("Save button clicked for ID:", id);
     console.log("Current editData:", editData);
 
-    // Get updated data from editData state
     const updatedData = {
       renters_name: editData.studentname,
-      course: editData.program,
-      tassel_color: editData.tassel,
-      hood_color: editData.hood,
-      toga_size: editData.gown,
+      course: editData.course,
+      tassel_color: editData.tassel_color,
+      hood_color: editData.hood_color,
+      toga_size: editData.toga_size,
     };
 
     console.log("Sending update to backend:", updatedData);
 
-    // Send updated data to the backend
     fetch(`http://localhost:5001/inventory/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        // Ensuring no caching issues
         "Cache-Control": "no-cache",
       },
       body: JSON.stringify(updatedData),
@@ -240,7 +230,6 @@ const Rows = ({
       .then((data) => {
         console.log("Update successful:", data);
 
-        // Update the dashboard and original data in local state
         const updatedItem = { ...editData };
         setDashboard((prev) =>
           prev.map((item) => (item.id === id ? updatedItem : item))
@@ -251,7 +240,6 @@ const Rows = ({
         setEditId(null);
         setEditData({});
 
-        // Show success message
         alert("Changes saved successfully!");
       })
       .catch((error) => {
@@ -260,42 +248,38 @@ const Rows = ({
       });
   };
 
-  // Cancel edit, balik sa dati
   const handleCancel = () => {
     setEditId(null);
     setEditData({});
   };
 
-  // updater to siya sa table view
   const handleCellChange = (id, name, value) => {
     setDashboard((prev) =>
       prev.map((row) => (row.id === id ? { ...row, [name]: value } : row))
     );
   };
 
-  // Sorting logic for table view
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
-          if (sortOrder === "newest" || sortOrder === "oldest") {
-            const dateA = new Date(a.dateofreservation);
-            const dateB = new Date(b.dateofreservation);
-            if (sortOrder === "newest") return dateB - dateA;
-            if (sortOrder === "oldest") return dateA - dateB;
-          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = (a.studentname || "").toLowerCase();
-            const nameB = (b.studentname || "").toLowerCase();
-            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
-            return 0;
-          }
+        if (sortOrder === "newest" || sortOrder === "oldest") {
+          const dateA = new Date(a.dateofreservation);
+          const dateB = new Date(b.dateofreservation);
+          if (sortOrder === "newest") return dateB - dateA;
+          if (sortOrder === "oldest") return dateA - dateB;
+        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+          const nameA = (a.studentname || "").toLowerCase();
+          const nameB = (b.studentname || "").toLowerCase();
+          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
           return 0;
-        })
+        }
+        return 0;
+      })
       : dashboard;
 
   useEffect(() => {
     if (!isGrid) {
-      // scroller here to horizontal
       const scrollContainer = document.querySelector(".table-scroll-container");
       if (scrollContainer) {
         scrollContainer.scrollLeft = scrollContainer.scrollWidth;
@@ -311,10 +295,8 @@ const Rows = ({
     }
   }, [sortOrder, isGrid]);
 
-  // Ito palang ung handleEyeMouseEnter para sa hover popup position niya
   function handleEyeMouseEnter(event, dbId) {
     setHoveredEyeId(dbId);
-    // Removed popupDirection logic since popup is now fixed and centered
   }
 
   const displayDashboard =
@@ -331,9 +313,9 @@ const Rows = ({
         hoveredEyeId={hoveredEyeId}
         popupMode={popupMode}
         modifyTable={modifyTable}
-        tasselOptions={tasselOptions}
-        hoodOptions={hoodOptions}
-        gownOptions={gownOptions}
+        tasselColorOptions={tasselColorOptions}
+        hoodColorOptions={hoodColorOptions}
+        togaSizeOptions={togaSizeOptions}
         handleEditClick={handleEditClick}
         handleEditChange={handleEditChange}
         handleSave={handleSave}
@@ -424,72 +406,69 @@ const Rows = ({
                       </td>
                       <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center">
-                          <h3 className="truncate">{db.program}</h3>
+                          <h3 className="truncate">{db.course}</h3>
                           <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
-                      {/* Tassel */}
                       <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center relative">
                           {isEditing ? (
                             <CustomDropdown
-                              value={modifyTable ? db.tassel : editData.tassel}
-                              options={tasselOptions}
+                              value={modifyTable ? db.tassel_color : editData.tassel_color}
+                              options={tasselColorOptions}
                               onChange={(val) =>
                                 modifyTable
-                                  ? handleCellChange(db.id, "tassel", val)
+                                  ? handleCellChange(db.id, "tassel_color", val)
                                   : handleEditChange({
-                                      target: { name: "tassel", value: val },
-                                    })
+                                    target: { name: "tassel_color", value: val },
+                                  })
                               }
                               disabled={false}
                             />
                           ) : (
-                            <h3 className="truncate">{db.tassel}</h3>
+                            <h3 className="truncate">{db.tassel_color}</h3>
                           )}
                           <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
-                      {/* Hood */}
                       <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center relative">
                           {isEditing ? (
                             <CustomDropdown
-                              value={modifyTable ? db.hood : editData.hood}
-                              options={hoodOptions}
+                              value={modifyTable ? db.hood_color : editData.hood_color}
+                              options={hoodColorOptions}
                               onChange={(val) =>
                                 modifyTable
-                                  ? handleCellChange(db.id, "hood", val)
+                                  ? handleCellChange(db.id, "hood_color", val)
                                   : handleEditChange({
-                                      target: { name: "hood", value: val },
-                                    })
+                                    target: { name: "hood_color", value: val },
+                                  })
                               }
                               disabled={false}
                             />
                           ) : (
-                            <h3 className="truncate">{db.hood}</h3>
+                            <h3 className="truncate">{db.hood_color}</h3>
                           )}
                           <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
-                      {/* Gown */}
                       <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center relative">
                           {isEditing ? (
                             <CustomDropdown
-                              value={modifyTable ? db.gown : editData.gown}
-                              options={gownOptions}
+                              value={modifyTable ? db.toga_size : editData.toga_size}
+                              options={togaSizeOptions}
                               onChange={(val) =>
                                 modifyTable
-                                  ? handleCellChange(db.id, "gown", val)
+                                  ? handleCellChange(db.id, "toga_size", val)
                                   : handleEditChange({
-                                      target: { name: "gown", value: val },
-                                    })
+                                    target: { name: "toga_size", value: val },
+                                  })
                               }
                               disabled={false}
                             />
                           ) : (
-                            <h3 className="truncate">{db.gown}</h3>
+                            <h3 className="truncate">{db.toga_size}</h3>
                           )}
                           <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
@@ -500,14 +479,12 @@ const Rows = ({
                           <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
-                      {/* Status */}
                       <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                         <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
                           {db.status}
                         </div>
                         <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                       </td>
-                      {/* Actions */}
                       <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
                           {editId === db.id ? (
@@ -520,7 +497,6 @@ const Rows = ({
                               >
                                 <Trash className="w-4" />
                               </button>
-                              {/* Floating Save/Cancel absolute container at the bottom sa edit view inline */}
                               <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
                                 <button
                                   className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
@@ -543,15 +519,14 @@ const Rows = ({
                                 onMouseLeave={() => setHoveredEyeId(null)}
                               >
                                 <button
-                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
-                                    hoveredEyeId === db.id ? "bg-blue-600" : ""
-                                  }`}
+                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id ? "bg-blue-600" : ""
+                                    }`}
                                   style={{
                                     background: modifyTable
                                       ? "#bdbdbd"
                                       : hoveredEyeId === db.id
-                                      ? "#2563eb"
-                                      : "#0C7E48",
+                                        ? "#2563eb"
+                                        : "#0C7E48",
                                     cursor: modifyTable
                                       ? "not-allowed"
                                       : "pointer",
@@ -568,11 +543,10 @@ const Rows = ({
                                   }}
                                 >
                                   <EyeIcon
-                                    className={`w-5 transition-colors duration-200 ${
-                                      hoveredEyeId === db.id
-                                        ? "text-blue-200"
-                                        : "text-white"
-                                    }`}
+                                    className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
+                                      ? "text-blue-200"
+                                      : "text-white"
+                                      }`}
                                   />
                                 </button>
                                 {hoveredEyeId === db.id && (
@@ -620,7 +594,33 @@ const Rows = ({
         </div>
         <PopupWindow
           open={popupOpen}
-          onClose={() => setPopupOpen(false)}
+          onClose={(updatedData) => {
+            setPopupOpen(false);
+            if (updatedData) {
+              // Map the updated data to match our component's format
+              const mappedData = updatedData.map((item) => ({
+                id: item.inventory_id,
+                studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                course: item.course,
+                tassel_color: item.tassel_color,
+                hood_color: item.hood_color,
+                toga_size: item.toga_size,
+                dateofreservation: item.rent_date
+                  ? new Date(item.rent_date).toLocaleDateString()
+                  : "",
+                status: item.return_status,
+                payment_status: item.payment_status,
+                evaluation_status: item.evaluation_status,
+                remarks: item.remarks,
+                return_date: item.return_date,
+                is_overdue: item.is_overdue,
+                has_cap: item.has_cap,
+                item_condition: item.item_condition
+              }));
+              setDashboard(mappedData);
+              setOriginalDashboard(mappedData);
+            }
+          }}
           user={popupUser}
           showBackButton={false}
           fullScreen={true}
@@ -632,7 +632,6 @@ const Rows = ({
 
 export default Rows;
 
-// CustomDropdown for table/grid inline editing
 const CustomDropdown = ({ value, options, onChange, disabled }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
@@ -650,9 +649,8 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${
-        disabled ? "pointer-events-none opacity-20" : ""
-      }`}
+      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
+        }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -710,11 +708,10 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                  opt === value
-                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                    : ""
-                }`}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
+                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                  : ""
+                  }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",
@@ -784,6 +781,5 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
 };
 
 function getRowColor(index) {
-  // Alternate row colors for better readability
   return index % 2 === 0 ? "bg-[#E9E9E9]" : "bg-[#D4D4D4]";
 }

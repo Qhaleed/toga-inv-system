@@ -4,60 +4,137 @@ import { RadialChart } from "../ui/radialchart";
 import { PendingRadial } from "../ui/pendingradial";
 import { EvaluationRadial } from "../ui/evaluationradial";
 import { CheckedOutRadial } from "../ui/checkedoutradial";
+import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-function AdminDashboard({ adminName }) {
-  // Only show the first word (before the first space)
-  const firstName = adminName ? adminName.split(" ")[0] : "Admin";
+function AdminDashboard() {
   return (
-    <div className="grid grid-cols-1 relative animate-fade-in gap-4 p sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 grid-rows-2 h-[88vh]  w-full ">
-      {/* Row 1 */}
-      <div className=" flex bg-amber-300 pt-10  md-0 md:pt-0 md:pl-8 relative h-full ">
-        <p className="absolute flex  text-lg md:text-2xl ml-4 top-0 font-semibold md:mt-2 md:ml-2">
-          {`Welcome, ${firstName}! 👋🏻`}
-        </p>
-        <div className="grid md:grid-cols-2 gap-5 h-full grid-rows-2 grid-cols-2  md:grid-rows-2  md:pt-12   w-full">
-          {/* First cell in row 1, spans two columns and two rows */}
-          {/* <div className="dashboard-card relative flex rounded-[30px] md:w-full md:h-full ">
-            <p className="w-10 text-[12px] font-bold ml-4 mt-2">
-              Stocks Available
-            </p>
-            <RadialChart />
-          </div>
-          <div className="dashboard-card relative flex rounded-[30px] shadow-lg  w-full h-full">
-            <p className="w-10 text-[12px] font-bold ml-4 mt-2">
-              Pending Status
-            </p>
-            <PendingRadial />
-          </div>
-          <div className="dashboard-card relative flex z-10 rounded-[30px] shadow-lg  w-full h-full">
-            <p className="w-10 text-[13px] font-bold ml-4 mt-2">
-              Evaluation Status
-            </p>
-            <EvaluationRadial />
-          </div>
-          <div className="dashboard-card  relative rounded-[30px] shadow-lg w-full h-full flex ">
-            <p className="w-10 text-[13px] font-bold ml-4 mt-2">Checked Out</p>
-            <CheckedOutRadial />
-          </div> */}
-        </div>
-      </div>
-      <div className=" h-full bg-green-300 pt-12 w-full flex  ">
-        <div className="flex w-full h-full   rounded-[30px] shadow-lg  "></div>
-      </div>
-      {/* Vertically connected column for three and six */}
-      <div className="  row-span-2  h-full min-h-0 bg-amber-500 text-xs font-bold ">
-        <div className="  h-full flex  justify-center w-full">
-          <div className="bg-white rounded-[30px] w-30 h-30 shadow-lg">
-            asdas
+    <div className="flex flex-col overflow-auto  gap-4 py-2 md:gap-6 md:py- h-full ">
+      {/* SectionCards: 4 boxes */}
+      <div className="grid grid-cols-1   md:grid-cols-2 xl:grid-cols-4 gap-4 px-4 lg:px-6">
+        {/* 1st box section */}
+        <div className="bg-white shadow-xl rounded-2xl  lg:max-h-[10rem] 2xl:max-w-[105rem]  h-[20rem]  md:min-w-[11rem] md:h-[10rem] lg:min-h-[10rem] text-white ">
+          <div className="flex w-full h-full ">
+            {/* 1st box */}
+            <div className="bg-amber-500  h-full flex flex-col w-40 text-black">
+              <div className="bg-amber-400 flex justify-center items-center ml-3 mt-5 rounded-xl w-15 h-15">
+                Icon
+              </div>
+              <span className="text-lg mt-2 ml-3">Statistics</span>
+            </div>
+            <div className=" h-full w-full bg-green-900 ">
+              <div className=" bg-red-200 h-10 items-center flex w-full">
+                <p> Stocks Available</p>
+              </div>
+              <div className=" bg-red-100 h-20 text-3xl font-black  text-black w-full">
+                156
+              </div>
+              <div className="flex justify-end items-center pr-5 bg-violet-200 h-10 ">
+                <p>View Report</p>
+              </div>
+            </div>
           </div>
         </div>
+        {/* 2nd box section */}
+        <div className="bg-white shadow-xl rounded-2xl  lg:max-h-[10rem] 2xl:max-w-[105rem]  h-[20rem]  md:min-w-[11rem] md:h-[10rem] lg:min-h-[10rem] text-white ">
+          <div className="flex w-full h-full ">
+            {/* 2nd box */}
+            <div className="bg-amber-500  h-full flex flex-col w-40 text-black">
+              <div className="bg-amber-400 flex justify-center items-center ml-3 mt-5 rounded-xl w-15 h-15">
+                Icon
+              </div>
+              <span className="text-lg mt-2 ml-3">Statistics</span>
+            </div>
+            <div className=" h-full w-full bg-green-900 ">
+              <div className=" bg-red-200 h-10 items-center flex w-full">
+                <p> Stocks Available</p>
+              </div>
+              <div className=" bg-red-100 h-20 text-3xl font-black  text-black w-full">
+                156
+              </div>
+              <div className="flex justify-end items-center pr-5 bg-violet-200 h-10 ">
+                <p>View Report</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* 3rd box section */}
+        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem]  h-[20rem] md:min-w-[11rem]   md:h-[10rem] lg:min-h-[10rem] text-white ">
+          <div className="bg-white shadow-xl rounded-2xl  lg:max-h-[10rem] 2xl:max-w-[105rem]  h-[20rem]  md:min-w-[11rem] md:h-[10rem] lg:min-h-[10rem] text-white ">
+            <div className="flex w-full h-full ">
+              {/* 3rd box */}
+              <div className="bg-amber-500  h-full flex flex-col w-40 text-black">
+                <div className="bg-amber-400 flex justify-center items-center ml-3 mt-5 rounded-xl w-15 h-15">
+                  Icon
+                </div>
+                <span className="text-lg mt-2 ml-3">Statistics</span>
+              </div>
+              <div className=" h-full w-full bg-green-900 ">
+                <div className=" bg-red-200 h-10 items-center flex w-full">
+                  <p> Stocks Available</p>
+                </div>
+                <div className=" bg-red-100 h-20 text-3xl font-black  text-black w-full">
+                  156
+                </div>
+                <div className="flex justify-end items-center pr-5 bg-violet-200 h-10 ">
+                  <p>View Report</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between"></div>
+        </div>
+        {/* 4th box section */}
+        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem]  h-[20rem]  md:h-[10rem] lg:min-h-[10rem] text-white ">
+          <div className="bg-white shadow-xl rounded-2xl  lg:max-h-[10rem] 2xl:max-w-[105rem]  h-[20rem]  md:min-w-[11rem] md:h-[10rem] lg:min-h-[10rem] text-white ">
+            <div className="flex w-full h-full ">
+              {/* 4th box */}
+              <div className="bg-amber-500  h-full flex flex-col w-40 text-black">
+                <div className="bg-amber-400 flex justify-center items-center ml-3 mt-5 rounded-xl w-15 h-15">
+                  Icon
+                </div>
+                <span className="text-lg mt-2 ml-3">Statistics</span>
+              </div>
+              <div className=" h-full w-full bg-green-900 ">
+                <div className=" bg-red-200 h-10 items-center flex w-full">
+                  <p> Stocks Available</p>
+                </div>
+                <div className=" bg-red-100 h-20 text-3xl font-black  text-black w-full">
+                  156
+                </div>
+                <div className="flex justify-end items-center pr-5 bg-violet-200 h-10 ">
+                  <p>View Report</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* Row 2 */}
-      <div className=" flex mt-1  text-xs font-bold  bg-white   h-full col-span-2">
-        {" "}
-        <GroupBarChart />
+      {/* 2nd row: 2 columns */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 lg:px-6">
+        <div className="bg-blue-200 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px]">
+          <span className="text-black font-bold text-lg">
+            fixing pa responsiveness desktop to mobile ahhahahah
+          </span>
+        </div>
+        <div className="bg-blue-300 rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px]">
+          <span className="text-black font-bold text-lg">
+            2nd column content
+          </span>
+        </div>
       </div>
-      {/* The third cell in row 2 is now merged above */}
+      {/* 3rd row: 3 columns */}
+      <div className="grid grid-cols-1 md:grid-cols-3 min-h-[200px]  gap-4 px-4 lg:px-6 mt-2">
+        <div className="bg-green-800 w-full  flex items-center justify-center text-white rounded-xl">
+          inayos ko ulit grid system pero admindashboard pa lng
+        </div>
+        <div className="bg-green-700 w-full flex items-center justify-center text-white rounded-xl">
+          2nd col
+        </div>
+        <div className="bg-green-600 w-fullflex items-center justify-center text-white rounded-xl">
+          3rd col
+        </div>
+      </div>
     </div>
   );
 }
