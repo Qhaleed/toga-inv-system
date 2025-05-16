@@ -243,7 +243,7 @@ const Navbar = ({
               /* Search bar and grid/row toggle */
             },
             (
-              <div className="flex flex-row  items-center w-full mt-5 animate-fade-in">
+              <div className="flex bg-amber-700  items-center w-full animate-fade-in">
                 <div className="w-full">
                   <div className="relative ml-6  ">
                     <Search className="absolute w-5 top-1/5 left-2" />

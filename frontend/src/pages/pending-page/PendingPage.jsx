@@ -41,6 +41,17 @@ const PendingPage = () => {
       )}
       {/* Main content */}
       <div className="bg-[#F3F9FF] w-full h-full">
+        {/* NavBar always at the top */}
+        <div className="w-full z-10 h-14 flex items-center relative">
+          <Navbar
+            isGrid={isGrid}
+            setIsGrid={setIsGrid}
+            modifyTable={modifyTable}
+            setmodifyTable={setmodifyTable}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        </div>
         <div className="w-full relative h-full overflow-hidden flex flex-col">
           <div className="w-full z-10 h-15 flex items-center ">
             <button
@@ -53,14 +64,6 @@ const PendingPage = () => {
                 {sidebarOpen ? "\u2190" : "\u2192"}
               </span>
             </button>
-            <Navbar
-              isGrid={isGrid}
-              setIsGrid={setIsGrid}
-              modifyTable={modifyTable}
-              setmodifyTable={setmodifyTable}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-            />
           </div>
           <div className="w-full h-full overflow-visible flex flex-col flex-1">
             <div className="flex-1 flex mx-auto min-w-fit animate-fade-in overflow-hidden">
