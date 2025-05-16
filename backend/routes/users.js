@@ -16,9 +16,10 @@ router.get("/", async (req, res) => {
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
 
-    const [users] = await db.pool.query("SELECT * FROM accounts WHERE account_id = ?", [
-      decoded.id,
-    ]);
+    const [users] = await db.pool.query(
+      "SELECT * FROM accounts WHERE account_id = ?",
+      [decoded.id]
+    );
     if (!users || users.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -31,7 +32,10 @@ router.get("/", async (req, res) => {
       role: user.role,
     });
   } catch (err) {
-    return res.status(401).json({ error: "Invalid token" });
+    return res.status(401).json({
+      error:
+        "di ka logged in && dapat naka protected route para 'di magexist error",
+    });
   }
 });
 
