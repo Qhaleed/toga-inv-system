@@ -258,55 +258,97 @@ function AdminDashboard() {
       <div className="flex flex-wrap gap-4 px-4 lg:px-6 w-full">
         {/* 1st col: New Users Registered */}
         <div className="bg-white w-full md:w-[32%] flex flex-col rounded-xl shadow-lg p-4 min-h-[200px] flex-1">
-          <h3 className="text-lg font-bold text-gray-700 mb-2">
-            New Users Registered
-          </h3>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-bold text-gray-700">
+              New Users Registered
+            </h3>
+            <button
+              className="text-xs text-blue-600 font-semibold hover:underline focus:underline transition"
+              onClick={() => alert("Show all new users")}
+            >
+              View All
+            </button>
+          </div>
           <ul className="flex flex-col gap-3">
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0">
+            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
               <img
                 src="https://ui-avatars.com/api/?name=Donald+Lee"
                 alt="Donald Lee"
-                className="w-8 h-8 rounded-full bg-gray-200"
+                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
               />
-              <div className="flex flex-col">
-                <span className="font-semibold text-gray-800">Donald Lee</span>
-                <span className="text-xs text-gray-400">2 min ago</span>
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="font-semibold text-gray-800 truncate">
+                  Donald Lee
+                </span>
+                <span className="text-xs text-gray-400 truncate">
+                  2 min ago
+                </span>
+                <span className="text-xs text-blue-700 font-medium truncate">
+                  BS Biology (BSBio)
+                </span>
               </div>
+              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                New
+              </span>
             </li>
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0">
+            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
               <img
                 src="https://ui-avatars.com/api/?name=Magang+Magang"
                 alt="Magang Magang"
-                className="w-8 h-8 rounded-full bg-gray-200"
+                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
               />
-              <div className="flex flex-col">
-                <span className="font-semibold text-gray-800">
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="font-semibold text-gray-800 truncate">
                   Magang Magang
                 </span>
-                <span className="text-xs text-gray-400">10 min ago</span>
+                <span className="text-xs text-gray-400 truncate">
+                  10 min ago
+                </span>
+                <span className="text-xs text-blue-700 font-medium truncate">
+                  BS Computer Science (BSCS)
+                </span>
               </div>
+              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                New
+              </span>
             </li>
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0">
+            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
               <img
                 src="https://ui-avatars.com/api/?name=Gold+Neger"
                 alt="Gold Neger"
-                className="w-8 h-8 rounded-full bg-gray-200"
+                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
               />
-              <div className="flex flex-col">
-                <span className="font-semibold text-gray-800">Gold Neger</span>
-                <span className="text-xs text-gray-400">1 hr ago</span>
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="font-semibold text-gray-800 truncate">
+                  Gold Neger
+                </span>
+                <span className="text-xs text-gray-400 truncate">1 hr ago</span>
+                <span className="text-xs text-blue-700 font-medium truncate">
+                  BS Accountancy (BSA)
+                </span>
               </div>
+              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                New
+              </span>
             </li>
-            <li className="flex items-center gap-3">
+            <li className="flex items-center gap-3 hover:bg-blue-50 rounded-lg transition">
               <img
                 src="https://ui-avatars.com/api/?name=Johnny+Sins"
                 alt="Johnny Sins"
-                className="w-8 h-8 rounded-full bg-gray-200"
+                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
               />
-              <div className="flex flex-col">
-                <span className="font-semibold text-gray-800">Johnny Sins</span>
-                <span className="text-xs text-gray-400">2 hr ago</span>
+              <div className="flex flex-col flex-1 min-w-0">
+                <span className="font-semibold text-gray-800 truncate">
+                  Johnny Sins
+                </span>
+                <span className="text-xs text-gray-400 truncate">2 hr ago</span>
+                <span className="text-xs text-blue-700 font-medium truncate">
+                  BS Education (BSEd)
+                </span>
               </div>
+              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                New
+              </span>
             </li>
           </ul>
         </div>
