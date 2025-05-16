@@ -75,19 +75,19 @@ function AdminDashboard() {
         <p className="ml-6 font-bold 2xl:text-2xl xl:text-xl">{`Welcome, Admin! 👋🏻`}</p>
       </div>
       {/* SectionCards: 4 boxes */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 px-4 lg:px-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 sm:mt:5 md:mt-0 mt-10 gap-3 px-4 lg:px-6">
         {/* 1st box section */}
-        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] h-[20rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white cursor-pointer outline-none">
+        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] max-w-[25rem] sm:max-w-[105rem] mh-[12rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white cursor-pointer outline-none">
           <div className="flex w-full h-full ">
             {/* 1st box */}
-            <div className="h-full flex flex-col w-40 text-black">
+            <div className="h-full flex flex-col w-40 sm:w-75 md:w-40 text-black">
               <button
-                className="bg-[#CFE1FF] flex justify-center items-center ml-3 mt-5 rounded-xl w-12 h-12 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
+                className="bg-[#CFE1FF] flex justify-center items-center mt-10 ml-3 sm:ml-3 sm:mt-5  rounded-xl md:w-12 md:h-12 sm:w-40 sm:h-40 w-20 h-20 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
                 onClick={() => navigate("/inventory")}
                 tabIndex={0}
                 aria-label="Go to Inventory"
               >
-                <BoxIcon className="w-6 h-6 cursor-pointer text-blue-700" />
+                <BoxIcon className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center  mt-8 ml-4">
                 <Upstats className="w-4" />
@@ -95,17 +95,17 @@ function AdminDashboard() {
               </span>
             </div>
             <div className="h-full w-full">
-              <div className="h-10 items-center flex w-full">
-                <p className="text-sm text-gray-500 font-semibold">
+              <div className="h-20 md:h-10 items-center flex w-full">
+                <p className="  text-md sm:text-lg md:text-sm text-gray-500 font-semibold">
                   Current Stock
                 </p>
               </div>
-              <div className="h-20 text-3xl font-black  text-[#102F5E] w-full">
+              <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black  text-[#102F5E] w-full">
                 12
               </div>
-              <div className="flex justify-end items-end pr-4 h-0">
+              <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
-                  className="self-end mt-1 text-xs text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
+                  className="self-end mt-1  md:text-xs  text-lg  sm:text-xl text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
                   onClick={() => navigate("/inventory")}
                   tabIndex={0}
                   aria-label="Go to Inventory"
@@ -117,31 +117,35 @@ function AdminDashboard() {
           </div>
         </div>
         {/* 2nd box section */}
-        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] h-[20rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white cursor-pointer outline-none">
+        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] max-w-[25rem] sm:max-w-[105rem] mh-[12rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white cursor-pointer outline-none">
           <div className="flex w-full h-full ">
             {/* 2nd box */}
-            <div className="h-full flex flex-col w-40 text-[#102F5E]">
+            <div className="h-full flex flex-col w-40 sm:w-75 md:w-40 text-[#102F5E]">
               <button
-                className="bg-[#CFE1FF] flex justify-center items-center ml-3 mt-5 rounded-xl w-12 h-12 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
+                className="bg-[#CFE1FF] flex justify-center items-center mt-10 ml-3 sm:ml-3 sm:mt-5 rounded-xl md:w-12 md:h-12 sm:w-40 sm:h-40 w-20 h-20 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
                 onClick={() => navigate("/reservation")}
                 tabIndex={0}
                 aria-label="Go to Reservation"
               >
-                <List className="w-6 h-6 cursor-pointer text-blue-700" />
+                <List className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center  mt-8 ml-4">
+              <span className="text-lg flex text-center items-center mt-8 ml-4">
                 <Upstats className="w-4" />
                 <p className="text-[#0DDF65] font-semibold text-xs ml-1">4%</p>
               </span>
             </div>
             <div className="h-full w-full">
-              <div className="h-10 items-center flex w-full">
-                <p className="text-sm text-gray-500 font-semibold">Reserved</p>
+              <div className="h-20 md:h-10 items-center flex w-full">
+                <p className="text-md sm:text-lg md:text-sm text-gray-500 font-semibold">
+                  Reserved
+                </p>
               </div>
-              <div className="h-20 text-3xl font-black text-[#102F5E]">51</div>
-              <div className="flex justify-end items-end pr-4 h-0">
+              <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black text-[#102F5E] w-full">
+                51
+              </div>
+              <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
-                  className="self-end mt-1 text-xs text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
+                  className="self-end mt-1  md:text-xs text-lg sm:text-xl text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
                   onClick={() => navigate("/reservation")}
                   tabIndex={0}
                   aria-label="Go to Reservation"
@@ -153,33 +157,35 @@ function AdminDashboard() {
           </div>
         </div>
         {/* 3rd box section */}
-        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] h-[20rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white  outline-none">
+        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] max-w-[25rem] sm:max-w-[105rem] mh-[12rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white  outline-none">
           <div className="flex w-full h-full ">
             {/* 3rd box */}
-            <div className="h-full flex flex-col w-40 text-black">
+            <div className="h-full flex flex-col w-40 sm:w-75 md:w-40 text-black">
               <button
-                className="bg-[#CFE1FF] flex justify-center items-center ml-3 mt-5 rounded-xl w-12 h-12 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
+                className="bg-[#CFE1FF] flex justify-center items-center mt-10 ml-3 sm:ml-3 sm:mt-5  rounded-xl md:w-12 md:h-12 sm:w-40 sm:h-40 w-20 h-20 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
                 onClick={() => navigate("/pending")}
                 tabIndex={0}
                 aria-label="Go to Pending"
               >
-                <Time className="w-6 h-6 cursor-pointer text-blue-700" />
+                <Time className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center  mt-8 ml-4">
+              <span className="text-lg flex text-center items-center mt-8 ml-4">
                 <Downstats className="w-4" />
                 <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
               </span>
             </div>
             <div className="h-full w-full">
-              <div className="h-10 items-center flex w-full">
-                <p className="text-sm text-gray-500 font-semibold">Pending</p>
+              <div className="h-20 md:h-10 items-center flex w-full">
+                <p className="text-md sm:text-lg md:text-sm text-gray-500 font-semibold">
+                  Pending
+                </p>
               </div>
-              <div className="h-20 text-3xl font-black text-[#102F5E] w-full">
+              <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black text-[#102F5E] w-full">
                 143
               </div>
-              <div className="flex justify-end items-end pr-4 h-0">
+              <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
-                  className="self-end mt-1 text-xs text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
+                  className="self-end mt-1  md:text-xs  text-lg  sm:text-xl text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
                   onClick={() => navigate("/pending")}
                   tabIndex={0}
                   aria-label="Go to Pending"
@@ -191,33 +197,35 @@ function AdminDashboard() {
           </div>
         </div>
         {/* 4th box section */}
-        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] h-[20rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white  outline-none">
+        <div className="bg-white shadow-xl rounded-2xl lg:max-h-[10rem] 2xl:max-w-[105rem] max-w-[25rem] sm:max-w-[105rem] mh-[12rem] md:min-w-[11rem] md:h-[8rem] lg:min-h-[8rem] text-white  outline-none">
           <div className="flex w-full h-full ">
             {/* 4th box */}
-            <div className="h-full flex flex-col w-40 text-black">
+            <div className="h-full flex flex-col w-40 sm:w-75 md:w-40 text-black">
               <button
-                className="bg-[#CFE1FF] flex justify-center items-center ml-3 mt-5 rounded-xl w-12 h-12 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
+                className="bg-[#CFE1FF] flex justify-center items-center mt-10 ml-3 sm:ml-3 sm:mt-5  rounded-xl md:w-12 md:h-12 sm:w-40 sm:h-40 w-20 h-20 focus:outline-none transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:scale-105 focus:shadow-lg"
                 onClick={() => navigate("/evaluation-page")}
                 tabIndex={0}
                 aria-label="Go to Evaluation"
               >
-                <Eval className="w-7 h-7 cursor-pointer text-blue-700" />
+                <Eval className="sm:w-24 sm:h-24 w-12 h-12 md:w-7 md:h-7 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center  mt-8 ml-4">
+              <span className="text-lg flex text-center items-center mt-8 ml-4">
                 <Downstats className="w-4" />
                 <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
               </span>
             </div>
             <div className="h-full w-full">
-              <div className="h-10 items-center flex w-full">
-                <p className="text-sm text-gray-500 font-semibold">Evaluated</p>
+              <div className="h-20 md:h-10 items-center flex w-full">
+                <p className="text-md sm:text-lg md:text-sm text-gray-500 font-semibold">
+                  Evaluated
+                </p>
               </div>
-              <div className="h-20 text-3xl font-black text-[#102F5E] w-full">
+              <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black text-[#102F5E] w-full">
                 4
               </div>
-              <div className="flex justify-end items-end pr-4 h-0">
+              <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
-                  className="self-end mt-1 text-xs text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
+                  className="self-end mt-1  md:text-xs text-lg sm:text-xl text-blue-600 hover:underline focus:underline font-semibold bg-transparent border-none outline-none cursor-pointer"
                   onClick={() => navigate("/evaluation-page")}
                   tabIndex={0}
                   aria-label="Go to Evaluation"
@@ -386,7 +394,7 @@ function AdminDashboard() {
           <h3 className="text-lg font-bold text-gray-700 mb-2 flex items-center justify-between">
             Student Concerns
             <button
-              className="text-xs text-blue-600 hover:underline focus:underline font-semibold ml-2 cursor-pointer"
+              className="md:text-xs text-2xl text-blue-600 hover:underline focus:underline font-semibold ml-2 cursor-pointer"
               onClick={() => {
                 setSelectedConcern(null);
                 setShowConcernModal(true);
@@ -427,7 +435,7 @@ function AdminDashboard() {
                   Response: {concern.response}
                 </div>
                 <button
-                  className="self-end mt-1 text-xs text-blue-600 hover:underline focus:underline font-semibold cursor-pointer"
+                  className="self-end mt-1  md:text-xs  text-lg  sm:text-xl text-blue-600 hover:underline focus:underline font-semibold cursor-pointer"
                   onClick={() => {
                     setSelectedConcern(concern);
                     setShowConcernModal(true);
