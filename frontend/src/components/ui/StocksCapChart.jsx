@@ -1,6 +1,6 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import CapCategoryChartTooltip from "./CapCategoryChartTooltip";
+import StocksCapTooltip from "./StocksCapTooltip";
 
 const CAP_CATEGORIES = ["Yes", "No"];
 const COLOR = "#2563eb";
@@ -15,8 +15,8 @@ export default function CapCategoryChart({ data = exampleData }) {
   return (
     <div className="w-full flex flex-col items-center">
       <BarChart
-        width={400}
-        height={260}
+        width={900}
+        height={520}
         data={data}
         margin={{ top: 24, right: 24, left: 24, bottom: 24 }}
         className="w-full"
@@ -43,7 +43,7 @@ export default function CapCategoryChart({ data = exampleData }) {
           isAnimationActive
         />
         <Tooltip
-          content={<CapCategoryChartTooltip />}
+          content={<StocksCapTooltip />}
           cursor={{ fill: "#e0e7ef", opacity: 0.3 }}
         />
       </BarChart>
