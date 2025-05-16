@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBar from "../../components/navigations/SideBar";
 import Navbar from "../../components/navigations/NavBar";
 import {
@@ -10,9 +10,22 @@ import {
 } from "./InventoryTabs";
 
 const InventoryPage = ({ setSortOrder }) => {
-  const [focusedStatus, setFocusedStatus] = useState("stocks");
-  const [activeTab, setActiveTab] = useState("inventory");
+  // checker if localstorage is not impty
+  const [focusedStatus, setFocusedStatus] = useState(
+    () => localStorage.getItem("focusedStatus") || "stocks"
+  );
+  const [activeTab, setActiveTab] = useState(
+    () => localStorage.getItem("activeTab") || "inventory"
+  );
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // eto na po lalagyan na ng local storage para di na babalik sa default scree nahahahah
+  useEffect(() => {
+    localStorage.setItem("focusedStatus", focusedStatus);
+  }, [focusedStatus]);
+  useEffect(() => {
+    localStorage.setItem("activeTab", activeTab);
+  }, [activeTab]);
 
   return (
     <div
@@ -22,7 +35,7 @@ const InventoryPage = ({ setSortOrder }) => {
           : "md:grid-cols-1"
       }`}
     >
-      {/* Sidebar: left on desktop, hidden on mobile */}
+      {/* Sidebar:mobile view */}
       {sidebarOpen && (
         <div className="max-md:hidden md:block w-full relative transition-transform duration-500 ease-in-out">
           <SideBar
@@ -55,7 +68,7 @@ const InventoryPage = ({ setSortOrder }) => {
           </div>
           <div className="w-full h-full overflow-visible flex flex-col flex-1">
             <div className="relative flex flex-col items-center justify-start gap-3 min-w-0 overflow-auto w-full animate-fade-in">
-              {/* Inventory tab content switching */}
+              {/* Inventory tab content switching components yk */}
               {activeTab === "inventory" &&
                 (() => {
                   switch (focusedStatus) {
