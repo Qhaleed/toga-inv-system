@@ -8,8 +8,52 @@ const Dashboard = () => {
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
   const [togaSize, setTogaSize] = useState("");
+  const [tasselColor, setTasselColor] = useState("");
+  const [hoodColor, setHoodColor] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
+  const [course, setCourse] = useState("");
+
+  // Course to color mapping - extracted to a higher scope for reuse
+  const courseGroups = {
+    Blue: [
+      "Bachelor of Early Childhood Education (BECEd)",
+      "Bachelor of Elementary Education (BEEd)",
+      "Bachelor of Physical Education (BPEd)",
+      "Bachelor of Secondary Education (BSEd)",
+    ],
+    Maroon: [
+      "BS Biomedical Engineering (BSBME)",
+      "BS Computer Engineering (BSCE)",
+      "BS Electronics Communication Engineering (BSECE)",
+      "Associate in Electronics Engineering Technology (AEET)",
+      "Associate in Computer Networking (ACN)",
+    ],
+    Orange: ["BS Nursing (BSN)"],
+    White: [
+      "BS Biology (BSBio)",
+      "BS Computer Science (BSCS)",
+      "BS Information Technology (BSIT)",
+      "BS Mathematics (BSMath)",
+      "BS Mathematics Sciences (BSMS)",
+      "BS New Media and Computer Animation (BSNMCA)",
+      "BS Psychology (BSPsych)",
+      "BA Communication (BAC)",
+      "BA English Language Studies (BAELS)",
+      "BA Interdisciplinary Studies (BAIDS)",
+      "BA International Studies (BAIS)",
+      "BA Philosophy (BAPhil)",
+    ],
+    Yellow: [
+      "BS Accountancy (BSA)",
+      "BS Accounting Information System (BSAIS)",
+      "BS Internal Auditing (BSIA)",
+      "BS Management Accounting (BSMA)",
+      "BS Business Administration (BSBA)",
+      "BS Office Management (BSOM)",
+      "BS Legal Management (BSLM)",
+    ],
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +69,12 @@ const Dashboard = () => {
         });
         const userData = await userResponse.json();
         setUserName(userData.first_name + " " + userData.surname);
+        setCourse(userData.course || "");
+
+        // Set colors based on course automatically
+        const colors = determineColorFromCourse(userData.course);
+        setTasselColor(colors.tasselColor);
+        setHoodColor(colors.hoodColor);
 
         // Check toga size submission status
         const togaResponse = await fetch(
@@ -56,6 +106,22 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const determineColorFromCourse = (course) => {
+    if (!course) {
+      return { tasselColor: "Blue", hoodColor: "Blue" }; // Default if no course specified
+    }
+
+    // Find the appropriate color for the course
+    for (const [color, courses] of Object.entries(courseGroups)) {
+      if (courses.some(c => course.includes(c))) {
+        return { tasselColor: color, hoodColor: color };
+      }
+    }
+
+    // Default if no match is found
+    return { tasselColor: "Blue", hoodColor: "Blue" };
+  };
+
   const handleTogaSizeSubmit = async (e) => {
     e.preventDefault();
     setFormSubmitting(true);
@@ -67,7 +133,12 @@ const Dashboard = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
         },
-        body: JSON.stringify({ toga_size: togaSize }),
+        body: JSON.stringify({
+          toga_size: togaSize,
+          tassel_color: tasselColor,
+          hood_color: hoodColor,
+          has_cap: 1 // Default to having a cap
+        }),
       });
 
       if (response.ok) {
@@ -128,9 +199,20 @@ const Dashboard = () => {
                   <option value="3XL">3XL</option>
                 </select>
               </div>
+
+              <div className="mb-6">
+                <div className="bg-gray-100 p-4 rounded text-gray-800">
+                  <h3 className="font-semibold mb-2">Colors Based on Your Program</h3>
+                  <p className="mb-1"><span className="font-medium">Program:</span> {course || "Not specified"}</p>
+                  <p className="mb-1"><span className="font-medium">Tassel Color:</span> {tasselColor}</p>
+                  <p><span className="font-medium">Hood Color:</span> {hoodColor}</p>
+                  <p className="mt-2 text-sm text-gray-600">These colors are automatically assigned based on your academic program and cannot be changed.</p>
+                </div>
+              </div>
+
               <button
                 type="submit"
-                disabled={formSubmitting}
+                disabled={formSubmitting || !togaSize}
                 className="w-full bg-[#0C7E48] text-white py-2 rounded hover:bg-[#0A6F40] transition-colors disabled:opacity-50"
               >
                 {formSubmitting ? "Submitting..." : "Submit"}

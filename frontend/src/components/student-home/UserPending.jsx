@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import LoginBg from "../../assets/images/loginbg.jpg";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 
-const PendingApproval = ({ onLogout }) => {
+const PendingApproval = () => {
   const [firstName, setFirstName] = useState("");
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate

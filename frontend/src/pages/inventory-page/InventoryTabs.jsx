@@ -68,28 +68,28 @@ export function StocksTab() {
   return (
     <>
       {" "}
-      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 text-center">
-        <span className="opacity-20 z-1000 hover:opacity-40 cursor-pointer text-black font-semibold">
+      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 mt-5 text-center">
+        <span className="z-1000 hover:opacity-40 cursor-pointer text-[#001C47] font-semibold">
           {" "}
           Inventory {">"}
         </span>
-        <span className="text-[#111240] hover:opacity-70 cursor-pointer">
+        <span className="text-[#02327B] hover:opacity-70 cursor-pointer">
           {" "}
           Stocks
         </span>
       </div>
-      <div className="w-full relative h-screen p-8 flex flex-col items-center">
-        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center">
+      <div className="w-full relative h-screen p-8 flex flex-col items-center border border-red-500">
+        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center border border-red-500">
           <div className="flex-1 flex flex-col items-center">
-            <div className="bg-white rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[420px] max-w-[520px] w-full mb-4">
+            <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
               <MyChart />
             </div>
-            <span className="text-gray-400 text-sm">
+            <span className="text-gray-500 font-bold text-sm">
               Inventory Distribution
             </span>
-          </div>
+          </div >
           {/* Stock Summary Section */}
-          <div className="flex-1   shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="border border-red-500 bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
@@ -98,53 +98,53 @@ export function StocksTab() {
             </div>
 
             {/* Add more stock summary items here */}
-            <div className="bg-[#DCFCE7] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#15803D]">
+            <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#dadada]">
                 {totals.cap}
               </span>
-              <span className="text-base text-gray-700 mt-1">
+              <span className="text-base text-[#dadada] mt-1">
                 Available Cap
               </span>
-              <span className="text-xs text-gray-500 mt-1">
+              <span className="text-xs text-[#dadada] mt-1">
                 {Object.entries(totals.capSizes || {})
                   .map(([size, count]) => `${size}: ${count}`)
                   .join(", ")}
               </span>
             </div>
-            <div className="bg-[#B6E0FE] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#2563eb]">
+            <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#001d5a]">
                 {totals.tassel}
               </span>
-              <span className="text-base text-gray-700 mt-1">
+              <span className="text-base text-[#001d5a] mt-1">
                 Available Tassel
               </span>
-              <span className="text-xs text-gray-500 mt-1">
+              <span className="text-xs text-[#001d5a] mt-1">
                 {Object.entries(totals.tasselColors || {})
                   .map(([color, count]) => `${color}: ${count}`)
                   .join(", ")}
               </span>
             </div>
-            <div className="bg-[#F3E8FF] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#b6c2e0]">
+            <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-gray-800">
                 {totals.gown}
               </span>
-              <span className="text-base text-gray-700 mt-1">
+              <span className="text-base text-gray-800 mt-1">
                 Available Gown
               </span>
-              <span className="text-xs text-gray-500 mt-1">
+              <span className="text-xs text-gray-800 mt-1">
                 {Object.entries(totals.gownSizes || {})
                   .map(([size, count]) => `${size}: ${count}`)
                   .join(", ")}
               </span>
             </div>
-            <div className="bg-[#FEF9C3] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#fbbf24]">
+            <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-black">
                 {totals.hood}
               </span>
-              <span className="text-base text-gray-700 mt-1">
+              <span className="text-base text-black mt-1">
                 Available Hood
               </span>
-              <span className="text-xs text-gray-500 mt-1">
+              <span className="text-xs text-black mt-1">
                 {Object.entries(totals.hoodColors || {})
                   .map(([color, count]) => `${color}: ${count}`)
                   .join(", ")}
@@ -193,10 +193,182 @@ export function ItemStatusTab() {
 }
 
 export function CheckReturnTab() {
+  const [totals, setTotals] = useState({
+    cap: 0,
+    tassel: 0,
+    gown: 0,
+    hood: 0,
+    capSizes: {},
+    tasselColors: {},
+    gownSizes: {},
+    hoodColors: {},
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:5001/inventory")
+      .then((res) => res.json())
+      .then((data) => {
+        let cap = 0,
+          tassel = 0,
+          gown = 0,
+          hood = 0;
+        let capSizes = {},
+          tasselColors = {},
+          gownSizes = {},
+          hoodColors = {};
+        data.forEach((item) => {
+          // Cap: count by size if has_cap is 1
+          if (item.has_cap === 1 && item.toga_size) {
+            cap += 1;
+            capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
+          }
+          // Tassel: count by color
+          if (item.tassel_color) {
+            tassel += 1;
+            tasselColors[item.tassel_color] =
+              (tasselColors[item.tassel_color] || 0) + 1;
+          }
+          // Gown: count by size
+          if (item.toga_size) {
+            gown += 1;
+            gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
+          }
+          // Hood: count by color
+          if (item.hood_color) {
+            hood += 1;
+            hoodColors[item.hood_color] =
+              (hoodColors[item.hood_color] || 0) + 1;
+          }
+        });
+        setTotals({
+          cap,
+          tassel,
+          gown,
+          hood,
+          capSizes,
+          tasselColors,
+          gownSizes,
+          hoodColors,
+        });
+      });
+  }, []);
+
+  const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
+
   return (
-    <div className="w-full p-8 text-center text-white text-xl">
-      Check Return Content
-    </div>
+    <>
+      {" "}
+      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 mt-5 text-center">
+        <span className="z-1000 hover:opacity-40 cursor-pointer text-[#001C47] font-semibold">
+          {" "}
+          Inventory {">"}
+        </span>
+        <span className="text-[#02327B] hover:opacity-70 cursor-pointer">
+          {" "}
+          Check Return
+        </span>
+      </div>
+      <div className="w-full relative h-screen p-8 flex flex-col items-center border border-red-500">
+        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center border border-red-500">
+          <div className="flex-1 flex flex-col items-center">
+            <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
+              <MyChart />
+            </div>
+            <span className="text-gray-500 font-bold text-sm">
+              Inventory Distribution
+            </span>
+          </div >
+          {/* Stock Summary Section */}
+          <div className="border border-red-500 bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#1E40AF]">
+                {totalItems}
+              </span>
+              <span className="text-base text-gray-700 mt-1">Total Returned Items</span>
+            </div>
+
+            {/* Add more stock summary items here */}
+            <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#dadada]">
+                {totals.cap}
+              </span>
+              <span className="text-base text-[#dadada] mt-1">
+                Returned Cap
+              </span>
+              <span className="text-xs text-[#dadada] mt-1">
+                {Object.entries(totals.capSizes || {})
+                  .map(([size, count]) => `${size}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+            <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#001d5a]">
+                {totals.tassel}
+              </span>
+              <span className="text-base text-[#001d5a] mt-1">
+                Returned Tassel
+              </span>
+              <span className="text-xs text-[#001d5a] mt-1">
+                {Object.entries(totals.tasselColors || {})
+                  .map(([color, count]) => `${color}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+            <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-gray-800">
+                {totals.gown}
+              </span>
+              <span className="text-base text-gray-800 mt-1">
+                Returned Gown
+              </span>
+              <span className="text-xs text-gray-800 mt-1">
+                {Object.entries(totals.gownSizes || {})
+                  .map(([size, count]) => `${size}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+            <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-black">
+                {totals.hood}
+              </span>
+              <span className="text-base text-black mt-1">
+                Returned Hood
+              </span>
+              <span className="text-xs text-black mt-1">
+                {Object.entries(totals.hoodColors || {})
+                  .map(([color, count]) => `${color}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* Low Stock Alert Section */}
+        <div className=" absolute  bottom-0 w-full max-w-3xl mt-10">
+          <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
+            Low Stock Alerts
+          </h2>
+          <div className="bg-[#FFF3CD] border-l-4 border-[#B91C1C] text-[#B91C1C] p-2 rounded flex items-center gap-3">
+            <svg
+              className="w-6 h-6 text-[#B91C1C]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>
+              Some items are running low! Please review your stock levels and
+              reorder as needed.
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

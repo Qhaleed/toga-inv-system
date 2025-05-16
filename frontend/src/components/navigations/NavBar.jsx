@@ -109,10 +109,10 @@ const Navbar = ({
           <LoaderAnimation />
         </div>
       )}
-      <div className="h-full flex w-full">
+      <div className="h-10 flex  w-full">
         {/* Top Navigation */}
         {/* Mobile: Only big icons, no text, small logout icon at end */}
-        <div className="flex  gap-7 w-full  md:hidden">
+        <div className="flex gap-7 w-full bg-[#102F5E] md:hidden h-14 items-center">
           <button className="p-2 transition-all duration-200 hover:bg-blue-900/40 hover:scale-110 rounded-full">
             <MenuIcon className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
@@ -151,9 +151,9 @@ const Navbar = ({
           </button>
         </div>
         {/* Desktop/Tablet: Full nav with text and logout */}
-        <div className="hidden md:flex h-full flex-col w-full">
-          <div className="flex items-center relative w-full">
-            <div className="flex items-center relative mt-2 w-full">
+        <div className="hidden md:flex h-10 flex-col w-full justify-end mt-2">
+          <div className="flex  relative w-full">
+            <div className="flex items-center relative mt-2 w-full h-14">
               {/* Dashboard button */}
               <button
                 onClick={() => navigate("/admin-dashboard")}

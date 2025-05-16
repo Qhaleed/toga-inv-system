@@ -119,18 +119,176 @@ router.get('/check-toga-size', async (req, res) => {
 
     // Check if user has a toga size entry
     const [existingEntry] = await db.pool.query(
-      "SELECT toga_size FROM inventory WHERE account_id = ?",
+      "SELECT toga_size, tassel_color, hood_color FROM inventory WHERE account_id = ?",
       [decoded.id]
     );
 
     res.json({
       hasSubmitted: existingEntry.length > 0 && existingEntry[0].toga_size !== null,
-      togaSize: existingEntry.length > 0 ? existingEntry[0].toga_size : null
+      togaSize: existingEntry.length > 0 ? existingEntry[0].toga_size : null,
+      tasselColor: existingEntry.length > 0 ? existingEntry[0].tassel_color : null,
+      hoodColor: existingEntry.length > 0 ? existingEntry[0].hood_color : null
     });
   } catch (error) {
     console.error("Error checking toga size:", error);
     res.status(500).json({ error: "Failed to check toga size status" });
   }
 });
+
+// Add POST endpoint to submit toga size and other details
+router.post('/', async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const { toga_size, has_cap = 1 } = req.body;
+
+    // Validate toga size
+    if (!toga_size) {
+      return res.status(400).json({ error: "Toga size is required" });
+    }
+
+    // Get student's course to determine correct colors
+    const [studentData] = await db.pool.query(
+      "SELECT course FROM accounts WHERE account_id = ?",
+      [decoded.id]
+    );
+
+    if (studentData.length === 0) {
+      return res.status(404).json({ error: "Student record not found" });
+    }
+
+    const course = studentData[0].course;
+    const { tassel_color, hood_color } = determineColorsFromCourse(course);
+
+    // Check if entry already exists
+    const [existingEntry] = await db.pool.query(
+      "SELECT inventory_id FROM inventory WHERE account_id = ?",
+      [decoded.id]
+    );
+
+    let result;
+    if (existingEntry.length > 0) {
+      // Update existing entry
+      [result] = await db.pool.query(
+        `UPDATE inventory 
+         SET toga_size = ?, tassel_color = ?, hood_color = ?, has_cap = ?, rent_date = CURRENT_DATE()
+         WHERE account_id = ?`,
+        [toga_size, tassel_color, hood_color, has_cap, decoded.id]
+      );
+
+      res.status(200).json({
+        message: "Toga details updated successfully",
+        inventory_id: existingEntry[0].inventory_id
+      });
+    } else {
+      // Create new entry with default values
+      [result] = await db.pool.query(
+        `INSERT INTO inventory 
+         (account_id, toga_size, tassel_color, hood_color, has_cap, rent_date, is_overdue, return_status, payment_status, evaluation_status) 
+         VALUES (?, ?, ?, ?, ?, CURRENT_DATE(), 0, 'Not Returned', 'Unpaid', 'Not Evaluated')`,
+        [decoded.id, toga_size, tassel_color, hood_color, has_cap]
+      );
+
+      res.status(201).json({
+        message: "Toga details submitted successfully",
+        inventory_id: result.insertId
+      });
+    }
+  } catch (error) {
+    console.error("Error submitting toga details:", error);
+    res.status(500).json({ error: "Failed to submit toga details: " + error.message });
+  }
+});
+
+// Helper function to determine colors based on course
+function determineColorsFromCourse(course) {
+  // Course to color mapping
+  const courseGroups = {
+    Blue: [
+      "Bachelor of Early Childhood Education",
+      "Bachelor of Elementary Education",
+      "Bachelor of Physical Education",
+      "Bachelor of Secondary Education",
+      "BECEd",
+      "BEEd",
+      "BPEd",
+      "BSEd",
+    ],
+    Maroon: [
+      "BS Biomedical Engineering",
+      "BS Computer Engineering",
+      "BS Electronics Communication Engineering",
+      "Associate in Electronics Engineering Technology",
+      "Associate in Computer Networking",
+      "BSBME",
+      "BSCE",
+      "BSECE",
+      "AEET",
+      "ACN",
+    ],
+    Orange: ["BS Nursing", "BSN"],
+    White: [
+      "BS Biology",
+      "BS Computer Science",
+      "BS Information Technology",
+      "BS Mathematics",
+      "BS Mathematics Sciences",
+      "BS New Media and Computer Animation",
+      "BS Psychology",
+      "BA Communication",
+      "BA English Language Studies",
+      "BA Interdisciplinary Studies",
+      "BA International Studies",
+      "BA Philosophy",
+      "BSBio",
+      "BSCS",
+      "BSIT",
+      "BSMath",
+      "BSMS",
+      "BSNMCA",
+      "BSPsych",
+      "BAC",
+      "BAELS",
+      "BAIDS",
+      "BAIS",
+      "BAPhil",
+    ],
+    Yellow: [
+      "BS Accountancy",
+      "BS Accounting Information System",
+      "BS Internal Auditing",
+      "BS Management Accounting",
+      "BS Business Administration",
+      "BS Office Management",
+      "BS Legal Management",
+      "BSA",
+      "BSAIS",
+      "BSIA",
+      "BSMA",
+      "BSBA",
+      "BSOM",
+      "BSLM",
+    ],
+  };
+
+  if (!course) {
+    return { tassel_color: "Blue", hood_color: "Blue" }; // Default if no course specified
+  }
+
+  // Find the appropriate color for the course
+  for (const [color, courses] of Object.entries(courseGroups)) {
+    if (courses.some(c => course.includes(c))) {
+      return { tassel_color: color, hood_color: color };
+    }
+  }
+
+  // Default if no match is found
+  return { tassel_color: "Blue", hood_color: "Blue" };
+}
 
 module.exports = router;
