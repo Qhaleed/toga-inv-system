@@ -5,7 +5,6 @@ import StocksGownChart from "../../components/ui/StocksGownChart";
 import StocksTasselChart from "../../components/ui/StocksTasselChart";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
 
-
 import CapDamageTable from "../../components/damage-tables/CapDamageTable";
 import GownDamageTable from "../../components/damage-tables/GownDamageTable";
 import HoodDamageTable from "../../components/damage-tables/HoodDamageTable";
@@ -23,7 +22,6 @@ import {
 
 import StocksCapChart from "@/components/ui/StocksCapChart";
 import StocksHoodChart from "@/components/ui/StocksHoodChart";
-
 
 export function StocksTab() {
   const [totals, setTotals] = useState({
@@ -172,7 +170,7 @@ export function StocksTab() {
               {cap && <StocksCapChart />}
               {tassel && <StocksTasselChart />}
               {gown && <StocksGownChart />}
-              {hood && <StocksHoodChart/>}
+              {hood && <StocksHoodChart />}
             </div>
             <div className="w-full h-10 flex justify-between items-center">
               <div className="w-[700px] h-10 flex justify-between items-center ml-3">
@@ -769,7 +767,7 @@ export function ViewDamageTab() {
   ];
 
   return (
-    <div className="w-full p-8 flex flex-col items-center">
+    <div className="w-full p-8 pb-20 flex flex-col items-center">
       <h2 className="text-2xl font-bold text-[#02327B] mb-6">
         Damaged Items Overview Nig
       </h2>

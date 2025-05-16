@@ -1,4 +1,4 @@
-// Centralized damage data for summary and tables
+// dito nalng temp para centralized ung damage data for summary and tables
 
 export const capData = [
   {
