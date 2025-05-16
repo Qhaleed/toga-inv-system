@@ -4,6 +4,7 @@ import MyChart from "../../components/ui/my-chart";
 import StocksGownChart from "../../components/ui/StocksGownChart";
 import StocksTasselChart from "../../components/ui/StocksTasselChart";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
+import CapCategoryChart from "@/components/ui/CapCategoryChart";
 
 export function StocksTab() {
   const [totals, setTotals] = useState({
@@ -75,61 +76,61 @@ export function StocksTab() {
   const [hood, setHood] = useState(false);
 
   const allToggle = () => {
-      setAll(true);
-      setCap(false);
-      setTassel(false);
-      setGown(false);
-      setHood(false);
-  }
+    setAll(true);
+    setCap(false);
+    setTassel(false);
+    setGown(false);
+    setHood(false);
+  };
 
   const capToggle = () => {
-      setAll(false);
-      setCap(true);
-      setTassel(false);
-      setGown(false);
-      setHood(false);
-  }
+    setAll(false);
+    setCap(true);
+    setTassel(false);
+    setGown(false);
+    setHood(false);
+  };
   const tasselToggle = () => {
-      setAll(false);
-      setCap(false);
-      setTassel(true);
-      setGown(false);
-      setHood(false);
-  }
+    setAll(false);
+    setCap(false);
+    setTassel(true);
+    setGown(false);
+    setHood(false);
+  };
   const gownToggle = () => {
-      setAll(false);
-      setCap(false);
-      setTassel(false);
-      setGown(true);
-      setHood(false);
-  }
+    setAll(false);
+    setCap(false);
+    setTassel(false);
+    setGown(true);
+    setHood(false);
+  };
   const hoodToggle = () => {
-      setAll(false);
-      setCap(false);
-      setTassel(false);
-      setGown(false);
-      setHood(true);
-  }
+    setAll(false);
+    setCap(false);
+    setTassel(false);
+    setGown(false);
+    setHood(true);
+  };
 
-  let allBtn = all ? 
-                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
-                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+  let allBtn = all
+    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
 
-  let capBtn = cap ? 
-                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
-                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
-  
-  let tasselBtn = tassel ? 
-                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
-                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
-  
-  let gownBtn = gown ? 
-                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
-                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+  let capBtn = cap
+    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
 
-  let hoodBtn = hood ? 
-                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
-                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+  let tasselBtn = tassel
+    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+
+  let gownBtn = gown
+    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+
+  let hoodBtn = hood
+    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
 
   return (
     <>
@@ -148,30 +149,26 @@ export function StocksTab() {
         <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
           <div className="flex-1 flex flex-col items-center">
             <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center h-[520px] w-full mb-4">
+              {cap && <CapCategoryChart />}
               {all && <MyChart />}
               {tassel && <StocksTasselChart />}
               {gown && <StocksGownChart />}
             </div>
             <div className="w-full h-10 flex justify-between items-center">
               <div className="w-[700px] h-10 flex justify-between items-center ml-3 border border-red-500">
-                <button className={allBtn}
-                onClick = {allToggle}>
+                <button className={allBtn} onClick={allToggle}>
                   All
                 </button>
-                <button className={capBtn}
-                onClick = {capToggle}>
+                <button className={capBtn} onClick={capToggle}>
                   Cap
                 </button>
-                <button className={tasselBtn}
-                onClick = {tasselToggle}>
+                <button className={tasselBtn} onClick={tasselToggle}>
                   Tassel
                 </button>
-                <button className={gownBtn}
-                onClick = {gownToggle}>
+                <button className={gownBtn} onClick={gownToggle}>
                   Gown
                 </button>
-                <button className={hoodBtn}
-                onClick = {hoodToggle}>
+                <button className={hoodBtn} onClick={hoodToggle}>
                   Hood
                 </button>
               </div>
@@ -185,7 +182,7 @@ export function StocksTab() {
                 </h3>
               </div>
             </div>
-          </div >
+          </div>
           {/* Stock Summary Section */}
           <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
@@ -278,7 +275,9 @@ export function StocksTab() {
   );
 }
 
-{/* ITEM STATUS */}
+{
+  /* ITEM STATUS */
+}
 export function ItemStatusTab() {
   const [totals, setTotals] = useState({
     cap: 0,
@@ -345,20 +344,20 @@ export function ItemStatusTab() {
   const [returnToggle, setReturnToggle] = useState(true);
 
   const returnToggler = () => {
-      setReturnToggle(true);
-  }
+    setReturnToggle(true);
+  };
 
   const notreturnToggler = () => {
-      setReturnToggle(false);
-  }
+    setReturnToggle(false);
+  };
 
-  let returnedBtn = returnToggle ? 
-                    "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" : 
-                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+  let returnedBtn = returnToggle
+    ? "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
 
-  let notreturnedBtn = !returnToggle ? 
-                       "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" :
-                       "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+  let notreturnedBtn = !returnToggle
+    ? "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
 
   return (
     <>
@@ -381,31 +380,36 @@ export function ItemStatusTab() {
             </div>
             <div className="w-full h-10 flex justify-between items-center">
               <div className="w-[420px] h-10 flex justify-between items-center ml-3">
-                <button className={returnedBtn}
-                onClick = {returnToggler}>
+                <button className={returnedBtn} onClick={returnToggler}>
                   Condition
                 </button>
-                <button className={notreturnedBtn}
-                onClick = {notreturnToggler}>
+                <button className={notreturnedBtn} onClick={notreturnToggler}>
                   Damage
                 </button>
-                <button className={notreturnedBtn}
-                onClick = {notreturnToggler}>
+                <button className={notreturnedBtn} onClick={notreturnToggler}>
                   Repair
                 </button>
               </div>
               <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
-                <h3 className="pl-3">{returnToggle ? "Returned Statistics" : "Not Returned Statistics"}</h3>
+                <h3 className="pl-3">
+                  {returnToggle
+                    ? "Returned Statistics"
+                    : "Not Returned Statistics"}
+                </h3>
               </div>
             </div>
-          </div >
+          </div>
           {/* Stock Summary Section */}
           <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
               </span>
-              <span className="text-sm text-gray-700 mt-1">{returnToggle ? "Total Returned Item" : "Total Unreturned Items"}</span>
+              <span className="text-sm text-gray-700 mt-1">
+                {returnToggle
+                  ? "Total Returned Item"
+                  : "Total Unreturned Items"}
+              </span>
             </div>
 
             {/* Add more stock summary items here */}
@@ -493,7 +497,9 @@ export function ItemStatusTab() {
   );
 }
 
-{/* CHECK RETURN */}
+{
+  /* CHECK RETURN */
+}
 export function CheckReturnTab() {
   const [totals, setTotals] = useState({
     cap: 0,
@@ -560,20 +566,20 @@ export function CheckReturnTab() {
   const [returnToggle, setReturnToggle] = useState(true);
 
   const returnToggler = () => {
-      setReturnToggle(true);
-  }
+    setReturnToggle(true);
+  };
 
   const notreturnToggler = () => {
-      setReturnToggle(false);
-  }
+    setReturnToggle(false);
+  };
 
-  let returnedBtn = returnToggle ? 
-                    "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" : 
-                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+  let returnedBtn = returnToggle
+    ? "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
 
-  let notreturnedBtn = !returnToggle ? 
-                       "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" :
-                       "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+  let notreturnedBtn = !returnToggle
+    ? "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
 
   return (
     <>
@@ -596,27 +602,33 @@ export function CheckReturnTab() {
             </div>
             <div className="w-full h-10 flex justify-between items-center">
               <div className="w-70 h-10 flex justify-between items-center ml-3">
-                <button className={returnedBtn}
-                onClick = {returnToggler}>
+                <button className={returnedBtn} onClick={returnToggler}>
                   Returned
                 </button>
-                <button className={notreturnedBtn}
-                onClick = {notreturnToggler}>
+                <button className={notreturnedBtn} onClick={notreturnToggler}>
                   Not Returned
                 </button>
               </div>
               <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
-                <h3 className="pl-3">{returnToggle ? "Returned Statistics" : "Not Returned Statistics"}</h3>
+                <h3 className="pl-3">
+                  {returnToggle
+                    ? "Returned Statistics"
+                    : "Not Returned Statistics"}
+                </h3>
               </div>
             </div>
-          </div >
+          </div>
           {/* Stock Summary Section */}
           <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
               </span>
-              <span className="text-sm text-gray-700 mt-1">{returnToggle ? "Total Returned Item" : "Total Unreturned Items"}</span>
+              <span className="text-sm text-gray-700 mt-1">
+                {returnToggle
+                  ? "Total Returned Item"
+                  : "Total Unreturned Items"}
+              </span>
             </div>
 
             {/* Add more stock summary items here */}
