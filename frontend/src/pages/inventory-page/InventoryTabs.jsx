@@ -78,18 +78,20 @@ export function StocksTab() {
           Stocks
         </span>
       </div>
-      <div className="w-full relative h-screen p-8 flex flex-col items-center border border-red-500">
-        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center border border-red-500">
+      <div className="w-full relative h-screen p-8 flex flex-col items-center">
+        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
           <div className="flex-1 flex flex-col items-center">
             <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
               <MyChart />
             </div>
-            <span className="text-gray-500 font-bold text-sm">
-              Inventory Distribution
-            </span>
+            <div className="w-full h-8 flex justify-end items-center">
+              <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
+                  <h3 className="pl-3">Inventory Distribution</h3>
+              </div>
+            </div>
           </div >
           {/* Stock Summary Section */}
-          <div className="border border-red-500 bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
@@ -181,17 +183,223 @@ export function StocksTab() {
     </>
   );
 }
-{
-  /*ITEM STATUS TAB */
-}
+
+{/* ITEM STATUS */}
 export function ItemStatusTab() {
+  const [totals, setTotals] = useState({
+    cap: 0,
+    tassel: 0,
+    gown: 0,
+    hood: 0,
+    capSizes: {},
+    tasselColors: {},
+    gownSizes: {},
+    hoodColors: {},
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:5001/inventory")
+      .then((res) => res.json())
+      .then((data) => {
+        let cap = 0,
+          tassel = 0,
+          gown = 0,
+          hood = 0;
+        let capSizes = {},
+          tasselColors = {},
+          gownSizes = {},
+          hoodColors = {};
+        data.forEach((item) => {
+          // Cap: count by size if has_cap is 1
+          if (item.has_cap === 1 && item.toga_size) {
+            cap += 1;
+            capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
+          }
+          // Tassel: count by color
+          if (item.tassel_color) {
+            tassel += 1;
+            tasselColors[item.tassel_color] =
+              (tasselColors[item.tassel_color] || 0) + 1;
+          }
+          // Gown: count by size
+          if (item.toga_size) {
+            gown += 1;
+            gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
+          }
+          // Hood: count by color
+          if (item.hood_color) {
+            hood += 1;
+            hoodColors[item.hood_color] =
+              (hoodColors[item.hood_color] || 0) + 1;
+          }
+        });
+        setTotals({
+          cap,
+          tassel,
+          gown,
+          hood,
+          capSizes,
+          tasselColors,
+          gownSizes,
+          hoodColors,
+        });
+      });
+  }, []);
+
+  const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
+
+  const [returnToggle, setReturnToggle] = useState(true);
+
+  const returnToggler = () => {
+      setReturnToggle(true);
+  }
+
+  const notreturnToggler = () => {
+      setReturnToggle(false);
+  }
+
+  let returnedBtn = returnToggle ? 
+                    "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" : 
+                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+
+  let notreturnedBtn = !returnToggle ? 
+                       "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" :
+                       "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+
   return (
-    <div className="w-full p-8 text-center text-white text-xl">
-      Item Status Content
-    </div>
+    <>
+      {" "}
+      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 mt-5 text-center">
+        <span className="z-1000 hover:opacity-40 cursor-pointer text-[#001C47] font-semibold">
+          {" "}
+          Inventory {">"}
+        </span>
+        <span className="text-[#02327B] hover:opacity-70 cursor-pointer">
+          {" "}
+          Item Status
+        </span>
+      </div>
+      <div className="w-full relative h-screen p-8 flex flex-col items-center">
+        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
+          <div className="flex-1 flex flex-col items-start">
+            <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
+              <MyChart />
+            </div>
+            <div className="w-full h-10 flex justify-between items-center">
+              <div className="w-[420px] h-10 flex justify-between items-center ml-3">
+                <button className={returnedBtn}
+                onClick = {returnToggler}>
+                  Condition
+                </button>
+                <button className={notreturnedBtn}
+                onClick = {notreturnToggler}>
+                  Damage
+                </button>
+                <button className={notreturnedBtn}
+                onClick = {notreturnToggler}>
+                  Repair
+                </button>
+              </div>
+              <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
+                <h3 className="pl-3">{returnToggle ? "Returned Statistics" : "Not Returned Statistics"}</h3>
+              </div>
+            </div>
+          </div >
+          {/* Stock Summary Section */}
+          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#1E40AF]">
+                {totalItems}
+              </span>
+              <span className="text-sm text-gray-700 mt-1">{returnToggle ? "Total Returned Item" : "Total Unreturned Items"}</span>
+            </div>
+
+            {/* Add more stock summary items here */}
+            <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#dadada]">
+                {totals.cap}
+              </span>
+              <span className="text-sm text-[#dadada] mt-1">
+                {returnToggle ? "Returned Cap" : "Unreturned Cap"}
+              </span>
+              <span className="text-xs text-[#dadada] mt-1">
+                {Object.entries(totals.capSizes || {})
+                  .map(([size, count]) => `${size}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+            <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-[#001d5a]">
+                {totals.tassel}
+              </span>
+              <span className="text-base text-[#001d5a] mt-1">
+                {returnToggle ? "Returned Tassel" : "Unreturned Tassel"}
+              </span>
+              <span className="text-xs text-[#001d5a] mt-1">
+                {Object.entries(totals.tasselColors || {})
+                  .map(([color, count]) => `${color}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+            <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-gray-800">
+                {totals.gown}
+              </span>
+              <span className="text-base text-gray-800 mt-1">
+                {returnToggle ? "Returned Gown" : "Unreturned Gown"}
+              </span>
+              <span className="text-xs text-gray-800 mt-1">
+                {Object.entries(totals.gownSizes || {})
+                  .map(([size, count]) => `${size}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+            <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+              <span className="text-3xl font-bold text-black">
+                {totals.hood}
+              </span>
+              <span className="text-base text-black mt-1">
+                {returnToggle ? "Returned Hood" : "Unreturned Hood"}
+              </span>
+              <span className="text-xs text-black mt-1">
+                {Object.entries(totals.hoodColors || {})
+                  .map(([color, count]) => `${color}: ${count}`)
+                  .join(", ")}
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* Low Stock Alert Section */}
+        <div className=" absolute  bottom-0 w-full max-w-3xl mt-10">
+          <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
+            Low Stock Alerts
+          </h2>
+          <div className="bg-[#FFF3CD] border-l-4 border-[#B91C1C] text-[#B91C1C] p-2 rounded flex items-center gap-3">
+            <svg
+              className="w-6 h-6 text-[#B91C1C]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>
+              Some items are running low! Please review your stock levels and
+              reorder as needed.
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
+{/* CHECK RETURN */}
 export function CheckReturnTab() {
   const [totals, setTotals] = useState({
     cap: 0,
@@ -255,6 +463,24 @@ export function CheckReturnTab() {
 
   const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
 
+  const [returnToggle, setReturnToggle] = useState(true);
+
+  const returnToggler = () => {
+      setReturnToggle(true);
+  }
+
+  const notreturnToggler = () => {
+      setReturnToggle(false);
+  }
+
+  let returnedBtn = returnToggle ? 
+                    "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" : 
+                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+
+  let notreturnedBtn = !returnToggle ? 
+                       "bg-[#02327B] text-white h-full w-32 rounded-3xl font-figtree-medium" :
+                       "border border-[#02327B] text-[#02327B] h-full w-32 rounded-3xl font-figtree-medium transition-all duration-500";
+
   return (
     <>
       {" "}
@@ -268,32 +494,44 @@ export function CheckReturnTab() {
           Check Return
         </span>
       </div>
-      <div className="w-full relative h-screen p-8 flex flex-col items-center border border-red-500">
-        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center border border-red-500">
-          <div className="flex-1 flex flex-col items-center">
+      <div className="w-full relative h-screen p-8 flex flex-col items-center">
+        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
+          <div className="flex-1 flex flex-col items-start">
             <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
               <MyChart />
             </div>
-            <span className="text-gray-500 font-bold text-sm">
-              Inventory Distribution
-            </span>
+            <div className="w-full h-10 flex justify-between items-center">
+              <div className="w-70 h-10 flex justify-between items-center ml-3">
+                <button className={returnedBtn}
+                onClick = {returnToggler}>
+                  Returned
+                </button>
+                <button className={notreturnedBtn}
+                onClick = {notreturnToggler}>
+                  Not Returned
+                </button>
+              </div>
+              <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
+                <h3 className="pl-3">{returnToggle ? "Returned Statistics" : "Not Returned Statistics"}</h3>
+              </div>
+            </div>
           </div >
           {/* Stock Summary Section */}
-          <div className="border border-red-500 bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
               </span>
-              <span className="text-base text-gray-700 mt-1">Total Returned Items</span>
+              <span className="text-sm text-gray-700 mt-1">{returnToggle ? "Total Returned Item" : "Total Unreturned Items"}</span>
             </div>
 
             {/* Add more stock summary items here */}
-            <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
+            <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#dadada]">
                 {totals.cap}
               </span>
-              <span className="text-base text-[#dadada] mt-1">
-                Returned Cap
+              <span className="text-sm text-[#dadada] mt-1">
+                {returnToggle ? "Returned Cap" : "Unreturned Cap"}
               </span>
               <span className="text-xs text-[#dadada] mt-1">
                 {Object.entries(totals.capSizes || {})
@@ -306,7 +544,7 @@ export function CheckReturnTab() {
                 {totals.tassel}
               </span>
               <span className="text-base text-[#001d5a] mt-1">
-                Returned Tassel
+                {returnToggle ? "Returned Tassel" : "Unreturned Tassel"}
               </span>
               <span className="text-xs text-[#001d5a] mt-1">
                 {Object.entries(totals.tasselColors || {})
@@ -319,7 +557,7 @@ export function CheckReturnTab() {
                 {totals.gown}
               </span>
               <span className="text-base text-gray-800 mt-1">
-                Returned Gown
+                {returnToggle ? "Returned Gown" : "Unreturned Gown"}
               </span>
               <span className="text-xs text-gray-800 mt-1">
                 {Object.entries(totals.gownSizes || {})
@@ -332,7 +570,7 @@ export function CheckReturnTab() {
                 {totals.hood}
               </span>
               <span className="text-base text-black mt-1">
-                Returned Hood
+                {returnToggle ? "Returned Hood" : "Unreturned Hood"}
               </span>
               <span className="text-xs text-black mt-1">
                 {Object.entries(totals.hoodColors || {})
