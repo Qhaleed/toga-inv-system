@@ -4,7 +4,8 @@ import MyChart from "../../components/ui/my-chart";
 import StocksGownChart from "../../components/ui/StocksGownChart";
 import StocksTasselChart from "../../components/ui/StocksTasselChart";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
-import CapCategoryChart from "@/components/ui/CapCategoryChart";
+import StocksCapChart from "@/components/ui/StocksCapChart";
+import StocksHoodChart from "@/components/ui/StocksHoodChart";
 
 export function StocksTab() {
   const [totals, setTotals] = useState({
@@ -114,23 +115,23 @@ export function StocksTab() {
 
   let allBtn = all
     ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let capBtn = cap
     ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let tasselBtn = tassel
     ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let gownBtn = gown
     ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let hoodBtn = hood
     ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   return (
     <>
@@ -149,13 +150,14 @@ export function StocksTab() {
         <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
           <div className="flex-1 flex flex-col items-center">
             <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center h-[520px] w-full mb-4">
-              {cap && <CapCategoryChart />}
               {all && <MyChart />}
+              {cap && <StocksCapChart />}
               {tassel && <StocksTasselChart />}
               {gown && <StocksGownChart />}
+              {hood && <StocksHoodChart/>}
             </div>
             <div className="w-full h-10 flex justify-between items-center">
-              <div className="w-[700px] h-10 flex justify-between items-center ml-3 border border-red-500">
+              <div className="w-[700px] h-10 flex justify-between items-center ml-3">
                 <button className={allBtn} onClick={allToggle}>
                   All
                 </button>
