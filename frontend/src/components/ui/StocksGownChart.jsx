@@ -1,6 +1,6 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import SizesChartTooltip from "./SizesChartTooltip";
+import GownChartTooltip from "./StocksGownChartTooltip";
 
 const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 const COLOR = "#2563eb";
@@ -20,8 +20,8 @@ export default function SizesChart({ data = exampleData }) {
   return (
     <div className="w-full flex flex-col items-center">
       <BarChart // dol todo necita ase adjust si man resize tu
-        width={500} // aki man adjust
-        height={320} // and este
+        width={900} // aki man adjust
+        height={520} // and este
         data={data}
         margin={{ top: 24, right: 24, left: 24, bottom: 24 }} // este tamen
         className="w-full"
@@ -48,7 +48,7 @@ export default function SizesChart({ data = exampleData }) {
           isAnimationActive
         />
         <Tooltip // el tooltip amo se ta lamma kunel hover data effect disuyu
-          content={<SizesChartTooltip />}
+          content={<GownChartTooltip />}
           cursor={{ fill: "#e0e7ef", opacity: 0.3 }} //style
         />
       </BarChart>
