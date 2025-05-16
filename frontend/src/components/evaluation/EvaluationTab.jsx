@@ -2,7 +2,7 @@ import RedButton from "../../assets/icons/red-x-icon.svg?react";
 import { useRef } from "react";
 import { useState } from "react";
 
-const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
+const EvaluationTab = ({ value, evalTab, setEvaluationTab, onUpdate }) => {
   const formRef = useRef(null);
 
   const exit = () => {
@@ -62,7 +62,6 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    exit();
     try {
       const response = await fetch("http://localhost:5001/evaluation", {
         method: "POST",
@@ -89,10 +88,13 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
           inventory_id: value.inventory_id,
         }),
       });
-    } catch (error) {
+    exit(); // sets tab to hidden
+    window.location.reload(); //reload para mag update ang evaluation status (sorry not maintindihan ang patch)
+    } 
+    catch (error) {
       console.error("Evaluation error:", error);
-    }
   };
+};
 
   const handleChange = (e) => {
     //kinuha ko lang sa code ng registerCard
