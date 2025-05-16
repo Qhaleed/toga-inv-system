@@ -62,11 +62,10 @@ router.post('/', async (req, res) => {
         }
         const updateEvaluationStatus = await db.updateEvaluationStatus(inventory_id, "evaluated");
         console.log("Evaluation saved successfully.");
+        res.status(200).json({ message: "Evaluation saved successfully." });
     } catch (error) {
         console.log("error in evaluation table: ", error); //debug error
-    }
-    
-
+    }   
 
 });
 
