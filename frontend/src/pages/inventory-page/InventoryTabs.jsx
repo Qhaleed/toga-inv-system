@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Profile from "../../assets/images/dump.jpg";
 import MyChart from "../../components/ui/my-chart";
+import StocksGownChart from "../../components/ui/StocksGownChart";
+import StocksTasselChart from "../../components/ui/StocksTasselChart";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
+
 export function StocksTab() {
   const [totals, setTotals] = useState({
     cap: 0,
@@ -27,23 +30,23 @@ export function StocksTab() {
           gownSizes = {},
           hoodColors = {};
         data.forEach((item) => {
-          // Cap: count by size if has_cap is 1
+          // Cap: count by size if has_cap is 1 kumbaga true
           if (item.has_cap === 1 && item.toga_size) {
             cap += 1;
             capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
           }
-          // Tassel: count by color
+          // Tassel: count ng color
           if (item.tassel_color) {
             tassel += 1;
             tasselColors[item.tassel_color] =
               (tasselColors[item.tassel_color] || 0) + 1;
           }
-          // Gown: count by size
+          // Gown: count ng  size
           if (item.toga_size) {
             gown += 1;
             gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
           }
-          // Hood: count by color
+          // Hood:counter color
           if (item.hood_color) {
             hood += 1;
             hoodColors[item.hood_color] =
@@ -65,6 +68,69 @@ export function StocksTab() {
 
   const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
 
+  const [all, setAll] = useState(true);
+  const [cap, setCap] = useState(false);
+  const [tassel, setTassel] = useState(false);
+  const [gown, setGown] = useState(false);
+  const [hood, setHood] = useState(false);
+
+  const allToggle = () => {
+      setAll(true);
+      setCap(false);
+      setTassel(false);
+      setGown(false);
+      setHood(false);
+  }
+
+  const capToggle = () => {
+      setAll(false);
+      setCap(true);
+      setTassel(false);
+      setGown(false);
+      setHood(false);
+  }
+  const tasselToggle = () => {
+      setAll(false);
+      setCap(false);
+      setTassel(true);
+      setGown(false);
+      setHood(false);
+  }
+  const gownToggle = () => {
+      setAll(false);
+      setCap(false);
+      setTassel(false);
+      setGown(true);
+      setHood(false);
+  }
+  const hoodToggle = () => {
+      setAll(false);
+      setCap(false);
+      setTassel(false);
+      setGown(false);
+      setHood(true);
+  }
+
+  let allBtn = all ? 
+                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
+                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+
+  let capBtn = cap ? 
+                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
+                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+  
+  let tasselBtn = tassel ? 
+                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
+                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+  
+  let gownBtn = gown ? 
+                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
+                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+
+  let hoodBtn = hood ? 
+                    "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium" : 
+                    "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500";
+
   return (
     <>
       {" "}
@@ -81,12 +147,42 @@ export function StocksTab() {
       <div className="w-full relative h-screen p-8 flex flex-col items-center">
         <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
           <div className="flex-1 flex flex-col items-center">
-            <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
-              <MyChart />
+            <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center h-[520px] w-full mb-4">
+              {all && <MyChart />}
+              {tassel && <StocksTasselChart />}
+              {gown && <StocksGownChart />}
             </div>
-            <div className="w-full h-8 flex justify-end items-center">
+            <div className="w-full h-10 flex justify-between items-center">
+              <div className="w-[700px] h-10 flex justify-between items-center ml-3 border border-red-500">
+                <button className={allBtn}
+                onClick = {allToggle}>
+                  All
+                </button>
+                <button className={capBtn}
+                onClick = {capToggle}>
+                  Cap
+                </button>
+                <button className={tasselBtn}
+                onClick = {tasselToggle}>
+                  Tassel
+                </button>
+                <button className={gownBtn}
+                onClick = {gownToggle}>
+                  Gown
+                </button>
+                <button className={hoodBtn}
+                onClick = {hoodToggle}>
+                  Hood
+                </button>
+              </div>
               <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
-                  <h3 className="pl-3">Inventory Distribution</h3>
+                <h3 className="pl-3">
+                  {all && "All Stocks"}
+                  {cap && "Cap Stocks"}
+                  {tassel && "Tassel Stocks"}
+                  {gown && "Gown Stocks"}
+                  {hood && "Hood Stocks"}
+                </h3>
               </div>
             </div>
           </div >
@@ -143,9 +239,7 @@ export function StocksTab() {
               <span className="text-3xl font-bold text-black">
                 {totals.hood}
               </span>
-              <span className="text-base text-black mt-1">
-                Available Hood
-              </span>
+              <span className="text-base text-black mt-1">Available Hood</span>
               <span className="text-xs text-black mt-1">
                 {Object.entries(totals.hoodColors || {})
                   .map(([color, count]) => `${color}: ${count}`)
