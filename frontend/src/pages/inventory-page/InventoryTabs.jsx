@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Profile from "../../assets/images/dump.jpg";
 import MyChart from "../../components/ui/my-chart";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
+import SizesChart from "../../components/ui/SizesChart";
+
 export function StocksTab() {
   const [totals, setTotals] = useState({
     cap: 0,
@@ -27,23 +29,23 @@ export function StocksTab() {
           gownSizes = {},
           hoodColors = {};
         data.forEach((item) => {
-          // Cap: count by size if has_cap is 1
+          // Cap: count by size if has_cap is 1 kumbaga true
           if (item.has_cap === 1 && item.toga_size) {
             cap += 1;
             capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
           }
-          // Tassel: count by color
+          // Tassel: count ng color
           if (item.tassel_color) {
             tassel += 1;
             tasselColors[item.tassel_color] =
               (tasselColors[item.tassel_color] || 0) + 1;
           }
-          // Gown: count by size
+          // Gown: count ng  size
           if (item.toga_size) {
             gown += 1;
             gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
           }
-          // Hood: count by color
+          // Hood:counter color
           if (item.hood_color) {
             hood += 1;
             hoodColors[item.hood_color] =
@@ -87,7 +89,7 @@ export function StocksTab() {
             <span className="text-gray-500 font-bold text-sm">
               Inventory Distribution
             </span>
-          </div >
+          </div>
           {/* Stock Summary Section */}
           <div className="border border-red-500 bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
@@ -141,9 +143,7 @@ export function StocksTab() {
               <span className="text-3xl font-bold text-black">
                 {totals.hood}
               </span>
-              <span className="text-base text-black mt-1">
-                Available Hood
-              </span>
+              <span className="text-base text-black mt-1">Available Hood</span>
               <span className="text-xs text-black mt-1">
                 {Object.entries(totals.hoodColors || {})
                   .map(([color, count]) => `${color}: ${count}`)
@@ -186,9 +186,17 @@ export function StocksTab() {
 }
 export function ItemStatusTab() {
   return (
-    <div className="w-full p-8 text-center text-white text-xl">
-      Item Status Content
-    </div>
+    {
+      /*ADjustlang tu aki jot pati na sizeschart si el graph mismo */
+    },
+    (
+      <div className="w-fit p-8 flex flex-col items-center justify-center border rounded-2xl shadow-md">
+        <h2 className="text-xl font-bold text-[#02327B] mb-4">
+          Sizes ste Size
+        </h2>
+        <SizesChart />
+      </div>
+    )
   );
 }
 
@@ -277,14 +285,16 @@ export function CheckReturnTab() {
             <span className="text-gray-500 font-bold text-sm">
               Inventory Distribution
             </span>
-          </div >
+          </div>
           {/* Stock Summary Section */}
           <div className="border border-red-500 bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
               <span className="text-3xl font-bold text-[#1E40AF]">
                 {totalItems}
               </span>
-              <span className="text-base text-gray-700 mt-1">Total Returned Items</span>
+              <span className="text-base text-gray-700 mt-1">
+                Total Returned Items
+              </span>
             </div>
 
             {/* Add more stock summary items here */}
@@ -331,9 +341,7 @@ export function CheckReturnTab() {
               <span className="text-3xl font-bold text-black">
                 {totals.hood}
               </span>
-              <span className="text-base text-black mt-1">
-                Returned Hood
-              </span>
+              <span className="text-base text-black mt-1">Returned Hood</span>
               <span className="text-xs text-black mt-1">
                 {Object.entries(totals.hoodColors || {})
                   .map(([color, count]) => `${color}: ${count}`)
