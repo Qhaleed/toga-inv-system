@@ -14,7 +14,7 @@ export default function CapCategoryChart({ data = exampleData }) {
   return (
     <div className="w-full flex flex-col items-center">
       <BarChart
-        width={900}
+        width={700}
         height={520}
         data={data}
         margin={{ top: 24, right: 24, left: 24, bottom: 24 }}

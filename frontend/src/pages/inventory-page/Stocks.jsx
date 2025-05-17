@@ -8,8 +8,7 @@ import StocksCapChart from "@/components/ui/StocksCapChart";
 import StocksHoodChart from "@/components/ui/StocksHoodChart";
 
 const Stocks = () => {
-
-const [totals, setTotals] = useState({
+  const [totals, setTotals] = useState({
     cap: 0,
     tassel: 0,
     gown: 0,
@@ -120,24 +119,24 @@ const [totals, setTotals] = useState({
   };
 
   let allBtn = all
-    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
+    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let capBtn = cap
-    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
+    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let tasselBtn = tassel
-    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
+    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let gownBtn = gown
-    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
+    ? "bg-[#02327B] text-white h-full w-24 rounded-lg mr-2 font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   let hoodBtn = hood
-    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
+    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   return (
     <>
@@ -153,17 +152,17 @@ const [totals, setTotals] = useState({
         </span>
       </div>
       <div className="w-full relative h-screen p-8 flex flex-col items-center">
-        <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
+        <div className="w-full flex flex-col 2xl:flex-row items-center gap-8 justify-center mt-10 transition-all ease-out duration-300">
           <div className="flex-1 flex flex-col items-center">
-            <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center h-[520px] w-full mb-4">
+            <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
               {all && <StocksAllChart />}
               {cap && <StocksCapChart />}
               {tassel && <StocksTasselChart />}
               {gown && <StocksGownChart />}
               {hood && <StocksHoodChart />}
             </div>
-            <div className="w-full h-10 flex justify-between items-center">
-              <div className="w-[700px] h-10 flex justify-between items-center ml-3">
+            <div className="w-full h-10 flex justify-between items-center mt-5">
+              <div className="w-[280px] md:w-[350px] lg:w-[500px] xl:w-[600px] h-10 flex justify-start items-center ml-3 transition-all ease-out duration-300">
                 <button className={allBtn} onClick={allToggle}>
                   All
                 </button>
@@ -180,7 +179,7 @@ const [totals, setTotals] = useState({
                   Hood
                 </button>
               </div>
-              <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
+              <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3 w-32">
                 <h3 className="pl-3">
                   {all && "All Stocks"}
                   {cap && "Cap Stocks"}
@@ -192,11 +191,13 @@ const [totals, setTotals] = useState({
             </div>
           </div>
           {/* Stock Summary Section */}
-          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4 border border-red-500">
             {all && (
-              <> {/*IF CLICKED ALL*/}
+              <>
+                {" "}
+                {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#1E40AF]">  
+                  <span className="text-3xl font-bold text-[#1E40AF]">
                     12 {/*CHANGE VALUE LANG HERE*/}
                   </span>
                   <span className="text-sm text-gray-700 mt-1">
@@ -216,22 +217,26 @@ const [totals, setTotals] = useState({
                     12 {/*CHANGE VALUE LANG HERE*/}
                   </span>
                   <span className="text-sm text-[#001d5a] mt-1">
-                   Total Tassel Available
+                    Total Tassel Available
                   </span>
-                  <span className="text-xs text-[#001d5a] mt-1"> {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
-                    {Object.entries(totals.tasselColors || {}) 
+                  <span className="text-xs text-[#001d5a] mt-1">
+                    {" "}
+                    {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
+                    {Object.entries(totals.tasselColors || {})
                       .map(([color, count]) => `${color}: ${count}`)
                       .join(", ")}
                   </span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
-                      12 {/*CHANGE VALUE LANG HERE*/}
+                    12 {/*CHANGE VALUE LANG HERE*/}
                   </span>
                   <span className="text-sm text-gray-800 mt-1">
                     Total Gown Available
                   </span>
-                  <span className="text-xs text-gray-800 mt-1"> {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
+                  <span className="text-xs text-gray-800 mt-1">
+                    {" "}
+                    {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
                     {Object.entries(totals.gownSizes || {})
                       .map(([size, count]) => `${size}: ${count}`)
                       .join(", ")}
@@ -244,7 +249,9 @@ const [totals, setTotals] = useState({
                   <span className="text-sm text-black mt-1">
                     Total Hood Available
                   </span>
-                  <span className="text-xs text-black mt-1"> {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
+                  <span className="text-xs text-black mt-1">
+                    {" "}
+                    {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
                     {Object.entries(totals.hoodColors || {})
                       .map(([color, count]) => `${color}: ${count}`)
                       .join(", ")}
@@ -259,13 +266,15 @@ const [totals, setTotals] = useState({
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
                   <span className="text-sm text-gray-700 mt-1">
-                      Total Cap Available
+                    Total Cap Available
                   </span>
                 </div>
               </>
             )}
             {tassel && (
-              <> {/*IF CLICKED ALL*/}
+              <>
+                {" "}
+                {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
                     10 {/*CHANGE VALUE LANG HERE*/}
@@ -278,46 +287,38 @@ const [totals, setTotals] = useState({
                   <span className="text-3xl font-bold text-[#dadada]">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#dadada] mt-1">
-                  Blue
-                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">Blue</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#001d5a] mt-1">
-                    Maroon
-                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">Maroon</span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-gray-800 mt-1">
-                    Orange
-                  </span>
+                  <span className="text-sm text-gray-800 mt-1">Orange</span>
                 </div>
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-black mt-1">
-                    White
-                  </span>
+                  <span className="text-sm text-black mt-1">White</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-black mt-1">
-                    Yellow
-                  </span>
+                  <span className="text-sm text-black mt-1">Yellow</span>
                 </div>
               </>
             )}
             {gown && (
-              <> {/*IF CLICKED ALL*/}
+              <>
+                {" "}
+                {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
                     10 {/*CHANGE VALUE LANG HERE*/}
@@ -330,62 +331,50 @@ const [totals, setTotals] = useState({
                   <span className="text-3xl font-bold text-[#dadada]">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#dadada] mt-1">
-                    XS
-                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">XS</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
-                   10 {/*CHANGE VALUE LANG HERE*/}
+                    10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#001d5a] mt-1">
-                    S
-                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">S</span>
                 </div>
                 <div className="bg-[#4f89cf] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#001d5a] mt-1">
-                    M
-                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">M</span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-gray-800 mt-1">
-                    L
-                  </span>
+                  <span className="text-sm text-gray-800 mt-1">L</span>
                 </div>
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-black mt-1">
-                    XL
-                  </span>
+                  <span className="text-sm text-black mt-1">XL</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-black mt-1">
-                    2XL
-                  </span>
+                  <span className="text-sm text-black mt-1">2XL</span>
                 </div>
                 <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#dadada]">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#dadada] mt-1">
-                    3XL
-                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">3XL</span>
                 </div>
               </>
             )}
             {hood && (
-              <> {/*IF CLICKED ALL*/}
+              <>
+                {" "}
+                {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
                     10 {/*CHANGE VALUE LANG HERE*/}
@@ -398,48 +387,38 @@ const [totals, setTotals] = useState({
                   <span className="text-3xl font-bold text-[#dadada]">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#dadada] mt-1">
-                  Blue
-                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">Blue</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-[#001d5a] mt-1">
-                    Maroon
-                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">Maroon</span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-gray-800 mt-1">
-                    Orange
-                  </span>
+                  <span className="text-sm text-gray-800 mt-1">Orange</span>
                 </div>
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
                     10 {/*CHANGE VALUE LANG HERE*/}
                   </span>
-                  <span className="text-sm text-black mt-1">
-                    White
-                  </span>
+                  <span className="text-sm text-black mt-1">White</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
                     10 {/*CHANGE VALUE LANG HERE*/}
-                  </span> 
-                  <span className="text-sm text-black mt-1">
-                    Yellow
                   </span>
+                  <span className="text-sm text-black mt-1">Yellow</span>
                 </div>
               </>
             )}
+          </div>
         </div>
-       </div>
         {/* Low Stock Alert Section */}
-        <div className=" absolute  bottom-0 w-full max-w-3xl mt-10">
+        <div className=" absolute bottom-0 w-full max-w-3xl mt-10 hidden">
           <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
             Low Stock Alerts
           </h2>
@@ -466,6 +445,6 @@ const [totals, setTotals] = useState({
       </div>
     </>
   );
-}
+};
 
 export default Stocks;
