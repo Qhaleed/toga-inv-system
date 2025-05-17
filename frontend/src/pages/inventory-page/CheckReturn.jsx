@@ -13,7 +13,7 @@ import MissingHoodChart from "@/components/ui/MissingHoodChart";
 import MissingTasselChart from "@/components/ui/MissingTasselChart";
 
 const CheckReturn = () => {
-    const [totals, setTotals] = useState({
+  const [totals, setTotals] = useState({
     cap: 0,
     tassel: 0,
     gown: 0,
@@ -75,7 +75,10 @@ const CheckReturn = () => {
 
   const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
 
-  const [returnToggle, setReturnToggle] = useState(true); {/*TOGGLE EFFECTS FOR EACH BUTTON*/}
+  const [returnToggle, setReturnToggle] = useState(true);
+  {
+    /*TOGGLE EFFECTS FOR EACH BUTTON*/
+  }
 
   const returnToggler = () => {
     setReturnToggle(true);
@@ -173,7 +176,8 @@ const CheckReturn = () => {
         <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
           <div className="flex-1 flex flex-col items-start">
             <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center h-[520px] w-full mb-4">
-              {returnToggle && all && <ReturnedAllChart />} {/*SWITCHING CHARTS*/}
+              {returnToggle && all && <ReturnedAllChart />}{" "}
+              {/*SWITCHING CHARTS*/}
               {returnToggle && cap && <ReturnedCapChart />}
               {returnToggle && tassel && <ReturnedTasselChart />}
               {returnToggle && gown && <ReturnedGownChart />}
@@ -186,7 +190,9 @@ const CheckReturn = () => {
             </div>
             <div className="w-full h-10 flex justify-between items-center">
               <div className="w-[700px] h-10 flex justify-between items-center ml-3">
-                <button className={allBtn} onClick={allToggle}> {/*BUTTONS*/}
+                <button className={allBtn} onClick={allToggle}>
+                  {" "}
+                  {/*BUTTONS*/}
                   All
                 </button>
                 <button className={capBtn} onClick={capToggle}>
@@ -204,7 +210,8 @@ const CheckReturn = () => {
               </div>
               <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
                 <h3 className="pl-3">
-                  {returnToggle && all && "Returned All"} {/*CHANGE NAME KUNG ANONG MODE*/}
+                  {returnToggle && all && "Returned All"}{" "}
+                  {/*CHANGE NAME KUNG ANONG MODE*/}
                   {returnToggle && cap && "Returned Cap"}
                   {returnToggle && tassel && "Returned Tassel"}
                   {returnToggle && gown && "Returned Gown"}
@@ -229,71 +236,339 @@ const CheckReturn = () => {
             </div>
           </div>
           {/* Stock Summary Section */}
-          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#1E40AF]">
-                {totalItems}
-              </span>
-              <span className="text-sm text-gray-700 mt-1">
-                {returnToggle
-                  ? "Total Returned Item"
-                  : "Total Missing Items"}
-              </span>
-            </div>
 
-            {/* Add more stock summary items here */}
-            <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#dadada]">
-                {totals.cap}
-              </span>
-              <span className="text-sm text-[#dadada] mt-1">
-                {returnToggle ? "Returned Cap" : "Missing Cap"}
-              </span>
-              <span className="text-xs text-[#dadada] mt-1">
-                {Object.entries(totals.capSizes || {})
-                  .map(([size, count]) => `${size}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
-            <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#001d5a]">
-                {totals.tassel}
-              </span>
-              <span className="text-sm text-[#001d5a] mt-1">
-                {returnToggle ? "Returned Tassel" : "Missing Tassel"}
-              </span>
-              <span className="text-xs text-[#001d5a] mt-1">
-                {Object.entries(totals.tasselColors || {})
-                  .map(([color, count]) => `${color}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
-            <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-gray-800">
-                {totals.gown}
-              </span>
-              <span className="text-sm text-gray-800 mt-1">
-                {returnToggle ? "Returned Gown" : "Missing Gown"}
-              </span>
-              <span className="text-xs text-gray-800 mt-1">
-                {Object.entries(totals.gownSizes || {})
-                  .map(([size, count]) => `${size}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
-            <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-black">
-                {totals.hood}
-              </span>
-              <span className="text-sm text-black mt-1">
-                {returnToggle ? "Returned Hood" : "Missing Hood"}
-              </span>
-              <span className="text-xs text-black mt-1">
-                {Object.entries(totals.hoodColors || {})
-                  .map(([color, count]) => `${color}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
+          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {all && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    {returnToggle 
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    {returnToggle
+                      ? "Total Returned Item"
+                      : "Total Missing Items"}
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    {returnToggle ? "Returned Cap" : "Missing Cap"}
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    {returnToggle ? "Returned Tassel" : "Missing Tassel"}
+                  </span>
+                  <span className="text-xs text-[#001d5a] mt-1">
+                    {Object.entries(totals.tasselColors || {})
+                      .map(([color, count]) => `${color}: ${count}`)
+                      .join(", ")}
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    {returnToggle ? "Returned Gown" : "Missing Gown"}
+                  </span>
+                  <span className="text-xs text-gray-800 mt-1">
+                    {Object.entries(totals.gownSizes || {})
+                      .map(([size, count]) => `${size}: ${count}`)
+                      .join(", ")}
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    {returnToggle ? "Returned Hood" : "Missing Hood"}
+                  </span>
+                  <span className="text-xs text-black mt-1">
+                    {Object.entries(totals.hoodColors || {})
+                      .map(([color, count]) => `${color}: ${count}`)
+                      .join(", ")}
+                  </span>
+                </div>
+              </>
+            )}
+            {cap && (
+              <>
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                      {returnToggle
+                      ? "Total Returned Cap"
+                      : "Total Missing Cap"}
+                  </span>
+                </div>
+              </>
+            )}
+            {tassel && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    {returnToggle 
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    {returnToggle
+                      ? "Total Returned Tassel"
+                      : "Total Missing tassel"}
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    {returnToggle ? "Returned Blue" : "Missing Blue"}
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    {returnToggle ? "Returned Maroon" : "Missing Maroon"}
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    {returnToggle ? "Returned Orange" : "Missing Orange"}
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    {returnToggle ? "Returned White" : "Missing White"}
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    {returnToggle ? "Returned Yellow" : "Missing Yellow"}
+                  </span>
+                </div>
+              </>
+            )}
+            {gown && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    {returnToggle 
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    {returnToggle
+                      ? "Total Returned Gown"
+                      : "Total Missing Gown"}
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    {returnToggle ? "Returned XS" : "Missing XS"}
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    {returnToggle ? "Returned S" : "Missing S"}
+                  </span>
+                </div>
+                <div className="bg-[#4f89cf] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    {returnToggle ? "Returned M" : "Missing M"}
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    {returnToggle ? "Returned L" : "Missing L"}
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    {returnToggle ? "Returned XL" : "Missing XL"}
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    {returnToggle ? "Returned 2XL" : "Missing 2XL"}
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    {returnToggle ? "Returned 3XL" : "Missing 3XL"}
+                  </span>
+                </div>
+              </>
+            )}
+            {hood && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    {returnToggle 
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    {returnToggle
+                      ? "Total Returned Hood"
+                      : "Total Missing Hood"}
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    {returnToggle ? "Returned Blue" : "Missing Blue"}
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    {returnToggle ? "Returned Maroon" : "Missing Maroon"}
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    {returnToggle ? "Returned Orange" : "Missing Orange"}
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    {returnToggle ? "Returned White" : "Missing White"}
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    {returnToggle
+                      ? 10
+                      : 12
+                    } {/*CHANGE VALUE IF RETURNED OR MISSING*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    {returnToggle ? "Returned Yellow" : "Missing Yellow"}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
         {/* Low Stock Alert Section */}
@@ -324,6 +599,6 @@ const CheckReturn = () => {
       </div>
     </>
   );
-}
- 
+};
+
 export default CheckReturn;

@@ -20,6 +20,11 @@ const [totals, setTotals] = useState({
     hoodColors: {},
   });
 
+  /*  I DID NOT USE THIS FETCH FOR THE DATA FOR THE STOCKS
+   NUMBERS CUZ KAY CLYDE TO, CONTINUE IT NALANG IF EVER OR MODIFY, 
+  YUNG MGA GRAPHS/CHARTS MAHAHANAP LANG SA UI FOLDER KASI STATIC
+   LANG RIN YUNG DATA DOON*/
+
   useEffect(() => {
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
@@ -188,66 +193,251 @@ const [totals, setTotals] = useState({
           </div>
           {/* Stock Summary Section */}
           <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#1E40AF]">
-                {totalItems}
-              </span>
-              <span className="text-base text-gray-700 mt-1">Total Items</span>
-            </div>
-
-            {/* Add more stock summary items here */}
-            <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#dadada]">
-                {totals.cap}
-              </span>
-              <span className="text-base text-[#dadada] mt-1">
-                Available Cap
-              </span>
-              <span className="text-xs text-[#dadada] mt-1">
-                {Object.entries(totals.capSizes || {})
-                  .map(([size, count]) => `${size}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
-            <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-[#001d5a]">
-                {totals.tassel}
-              </span>
-              <span className="text-base text-[#001d5a] mt-1">
-                Available Tassel
-              </span>
-              <span className="text-xs text-[#001d5a] mt-1">
-                {Object.entries(totals.tasselColors || {})
-                  .map(([color, count]) => `${color}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
-            <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-gray-800">
-                {totals.gown}
-              </span>
-              <span className="text-base text-gray-800 mt-1">
-                Available Gown
-              </span>
-              <span className="text-xs text-gray-800 mt-1">
-                {Object.entries(totals.gownSizes || {})
-                  .map(([size, count]) => `${size}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
-            <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
-              <span className="text-3xl font-bold text-black">
-                {totals.hood}
-              </span>
-              <span className="text-base text-black mt-1">Available Hood</span>
-              <span className="text-xs text-black mt-1">
-                {Object.entries(totals.hoodColors || {})
-                  .map(([color, count]) => `${color}: ${count}`)
-                  .join(", ")}
-              </span>
-            </div>
-          </div>
+            {all && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">  
+                    12 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    Total Items Available
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    12 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    Total Cap Available
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    12 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                   Total Tassel Available
+                  </span>
+                  <span className="text-xs text-[#001d5a] mt-1"> {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
+                    {Object.entries(totals.tasselColors || {}) 
+                      .map(([color, count]) => `${color}: ${count}`)
+                      .join(", ")}
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                      12 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    Total Gown Available
+                  </span>
+                  <span className="text-xs text-gray-800 mt-1"> {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
+                    {Object.entries(totals.gownSizes || {})
+                      .map(([size, count]) => `${size}: ${count}`)
+                      .join(", ")}
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    Total Hood Available
+                  </span>
+                  <span className="text-xs text-black mt-1"> {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
+                    {Object.entries(totals.hoodColors || {})
+                      .map(([color, count]) => `${color}: ${count}`)
+                      .join(", ")}
+                  </span>
+                </div>
+              </>
+            )}
+            {cap && (
+              <>
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                      Total Cap Available
+                  </span>
+                </div>
+              </>
+            )}
+            {tassel && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    Total Tassel Available
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                  Blue
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    Maroon
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    Orange
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    White
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    Yellow
+                  </span>
+                </div>
+              </>
+            )}
+            {gown && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    Total Gown Available
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    XS
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                   10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    S
+                  </span>
+                </div>
+                <div className="bg-[#4f89cf] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    M
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    L
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    XL
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    2XL
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                    3XL
+                  </span>
+                </div>
+              </>
+            )}
+            {hood && (
+              <> {/*IF CLICKED ALL*/}
+                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#1E40AF]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-700 mt-1">
+                    Total Hood Available
+                  </span>
+                </div>
+                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#dadada]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#dadada] mt-1">
+                  Blue
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-[#001d5a]">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-[#001d5a] mt-1">
+                    Maroon
+                  </span>
+                </div>
+                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-gray-800">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-gray-800 mt-1">
+                    Orange
+                  </span>
+                </div>
+                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span>
+                  <span className="text-sm text-black mt-1">
+                    White
+                  </span>
+                </div>
+                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-3xl font-bold text-black">
+                    10 {/*CHANGE VALUE LANG HERE*/}
+                  </span> 
+                  <span className="text-sm text-black mt-1">
+                    Yellow
+                  </span>
+                </div>
+              </>
+            )}
         </div>
+       </div>
         {/* Low Stock Alert Section */}
         <div className=" absolute  bottom-0 w-full max-w-3xl mt-10">
           <h2 className="text-lg font-semibold text-[#ffffff] mb-2">

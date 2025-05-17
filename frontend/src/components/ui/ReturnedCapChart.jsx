@@ -7,8 +7,7 @@ const COLOR = "#2563eb";
 
 // Example data for cap category (boolean yes/no)
 const exampleData = [
-  { category: "Yes", count: 34, color: "#2563eb" },
-  { category: "No", count: 12, color: "#1E4FCC" },
+  { category: "Cap", count: 34, color: "#2563eb" },
 ];
 
 export default function CapCategoryChart({ data = exampleData }) {

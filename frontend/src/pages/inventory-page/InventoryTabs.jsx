@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Profile from "../../assets/images/dump.jpg";
-import StocksAllChart from "../../components/ui/StocksAllChart";
-import StocksGownChart from "../../components/ui/StocksGownChart";
-import StocksTasselChart from "../../components/ui/StocksTasselChart";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
 
 import CapDamageTable from "../../components/damage-tables/CapDamageTable";
@@ -19,20 +16,6 @@ import {
   hoodData,
   tasselData,
 } from "../../components/damage-tables/damageData";
-
-import StocksCapChart from "@/components/ui/StocksCapChart";
-import StocksHoodChart from "@/components/ui/StocksHoodChart";
-import ReturnedAllChart from "@/components/ui/ReturnedAllChart";
-import ReturnedCapChart from "@/components/ui/ReturnedCapChart";
-import ReturnedGownChart from "@/components/ui/ReturnedGownChart";
-import ReturnedHoodChart from "@/components/ui/ReturnedHoodChart";
-import ReturnedTasselChart from "@/components/ui/ReturnedTasselChart";
-import MissingAllChart from "@/components/ui/MissingAllChart";
-import MissingCapChart from "@/components/ui/MissingCapChart";
-import MissingGownChart from "@/components/ui/MissingGownChart";
-import MissingHoodChart from "@/components/ui/MissingHoodChart";
-import MissingTasselChart from "@/components/ui/MissingTasselChart";
-import ItemStatusAllChart from "@/components/ui/ItemStatusAllChart";
 import Stocks from "./Stocks";
 import ItemStatus from "./ItemStatus";
 import CheckReturn from "./CheckReturn";
