@@ -191,7 +191,7 @@ const Stocks = () => {
             </div>
           </div>
           {/* Stock Summary Section */}
-          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4 border border-red-500">
+          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4">
             {all && (
               <>
                 {" "}
