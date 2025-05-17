@@ -8,7 +8,7 @@ export default function ReturnedTasselTooltip({ active, payload }) {
       <div className="font-bold mb-1" style={{ color: d.color }}>
         {d.colors}
       </div>
-      <div className="font-bold text-lg">{d.count} pcs</div>
+      <div className="font-bold text-lg">{d.count} returned</div>
     </div>
   );
 }

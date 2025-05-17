@@ -8,7 +8,7 @@ export default function ReturnedGownTooltip({ active, payload }) {
       <div className="font-bold mb-1" style={{ color: d.color }}>
         {d.size}
       </div>
-      <div className="font-bold text-lg">{d.count} pcs</div>
+      <div className="font-bold text-lg">{d.count} returned</div>
     </div>
   );
 }

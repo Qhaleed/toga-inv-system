@@ -8,7 +8,7 @@ export default function ReturnedCapTooltip({ active, payload }) {
       <div className="font-bold mb-1" style={{ color: d.color }}>
         {d.category}
       </div>
-      <div className="font-bold text-lg">{d.count} pcs</div>
+      <div className="font-bold text-lg">{d.count} returned</div>
     </div>
   );
 }
