@@ -1,17 +1,19 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import StocksTasselChartTooltip from "./StocksTasselChartTooltip";
+import ReturnedGownTooltip from "./ReturnedGownTooltip";
 
-const COLORS = ["Blue", "Maroon", "Orange", "White", "Yellow"];
+const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 const COLOR = "#2563eb";
 
 // hardcoded datas di ko muna kinuha sa fethch
 const exampleData = [
-  { colors: "Blue", count: 5, color: "#2563EB" },
-  { colors: "Maroon", count: 12, color: "#1E4FCC" },
-  { colors: "Orange", count: 20, color: "#3A78F0" },
-  { colors: "White", count: 18, color: "#5B91F3" },
-  { colors: "Yellow", count: 10, color: "#7DAAF6" },
+  { size: "XS", count: 5, color: "#2563EB"},
+  { size: "S", count: 12, color: "#1E4FCC"},
+  { size: "M", count: 20, color: "#3A78F0" },
+  { size: "L", count: 18, color: "#5B91F3" },
+  { size: "XL", count: 10, color: "#7DAAF6" },
+  { size: "2XL", count: 7, color: "#2563EB" },
+  { size: "3XL", count: 2, color: "#1E4FCC" },
 ];
 
 export default function SizesChart({ data = exampleData }) {
@@ -30,7 +32,7 @@ export default function SizesChart({ data = exampleData }) {
           stroke="#e5e7eb"
         />
         <XAxis
-          dataKey="colors"
+          dataKey="size"
           tickLine={false}
           tickMargin={10}
           axisLine={false}
@@ -46,7 +48,7 @@ export default function SizesChart({ data = exampleData }) {
           isAnimationActive
         />
         <Tooltip // el tooltip amo se ta lamma kunel hover data effect disuyu
-          content={<StocksTasselChartTooltip />}
+          content={<ReturnedGownTooltip />}
           cursor={{ fill: "#e0e7ef", opacity: 0.3 }} //style
         />
       </BarChart>

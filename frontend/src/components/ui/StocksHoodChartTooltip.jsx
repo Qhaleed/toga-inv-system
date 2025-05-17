@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function StocksTassselChartTooltip({ active, payload }) {
+export default function StocksHoodChartTooltip({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
   const d = payload[0].payload;
   return (

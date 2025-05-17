@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function StocksCapTooltip({ active, payload }) {
+export default function ReturnedCapTooltip({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
   const d = payload[0].payload;
   return (

@@ -7,13 +7,13 @@ const COLOR = "#2563eb";
 
 // hardcoded datas di ko muna kinuha sa fethch
 const exampleData = [
-  { size: "XS", count: 5, color: COLOR },
-  { size: "S", count: 12, color: COLOR },
-  { size: "M", count: 20, color: COLOR },
-  { size: "L", count: 18, color: COLOR },
-  { size: "XL", count: 10, color: COLOR },
-  { size: "2XL", count: 7, color: COLOR },
-  { size: "3XL", count: 2, color: COLOR },
+  { size: "XS", count: 5, color: "#2563EB"},
+  { size: "S", count: 12, color: "#1E4FCC"},
+  { size: "M", count: 20, color: "#3A78F0" },
+  { size: "L", count: 18, color: "#5B91F3" },
+  { size: "XL", count: 10, color: "#7DAAF6" },
+  { size: "2XL", count: 7, color: "#2563EB" },
+  { size: "3XL", count: 2, color: "#1E4FCC" },
 ];
 
 export default function SizesChart({ data = exampleData }) {

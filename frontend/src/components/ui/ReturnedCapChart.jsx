@@ -1,6 +1,6 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import StocksCapTooltip from "./StocksCapTooltip";
+import ReturnedCapTooltip from "./ReturnedCapTooltip";
 
 const CAP_CATEGORIES = ["Yes", "No"];
 const COLOR = "#2563eb";
@@ -43,7 +43,7 @@ export default function CapCategoryChart({ data = exampleData }) {
           isAnimationActive
         />
         <Tooltip
-          content={<StocksCapTooltip />}
+          content={<ReturnedCapTooltip />}
           cursor={{ fill: "#e0e7ef", opacity: 0.3 }}
         />
       </BarChart>
