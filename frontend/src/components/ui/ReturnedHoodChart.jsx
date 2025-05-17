@@ -1,6 +1,6 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import StocksHoodChartTooltip from "./StocksHoodChartTooltip";
+import ReturnedHoodTooltip from "./ReturnedHoodTooltip";
 
 const COLORS = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const COLOR = "#2563eb";
@@ -46,7 +46,7 @@ export default function SizesChart({ data = exampleData }) {
           isAnimationActive
         />
         <Tooltip // el tooltip amo se ta lamma kunel hover data effect disuyu
-          content={<StocksHoodChartTooltip />}
+          content={<ReturnedHoodTooltip />}
           cursor={{ fill: "#e0e7ef", opacity: 0.3 }} //style
         />
       </BarChart>

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ReturnedTasselTooltip({ active, payload }) {
+export default function ReturnedHoodTooltip({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
   const d = payload[0].payload;
   return (
@@ -8,7 +8,7 @@ export default function ReturnedTasselTooltip({ active, payload }) {
       <div className="font-bold mb-1" style={{ color: d.color }}>
         {d.colors}
       </div>
-      <div className="font-bold text-lg">{d.count} returned</div>
+      <div className="font-bold text-lg">{d.count} pcs</div>
     </div>
   );
 }
