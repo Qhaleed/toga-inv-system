@@ -195,11 +195,6 @@ const ItemStatus = () => {
                   <span className="text-sm text-[#dadada] mt-1">
                     Cap Status
                   </span>
-                  <span className="text-xs text-[#dadada] mt-1">
-                    {Object.entries(totals.capSizes || {})
-                      .map(([size, count]) => `${size}: ${count}`)
-                      .join(", ")}
-                  </span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">

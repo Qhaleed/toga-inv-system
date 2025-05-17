@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ItemStatusTooltip({ active, payload }) {
+export default function ItemStatusAllTooltip({ active, payload }) {
   if (!active || !payload || !payload.length) return null;
   const d = payload[0].payload;
   return (
