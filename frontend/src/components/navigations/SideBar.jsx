@@ -66,9 +66,9 @@ const SideBar = ({
           } catch {
             // Not JSON, ignore
           }
-          setAdminName("Fetch error");
+          setAdminName("Bug log in pero nasa inside ka parin");
           setAdminRole(errorMsg);
-          onAdminName && onAdminName("Fetch error");
+          onAdminName && onAdminName("Bug log in pero nasa inside ka parin");
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }

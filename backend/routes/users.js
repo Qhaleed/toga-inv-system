@@ -34,7 +34,10 @@ router.get("/", async (req, res) => {
       course: user.course, // Include course
     });
   } catch (err) {
-    return res.status(401).json({ error: "Invalid token" });
+    return res.status(401).json({
+      error:
+        "di ka logged in && dapat naka protected route para 'di magexist error",
+    });
   }
 });
 
