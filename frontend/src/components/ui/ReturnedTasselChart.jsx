@@ -18,7 +18,7 @@ export default function SizesChart({ data = exampleData }) {
   return (
     <div className="w-full flex flex-col items-center">
       <BarChart // dol todo necita ase adjust si man resize tu
-        width={900} // aki man adjust
+        width={700} // aki man adjust
         height={520} // and este
         data={data}
         margin={{ top: 24, right: 24, left: 24, bottom: 24 }} // este tamen
