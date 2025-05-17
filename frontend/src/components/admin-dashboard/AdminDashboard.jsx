@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GroupBarChart } from "@/components/ui/GroupBarChart";
 import { RadialChart } from "../ui/radialchart";
@@ -21,11 +21,28 @@ import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
 import StudentConcernsModal from "./StudentConcernsModal";
+import { set } from "date-fns";
 
 function AdminDashboard() {
   const navigate = useNavigate();
   const [showConcernModal, setShowConcernModal] = useState(false);
   const [selectedConcern, setSelectedConcern] = useState(null);
+  //default is 0 since need number ang value not string
+  const [totalPending, setTotalPending] = useState(0); //state for total pending
+  const [totalEvaluated, setTotalEvaluated] = useState(0); //state for total evaluated
+  const [totalReservation, setTotalReservation] = useState(0); //state for total reservation
+
+    //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
+useEffect(() => {
+  fetch("http://localhost:5001/inventory")
+    .then((res) => res.json())
+    .then((data) => {
+      setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
+      setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
+      setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
+    });
+}, []);
+  
   // hardcoded muna to
   const concerns = [
     {
@@ -141,7 +158,7 @@ function AdminDashboard() {
                 </p>
               </div>
               <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black text-[#102F5E] w-full">
-                51
+                {totalReservation}
               </div>
               <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
@@ -181,7 +198,7 @@ function AdminDashboard() {
                 </p>
               </div>
               <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black text-[#102F5E] w-full">
-                143
+                {totalPending}
               </div>
               <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
@@ -221,7 +238,7 @@ function AdminDashboard() {
                 </p>
               </div>
               <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black text-[#102F5E] w-full">
-                4
+                {totalEvaluated}
               </div>
               <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
