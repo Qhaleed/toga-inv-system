@@ -27,7 +27,7 @@ const PendingApproval = () => {
         }
         const data = await res.json();
         console.log("Fetched data:", data);
-        setFirstName(data.name);
+        setFirstName(data.first_name || data.name || "Guest");
       })
       .catch(() => setFirstName("Guest"));
   }, []);

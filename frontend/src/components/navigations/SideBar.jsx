@@ -75,11 +75,22 @@ const SideBar = ({
         return res.json();
       })
       .then((data) => {
-        if (data && data.name && data.role) {
-          setAdminName(data.name);
+        // Prefer full name if available, otherwise fallback to first_name
+        let displayName = "";
+        if (data) {
+          if (data.name) {
+            displayName = data.name;
+          } else if (data.first_name && data.surname) {
+            displayName = `${data.first_name} ${data.surname}`;
+          } else if (data.first_name) {
+            displayName = data.first_name;
+          }
+        }
+        if (displayName && data.role) {
+          setAdminName(displayName);
           setAdminRole(data.role);
-          onAdminName && onAdminName(data.name);
-        } else if (data) {
+          onAdminName && onAdminName(displayName);
+        } else {
           setAdminName("No user found");
           setAdminRole("N/A");
           onAdminName && onAdminName("No user found");
@@ -259,9 +270,11 @@ const SideBar = ({
             className="min-w-full md:w-11/12 md:scale-100 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <div className="relative w-full flex flex-col justify-between md:w-full">
-              <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
-                ITEM STATUS
-              </h4>
+              {activeTab !== "student-home" && (
+                <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
+                  ITEM STATUS
+                </h4>
+              )}
               {activeTab === "evaluation" ? (
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
