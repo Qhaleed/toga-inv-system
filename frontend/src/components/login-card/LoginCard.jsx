@@ -15,7 +15,7 @@ function LoginCard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Show loader when login starts
+    setLoading(true);
     try {
       const response = await fetch("api/auth/login", {
         method: "POST",
@@ -30,7 +30,7 @@ function LoginCard() {
         localStorage.setItem("userRole", data.role);
 
         setTimeout(() => {
-          setLoading(false); // Hide loader after navigation
+          setLoading(false);
           if (data.role === "admin") {
             navigate("/admin-dashboard");
           } else {
@@ -39,11 +39,12 @@ function LoginCard() {
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Wrong email or password.");
+        setError(errorData.message || "Login failed. Please try again.");
         setLoading(false);
       }
-    } catch {
-      setError("Error connecting to the server. NO DATABASE NIGGAS .");
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Connection error. Please check your internet connection.");
       setLoading(false);
     }
   };

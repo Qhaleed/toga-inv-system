@@ -23,9 +23,8 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   return (
     <div
       ref={ref}
-      className={`relative w-[30%] inline ${
-        disabled ? "pointer-events-none opacity-60" : ""
-      }`}
+      className={`relative w-[30%] inline ${disabled ? "pointer-events-none opacity-60" : ""
+        }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -83,11 +82,10 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150$${
-                  opt === value
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150$${opt === value
                     ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
                     : ""
-                }`}
+                  }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",
@@ -166,14 +164,15 @@ const GridView = ({
   tasselOptions = [],
   hoodOptions = [],
   gownOptions = [],
-  handleEditClick = () => {},
-  handleEditChange = () => {},
-  handleSave = () => {},
-  handleCancel = () => {},
-  setHoveredEyeId = () => {},
-  setPopupMode = () => {},
-  setPopupUser = () => {},
-  setPopupOpen = () => {},
+  handleEditClick = () => { },
+  handleEditChange = () => { },
+  handleSave = () => { },
+  handleCancel = () => { },
+  handleDelete = () => { },
+  setHoveredEyeId = () => { },
+  setPopupMode = () => { },
+  setPopupUser = () => { },
+  setPopupOpen = () => { },
 }) => {
   return (
     <div className="w-full animate-fade-in" style={{ height: "80vh" }}>
@@ -347,11 +346,15 @@ const GridView = ({
                   >
                     <Table className="w-6" />
                   </button>
+
+                  {/* Delete button */}
                   <button
                     className="w-full h-9 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-105 ml-2 text-base"
                     style={{ minWidth: 0, background: "#C0392B" }}
                     onClick={() => {
-                      /* implement delete logic here */
+                      if (window.confirm(`Are you sure you want to delete ${db.studentname}'s records?`)) {
+                        handleDelete(db.id);
+                      }
                     }}
                   >
                     <Trash className="w-5" />

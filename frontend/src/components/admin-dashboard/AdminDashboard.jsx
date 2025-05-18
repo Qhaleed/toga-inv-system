@@ -21,7 +21,6 @@ import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
 import StudentConcernsModal from "./StudentConcernsModal";
-import { set } from "date-fns";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -31,18 +30,51 @@ function AdminDashboard() {
   const [totalPending, setTotalPending] = useState(0); //state for total pending
   const [totalEvaluated, setTotalEvaluated] = useState(0); //state for total evaluated
   const [totalReservation, setTotalReservation] = useState(0); //state for total reservation
+  const [totalStock, setTotalStock] = useState(0); // state for total stock
+  const [items, setItems] = useState([]); // state for items data
+  const [inventoryData, setInventoryData] = useState([]); // state to store all inventory data
+  const [latestRegistrations, setLatestRegistrations] = useState([]); // state for latest registrations
 
-    //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
-useEffect(() => {
-  fetch("http://localhost:5001/inventory")
-    .then((res) => res.json())
-    .then((data) => {
-      setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
-      setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
-      setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
-    });
-}, []);
-  
+  //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
+  useEffect(() => {
+    // Fetch inventory data
+    fetch("http://localhost:5001/inventory")
+      .then((res) => res.json())
+      .then((data) => {
+        setInventoryData(data); // Store all inventory data
+        setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
+        setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
+        setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
+
+        // Get latest 4 registrations based on rent_date
+        const sortedRegistrations = [...data]
+          .filter((item) => item.rent_date) // Only items with a rent_date
+          .sort((a, b) => new Date(b.rent_date) - new Date(a.rent_date)) // Sort by date (newest first)
+          .slice(0, 4); // Get only the first 4
+
+        setLatestRegistrations(sortedRegistrations);
+      });
+
+    // Fetch items data
+    fetch("http://localhost:5001/items")
+      .then((res) => res.json())
+      .then((data) => {
+        setItems(data);
+        // Calculate total stock by summing up the quantities of all items
+        const totalQty = data.reduce((total, item) => total + item.quantity, 0);
+        setTotalStock(totalQty);
+      });
+  }, []);
+
+  // Group items by type for chart display
+  const itemsByType = items.reduce((acc, item) => {
+    if (!acc[item.item_type]) {
+      acc[item.item_type] = 0;
+    }
+    acc[item.item_type] += item.quantity;
+    return acc;
+  }, {});
+
   // hardcoded muna to
   const concerns = [
     {
@@ -118,7 +150,7 @@ useEffect(() => {
                 </p>
               </div>
               <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black  text-[#102F5E] w-full">
-                12
+                {totalStock}
               </div>
               <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
@@ -259,7 +291,7 @@ useEffect(() => {
       <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-4 px-4 lg:px-6">
         <div className="bg-white rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px] transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl  outline-none">
           <span className="text-black font-semibold text-lg">
-            Graph to becontinued hahahahahhahahaha
+            Graph to be continued
           </span>
         </div>
         <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] outline-none">
@@ -281,92 +313,61 @@ useEffect(() => {
             </h3>
             <button
               className="text-xs text-blue-600 font-semibold hover:underline focus:underline transition"
-              onClick={() => alert("Show all new users")}
+              onClick={() => navigate("/reservation")}
             >
               View All
             </button>
           </div>
           <ul className="flex flex-col gap-3">
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Donald+Lee"
-                alt="Donald Lee"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Donald Lee
-                </span>
-                <span className="text-xs text-gray-400 truncate">
-                  2 min ago
-                </span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Biology (BSBio)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Magang+Magang"
-                alt="Magang Magang"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Magang Magang
-                </span>
-                <span className="text-xs text-gray-400 truncate">
-                  10 min ago
-                </span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Computer Science (BSCS)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Gold+Neger"
-                alt="Gold Neger"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Gold Neger
-                </span>
-                <span className="text-xs text-gray-400 truncate">1 hr ago</span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Accountancy (BSA)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
-            <li className="flex items-center gap-3 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Johnny+Sins"
-                alt="Johnny Sins"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Johnny Sins
-                </span>
-                <span className="text-xs text-gray-400 truncate">2 hr ago</span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Education (BSEd)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
+            {latestRegistrations.length > 0 ? (
+              latestRegistrations.map((user, index) => {
+                // Calculate time difference
+                const rentDate = new Date(user.rent_date);
+                const now = new Date();
+                const diffTime = Math.abs(now - rentDate);
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor((diffTime / (1000 * 60 * 60)) % 24);
+                const diffMinutes = Math.floor((diffTime / (1000 * 60)) % 60);
+
+                let timeAgo;
+                if (diffDays > 0) {
+                  timeAgo = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+                } else if (diffHours > 0) {
+                  timeAgo = `${diffHours} hr${diffHours > 1 ? 's' : ''} ago`;
+                } else {
+                  timeAgo = `${diffMinutes} min${diffMinutes > 1 ? 's' : ''} ago`;
+                }
+
+                // Create full name for avatar
+                const fullName = `${user.first_name} ${user.surname}`;
+
+                return (
+                  <li key={index} className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${user.first_name}+${user.surname}`}
+                      alt={fullName}
+                      className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
+                    />
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <span className="font-semibold text-gray-800 truncate">
+                        {fullName}
+                      </span>
+                      <span className="text-xs text-gray-400 truncate">
+                        {timeAgo}
+                      </span>
+                      <span className="text-xs text-blue-700 font-medium truncate">
+                        {user.course}
+                      </span>
+                    </div>
+                    <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                      New
+                    </span>
+                  </li>
+                );
+              })
+            ) : (
+              <li className="text-center py-4 text-gray-500">No recent registrations found</li>
+            )}
           </ul>
         </div>
 

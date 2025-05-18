@@ -3,7 +3,7 @@ import Table from "../common/Table";
 import SideBar from "../navigations/SideBar";
 import NavBar from "../navigations/NavBar";
 import AdminDashboard from "./AdminDashboard"; // Import the AdminDashboard component
-import profilePic from "@/assets/images/profilepicture.jpg";
+// import profilePic from "@/assets/images/profilepicture.jpg";
 
 const AdminDashboardCard = () => {
   // States for grid and modifyTable
@@ -15,14 +15,14 @@ const AdminDashboardCard = () => {
 
   const handleAdminName = useCallback((name) => setAdminName(name), []);
   const firstName = adminName.split(" ")[0];
+  console.log(firstName)
 
   return (
     <div
-      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
-        sidebarOpen
-          ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr] trans"
-          : "md:grid-cols-1"
-      }`}
+      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${sidebarOpen
+        ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr] trans"
+        : "md:grid-cols-1"
+        }`}
     >
       {/* Sidebar: left on desktop, hidden on mobile */}
       {sidebarOpen && (

@@ -259,6 +259,44 @@ const Rows = ({
     );
   };
 
+  const handleDelete = (id) => {
+    console.log("Delete button clicked for ID:", id);
+
+    fetch(`http://localhost:5001/inventory/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache",
+      },
+    })
+      .then((response) => {
+        console.log("Delete response status:", response.status);
+        if (!response.ok) {
+          throw new Error("Network response was not ok: " + response.status);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Delete successful:", data);
+
+        // Remove the deleted item from both state arrays
+        setDashboard(prev => prev.filter(item => item.id !== id));
+        setOriginalDashboard(prev => prev.filter(item => item.id !== id));
+
+        // Clear edit state if the deleted item was being edited
+        if (editId === id) {
+          setEditId(null);
+          setEditData({});
+        }
+
+        alert("Item deleted successfully!");
+      })
+      .catch((error) => {
+        console.error("Error deleting inventory item:", error);
+        alert("Failed to delete the item: " + error.message);
+      });
+  };
+
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
@@ -320,6 +358,7 @@ const Rows = ({
         handleEditChange={handleEditChange}
         handleSave={handleSave}
         handleCancel={handleCancel}
+        handleDelete={handleDelete}
         setHoveredEyeId={setHoveredEyeId}
         setPopupMode={setPopupMode}
         setPopupUser={setPopupUser}
@@ -492,7 +531,9 @@ const Rows = ({
                               <button
                                 className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
                                 onClick={() => {
-                                  // TODO: implement delete logic for column view
+                                  if (window.confirm(`Are you sure you want to delete ${db.studentname}'s records?`)) {
+                                    handleDelete(db.id);
+                                  }
                                 }}
                               >
                                 <Trash className="w-4" />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import StocksTasselChartTooltip from "./StocksTasselChartTooltip";
 
@@ -14,11 +14,35 @@ const exampleData = [
   { colors: "Yellow", count: 10, color: "#7DAAF6" },
 ];
 
-export default function SizesChart({ data = exampleData }) {
+// Color mapping for consistent colors
+const colorMapping = {
+  Blue: "#2563EB",
+  Maroon: "#1E4FCC",
+  Orange: "#3A78F0",
+  White: "#5B91F3",
+  Yellow: "#7DAAF6",
+};
+
+export default function SizesChart({ stocksData }) {
+  // Transform the data from Stocks.jsx format to the format needed by this chart
+  const data = useMemo(() => {
+    if (!stocksData || !stocksData.tasselColors) {
+      return exampleData;
+    }
+
+    // Convert the tasselColors object from Stocks.jsx to the array format needed by the chart
+    return Object.entries(stocksData.tasselColors).map(([color, count]) => ({
+      colors: color,
+      count: count,
+      color: colorMapping[color] || "#2563EB", // Use the defined color or default to blue
+    }));
+  }, [stocksData]);
+
   return (
     <div className="w-full flex flex-col items-center">
-      <BarChart // dol todo necita ase adjust si man resize tu
-        width={900} // aki man adjust
+      <BarChart
+        // dol todo necita ase adjust si man resize tu
+        width={700} // aki man adjust
         height={520} // and este
         data={data}
         margin={{ top: 24, right: 24, left: 24, bottom: 24 }} // este tamen
@@ -40,12 +64,13 @@ export default function SizesChart({ data = exampleData }) {
         <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
         <Bar
           dataKey="count"
-          fill={COLOR}
+          fill={({ color }) => color} // Use the color from the data point
           radius={8}
           barSize={40}
           isAnimationActive
         />
-        <Tooltip // el tooltip amo se ta lamma kunel hover data effect disuyu
+        <Tooltip
+          // el tooltip amo se ta lamma kunel hover data effect disuyu
           content={<StocksTasselChartTooltip />}
           cursor={{ fill: "#e0e7ef", opacity: 0.3 }} //style
         />
