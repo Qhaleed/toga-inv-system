@@ -205,6 +205,41 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Add DELETE endpoint to remove inventory items
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // First check if the inventory item exists
+    const [existingItem] = await db.pool.query(
+      "SELECT * FROM inventory WHERE inventory_id = ?",
+      [id]
+    );
+
+    if (existingItem.length === 0) {
+      return res.status(404).json({ error: "Inventory item not found" });
+    }
+
+    // If item exists, delete it
+    const [result] = await db.pool.query(
+      "DELETE FROM inventory WHERE inventory_id = ?",
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Inventory item not found" });
+    }
+
+    res.json({
+      message: "Inventory item deleted successfully",
+      deletedId: id
+    });
+  } catch (error) {
+    console.error("Error deleting inventory item:", error);
+    res.status(500).json({ error: "Failed to delete inventory item: " + error.message });
+  }
+});
+
 // Helper function to determine colors based on course
 function determineColorsFromCourse(course) {
   // Course to color mapping
