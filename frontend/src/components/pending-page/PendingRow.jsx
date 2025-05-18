@@ -1,0 +1,828 @@
+import React, { useState, useEffect, useRef } from "react";
+import Table from "../../assets/icons/table.svg?react";
+import EyeIcon from "../../assets/icons/eye-icon.svg?react";
+import Trash from "../../assets/icons/black-trash.svg?react";
+import ChevronDown from "../../assets/icons/chevron-down.svg?react";
+import PopupWindow from "../common/PopupWindow";
+import HoverPopup from "../common/HoverPopup";
+import GridView from "../common/GridView";
+
+const tasselColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
+const hoodColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
+const togaSizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
+
+const PendingRow = ({
+    isGrid,
+    hideActionButton,
+    modifyTable,
+    rowHeightClass = "h-16",
+    sortOrder,
+    searchResults,
+}) => {
+    const [dashboard, setDashboard] = useState([]);
+    const [originalDashboard, setOriginalDashboard] = useState([]);
+    const [editId, setEditId] = useState(null);
+    const [editData, setEditData] = useState({});
+    const [tableAnim, setTableAnim] = useState("");
+    const prevSortOrder = useRef(sortOrder);
+    const [popupMode, setPopupMode] = useState("none");
+    const [hoveredEyeId, setHoveredEyeId] = useState(null);
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupUser, setPopupUser] = useState(false);
+
+    useEffect(() => {
+        fetch("http://localhost:5001/inventory")
+            .then((res) => res.json())
+            .then((data) => {
+                // Filter out entries without toga_size
+                // This is because no toga size = no form submitted yet
+                const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+                const mappedData = filteredData.map((item) => ({
+                    id: item.inventory_id,
+                    studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                    course: item.course,
+                    tassel_color: item.tassel_color,
+                    hood_color: item.hood_color,
+                    toga_size: item.toga_size,
+                    dateofreservation: item.rent_date
+                        ? new Date(item.rent_date).toLocaleDateString()
+                        : "",
+                    status: item.status, // Using status instead of return_status here
+                    payment_status: item.payment_status,
+                    evaluation_status: item.evaluation_status,
+                    remarks: item.remarks,
+                    return_date: item.return_date,
+                    is_overdue: item.is_overdue,
+                    has_cap: item.has_cap,
+                    item_condition: item.item_condition,
+                }));
+                setDashboard(mappedData);
+                setOriginalDashboard(mappedData);
+                console.log("Original data:", data);
+                console.log("Mapped data for display:", mappedData[0]);
+            });
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(
+                    `http://localhost:5001/inventory?sort=${sortOrder || ""}`
+                );
+                const data = await response.json();
+
+                // Filter out entries without toga_size before mapping
+                const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+                const mappedData = filteredData.map((item) => ({
+                    id: item.inventory_id,
+                    studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                    course: item.course,
+                    tassel_color: item.tassel_color,
+                    hood_color: item.hood_color,
+                    toga_size: item.toga_size,
+                    dateofreservation: item.rent_date
+                        ? new Date(item.rent_date).toLocaleDateString()
+                        : "",
+                    status: item.status, // Using status instead of return_status here
+                    payment_status: item.payment_status,
+                    evaluation_status: item.evaluation_status,
+                    remarks: item.remarks,
+                    return_date: item.return_date,
+                    is_overdue: item.is_overdue,
+                    has_cap: item.has_cap,
+                    item_condition: item.item_condition,
+                }));
+                const sortedData = mappedData.sort((a, b) => {
+                    if (sortOrder === "newest" || sortOrder === "oldest") {
+                        const dateA = new Date(a.dateofreservation);
+                        const dateB = new Date(b.dateofreservation);
+                        return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+                    } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+                        const nameA = (a.studentname || "").toLowerCase();
+                        const nameB = (b.studentname || "").toLowerCase();
+                        if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+                        if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
+                        return 0;
+                    }
+                    return 0;
+                });
+                setDashboard(sortedData);
+                setOriginalDashboard(sortedData);
+            } catch (error) {
+                console.error("Error fetching inventory data:", error);
+            }
+        };
+
+        fetchData();
+    }, [sortOrder]);
+
+    useEffect(() => {
+        if (modifyTable) {
+            setDashboard((prev) =>
+                prev.map((item) => ({ ...item, eye: "hidden", trash: "block" }))
+            );
+        } else {
+            setDashboard((prev) =>
+                prev.map((item) => ({ ...item, eye: "block", trash: "hidden" }))
+            );
+        }
+    }, [modifyTable]);
+
+    useEffect(() => {
+        if (modifyTable) {
+            setEditId(null);
+            setEditData({});
+        }
+    }, [modifyTable]);
+
+    const prevModifyTable = useRef(modifyTable);
+
+    useEffect(() => {
+        if (prevModifyTable.current && !modifyTable) {
+            const changedRows = dashboard.filter((row) => {
+                const orig = originalDashboard.find((o) => o.id === row.id);
+                return (
+                    orig &&
+                    (row.tassel_color !== orig.tassel_color ||
+                        row.hood_color !== orig.hood_color ||
+                        row.toga_size !== orig.toga_size)
+                );
+            });
+            if (changedRows.length > 0) {
+                Promise.all(
+                    changedRows.map((row) =>
+                        fetch(`http://localhost:5001/inventory/${row.id}`, {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                tassel_color: row.tassel_color,
+                                hood_color: row.hood_color,
+                                toga_size: row.toga_size,
+                            }),
+                        })
+                    )
+                )
+                    .then(() => {
+                        alert("Changes saved!");
+                        setOriginalDashboard(dashboard);
+                    })
+                    .catch(() => {
+                        alert("Failed to save changes.");
+                    });
+            }
+        }
+        prevModifyTable.current = modifyTable;
+    }, [modifyTable, dashboard, originalDashboard]);
+
+    const handleEditClick = (db) => {
+        setDashboard((prev) =>
+            prev.map((item) =>
+                db.id === item.id
+                    ? {
+                        ...item,
+                        eye: item.eye === "block" ? "hidden" : "block",
+                        trash: item.trash === "hidden" ? "block" : "hidden",
+                    }
+                    : item
+            )
+        );
+        setEditId(db.id);
+        setEditData({ ...db });
+    };
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setEditData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSave = (id) => {
+        console.log("Save button clicked for ID:", id);
+        console.log("Current editData:", editData);
+
+        const updatedData = {
+            renters_name: editData.studentname,
+            course: editData.course,
+            tassel_color: editData.tassel_color,
+            hood_color: editData.hood_color,
+            toga_size: editData.toga_size,
+        };
+
+        console.log("Sending update to backend:", updatedData);
+
+        fetch(`http://localhost:5001/inventory/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
+            },
+            body: JSON.stringify(updatedData),
+        })
+            .then((response) => {
+                console.log("Response status:", response.status);
+                if (!response.ok) {
+                    throw new Error("Network response was not ok: " + response.status);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Update successful:", data);
+
+                const updatedItem = { ...editData };
+                setDashboard((prev) =>
+                    prev.map((item) => (item.id === id ? updatedItem : item))
+                );
+                setOriginalDashboard((prev) =>
+                    prev.map((item) => (item.id === id ? updatedItem : item))
+                );
+                setEditId(null);
+                setEditData({});
+
+                alert("Changes saved successfully!");
+            })
+            .catch((error) => {
+                console.error("Error updating inventory item:", error);
+                alert("Failed to save changes to the database: " + error.message);
+            });
+    };
+
+    const handleCancel = () => {
+        setEditId(null);
+        setEditData({});
+    };
+
+    const handleCellChange = (id, name, value) => {
+        setDashboard((prev) =>
+            prev.map((row) => (row.id === id ? { ...row, [name]: value } : row))
+        );
+    };
+
+    const handleDelete = (id) => {
+        console.log("Delete button clicked for ID:", id);
+
+        fetch(`http://localhost:5001/inventory/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
+            },
+        })
+            .then((response) => {
+                console.log("Delete response status:", response.status);
+                if (!response.ok) {
+                    throw new Error("Network response was not ok: " + response.status);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Delete successful:", data);
+
+                // Remove the deleted item from both state arrays
+                setDashboard(prev => prev.filter(item => item.id !== id));
+                setOriginalDashboard(prev => prev.filter(item => item.id !== id));
+
+                // Clear edit state if the deleted item was being edited
+                if (editId === id) {
+                    setEditId(null);
+                    setEditData({});
+                }
+
+                alert("Item deleted successfully!");
+            })
+            .catch((error) => {
+                console.error("Error deleting inventory item:", error);
+                alert("Failed to delete the item: " + error.message);
+            });
+    };
+
+    const sortedDashboard =
+        !isGrid && sortOrder
+            ? [...dashboard].sort((a, b) => {
+                if (sortOrder === "newest" || sortOrder === "oldest") {
+                    const dateA = new Date(a.dateofreservation);
+                    const dateB = new Date(b.dateofreservation);
+                    if (sortOrder === "newest") return dateB - dateA;
+                    if (sortOrder === "oldest") return dateA - dateB;
+                } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+                    const nameA = (a.studentname || "").toLowerCase();
+                    const nameB = (b.studentname || "").toLowerCase();
+                    if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+                    if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
+                    return 0;
+                }
+                return 0;
+            })
+            : dashboard;
+
+    useEffect(() => {
+        if (!isGrid) {
+            const scrollContainer = document.querySelector(".table-scroll-container");
+            if (scrollContainer) {
+                scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+            }
+        }
+    }, [isGrid]);
+
+    useEffect(() => {
+        if (prevSortOrder.current !== sortOrder && !isGrid) {
+            setTableAnim("animate-table-sort");
+            setTimeout(() => setTableAnim(""), 400);
+            prevSortOrder.current = sortOrder;
+        }
+    }, [sortOrder, isGrid]);
+
+    function handleEyeMouseEnter(event, dbId) {
+        setHoveredEyeId(dbId);
+    }
+
+    const displayDashboard =
+        Array.isArray(searchResults) && searchResults.length > 0
+            ? searchResults
+            : sortedDashboard;
+
+    if (isGrid) {
+        return (
+            <GridView
+                dashboard={displayDashboard}
+                editId={editId}
+                editData={editData}
+                hoveredEyeId={hoveredEyeId}
+                popupMode={popupMode}
+                modifyTable={modifyTable}
+                tasselColorOptions={tasselColorOptions}
+                hoodColorOptions={hoodColorOptions}
+                togaSizeOptions={togaSizeOptions}
+                handleEditClick={handleEditClick}
+                handleEditChange={handleEditChange}
+                handleSave={handleSave}
+                handleCancel={handleCancel}
+                handleDelete={handleDelete}
+                setHoveredEyeId={setHoveredEyeId}
+                setPopupMode={setPopupMode}
+                setPopupUser={setPopupUser}
+                setPopupOpen={setPopupOpen}
+                hideActionButton={hideActionButton}
+            />
+        );
+    } else {
+        return (
+            <div
+                className={`w-full max-h-[80vh] overflow-x-auto overflow-y-auto ${tableAnim}`}
+                style={{ minWidth: "100px", maxWidth: "100vw", height: "auto" }}
+            >
+                <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-1000 bg-red">
+                    <table className="w-full table-fixed border-separate border-spacing-0 relative">
+                        <thead className="bg-[#02327B] sticky top-0 z-30">
+                            <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
+                                <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Student Name
+                                    </span>
+                                </th>
+                                <th className="w-[90px] min-w-[60px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Program
+                                    </span>
+                                </th>
+                                <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Tassel
+                                    </span>
+                                </th>
+                                <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Hood
+                                    </span>
+                                </th>
+                                <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Gown
+                                    </span>
+                                </th>
+                                <th className="w-[120px] min-w-[80px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Date of Reservation
+                                    </span>
+                                </th>
+                                <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Status
+                                    </span>
+                                </th>
+                                <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                                        Actions
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="w-full">
+                            {displayDashboard.length === 0 ? (
+                                <tr>
+                                    <td
+                                        colSpan={8}
+                                        className="text-center py-8 text-gray-500 font-semibold bg-white"
+                                    >
+                                        No data found
+                                    </td>
+                                </tr>
+                            ) : (
+                                displayDashboard.map((db, idx) => {
+                                    const rowColor = getRowColor(idx);
+                                    const isEditing = modifyTable || editId === db.id;
+                                    return (
+                                        <tr
+                                            className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-columns`}
+                                            key={db.id}
+                                        >
+                                            <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
+                                                <div className="h-full w-[100%] py-4 flex justify-center items-center">
+                                                    <h3 className="truncate">{db.studentname}</h3>
+                                                    <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                                                </div>
+                                            </td>
+                                            <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
+                                                <div className="h-full w-full py-2 flex justify-center items-center">
+                                                    <h3 className="truncate">{db.course}</h3>
+                                                    <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                                                </div>
+                                            </td>
+                                            <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                                                <div className="h-full w-full py-2 flex justify-center items-center relative">
+                                                    {isEditing ? (
+                                                        <CustomDropdown
+                                                            value={modifyTable ? db.tassel_color : editData.tassel_color}
+                                                            options={tasselColorOptions}
+                                                            onChange={(val) =>
+                                                                modifyTable
+                                                                    ? handleCellChange(db.id, "tassel_color", val)
+                                                                    : handleEditChange({
+                                                                        target: { name: "tassel_color", value: val },
+                                                                    })
+                                                            }
+                                                            disabled={false}
+                                                        />
+                                                    ) : (
+                                                        <h3 className="truncate">{db.tassel_color}</h3>
+                                                    )}
+                                                    <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                                                </div>
+                                            </td>
+                                            <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                                                <div className="h-full w-full py-2 flex justify-center items-center relative">
+                                                    {isEditing ? (
+                                                        <CustomDropdown
+                                                            value={modifyTable ? db.hood_color : editData.hood_color}
+                                                            options={hoodColorOptions}
+                                                            onChange={(val) =>
+                                                                modifyTable
+                                                                    ? handleCellChange(db.id, "hood_color", val)
+                                                                    : handleEditChange({
+                                                                        target: { name: "hood_color", value: val },
+                                                                    })
+                                                            }
+                                                            disabled={false}
+                                                        />
+                                                    ) : (
+                                                        <h3 className="truncate">{db.hood_color}</h3>
+                                                    )}
+                                                    <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                                                </div>
+                                            </td>
+                                            <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                                                <div className="h-full w-full py-2 flex justify-center items-center relative">
+                                                    {isEditing ? (
+                                                        <CustomDropdown
+                                                            value={modifyTable ? db.toga_size : editData.toga_size}
+                                                            options={togaSizeOptions}
+                                                            onChange={(val) =>
+                                                                modifyTable
+                                                                    ? handleCellChange(db.id, "toga_size", val)
+                                                                    : handleEditChange({
+                                                                        target: { name: "toga_size", value: val },
+                                                                    })
+                                                            }
+                                                            disabled={false}
+                                                        />
+                                                    ) : (
+                                                        <h3 className="truncate">{db.toga_size}</h3>
+                                                    )}
+                                                    <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                                                </div>
+                                            </td>
+                                            <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
+                                                <div className="h-full w-full py-2 flex justify-center items-center">
+                                                    <h3 className="truncate">{db.dateofreservation}</h3>
+                                                    <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                                                </div>
+                                            </td>
+                                            <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
+                                                <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
+                                                    {db.status}
+                                                </div>
+                                                <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                                            </td>
+                                            <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
+                                                <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
+                                                    {editId === db.id ? (
+                                                        <>
+                                                            <button
+                                                                className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
+                                                                onClick={() => {
+                                                                    if (window.confirm(`Are you sure you want to delete ${db.studentname}'s records?`)) {
+                                                                        handleDelete(db.id);
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Trash className="w-4" />
+                                                            </button>
+                                                            <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
+                                                                <button
+                                                                    className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
+                                                                    onClick={() => handleSave(db.id)}
+                                                                >
+                                                                    Save
+                                                                </button>
+                                                                <button
+                                                                    className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
+                                                                    onClick={handleCancel}
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div
+                                                                className="relative"
+                                                                onMouseLeave={() => setHoveredEyeId(null)}
+                                                            >
+                                                                <button
+                                                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id ? "bg-blue-600" : ""
+                                                                        }`}
+                                                                    style={{
+                                                                        background: modifyTable
+                                                                            ? "#bdbdbd"
+                                                                            : hoveredEyeId === db.id
+                                                                                ? "#2563eb"
+                                                                                : "#0C7E48",
+                                                                        cursor: modifyTable
+                                                                            ? "not-allowed"
+                                                                            : "pointer",
+                                                                    }}
+                                                                    disabled={modifyTable}
+                                                                    onMouseEnter={(e) =>
+                                                                        handleEyeMouseEnter(e, db.id)
+                                                                    }
+                                                                    onClick={() => {
+                                                                        setHoveredEyeId(db.id);
+                                                                        setPopupUser(db);
+                                                                        setPopupOpen(true);
+                                                                        setPopupMode("full");
+                                                                    }}
+                                                                >
+                                                                    <EyeIcon
+                                                                        className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
+                                                                            ? "text-blue-200"
+                                                                            : "text-white"
+                                                                            }`}
+                                                                    />
+                                                                </button>
+                                                                {hoveredEyeId === db.id && (
+                                                                    <div
+                                                                        className="fixed left-9/12 top-1/2 z-50 w-80 h-fit rounded-xl opacity-200 transition-all duration-300 animate-fade-in pointer-events-auto transform -translate-x-1/2 -translate-y-1/2 "
+                                                                        onMouseEnter={(e) =>
+                                                                            handleEyeMouseEnter(e, db.id)
+                                                                        }
+                                                                        onMouseLeave={() => setHoveredEyeId(null)}
+                                                                    >
+                                                                        <HoverPopup user={db} />
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            <button
+                                                                className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"
+                                                                style={{
+                                                                    background: modifyTable
+                                                                        ? "#bdbdbd"
+                                                                        : "#0C7E48",
+                                                                    cursor: modifyTable
+                                                                        ? "not-allowed"
+                                                                        : "pointer",
+                                                                }}
+                                                                disabled={modifyTable}
+                                                                onClick={() => {
+                                                                    if (!modifyTable) {
+                                                                        setEditId(db.id);
+                                                                        setEditData({ ...db });
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Table className="w-5" />
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+                <PopupWindow
+                    open={popupOpen}
+                    onClose={(updatedData) => {
+                        setPopupOpen(false);
+                        if (updatedData) {
+                            // Filter out entries without toga_size before mapping
+                            const filteredData = updatedData.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+
+                            // Map the filtered data to match our component's format
+                            const mappedData = filteredData.map((item) => ({
+                                id: item.inventory_id,
+                                studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                                course: item.course,
+                                tassel_color: item.tassel_color,
+                                hood_color: item.hood_color,
+                                toga_size: item.toga_size,
+                                dateofreservation: item.rent_date
+                                    ? new Date(item.rent_date).toLocaleDateString()
+                                    : "",
+                                status: item.status, // Using status instead of return_status here
+                                payment_status: item.payment_status,
+                                evaluation_status: item.evaluation_status,
+                                remarks: item.remarks,
+                                return_date: item.return_date,
+                                is_overdue: item.is_overdue,
+                                has_cap: item.has_cap,
+                                item_condition: item.item_condition
+                            }));
+                            setDashboard(mappedData);
+                            setOriginalDashboard(mappedData);
+                        }
+                    }}
+                    user={popupUser}
+                    showBackButton={false}
+                    fullScreen={true}
+                />
+            </div>
+        );
+    }
+};
+
+export default PendingRow;
+
+const CustomDropdown = ({ value, options, onChange, disabled }) => {
+    const [open, setOpen] = useState(false);
+    const ref = useRef();
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                setOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
+                }`}
+            tabIndex={0}
+            style={{
+                outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
+                borderRadius: 30,
+                cursor: disabled ? "not-allowed" : "pointer",
+                boxSizing: "border-box",
+                background: open ? "#fff" : "#F3F4F6",
+                transition: "outline-color 0.3s, background 0.2s",
+            }}
+        >
+            <button
+                type="button"
+                className="w-full flex items-center px-1 md:px-3 text-black sm:text-[8px] text-[6px] md:text-[10px] lg:text-[11px] justify-center font-semibold font-Figtree tracking-widest focus:outline-[#EDB427] focus:outline-1.5 focus:outline-offset-[-1px] focus:outline-blur-md"
+                style={{
+                    borderRadius: 35,
+                    minHeight: "20px",
+                    background: open ? "#0C7E48" : "#DBDBDB",
+                    color: open ? "#fff" : "#000000",
+                    transition: "background 0.3s",
+                    position: "relative",
+                }}
+                onClick={() => !disabled && setOpen((o) => !o)}
+                disabled={disabled}
+                aria-haspopup="listbox"
+                aria-expanded={open}
+            >
+                <span className="truncate">{value}</span>
+                <span
+                    className="items-center absolute hidden md:flex lg:flex"
+                    style={{
+                        right: 16,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        pointerEvents: "cursor",
+                    }}
+                >
+                    <ChevronDown
+                        className="w-2.5 h-2.5 text-black absolute"
+                        style={{ opacity: open ? 0.8 : 1, color: open ? "#fff" : "#000" }}
+                        aria-hidden="true"
+                    />
+                </span>
+            </button>
+            {open && (
+                <div className="absolute z-30 left-0 top-full w-full mt-1 animate-fade-in flex justify-center">
+                    <div
+                        className="w-full h-full absolute top-0 left-0 rounded-lg border-[1.5px] border-[#0C7E48] bg-[#E9E9E9] pointer-events-none"
+                        style={{ zIndex: 0 }}
+                    />
+                    <div
+                        className="relative w-full overflow-auto flex flex-col items-center"
+                        style={{ zIndex: 1 }}
+                        role="listbox"
+                    >
+                        {options.map((opt, idx) => (
+                            <div
+                                key={opt}
+                                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
+                                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                                    : ""
+                                    }`}
+                                style={{
+                                    background: opt === value ? "#E9E9E9" : "transparent",
+                                    borderRadius: "0",
+                                    borderLeft: opt === value ? "5px solid #0C7E48" : "none",
+                                    borderRight: opt === value ? "5px solid #0C7E48" : "none",
+                                    borderTop: "none",
+                                    borderBottom: "none",
+                                }}
+                                onClick={() => {
+                                    onChange(opt);
+                                    setOpen(false);
+                                }}
+                                role="option"
+                                aria-selected={opt === value}
+                                tabIndex={0}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = "#d9d9d9";
+                                    e.currentTarget.style.color = "#0C7E48";
+                                    if (idx === 0) {
+                                        e.currentTarget.style.borderTopLeftRadius = "5px";
+                                        e.currentTarget.style.borderTopRightRadius = "5px";
+                                    } else if (idx === options.length - 1) {
+                                        e.currentTarget.style.borderBottomLeftRadius = "5px";
+                                        e.currentTarget.style.borderBottomRightRadius = "5px";
+                                    } else {
+                                        e.currentTarget.style.borderTopLeftRadius = "0";
+                                        e.currentTarget.style.borderTopRightRadius = "0";
+                                        e.currentTarget.style.borderBottomLeftRadius = "0";
+                                        e.currentTarget.style.borderBottomRightRadius = "0";
+                                    }
+                                    if (opt === value) {
+                                        e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
+                                        e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
+                                        e.currentTarget.style.borderTop = "none";
+                                        e.currentTarget.style.borderBottom = "none";
+                                    } else {
+                                        e.currentTarget.style.border = "none";
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background =
+                                        opt === value ? "#E9E9E9" : "transparent";
+                                    e.currentTarget.style.color =
+                                        opt === value ? "#0C7E48" : "#000";
+                                    e.currentTarget.style.borderTopLeftRadius = "4";
+                                    e.currentTarget.style.borderTopRightRadius = "4";
+                                    e.currentTarget.style.borderBottomLeftRadius = "4";
+                                    e.currentTarget.style.borderBottomRightRadius = "4";
+                                    if (opt === value) {
+                                        e.currentTarget.style.borderLeft = "4px solid #0C7E48";
+                                        e.currentTarget.style.borderRight = "4px solid #0C7E48";
+                                        e.currentTarget.style.borderTop = "none";
+                                        e.currentTarget.style.borderBottom = "none";
+                                    } else {
+                                        e.currentTarget.style.border = "none";
+                                    }
+                                }}
+                            >
+                                {opt}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+function getRowColor(index) {
+    return index % 2 === 0 ? "bg-[#E9E9E9]" : "bg-[#D4D4D4]";
+}

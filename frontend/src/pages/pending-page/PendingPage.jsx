@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Table from "../../components/common/Table";
+import PendingTable from "../../components/pending-page/PendingTable";
 import SideBar from "../../components/navigations/SideBar";
 import Navbar from "../../components/navigations/NavBar";
 
@@ -18,11 +18,10 @@ const PendingPage = () => {
 
   return (
     <div
-      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
-        sidebarOpen
+      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${sidebarOpen
           ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
           : "md:grid-cols-1"
-      }`}
+        }`}
     >
       {/* Sidebar: left on desktop, hidden on mobile */}
       {sidebarOpen && (
@@ -67,7 +66,7 @@ const PendingPage = () => {
           </div>
           <div className="w-full h-full overflow-visible flex flex-col flex-1">
             <div className="flex-1 flex mx-auto min-w-fit animate-fade-in overflow-hidden">
-              <Table
+              <PendingTable
                 isGrid={isGrid}
                 modifyTable={modifyTable}
                 sortOrder={sortOrder}
