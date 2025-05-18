@@ -19,6 +19,9 @@ const SideBar = ({
   focusedStatus, //setter kada click ng button
   setFocusedStatus, // hover effects to
   onAdminName, // adminname passere this
+  allCount = 0, //tota count ng total students sa rows
+  evaluatedCount = 0, //total count ng evaluted students 
+  NotEvaluatedCount = 0, //total counts ng not evaluated students
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -277,7 +280,7 @@ const SideBar = ({
                         All
                       </p>
                       <div className="right-0 absolute sm:text-[10px] text-[11px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2  py-0.5 px-2">
-                        123
+                        {allCount}
                       </div>
                     </button>
                     <button
@@ -292,7 +295,7 @@ const SideBar = ({
                         Evaluated
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        13
+                        {evaluatedCount}
                       </div>
                     </button>
                   </div>
@@ -309,7 +312,7 @@ const SideBar = ({
                         No Evaluation
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        19
+                        {NotEvaluatedCount}
                       </div>
                     </button>
                   </div>
