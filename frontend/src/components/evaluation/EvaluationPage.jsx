@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBar from "../navigations/SideBar";
 import Navbar from "../navigations/NavBar";
 import EvaluationTable from "./EvaluationTable";
@@ -16,6 +16,20 @@ const EvaluationPage = () => {
   const [isNotEvaluationTab, setIsNotEvaluationTab] = useState(false);
   const [isAZ, setIsAZ] = useState(false);
   const [isZA, setIsZA] = useState(false);
+  const [focusedStatus, setFocusedStatus] = useState("all");
+  const [allData, setAllData] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/evaluation")
+      .then((res) => res.json())
+      .then((data) => {
+        const filteredData = data.filter(
+          (item) => item.toga_size !== null && item.toga_size !== undefined
+        );
+        setAllData(filteredData);
+      });
+  }, []);
+
 
   return (
     <div
@@ -36,6 +50,11 @@ const EvaluationPage = () => {
             setIsNotEvaluationTab={setIsNotEvaluationTab}
             setIsAZ={setIsAZ}
             setIsZA={setIsZA}
+            focusedStatus={focusedStatus}
+            setFocusedStatus={setFocusedStatus}
+            allCount={allData.length}
+            evaluatedCount={allData.filter(item => item.evaluation_status === "Evaluated").length}
+            NotEvaluatedCount={allData.filter(item => item.evaluation_status === "Not Evaluated").length}
           />
         </div>
       )}
@@ -73,6 +92,7 @@ const EvaluationPage = () => {
                 isnotevalTab={isNotEvaluationTab}
                 isAZ={isAZ}
                 isZA={isZA}
+                allData={allData}
               />
             </div>
             <EvaluationTab

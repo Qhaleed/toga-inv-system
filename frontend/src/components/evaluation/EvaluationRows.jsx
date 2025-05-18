@@ -13,9 +13,9 @@ const EvaluationRows = ({
   isnotevalTab,
   isAZ,
   isZA,
+  allData,
 }) => {
   const [dashboard, setDashboard] = useState([]);
-  const [allData, setAllData] = useState([]);
 
   const openTab = (db) => {
     setValue(db);
@@ -23,26 +23,12 @@ const EvaluationRows = ({
   };
 
   useEffect(() => {
-    // kuha data sa JSON
-    fetch("http://localhost:5001/evaluation")
-      .then((res) => res.json())
-      .then((data) => {
-        // Filter out entries without toga_size
-        const filteredData = data.filter(
-          (item) => item.toga_size !== null && item.toga_size !== undefined
-        );
-        setDashboard(filteredData);
-        setAllData(filteredData);
-      });
-  }, []);
-
-  useEffect(() => {
     // Start with filtered data (no null toga_size)
     let filtered = allData;
     if (isevalTab) {
-      filtered = allData.filter((db) => db.evaluation === "Evaluated");
+      filtered = allData.filter((db) => db.evaluation_status === "Evaluated");
     } else if (isnotevalTab) {
-      filtered = allData.filter((db) => db.evaluation === "No Evaluation");
+      filtered = allData.filter((db) => db.evaluation_status === "Not Evaluated");
     } else if (isAll) {
       filtered = allData;
     }

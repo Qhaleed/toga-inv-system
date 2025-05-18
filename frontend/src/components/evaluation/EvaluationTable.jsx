@@ -10,6 +10,7 @@ const EvaluationTable = ({
   isnotevalTab,
   isAZ,
   isZA,
+  allData,
 }) => {
   const mainContentHeight = "80vh";
 
@@ -56,6 +57,7 @@ const EvaluationTable = ({
                     isnotevalTab={isnotevalTab}
                     isAZ={isAZ}
                     isZA={isZA}
+                    allData={allData}
                   />
                 </table>
               </div>
