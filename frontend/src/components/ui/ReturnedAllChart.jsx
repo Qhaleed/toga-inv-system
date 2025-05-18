@@ -11,7 +11,7 @@ import {
 
 import { ChartContainer } from "./chart";
 
-export default function MyChart() {
+export default function MyChart({ returnData }) {
   const [chartData, setChartData] = useState([
     { name: "Cap", count: 0, color: "#2563eb", inventorySizes: {} },
     { name: "Tassel", count: 0, color: "#60a5fa", inventoryColors: {} },
@@ -28,69 +28,109 @@ export default function MyChart() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5001/inventory")
-      .then((res) => res.json())
-      .then((data) => {
-        let cap = 0,
-          tassel = 0,
-          gown = 0,
-          hood = 0;
-        let capSizes = {},
-          tasselColors = {},
-          gownSizes = {},
-          hoodColors = {};
-        data.forEach((item) => {
-          // Cap: count by size if has_cap is 1
-          if (item.has_cap === 1 && item.toga_size) {
-            cap += 1;
-            capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
-          }
-          // Tassel: count by color
-          if (item.tassel_color) {
-            tassel += 1;
-            tasselColors[item.tassel_color] =
-              (tasselColors[item.tassel_color] || 0) + 1;
-          }
-          // Gown: count by size
-          if (item.toga_size) {
-            gown += 1;
-            gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
-          }
-          // Hood: count by color
-          if (item.hood_color) {
-            hood += 1;
-            hoodColors[item.hood_color] =
-              (hoodColors[item.hood_color] || 0) + 1;
-          }
+    // If returnData is passed as a prop, use it to update the chart
+    if (returnData) {
+      const { returnByType, returnByVariant } = returnData;
+
+      setChartData([
+        {
+          name: "Cap",
+          count: returnByType.cap.returned,
+          color: colorMap.Cap,
+          inventorySizes: returnByVariant.cap || {},
+        },
+        {
+          name: "Tassel",
+          count: returnByType.tassel.returned,
+          color: colorMap.Tassel,
+          inventoryColors: returnByVariant.tassel || {},
+        },
+        {
+          name: "Gown",
+          count: returnByType.gown.returned,
+          color: colorMap.Gown,
+          inventorySizes: returnByVariant.gown || {},
+        },
+        {
+          name: "Hood",
+          count: returnByType.hood.returned,
+          color: colorMap.Hood,
+          inventoryColors: returnByVariant.hood || {},
+        },
+      ]);
+    } else {
+      // Fallback to the original fetch if no returnData is provided
+      fetch("http://localhost:5001/items")
+        .then((res) => res.json())
+        .then((data) => {
+          let capReturned = 0,
+            tasselReturned = 0,
+            gownReturned = 0,
+            hoodReturned = 0;
+          let capSizes = {},
+            tasselColors = {},
+            gownSizes = {},
+            hoodColors = {};
+
+          data.forEach((item) => {
+            if (item.return_status === "Returned") {
+              const itemType = item.item_type;
+              const variant = item.variant;
+              const quantity = item.quantity || 0;
+
+              if (itemType === "cap") {
+                capReturned += quantity;
+                if (variant) {
+                  capSizes[variant] = (capSizes[variant] || 0) + quantity;
+                }
+              } else if (itemType === "tassel" || itemType === "tassle") {
+                tasselReturned += quantity;
+                if (variant) {
+                  tasselColors[variant] = (tasselColors[variant] || 0) + quantity;
+                }
+              } else if (itemType === "gown") {
+                gownReturned += quantity;
+                if (variant) {
+                  gownSizes[variant] = (gownSizes[variant] || 0) + quantity;
+                }
+              } else if (itemType === "hood") {
+                hoodReturned += quantity;
+                if (variant) {
+                  hoodColors[variant] = (hoodColors[variant] || 0) + quantity;
+                }
+              }
+            }
+          });
+
+          setChartData([
+            {
+              name: "Cap",
+              count: capReturned,
+              color: colorMap.Cap,
+              inventorySizes: capSizes,
+            },
+            {
+              name: "Tassel",
+              count: tasselReturned,
+              color: colorMap.Tassel,
+              inventoryColors: tasselColors,
+            },
+            {
+              name: "Gown",
+              count: gownReturned,
+              color: colorMap.Gown,
+              inventorySizes: gownSizes,
+            },
+            {
+              name: "Hood",
+              count: hoodReturned,
+              color: colorMap.Hood,
+              inventoryColors: hoodColors,
+            },
+          ]);
         });
-        setChartData([
-          {
-            name: "Cap",
-            count: cap,
-            color: colorMap.Cap,
-            inventorySizes: capSizes,
-          },
-          {
-            name: "Tassel",
-            count: tassel,
-            color: colorMap.Tassel,
-            inventoryColors: tasselColors,
-          },
-          {
-            name: "Gown",
-            count: gown,
-            color: colorMap.Gown,
-            inventorySizes: gownSizes,
-          },
-          {
-            name: "Hood",
-            count: hood,
-            color: colorMap.Hood,
-            inventoryColors: hoodColors,
-          },
-        ]);
-      });
-  }, [colorMap.Cap, colorMap.Tassel, colorMap.Gown, colorMap.Hood]);
+    }
+  }, [returnData, colorMap.Cap, colorMap.Tassel, colorMap.Gown, colorMap.Hood]);
 
   return (
     <ChartContainer

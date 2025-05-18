@@ -272,17 +272,17 @@ const CheckReturn = () => {
 
           <div className="flex-1 flex flex-col items-start">
             <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
-              {returnToggle && all && <ReturnedAllChart />}{" "}
+              {returnToggle && all && <ReturnedAllChart returnData={returnData} />}{" "}
               {/*SWITCHING CHARTS*/}
-              {returnToggle && cap && <ReturnedCapChart />}
-              {returnToggle && tassel && <ReturnedTasselChart />}
-              {returnToggle && gown && <ReturnedGownChart />}
-              {returnToggle && hood && <ReturnedHoodChart />}
-              {!returnToggle && all && <MissingAllChart />}
-              {!returnToggle && cap && <MissingCapChart />}
-              {!returnToggle && tassel && <MissingTasselChart />}
-              {!returnToggle && gown && <MissingGownChart />}
-              {!returnToggle && hood && <MissingHoodChart />}
+              {returnToggle && cap && <ReturnedCapChart returnData={returnData} />}
+              {returnToggle && tassel && <ReturnedTasselChart returnData={returnData} />}
+              {returnToggle && gown && <ReturnedGownChart returnData={returnData} />}
+              {returnToggle && hood && <ReturnedHoodChart returnData={returnData} />}
+              {!returnToggle && all && <MissingAllChart returnData={returnData} />}
+              {!returnToggle && cap && <MissingCapChart returnData={returnData} />}
+              {!returnToggle && tassel && <MissingTasselChart returnData={returnData} />}
+              {!returnToggle && gown && <MissingGownChart returnData={returnData} />}
+              {!returnToggle && hood && <MissingHoodChart returnData={returnData} />}
             </div>
             <div className="w-full h-10 flex justify-between items-center mt-5">
               <div className="w-[280px] md:w-[350px] lg:w-[500px] xl:w-[600px] h-10 flex justify-start items-center ml-3 transition-all ease-out duration-300">
