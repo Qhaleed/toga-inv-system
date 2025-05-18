@@ -27,10 +27,21 @@ router.get("/", async (req, res) => {
     const user = users[0];
     const firstOnly = req.query.firstOnly === "true";
 
-    res.json({
-      name: firstOnly ? user.first_name : `${user.first_name} ${user.surname}`,
-      role: user.role,
-    });
+    if (firstOnly) {
+      res.json({
+        first_name: user.first_name,
+      });
+    } else {
+      res.json({
+        first_name: user.first_name,
+        middle_initial: user.middle_initial,
+        surname: user.surname,
+        id_number: user.id_number,
+        course: user.course,
+        role: user.role,
+        status: user.status, // include status in full user response
+      });
+    }
   } catch (err) {
     return res.status(401).json({
       error:
