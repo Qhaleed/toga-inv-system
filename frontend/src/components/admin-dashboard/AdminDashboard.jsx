@@ -21,7 +21,7 @@ import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
 import StudentConcernsModal from "./StudentConcernsModal";
-import { set } from "date-fns";
+// import { set } from "date-fns";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -32,17 +32,17 @@ function AdminDashboard() {
   const [totalEvaluated, setTotalEvaluated] = useState(0); //state for total evaluated
   const [totalReservation, setTotalReservation] = useState(0); //state for total reservation
 
-    //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
-useEffect(() => {
-  fetch("http://localhost:5001/inventory")
-    .then((res) => res.json())
-    .then((data) => {
-      setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
-      setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
-      setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
-    });
-}, []);
-  
+  //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
+  useEffect(() => {
+    fetch("http://localhost:5001/inventory")
+      .then((res) => res.json())
+      .then((data) => {
+        setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
+        setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
+        setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
+      });
+  }, []);
+
   // hardcoded muna to
   const concerns = [
     {
@@ -259,7 +259,7 @@ useEffect(() => {
       <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-4 px-4 lg:px-6">
         <div className="bg-white rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px] transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl  outline-none">
           <span className="text-black font-semibold text-lg">
-            Graph to becontinued hahahahahhahahaha
+            Graph to be continued
           </span>
         </div>
         <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] outline-none">
