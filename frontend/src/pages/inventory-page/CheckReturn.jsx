@@ -187,8 +187,8 @@ const CheckReturn = () => {
     : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90 mr-3";
 
   let notreturnedBtn = !returnToggle
-    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
+    ? "bg-[#02327B] text-white h-full w-28 mr-2 rounded-lg font-figtree-medium"
+    : "border border-[#02327B] text-[#02327B] h-full w-28 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   const [all, setAll] = useState(true);
   const [cap, setCap] = useState(false);
@@ -326,7 +326,7 @@ const CheckReturn = () => {
                   Returned
                 </button>
                 <button className={notreturnedBtn} onClick={notreturnToggler}>
-                  Missing
+                  Not Returned
                 </button>
               </div>
             </div>
