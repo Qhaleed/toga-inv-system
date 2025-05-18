@@ -13,6 +13,17 @@ const UserApproved = () => {
     shoulderWidth: "",
     togaSize: "",
   });
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const togaSizes = [
+    "XS (17 inches)",
+    "S (18 inches)",
+    "M (19 inches)",
+    "L (20 inches)",
+    "XL (21 inches)",
+    "2XL (22 inches)",
+    "3XL (23 inches)",
+    "4XL (24 inches)",
+  ];
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,19 +101,27 @@ const UserApproved = () => {
     }));
   };
 
+  const handleTogaSizeSelect = (size) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      togaSize: size,
+    }));
+    setOpenDropdown(false);
+  };
+
   return (
     <FormWrapper
       title="Toga Sizing Form"
       onSubmit={handleSubmit}
       className="register-card"
     >
-      {/* STEP 2: Display fetched student details */}
+      {/* STEP 1: Display fetched student details */}
       <div className="mt-4">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
-          STEP 2:
+          STEP 1:
         </span>
         <span className="text-white-400 text-lg sm:text-xl font-semibold mr-1">
-          Verify Your Details
+          Review Your Details
         </span>
       </div>
 
@@ -160,13 +179,13 @@ const UserApproved = () => {
         </div>
       </div>
 
-      {/* STEP 3: Toga Measurement */}
+      {/* STEP : Toga Measurement */}
       <div className="mt-6">
         <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
-          STEP 3:
+          STEP 2:
         </span>
         <span className="text-white-400 text-lg sm:text-xl font-semibold mr-1">
-          Enter Your Toga Measurement
+          Select Your Toga Size
         </span>
       </div>
 
@@ -188,24 +207,43 @@ const UserApproved = () => {
       </div>
 
       {/* Toga Size Dropdown */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 mt-4">
-        <label className="w-full sm:w-32 text-primary text-m font-manjari font-bold">
-          Toga Size
-        </label>
-        <select
-          name="togaSize"
-          value={formData.togaSize}
-          onChange={handleChange}
-          className="w-full flex-1 bg-[#2A4D89] text-white font-manjari rounded-md px-3 py-2
-                focus:outline-none focus:ring-2 focus:ring-primary transition"
+      <div className="relative w-full sm:w-auto mt-4">
+        <div
+          onClick={() => setOpenDropdown(!openDropdown)}
+          onMouseDown={(e) => e.preventDefault()}
+          className="w-full flex-1 cursor-pointer bg-[#2A4D89] text-white rounded-md font-manjari
+            hover:bg-primary transition duration-200 ease-in-out relative"
         >
-          <option value="">Select size</option>
-          <option value="XS">Extra Small</option>
-          <option value="S">Small</option>
-          <option value="M">Medium</option>
-          <option value="L">Large</option>
-          <option value="XL">Extra Large</option>
-        </select>
+          <div className="py-2 px-3">
+            {formData.togaSize || "Select Toga Size"}
+          </div>
+
+          {/* Dropdown Arrow */}
+          <div
+            className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
+              openDropdown ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            ▼
+          </div>
+
+          {openDropdown && (
+            <div
+              className="absolute z-10 mt-1 w-full bg-gray-800 text-white rounded-md shadow-lg max-h-40 overflow-y-auto border border-gray-600
+                opacity-0 animate-fade-down transition-opacity duration-300"
+            >
+              {togaSizes.map((size) => (
+                <div
+                  key={size}
+                  onClick={() => handleTogaSizeSelect(size)}
+                  className="px-6 py-3 hover:bg-primary hover:text-white transition duration-200 ease-in-out"
+                >
+                  {size}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Submit Button */}
