@@ -40,6 +40,7 @@ router.get("/", async (req, res) => {
         course: user.course,
         role: user.role,
         status: user.status, // include status in full user response
+        account_id: user.account_id
       });
     }
   } catch (err) {
