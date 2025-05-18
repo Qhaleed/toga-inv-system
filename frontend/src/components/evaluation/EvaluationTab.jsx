@@ -2,7 +2,7 @@ import RedButton from "../../assets/icons/red-x-icon.svg?react";
 import { useRef } from "react";
 import { useState } from "react";
 
-const EvaluationTab = ({ value, evalTab, setEvaluationTab, onUpdate }) => {
+const EvaluationTab = ({ value, evalTab, setEvaluationTab, }) => {
   const formRef = useRef(null);
 
   const exit = () => {
