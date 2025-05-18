@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../navigations/SideBar";
 import PendingApproval from "./UserPending";
 import ApprovedView from "./UserApproved";
+import { handleApiRequest } from "@/lib/utils";
 
 const Dashboard = () => {
   const [userStatus, setUserStatus] = useState(null);
@@ -59,14 +60,10 @@ const Dashboard = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const authToken = localStorage.getItem("token");
-
         // Fetch user's basic info
-        const userResponse = await fetch("http://localhost:5001/users", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        const userResponse = await handleApiRequest("http://localhost:5001/users");
+        if (!userResponse) return; // Token expired/invalid, handleApiRequest will handle redirect
+        
         const userData = await userResponse.json();
         setUserName(userData.first_name + " " + userData.surname);
         setCourse(userData.course || "");
@@ -77,11 +74,9 @@ const Dashboard = () => {
         setHoodColor(colors.hoodColor);
 
         // Check toga size submission status
-        const togaResponse = await fetch("http://localhost:5001/inventory/check-toga-size", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        const togaResponse = await handleApiRequest("http://localhost:5001/inventory/check-toga-size");
+        if (!togaResponse) return;
+        
         const togaData = await togaResponse.json();
 
         if (togaData.hasSubmitted) {

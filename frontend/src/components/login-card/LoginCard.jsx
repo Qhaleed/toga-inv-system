@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 import FormWrapper from "../common/FormWrapper";
 import LoginLoaderAnimation from "./LoginLoaderAnimation";
+import { handleApiRequest } from "@/lib/utils";
 
 function LoginCard() {
   const [email, setEmail] = useState("");
@@ -15,13 +16,20 @@ function LoginCard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Show loader when login starts
+    setLoading(true);
     try {
-      const response = await fetch("api/auth/login", {
+      const response = await handleApiRequest("api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
+      if (!response) {
+        // handleApiRequest returns null if token is expired/invalid
+        setError("Session expired. Please log in again.");
+        setLoading(false);
+        return;
+      }
 
       if (response.ok) {
         const data = await response.json();
@@ -30,7 +38,7 @@ function LoginCard() {
         localStorage.setItem("userRole", data.role);
 
         setTimeout(() => {
-          setLoading(false); // Hide loader after navigation
+          setLoading(false);
           if (data.role === "admin") {
             navigate("/admin-dashboard");
           } else {
@@ -39,11 +47,12 @@ function LoginCard() {
         }, 2000);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Wrong email or password.");
+        setError(errorData.message || "Login failed. Please try again.");
         setLoading(false);
       }
-    } catch {
-      setError("Error connecting to the server. NO DATABASE NIGGAS .");
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("Connection error. Please check your internet connection.");
       setLoading(false);
     }
   };
