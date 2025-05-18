@@ -12,6 +12,7 @@ const UserApproved = () => {
     idNumber: "",
     shoulderWidth: "",
     togaSize: "",
+    account_id: "",
   });
   const [openDropdown, setOpenDropdown] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -38,6 +39,7 @@ const UserApproved = () => {
           idNumber: "",
           shoulderWidth: "",
           togaSize: "",
+          account_id: "",
         });
         return;
       }
@@ -55,6 +57,7 @@ const UserApproved = () => {
             idNumber: "",
             shoulderWidth: "",
             togaSize: "",
+            account_id: "",
           });
           return;
         }
@@ -66,6 +69,7 @@ const UserApproved = () => {
           surname: data.surname,
           idNumber: data.id_number || data.idNumber || "",
           course: data.course,
+          account_id: data.account_id,
           status: data.status, // <-- add status to formData
         }));
       } catch {
@@ -76,6 +80,7 @@ const UserApproved = () => {
           idNumber: "",
           shoulderWidth: "",
           togaSize: "",
+          account_id: "",
         });
       }
     };
@@ -103,9 +108,27 @@ const UserApproved = () => {
     }));
   }, [formData.shoulderWidth]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+    const trimmedTogaSize = formData.togaSize ? formData.togaSize.split(" ")[0] : ""; //remove the parenthesis sa gown size
+    try {
+      const response = await fetch("http://localhost:5001/student-home", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          gown_size: trimmedTogaSize,
+          tasselColor: determineColorFromCourse(formData.course).tasselColor,
+          hoodColor: determineColorFromCourse(formData.course).hoodColor,
+          cap: true,
+          account_id: formData.account_id
+        }),
+      });
+      alert(JSON.stringify(formData, null, 2));
+    } catch (error) {
+      console.log("Error submitting form:", error);
+    }
   };
 
   const handleChange = (e) => {
