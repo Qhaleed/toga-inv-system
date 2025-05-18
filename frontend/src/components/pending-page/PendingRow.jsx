@@ -1,3 +1,10 @@
+/* 
+ * PendingRow Component
+ * Displays rows of toga inventory data with a focus on item status
+ * This component is specifically designed for the pending page to show item status 
+ * instead of return status in the status column
+ */
+
 import React, { useState, useEffect, useRef } from "react";
 import Table from "../../assets/icons/table.svg?react";
 import EyeIcon from "../../assets/icons/eye-icon.svg?react";
@@ -7,10 +14,22 @@ import PopupWindow from "../common/PopupWindow";
 import HoverPopup from "../common/HoverPopup";
 import GridView from "../common/GridView";
 
+// Constants for dropdown options
 const tasselColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const hoodColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
 const togaSizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
+const statusOptions = ["Pending", "Approved"];
 
+/**
+ * PendingRow Component
+ * @param {Object} props - Component props
+ * @param {boolean} props.isGrid - Whether to display in grid view
+ * @param {boolean} props.hideActionButton - Whether to hide action buttons
+ * @param {boolean} props.modifyTable - Whether table is in edit mode
+ * @param {string} props.rowHeightClass - CSS class for row height
+ * @param {string} props.sortOrder - Current sort order
+ * @param {Array} props.searchResults - Search results to display
+ */
 const PendingRow = ({
     isGrid,
     hideActionButton,
@@ -19,6 +38,7 @@ const PendingRow = ({
     sortOrder,
     searchResults,
 }) => {
+    // State management
     const [dashboard, setDashboard] = useState([]);
     const [originalDashboard, setOriginalDashboard] = useState([]);
     const [editId, setEditId] = useState(null);
@@ -30,17 +50,21 @@ const PendingRow = ({
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupUser, setPopupUser] = useState(false);
 
+    // Fetch inventory data on component mount
     useEffect(() => {
         fetch("http://localhost:5001/inventory")
             .then((res) => res.json())
             .then((data) => {
                 // Filter out entries without toga_size
                 // This is because no toga size = no form submitted yet
-                const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+                const filteredData = data.filter(
+                    (item) => item.toga_size !== null && item.toga_size !== undefined
+                );
 
                 const mappedData = filteredData.map((item) => ({
                     id: item.inventory_id,
-                    studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                    studentname:
+                        item.surname + ", " + item.first_name + " " + item.middle_initial,
                     course: item.course,
                     tassel_color: item.tassel_color,
                     hood_color: item.hood_color,
@@ -64,6 +88,7 @@ const PendingRow = ({
             });
     }, []);
 
+    // Fetch sorted data when sortOrder changes
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -73,11 +98,14 @@ const PendingRow = ({
                 const data = await response.json();
 
                 // Filter out entries without toga_size before mapping
-                const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+                const filteredData = data.filter(
+                    (item) => item.toga_size !== null && item.toga_size !== undefined
+                );
 
                 const mappedData = filteredData.map((item) => ({
                     id: item.inventory_id,
-                    studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                    studentname:
+                        item.surname + ", " + item.first_name + " " + item.middle_initial,
                     course: item.course,
                     tassel_color: item.tassel_color,
                     hood_color: item.hood_color,
@@ -118,6 +146,7 @@ const PendingRow = ({
         fetchData();
     }, [sortOrder]);
 
+    // Update dashboard state when modifyTable changes
     useEffect(() => {
         if (modifyTable) {
             setDashboard((prev) =>
@@ -130,6 +159,7 @@ const PendingRow = ({
         }
     }, [modifyTable]);
 
+    // Reset edit state when modifyTable changes
     useEffect(() => {
         if (modifyTable) {
             setEditId(null);
@@ -139,6 +169,7 @@ const PendingRow = ({
 
     const prevModifyTable = useRef(modifyTable);
 
+    // Save changes to the backend when exiting edit mode
     useEffect(() => {
         if (prevModifyTable.current && !modifyTable) {
             const changedRows = dashboard.filter((row) => {
@@ -176,6 +207,10 @@ const PendingRow = ({
         prevModifyTable.current = modifyTable;
     }, [modifyTable, dashboard, originalDashboard]);
 
+    /**
+     * Handles clicking the edit button for a row
+     * @param {Object} db - The row data to edit
+     */
     const handleEditClick = (db) => {
         setDashboard((prev) =>
             prev.map((item) =>
@@ -192,11 +227,19 @@ const PendingRow = ({
         setEditData({ ...db });
     };
 
+    /**
+     * Handles changes to editable fields
+     * @param {Object} e - Event object containing name and value
+     */
     const handleEditChange = (e) => {
         const { name, value } = e.target;
         setEditData((prev) => ({ ...prev, [name]: value }));
     };
 
+    /**
+     * Saves changes made to a row
+     * @param {string|number} id - ID of the row being saved
+     */
     const handleSave = (id) => {
         console.log("Save button clicked for ID:", id);
         console.log("Current editData:", editData);
@@ -279,8 +322,8 @@ const PendingRow = ({
                 console.log("Delete successful:", data);
 
                 // Remove the deleted item from both state arrays
-                setDashboard(prev => prev.filter(item => item.id !== id));
-                setOriginalDashboard(prev => prev.filter(item => item.id !== id));
+                setDashboard((prev) => prev.filter((item) => item.id !== id));
+                setOriginalDashboard((prev) => prev.filter((item) => item.id !== id));
 
                 // Clear edit state if the deleted item was being edited
                 if (editId === id) {
@@ -294,6 +337,43 @@ const PendingRow = ({
                 console.error("Error deleting inventory item:", error);
                 alert("Failed to delete the item: " + error.message);
             });
+    };
+
+    const handleStatusChange = async (id, newStatus) => {
+        try {
+            const response = await fetch(`http://localhost:5001/inventory/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Cache-Control": "no-cache",
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok: " + response.status);
+            }
+
+            const data = await response.json();
+            console.log("Status update successful:", data);
+
+            // Update local state
+            setDashboard((prev) =>
+                prev.map((item) =>
+                    item.id === id ? { ...item, status: newStatus } : item
+                )
+            );
+            setOriginalDashboard((prev) =>
+                prev.map((item) =>
+                    item.id === id ? { ...item, status: newStatus } : item
+                )
+            );
+
+            alert("Status updated successfully!");
+        } catch (error) {
+            console.error("Error updating status:", error);
+            alert("Failed to update status: " + error.message);
+        }
     };
 
     const sortedDashboard =
@@ -452,7 +532,9 @@ const PendingRow = ({
                                                 <div className="h-full w-full py-2 flex justify-center items-center relative">
                                                     {isEditing ? (
                                                         <CustomDropdown
-                                                            value={modifyTable ? db.tassel_color : editData.tassel_color}
+                                                            value={
+                                                                modifyTable ? db.tassel_color : editData.tassel_color
+                                                            }
                                                             options={tasselColorOptions}
                                                             onChange={(val) =>
                                                                 modifyTable
@@ -519,7 +601,22 @@ const PendingRow = ({
                                             </td>
                                             <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                                                 <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                                                    {db.status}
+                                                    {isEditing ? (
+                                                        <CustomDropdown
+                                                            value={modifyTable ? db.status : editData.status}
+                                                            options={statusOptions}
+                                                            onChange={(val) =>
+                                                                modifyTable
+                                                                    ? handleStatusChange(db.id, val)
+                                                                    : handleEditChange({
+                                                                        target: { name: "status", value: val },
+                                                                    })
+                                                            }
+                                                            disabled={false}
+                                                        />
+                                                    ) : (
+                                                        db.status
+                                                    )}
                                                 </div>
                                                 <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                                             </td>
@@ -530,7 +627,11 @@ const PendingRow = ({
                                                             <button
                                                                 className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
                                                                 onClick={() => {
-                                                                    if (window.confirm(`Are you sure you want to delete ${db.studentname}'s records?`)) {
+                                                                    if (
+                                                                        window.confirm(
+                                                                            `Are you sure you want to delete ${db.studentname}'s records?`
+                                                                        )
+                                                                    ) {
                                                                         handleDelete(db.id);
                                                                     }
                                                                 }}
@@ -638,12 +739,15 @@ const PendingRow = ({
                         setPopupOpen(false);
                         if (updatedData) {
                             // Filter out entries without toga_size before mapping
-                            const filteredData = updatedData.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+                            const filteredData = updatedData.filter(
+                                (item) => item.toga_size !== null && item.toga_size !== undefined
+                            );
 
                             // Map the filtered data to match our component's format
                             const mappedData = filteredData.map((item) => ({
                                 id: item.inventory_id,
-                                studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                                studentname:
+                                    item.surname + ", " + item.first_name + " " + item.middle_initial,
                                 course: item.course,
                                 tassel_color: item.tassel_color,
                                 hood_color: item.hood_color,
@@ -658,7 +762,7 @@ const PendingRow = ({
                                 return_date: item.return_date,
                                 is_overdue: item.is_overdue,
                                 has_cap: item.has_cap,
-                                item_condition: item.item_condition
+                                item_condition: item.item_condition,
                             }));
                             setDashboard(mappedData);
                             setOriginalDashboard(mappedData);
@@ -675,6 +779,15 @@ const PendingRow = ({
 
 export default PendingRow;
 
+/**
+ * CustomDropdown Component
+ * Reusable dropdown component for editing table cell values
+ * @param {Object} props - Component props
+ * @param {string} props.value - Current selected value
+ * @param {Array} props.options - Available options
+ * @param {Function} props.onChange - Change handler
+ * @param {boolean} props.disabled - Whether dropdown is disabled
+ */
 const CustomDropdown = ({ value, options, onChange, disabled }) => {
     const [open, setOpen] = useState(false);
     const ref = useRef();
@@ -823,6 +936,11 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
     );
 };
 
-function getRowColor(index) {
+/**
+ * Determines row background color based on index
+ * @param {number} index - Row index
+ * @returns {string} CSS class for background color
+ */
+const getRowColor = (index) => {
     return index % 2 === 0 ? "bg-[#E9E9E9]" : "bg-[#D4D4D4]";
-}
+};

@@ -1,12 +1,30 @@
+/**
+ * PendingTable Component
+ * Main table component for the pending page that displays pending toga inventory items
+ * Uses PendingRow for rendering individual rows with status instead of return_status
+ */
+
 import PendingRow from "./PendingRow";
 import "../common/Table.css";
 import { useState, useEffect } from "react";
 
+/**
+ * PendingTable Component
+ * @param {Object} props - Component props
+ * @param {boolean} props.isGrid - Whether to display in grid view
+ * @param {boolean} props.modifyTable - Whether table is in edit mode
+ * @param {string} props.sortOrder - Current sort order
+ * @param {Array} props.data - Data to display in the table
+ */
 const PendingTable = ({ isGrid, modifyTable, sortOrder, data }) => {
+    // Track internal sort order state
     const [internalSortOrder, setInternalSortOrder] = useState(sortOrder || null);
+
+    // Update internal sort order when prop changes
     useEffect(() => {
         setInternalSortOrder(sortOrder);
     }, [sortOrder]);
+
     const mainContentHeight = "80vh";
     return (
         <div className="w-full flex flex-col items-center animate-fade-in justify-start z-10 mt-10">
