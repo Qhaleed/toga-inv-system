@@ -21,7 +21,6 @@ import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
 import StudentConcernsModal from "./StudentConcernsModal";
-// import { set } from "date-fns";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -31,17 +30,41 @@ function AdminDashboard() {
   const [totalPending, setTotalPending] = useState(0); //state for total pending
   const [totalEvaluated, setTotalEvaluated] = useState(0); //state for total evaluated
   const [totalReservation, setTotalReservation] = useState(0); //state for total reservation
+  const [totalStock, setTotalStock] = useState(0); // state for total stock
+  const [items, setItems] = useState([]); // state for items data
+  const [inventoryData, setInventoryData] = useState([]); // state to store all inventory data
 
   //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
   useEffect(() => {
+    // Fetch inventory data
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
+        setInventoryData(data); // Store all inventory data
         setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
         setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
         setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
       });
+
+    // Fetch items data
+    fetch("http://localhost:5001/items")
+      .then((res) => res.json())
+      .then((data) => {
+        setItems(data);
+        // Calculate total stock by summing up the quantities of all items
+        const totalQty = data.reduce((total, item) => total + item.quantity, 0);
+        setTotalStock(totalQty);
+      });
   }, []);
+
+  // Group items by type for chart display
+  const itemsByType = items.reduce((acc, item) => {
+    if (!acc[item.item_type]) {
+      acc[item.item_type] = 0;
+    }
+    acc[item.item_type] += item.quantity;
+    return acc;
+  }, {});
 
   // hardcoded muna to
   const concerns = [
@@ -118,7 +141,7 @@ function AdminDashboard() {
                 </p>
               </div>
               <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black  text-[#102F5E] w-full">
-                12
+                {totalStock}
               </div>
               <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button

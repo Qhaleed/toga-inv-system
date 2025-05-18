@@ -2,6 +2,7 @@
 
 import { TrendingUp } from "lucide-react";
 import { Pie, PieChart, Cell } from "recharts";
+import { useState, useEffect } from "react";
 
 import {
   Card,
@@ -15,102 +16,79 @@ import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { DashboardPieTooltip } from "./DashboardPieTooltip";
 
 // PIE CHART DATA FOR ITEMS (Cap, Tassel, Gown, Hood)
-// You can replace this with a prop or fetch if needed
-const itemData = [
-  { label: "Cap", key: "has_cap" },
-  { label: "Tassel", key: "tassel_color" },
-  { label: "Gown", key: "gown_condition" },
-  { label: "Hood", key: "hood_color" },
-];
-
-// Example: Replace this with your real data source
-const rawData = [
-  {
-    has_cap: 0,
-    tassel_color: "Blue",
-    gown_condition: "Yes",
-    hood_color: "Maroon",
-  },
-  {
-    has_cap: 0,
-    tassel_color: "Red",
-    gown_condition: "Yes",
-    hood_color: "White",
-  },
-  {
-    has_cap: 1,
-    tassel_color: "Green",
-    gown_condition: "Yes",
-    hood_color: "Black",
-  },
-  {
-    has_cap: 1,
-    tassel_color: "Purple",
-    gown_condition: null,
-    hood_color: "Yellow",
-  },
-  {
-    has_cap: 0,
-    tassel_color: "Blue",
-    gown_condition: null,
-    hood_color: "White",
-  },
-  {
-    has_cap: 0,
-    tassel_color: "Blue",
-    gown_condition: "Yes",
-    hood_color: "White",
-  },
-];
-
-// Calculate overall quantity for each item
-const chartData = itemData.map((item) => {
-  let value = 0;
-  if (item.key === "has_cap") {
-    value = rawData.reduce((acc, row) => acc + (row.has_cap ? 1 : 0), 0);
-  } else {
-    value = rawData.reduce((acc, row) => acc + (row[item.key] ? 1 : 0), 0);
-  }
-  return {
-    item: item.label,
-    value,
-  };
-});
+const itemTypes = ["cap", "tassle", "gown", "hood"];
 
 const chartConfig = {
-  Cap: { label: "Cap", color: "hsl(var(--chart-1))" },
-  Tassel: { label: "Tassel", color: "hsl(var(--chart-2))" },
-  Gown: { label: "Gown", color: "hsl(var(--chart-3))" },
-  Hood: { label: "Hood", color: "hsl(var(--chart-4))" },
+  cap: { label: "Cap", color: "hsl(var(--chart-1))" },
+  tassle: { label: "Tassel", color: "hsl(var(--chart-2))" },
+  gown: { label: "Gown", color: "hsl(var(--chart-3))" },
+  hood: { label: "Hood", color: "hsl(var(--chart-4))" },
 };
 
-// Map chartData to include fill color from chartConfig
-const coloredChartData = chartData.map((d) => ({
-  ...d,
-  fill: chartConfig[d.item]?.color || "#2563eb",
-}));
-
-// Calculate total for percentage
-const total = coloredChartData.reduce((acc, d) => acc + d.value, 0);
-
 export function DashboardPie() {
+  const [chartData, setChartData] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch items data from API
+    fetch("http://localhost:5001/items")
+      .then((res) => res.json())
+      .then((data) => {
+        // Group items by type and sum quantities
+        const groupedData = data.reduce((acc, item) => {
+          if (!acc[item.item_type]) {
+            acc[item.item_type] = 0;
+          }
+          acc[item.item_type] += item.quantity;
+          return acc;
+        }, {});
+
+        // Convert grouped data to chart format with colors
+        const formattedData = Object.entries(groupedData).map(([type, value]) => ({
+          item: type.charAt(0).toUpperCase() + type.slice(1), // Capitalize first letter
+          value,
+          fill: chartConfig[type]?.color || "#2563eb", // Default blue if type not in config
+        }));
+
+        // Calculate total for percentages
+        const itemTotal = formattedData.reduce((sum, item) => sum + item.value, 0);
+
+        setChartData(formattedData);
+        setTotal(itemTotal);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching items data:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <span className="text-gray-400">Loading data...</span>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="flex flex-row items-center  gap-4">
+      <div className="flex flex-row items-center gap-4">
         <ChartContainer
           config={chartConfig}
-          className="aspect-square  transition-all duration-700 ease-in-out hover:scale-110 focus:scale-102  h-50 max-h-[230px]"
+          className="aspect-square transition-all duration-700 ease-in-out hover:scale-110 focus:scale-102 h-50 max-h-[230px]"
         >
           <PieChart>
             <ChartTooltip cursor={false} content={<DashboardPieTooltip />} />
             <Pie
-              data={coloredChartData}
+              data={chartData}
               dataKey="value"
               nameKey="item"
               innerRadius={45}
               isAnimationActive={true}
             >
-              {coloredChartData.map((entry, idx) => (
+              {chartData.map((entry, idx) => (
                 <Cell key={`cell-${idx}`} fill={entry.fill} />
               ))}
             </Pie>
@@ -119,14 +97,14 @@ export function DashboardPie() {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-col gap-5 my-8 mr-4 justify-center h-fill w-full ">
-        {coloredChartData.map((entry) => {
+      <div className="flex flex-col gap-5 my-8 mr-4 justify-center h-fill w-full">
+        {chartData.map((entry) => {
           const percent =
             total > 0 ? ((entry.value / total) * 100).toFixed(1) : 0;
           return (
             <div
               key={entry.item}
-              className="flex items-center text-xs justify-between  h-full w-full"
+              className="flex items-center text-xs justify-between h-full w-full"
             >
               <span
                 className="inline-block w-3 h-3 rounded-full mr-2"
