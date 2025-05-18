@@ -51,19 +51,19 @@ export default function GownDamageTable({ data = gownData }) {
                     {item.category}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-800 w-[300px] truncate"
+                    className="px-4 py-3 text-gray-800  w-[470px] truncate"
                     title={item.reason}
                   >
                     {item.reason}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-600 max-w-[140px] truncate"
+                    className="px-4 py-3 text-gray-600 w-[320px] truncate"
                     title={item.student}
                   >
                     {item.student}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-500 max-w-[110px] truncate"
+                    className="px-4 py-3 text-gray-500 max-w-[30px] truncate"
                     title={item.date}
                   >
                     {item.date}

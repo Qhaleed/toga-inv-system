@@ -28,7 +28,9 @@ const EvaluationRows = ({
     if (isevalTab) {
       filtered = allData.filter((db) => db.evaluation_status === "Evaluated");
     } else if (isnotevalTab) {
-      filtered = allData.filter((db) => db.evaluation_status === "Not Evaluated");
+      filtered = allData.filter(
+        (db) => db.evaluation_status === "Not Evaluated"
+      );
     } else if (isAll) {
       filtered = allData;
     }

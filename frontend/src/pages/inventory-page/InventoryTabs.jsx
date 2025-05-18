@@ -124,7 +124,7 @@ export function ViewDamageTab() {
 export function ViewRepairTab() {
   return (
     <div className="h-full flex justify-center w-full">
-      <CarouselPlugin />
+      <h1>DI KO NA TO ICAROUSEL, same ko nalng sa view damage items</h1>
     </div>
   );
 }

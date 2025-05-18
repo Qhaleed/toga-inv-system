@@ -30,7 +30,6 @@ const EvaluationPage = () => {
       });
   }, []);
 
-
   return (
     <div
       className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
@@ -53,8 +52,15 @@ const EvaluationPage = () => {
             focusedStatus={focusedStatus}
             setFocusedStatus={setFocusedStatus}
             allCount={allData.length}
-            evaluatedCount={allData.filter(item => item.evaluation_status === "Evaluated").length}
-            NotEvaluatedCount={allData.filter(item => item.evaluation_status === "Not Evaluated").length}
+            evaluatedCount={
+              allData.filter((item) => item.evaluation_status === "Evaluated")
+                .length
+            }
+            NotEvaluatedCount={
+              allData.filter(
+                (item) => item.evaluation_status === "Not Evaluated"
+              ).length
+            }
           />
         </div>
       )}

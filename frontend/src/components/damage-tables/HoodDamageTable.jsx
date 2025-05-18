@@ -60,13 +60,13 @@ export default function HoodDamageTable({ data = hoodData }) {
                       {item.reason}
                     </td>
                     <td
-                      className="px-4 py-3 text-gray-600 w-[300px] truncate"
+                      className="px-4 py-3 text-gray-600 w-[320px] truncate"
                       title={item.student}
                     >
                       {item.student}
                     </td>
                     <td
-                      className="px-4 py-3 text-gray-500 max-w-[110px] truncate"
+                      className="px-4 py-3 text-gray-500 max-w-[10px] truncate"
                       title={item.date}
                     >
                       {item.date}
