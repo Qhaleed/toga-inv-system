@@ -17,6 +17,7 @@ const invenRoute = require("./routes/inventory");
 const authRoute = require("./routes/auth");
 const registerRoute = require("./routes/register");
 const itemsRoute = require("./routes/items");
+const studentHomeRoute = require("./routes/student-home");
 
 // Routes for db
 const accountsRoute = require("./routes/accounts");
@@ -32,6 +33,7 @@ app.use("/auth", authRoute);
 app.use("/register", registerRoute);
 app.use("/accounts", accountsRoute);
 app.use("/items", itemsRoute);
+app.use("/student-home", studentHomeRoute);
 
 // Root Test
 app.get("/", (req, res) => {
