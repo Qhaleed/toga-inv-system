@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 import FormWrapper from "../common/FormWrapper";
 import LoginLoaderAnimation from "./LoginLoaderAnimation";
-import { handleApiRequest } from "@/lib/utils";
 
 function LoginCard() {
   const [email, setEmail] = useState("");
@@ -18,18 +17,11 @@ function LoginCard() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await handleApiRequest("api/auth/login", {
+      const response = await fetch("api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
-      if (!response) {
-        // handleApiRequest returns null if token is expired/invalid
-        setError("Session expired. Please log in again.");
-        setLoading(false);
-        return;
-      }
 
       if (response.ok) {
         const data = await response.json();
