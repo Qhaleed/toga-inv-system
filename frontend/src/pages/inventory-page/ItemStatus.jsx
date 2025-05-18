@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
 import Profile from "../../assets/images/dump.jpg";
 import ItemStatusAllChart from "@/components/ui/ItemStatusAllChart";
+import ItemStatusCapChart from "@/components/ui/ItemStatusCapChart";
+import ItemStatusTasselChart from "@/components/ui/ItemStatusTasselChart";
+import ItemStatusGownChart from "@/components/ui/ItemStatusGownChart";
+import ItemStatusHoodChart from "@/components/ui/ItemStatusHoodChart";
 
 const ItemStatus = () => {
   // Original totals state for backward compatibility
@@ -352,6 +356,10 @@ const ItemStatus = () => {
           <div className="flex-1 flex flex-col items-start">
             <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
               {all && <ItemStatusAllChart />}
+              {cap && <ItemStatusCapChart />}
+              {tassel && <ItemStatusTasselChart />}
+              {gown && <ItemStatusGownChart />}
+              {hood && <ItemStatusHoodChart />}
             </div>
             <div className="w-full h-10 flex justify-between items-center">
               <div className="w-[700px] h-10 flex justify-between items-center ml-3">
@@ -387,6 +395,8 @@ const ItemStatus = () => {
           <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-xl grid grid-cols-1 sm:grid-cols-2 gap-4">
             {all && (
               <>
+
+                {/* Total Item Status */}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
                     {totalItems}
@@ -411,15 +421,32 @@ const ItemStatus = () => {
                   </div>
                 </div>
 
-                {/* Add more stock summary items here */}
-                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
+                {/* Cap Status */}
+                <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#dadada]">
                     {itemsData.totalCap || totals.cap}
                   </span>
                   <span className="text-sm text-[#dadada] mt-1">
                     Cap Status
                   </span>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-[#dadada]">In Good Condition: {itemsData.capStatus?.inGoodCondition || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-[#dadada]">For Repair: {itemsData.capStatus?.forRepair || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-[#dadada]">Damaged: {itemsData.capStatus?.damaged || 0}</span>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Tassel Status */}
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
                     {itemsData.totalTassel || totals.tassel}
@@ -427,12 +454,24 @@ const ItemStatus = () => {
                   <span className="text-base text-[#001d5a] mt-1">
                     Tassel Status
                   </span>
-                  <span className="text-xs text-[#001d5a] mt-1">
-                    {Object.entries(itemsData.tasselColors || totals.tasselColors || {})
-                      .map(([color, count]) => `${color}: ${count}`)
-                      .join(", ")}
-                  </span>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-[#001d5a]">In Good Condition: {itemsData.tasselStatus?.inGoodCondition || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-[#001d5a]">For Repair: {itemsData.tasselStatus?.forRepair || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-[#001d5a]">Damaged: {itemsData.tasselStatus?.damaged || 0}</span>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Gown Status */}
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
                     {itemsData.totalGown || totals.gown}
@@ -440,12 +479,24 @@ const ItemStatus = () => {
                   <span className="text-base text-gray-800 mt-1">
                     Gown Status
                   </span>
-                  <span className="text-xs text-gray-800 mt-1">
-                    {Object.entries(itemsData.gownSizes || totals.gownSizes || {})
-                      .map(([size, count]) => `${size}: ${count}`)
-                      .join(", ")}
-                  </span>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-gray-800">In Good Condition: {itemsData.gownStatus?.inGoodCondition || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-gray-800">For Repair: {itemsData.gownStatus?.forRepair || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-gray-800">Damaged: {itemsData.gownStatus?.damaged || 0}</span>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Hood Status */}
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
                     {itemsData.totalHood || totals.hood}
@@ -453,11 +504,21 @@ const ItemStatus = () => {
                   <span className="text-base text-black mt-1">
                     Hood Status
                   </span>
-                  <span className="text-xs text-black mt-1">
-                    {Object.entries(itemsData.hoodColors || totals.hoodColors || {})
-                      .map(([color, count]) => `${color}: ${count}`)
-                      .join(", ")}
-                  </span>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-black">In Good Condition: {itemsData.hoodStatus?.inGoodCondition || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-black">For Repair: {itemsData.hoodStatus?.forRepair || 0}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between w-full mt-1">
+                    <div className="text-center">
+                      <span className="text-xs text-black">Damaged: {itemsData.hoodStatus?.damaged || 0}</span>
+                    </div>
+                  </div>
                 </div>
               </>
             )}
@@ -588,38 +649,11 @@ const ItemStatus = () => {
                 </div>
               </>
             )}
-
-          </div>
-        </div>
-        {/* Low Stock Alert Section */}
-        <div className="absolute bottom-0 w-full max-w-3xl mt-10">
-          <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
-            Item Status Alerts
-          </h2>
-          <div className="bg-[#FFF3CD] border-l-4 border-[#B91C1C] text-[#B91C1C] p-2 rounded flex items-center gap-3">
-            <svg
-              className="w-6 h-6 text-[#B91C1C]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>
-              {itemsData.statusBreakdown?.damaged > 0 && `${itemsData.statusBreakdown.damaged} damaged items need attention. `}
-              {itemsData.statusBreakdown?.forRepair > 0 && `${itemsData.statusBreakdown.forRepair} items need repair. `}
-              Please check the item status details.
-            </span>
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default ItemStatus;
