@@ -11,7 +11,7 @@ import {
 
 import { ChartContainer } from "./chart";
 
-export default function MyChart() {
+export default function MyChart({ data }) {
   const [chartData, setChartData] = useState([
     { name: "Cap", count: 0, color: "#2563eb", inventorySizes: {} },
     { name: "Tassel", count: 0, color: "#60a5fa", inventoryColors: {} },
@@ -28,6 +28,38 @@ export default function MyChart() {
   };
 
   useEffect(() => {
+    // If data is passed as props, use it instead of fetching
+    if (data) {
+      setChartData([
+        {
+          name: "Cap",
+          count: data.totalCap || 0,
+          color: colorMap.Cap,
+          inventorySizes: {}, // Cap sizes data not available in new schema
+        },
+        {
+          name: "Tassel",
+          count: data.totalTassel || 0,
+          color: colorMap.Tassel,
+          inventoryColors: data.tasselColors || {},
+        },
+        {
+          name: "Gown",
+          count: data.totalGown || 0,
+          color: colorMap.Gown,
+          inventorySizes: data.gownSizes || {},
+        },
+        {
+          name: "Hood",
+          count: data.totalHood || 0,
+          color: colorMap.Hood,
+          inventoryColors: data.hoodColors || {},
+        },
+      ]);
+      return;
+    }
+
+    // Fallback to fetch data directly if no props provided
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
@@ -90,7 +122,7 @@ export default function MyChart() {
           },
         ]);
       });
-  }, [colorMap.Cap, colorMap.Tassel, colorMap.Gown, colorMap.Hood]);
+  }, [data, colorMap.Cap, colorMap.Tassel, colorMap.Gown, colorMap.Hood]);
 
   return (
     <ChartContainer

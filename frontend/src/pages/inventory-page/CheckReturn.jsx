@@ -268,6 +268,8 @@ const CheckReturn = () => {
       </div>
       <div className="w-full relative h-screen p-8 flex flex-col items-center">
         <div className="w-full flex flex-col 2xl:flex-row items-center gap-8 justify-center mt-10 transition-all ease-out duration-300">
+
+
           <div className="flex-1 flex flex-col items-start">
             <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
               {returnToggle && all && <ReturnedAllChart />}{" "}

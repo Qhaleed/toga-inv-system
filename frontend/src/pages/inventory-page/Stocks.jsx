@@ -243,11 +243,11 @@ const Stocks = () => {
         <div className="w-full flex flex-col 2xl:flex-row items-center gap-8 justify-center mt-10 transition-all ease-out duration-300">
           <div className="flex-1 flex flex-col items-center">
             <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
-              {all && <StocksAllChart />}
-              {cap && <StocksCapChart />}
-              {tassel && <StocksTasselChart />}
-              {gown && <StocksGownChart />}
-              {hood && <StocksHoodChart />}
+              {all && <StocksAllChart data={itemsData} />}
+              {cap && <StocksCapChart data={itemsData} />}
+              {tassel && <StocksTasselChart stocksData={itemsData} />}
+              {gown && <StocksGownChart stocksData={itemsData} />}
+              {hood && <StocksHoodChart stocksData={itemsData} />}
             </div>
             <div className="w-full h-10 flex justify-between items-center mt-5">
               <div className="w-[280px] md:w-[350px] lg:w-[500px] xl:w-[600px] h-10 flex justify-start items-center ml-3 transition-all ease-out duration-300">
