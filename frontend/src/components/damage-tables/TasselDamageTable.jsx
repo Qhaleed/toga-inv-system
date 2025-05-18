@@ -62,7 +62,7 @@ export default function TasselDamageTable({ data = tasselData }) {
                     {item.student}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-500 max-w-[110px] truncate"
+                    className="px-4 py-3 text-gray-500  max-w-[30px] truncate"
                     title={item.date}
                   >
                     {item.date}
