@@ -15,7 +15,7 @@ const ItemStatus = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5001/items")
+    fetch("http://localhost:5001/statuses")
       .then((res) => res.json())
       .then((data) => {
         setItems(data.items || []);
