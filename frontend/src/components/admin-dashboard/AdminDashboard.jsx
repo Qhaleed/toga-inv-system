@@ -35,6 +35,7 @@ function AdminDashboard() {
   const [items, setItems] = useState([]); // state for items data
   const [inventoryData, setInventoryData] = useState([]); // state to store all inventory data
   const [latestRegistrations, setLatestRegistrations] = useState([]); // state for latest registrations
+  const [pendingApprovals, setPendingApprovals] = useState([]); // state for pending approvals
 
   //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
   useEffect(() => {
@@ -58,6 +59,20 @@ function AdminDashboard() {
           .slice(0, 4); // Get only the first 4
 
         setLatestRegistrations(sortedRegistrations);
+
+        // Get pending approvals sorted alphabetically by first_name
+        const pendingItems = data
+          .filter((item) => item.status === "Pending")
+          .sort((a, b) => {
+            // Sort alphabetically by first name
+            if (a.first_name && b.first_name) {
+              return a.first_name.localeCompare(b.first_name);
+            }
+            return 0;
+          })
+          .slice(0, 2); // Get only the first 2
+
+        setPendingApprovals(pendingItems);
       });
 
     // Fetch items data
@@ -340,9 +355,8 @@ function AdminDashboard() {
                 } else if (diffHours > 0) {
                   timeAgo = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
                 } else {
-                  timeAgo = `${diffMinutes} min${
-                    diffMinutes > 1 ? "s" : ""
-                  } ago`;
+                  timeAgo = `${diffMinutes} min${diffMinutes > 1 ? "s" : ""
+                    } ago`;
                 }
 
                 // Create full name for avatar
@@ -401,64 +415,52 @@ function AdminDashboard() {
           </h3>
           <ul className="flex flex-col gap-3">
             {/*Newly registered students  dito */}
-            <li className="flex flex-col gap-1 border-b pb-2 last:border-b-0">
-              <div className="flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                <span className="font-semibold text-gray-800">
-                  Labazmo T. Timo
-                </span>
-                <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                  New
-                </span>
-              </div>
-              <div className="text-xs text-gray-500 ml-4">ID: 203111</div>
-              <div className="text-xs text-gray-500 ml-4">
-                Course: BS Biology (BSBio)
-              </div>
-              <div className="flex gap-2 ml-4 mt-1">
-                <button
-                  className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 focus:bg-blue-200 transition"
-                  onClick={() =>
-                    alert("Show registration form for Steven Universe")
-                  }
+            {pendingApprovals.length > 0 ? (
+              pendingApprovals.map((item, index) => (
+                <li
+                  key={index}
+                  className="flex flex-col gap-1 border-b pb-2 last:border-b-0"
                 >
-                  View Form
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-green-100 text-green-700 font-semibold hover:bg-green-200 focus:bg-green-200 transition">
-                  Accept
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 focus:bg-red-200 transition">
-                  Deny
-                </button>
-              </div>
-            </li>
-            <li className="flex flex-col gap-1 border-b pb-2 last:border-b-0">
-              <div className="flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                <span className="font-semibold text-gray-800">Pablo Jab</span>
-                <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                  New
-                </span>
-              </div>
-              <div className="text-xs text-gray-500 ml-4">ID: 333222</div>
-              <div className="text-xs text-gray-500 ml-4">
-                Course: Bachelor of Elementary Education (BEEd)
-              </div>
-              <div className="flex gap-2 ml-4 mt-1">
-                <button
-                  className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 focus:bg-blue-200 transition"
-                  onClick={() => alert("Show registration form for Pablo Jab")}
-                >
-                  View Form
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-green-100 text-green-700 font-semibold hover:bg-green-200 focus:bg-green-200 transition">
-                  Accept
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 focus:bg-red-200 transition">
-                  Deny
-                </button>
-              </div>
-            </li>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+                    <span className="font-semibold text-gray-800">
+                      {item.first_name} {item.surname}
+                    </span>
+                    <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                      New
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-500 ml-4">
+                    ID: {item.id}
+                  </div>
+                  <div className="text-xs text-gray-500 ml-4">
+                    Course: {item.course}
+                  </div>
+                  <div className="flex gap-2 ml-4 mt-1">
+                    <button
+                      className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 focus:bg-blue-200 transition"
+                      onClick={() =>
+                        alert(
+                          `View details for ${item.first_name} ${item.surname}`
+                        )
+                      }
+                    >
+                      View Details
+                    </button>
+                    <button className="px-2 py-1 text-xs rounded bg-green-100 text-green-700 font-semibold hover:bg-green-200 focus:bg-green-200 transition">
+                      Accept
+                    </button>
+                    <button className="px-2 py-1 text-xs rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 focus:bg-red-200 transition">
+                      Deny
+                    </button>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <li className="text-center py-4 text-gray-500">
+                No approval requests found
+              </li>
+            )}
           </ul>
         </div>
         {/* 3rd col: Student Concerns Results */}
