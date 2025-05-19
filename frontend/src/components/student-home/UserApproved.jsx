@@ -110,7 +110,9 @@ const UserApproved = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const trimmedTogaSize = formData.togaSize ? formData.togaSize.split(" ")[0] : ""; //remove the parenthesis sa gown size
+    const trimmedTogaSize = formData.togaSize
+      ? formData.togaSize.split(" ")[0]
+      : ""; //remove the parenthesis sa gown size
     try {
       const response = await fetch("http://localhost:5001/student-home", {
         method: "POST",
@@ -122,7 +124,7 @@ const UserApproved = () => {
           tasselColor: determineColorFromCourse(formData.course).tasselColor,
           hoodColor: determineColorFromCourse(formData.course).hoodColor,
           cap: true,
-          account_id: formData.account_id
+          account_id: formData.account_id,
         }),
       });
       alert(JSON.stringify(formData, null, 2));

@@ -1,87 +1,143 @@
-import React, { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import React, { useMemo } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import ItemStatusAllTooltip from "./ItemStatusAllTooltip";
 
-const COLOR = ["#b6c2e0", "#8c9ec7", "#6b7fa6"];
+export default function ItemStatusGownChart({ items = [] }) {
+  // Memoize status and color arrays to avoid dependency issues
+  const STATUS = useMemo(
+    () => ["In Good Condition", "For Repair", "Damaged"],
+    []
+  );
+  const COLORS = useMemo(
+    () => [
+      "#16a34a", // In Good Condition (green)
+      "#eab308", // For Repair (yellow)
+      "#dc2626", // Damaged (red)
+    ],
+    []
+  );
 
-export default function ItemStatusGownChart() {
-    const [chartData, setChartData] = useState([
-        { status: "In Good Condition", count: 0, color: "#b6c2e0" },
-        { status: "For Repair", count: 0, color: "#8c9ec7" },
-        { status: "Damaged", count: 0, color: "#6b7fa6" },
-    ]);
+  // Define gown sizes for x-axis
+  const GOWN_SIZES = useMemo(
+    () => ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+    []
+  );
 
-    useEffect(() => {
-        fetch("http://localhost:5001/items")
-            .then((res) => res.json())
-            .then((data) => {
-                // Initialize counters for each status
-                let inGoodCondition = 0;
-                let forRepair = 0;
-                let damaged = 0;
+  // Build chart data: one entry per gown size, each with 3 status counts, sorted by STATUS order
+  const chartData = useMemo(() => {
+    return GOWN_SIZES.map((size) => {
+      // Gather all items for this size (case-insensitive, trimmed, using variant field)
+      const sizeLower = size.toLowerCase().trim();
+      const sizeItems = items.filter((item) => {
+        const type = (item.item_type || "").toLowerCase().trim();
+        const variant = (item.variant || "").toLowerCase().trim();
+        return type === "gown" && variant === sizeLower;
+      });
+      // For each status, get the count (sorted by STATUS order)
+      const entry = { size };
+      STATUS.forEach((status) => {
+        const normalizedStatus = status.toLowerCase().trim();
+        entry[status] = sizeItems
+          .filter((item) => {
+            const itemStatus = (item.item_status || "").toLowerCase().trim();
+            return itemStatus === normalizedStatus;
+          })
+          .reduce((sum, item) => sum + (item.quantity || 0), 0);
+      });
+      return entry;
+    });
+  }, [items, STATUS, GOWN_SIZES]);
 
-                // Process only gown items
-                data.forEach((item) => {
-                    if (item.item_type === "gown") {
-                        const itemQuantity = item.quantity || 0;
+  // Check if items is empty or all chart data is zero
+  const allZero = chartData.every((entry) =>
+    STATUS.every((status) => entry[status] === 0)
+  );
 
-                        if (item.item_status === "In Good Condition") {
-                            inGoodCondition += itemQuantity;
-                        } else if (item.item_status === "For Repair") {
-                            forRepair += itemQuantity;
-                        } else if (item.item_status === "Damaged") {
-                            damaged += itemQuantity;
-                        }
-                    }
-                });
-
-                // Update chart data with real values
-                setChartData([
-                    { status: "In Good Condition", count: inGoodCondition, color: "#b6c2e0" },
-                    { status: "For Repair", count: forRepair, color: "#8c9ec7" },
-                    { status: "Damaged", count: damaged, color: "#6b7fa6" },
-                ]);
-            })
-            .catch((error) => {
-                console.error("Error fetching gown data for chart:", error);
-            });
-    }, []);
-
+  if (!items.length) {
     return (
-        <div className="w-full flex flex-col items-center">
-            <BarChart
-                width={900}
-                height={520}
-                data={chartData}
-                margin={{ top: 24, right: 24, left: 24, bottom: 24 }}
-                className="w-full"
-            >
-                <CartesianGrid
-                    strokeDasharray="3 3"
-                    vertical={false}
-                    stroke="#e5e7eb"
-                />
-                <XAxis
-                    dataKey="status"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    fontWeight="bold"
-                    fontSize={16}
-                />
-                <YAxis allowDecimals={false} tickLine={false} axisLine={false} />
-                <Bar
-                    dataKey="count"
-                    fill={COLOR}
-                    radius={8}
-                    barSize={60}
-                    isAnimationActive
-                />
-                <Tooltip
-                    content={<ItemStatusAllTooltip />}
-                    cursor={{ fill: "#e0e7ef", opacity: 0.3 }}
-                />
-            </BarChart>
-        </div>
+      <div className="text-red-600 font-bold p-4">
+        No gown items data received. Check parent component or API.
+      </div>
     );
+  }
+  if (allZero) {
+    return (
+      <div className="text-yellow-600 font-bold p-4">
+        Gown chart: All values are zero. Check data values and normalization.
+      </div>
+    );
+  }
+
+  // Debug: log incoming items and unique field values
+  console.log("Gown Items", items);
+  console.log(
+    "Unique item_status",
+    Array.from(new Set(items.map((i) => i.item_status)))
+  );
+  console.log(
+    "Unique variant",
+    Array.from(new Set(items.map((i) => i.variant)))
+  );
+  console.log(
+    "Unique item_type",
+    Array.from(new Set(items.map((i) => i.item_type)))
+  );
+
+  // Debug: log chart data
+  console.log("Gown Chart Data", chartData);
+
+  return (
+    <div className="w-full p-4 sm:p-6 md:p-8">
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart
+          data={chartData}
+          margin={{ top: 24, right: 24, left: 24, bottom: 24 }}
+        >
+          <CartesianGrid
+            strokeDasharray="3 3"
+            vertical={false}
+            stroke="#e5e7eb"
+          />
+          <XAxis
+            dataKey="size"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={10}
+            style={{ fontWeight: 600, fontSize: "14px" }}
+          />
+          <YAxis
+            allowDecimals={false}
+            tickLine={false}
+            axisLine={false}
+            style={{ fontSize: "13px" }}
+          />
+          <Tooltip
+            content={<ItemStatusAllTooltip />}
+            cursor={{ fill: "#e0e7ef", opacity: 0.3 }}
+          />
+          <Legend />
+          {STATUS.map((status, idx) => (
+            <Bar
+              key={status}
+              dataKey={status}
+              name={status}
+              fill={COLORS[idx]}
+              radius={8}
+              barSize={30}
+              isAnimationActive
+            />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
 }

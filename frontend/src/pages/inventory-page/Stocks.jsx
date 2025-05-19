@@ -35,8 +35,9 @@ const Stocks = () => {
   useEffect(() => {
     console.log("Fetching items data from API...");
     fetch("http://localhost:5001/items")
-      .then((res) => res.json())
-      .then((data) => {
+    .then((res) => res.json())
+    .then((data) => {
+      const items = data.items || [];
         console.log("Raw items data from API:", data);
 
         // Initialize counters and storage objects
@@ -226,60 +227,66 @@ const Stocks = () => {
   const availableHood = itemsData.totalHood - (itemsData.statusBreakdown?.damaged || 0);
   const availableTotal = itemsData.totalItems - (itemsData.statusBreakdown?.damaged || 0);
 
-  return (
-    <>
-      {" "}
-      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 mt-5 text-center">
-        <span className="z-1000 hover:opacity-40 cursor-pointer text-[#001C47] font-semibold">
-          {" "}
-          Inventory {">"}
+  const getButtonClass = (isActive) =>
+  isActive
+    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium shadow-md scale-105 transition-all duration-200 hover:bg-[#1e293b] hover:shadow-lg"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-105 hover:bg-[#e0e7ef] hover:text-[#02327B] hover:shadow-md";
+
+return (
+  <>
+    {/* Breadcrumb Title (styled like ItemStatus.jsx) */}
+    <div className="w-full px-8 pt-6">
+      <h2 className="text-2xl font-figtree tracking-tight text-[#1e293b] mb-2 drop-shadow-sm">
+        <span className="text-black font-bold">Inventory</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-primary">Stocks</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-[#2563eb]">
+          {all && "All"}{cap && "Cap"}{tassel && "Tassel"}{gown && "Gown"}{hood && "Hood"}
         </span>
-        <span className="text-[#02327B] hover:opacity-70 cursor-pointer">
-          {" "}
-          Stocks
-        </span>
-      </div>
-      <div className="w-full relative h-screen p-8 flex flex-col items-center">
-        <div className="w-full flex flex-col 2xl:flex-row items-center gap-8 justify-center mt-10 transition-all ease-out duration-300">
-          <div className="flex-1 flex flex-col items-center">
-            <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
-              {all && <StocksAllChart data={itemsData} />}
-              {cap && <StocksCapChart data={itemsData} />}
-              {tassel && <StocksTasselChart stocksData={itemsData} />}
-              {gown && <StocksGownChart stocksData={itemsData} />}
-              {hood && <StocksHoodChart stocksData={itemsData} />}
+      </h2>
+    </div>
+    <div className="w-full relative h-screen p-8 flex flex-col items-center">
+      <div className="w-full flex flex-col 2xl:flex-row items-center gap-8 justify-center mt-10 transition-all ease-out duration-300">
+        <div className="flex-1 flex flex-col items-center">
+          <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
+            {all && <StocksAllChart data={itemsData} />}
+            {cap && <StocksCapChart data={itemsData} />}
+            {tassel && <StocksTasselChart stocksData={itemsData} />}
+            {gown && <StocksGownChart stocksData={itemsData} />}
+            {hood && <StocksHoodChart stocksData={itemsData} />}
+          </div>
+          {/* Chart Type Selector - styled like ItemStatus.jsx */}
+          <div className="w-full h-10 flex justify-between items-center mt-5">
+            <div className="w-[280px] md:w-[350px] lg:w-[500px] xl:w-[600px] h-10 flex justify-start items-center ml-3 transition-all ease-out duration-300 gap-2">
+              <button className={getButtonClass(all)} onClick={allToggle}>
+                All
+              </button>
+              <button className={getButtonClass(cap)} onClick={capToggle}>
+                Cap
+              </button>
+              <button className={getButtonClass(tassel)} onClick={tasselToggle}>
+                Tassel
+              </button>
+              <button className={getButtonClass(gown)} onClick={gownToggle}>
+                Gown
+              </button>
+              <button className={getButtonClass(hood)} onClick={hoodToggle}>
+                Hood
+              </button>
             </div>
-            <div className="w-full h-10 flex justify-between items-center mt-5">
-              <div className="w-[280px] md:w-[350px] lg:w-[500px] xl:w-[600px] h-10 flex justify-start items-center ml-3 transition-all ease-out duration-300">
-                <button className={allBtn} onClick={allToggle}>
-                  All
-                </button>
-                <button className={capBtn} onClick={capToggle}>
-                  Cap
-                </button>
-                <button className={tasselBtn} onClick={tasselToggle}>
-                  Tassel
-                </button>
-                <button className={gownBtn} onClick={gownToggle}>
-                  Gown
-                </button>
-                <button className={hoodBtn} onClick={hoodToggle}>
-                  Hood
-                </button>
-              </div>
-              <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3 w-32">
-                <h3 className="pl-3">
-                  {all && "All Stocks"}
-                  {cap && "Cap Stocks"}
-                  {tassel && "Tassel Stocks"}
-                  {gown && "Gown Stocks"}
-                  {hood && "Hood Stocks"}
-                </h3>
-              </div>
+            <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3 w-32">
+              <h3 className="pl-3">
+                {all && "All Stocks"}
+                {cap && "Cap Stocks"}
+                {tassel && "Tassel Stocks"}
+                {gown && "Gown Stocks"}
+                {hood && "Hood Stocks"}
+              </h3>
             </div>
           </div>
-          {/* Stock Summary Section */}
-          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4 border border-red-500">
+        </div>
+        <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4 border border-red-500">
             {all && (
               <>
                 {" "}
@@ -549,9 +556,9 @@ const Stocks = () => {
               </>
             )}
           </div>
-        </div>
-        {/* Low Stock Alert Section - conditionally show based on inventory levels */}
-        {(itemsData.totalCap < 20 || itemsData.totalTassel < 20 || itemsData.totalGown < 20 || itemsData.totalHood < 20) && (
+      </div>
+      {/* ...existing code for Low Stock Alert Section... */}
+      {(itemsData.totalCap < 20 || itemsData.totalTassel < 20 || itemsData.totalGown < 20 || itemsData.totalHood < 20) && (
           <div className="w-full max-w-3xl mt-10">
             <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
               Low Stock Alerts
@@ -577,9 +584,11 @@ const Stocks = () => {
             </div>
           </div>
         )}
-      </div>
-    </>
-  );
-};
+    </div>
+  </>
+);
+}
+
+// ...existing code...
 
 export default Stocks;
