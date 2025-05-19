@@ -15,7 +15,10 @@ const ReservationPage = () => {
   const [isAZ, setIsAZ] = useState(false);
   const [isZA, setIsZA] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]); // FOR SEARCH BAR
 
+
+  //fetch info from db
   useEffect(() => {
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
@@ -26,6 +29,11 @@ const ReservationPage = () => {
         setAllData(filteredData);
       });
   }, []);
+
+//para ma filter ang data if nag search
+  useEffect(() => {
+  setFilteredData(allData);
+}, [allData]);
 
   return (
     <div
@@ -67,6 +75,7 @@ const ReservationPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            onSearch={setFilteredData}
           />
         </div>
         <div className="w-full relative h-full flex flex-col">
@@ -90,7 +99,8 @@ const ReservationPage = () => {
                 isNotReturnedTab={isNotReturnedTab}
                 isAZ={isAZ}
                 isZA={isZA}
-                allData={allData}
+                allData={filteredData}
+                
               />
             </div>
           </div>
