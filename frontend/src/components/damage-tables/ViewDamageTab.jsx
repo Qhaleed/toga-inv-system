@@ -63,11 +63,12 @@ export default function ViewDamageTab() {
     {
       label: "Cap",
       count: capData.length,
-      color: "bg-blue-200",
-      text: "text-blue-900",
+      color:
+        "bg-gradient-to-br from-blue-200 via-blue-100 to-blue-50 border-blue-300 border-2",
+      text: "text-[#2840A1]",
       icon: (
         <svg
-          className="w-7 h-7 text-blue-500"
+          className="w-7 h-7 text-[#2840A1]"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -80,11 +81,12 @@ export default function ViewDamageTab() {
     {
       label: "Gown",
       count: gownData.length,
-      color: "bg-gray-200",
-      text: "text-gray-800",
+      color:
+        "bg-gradient-to-br from-gray-200 via-gray-100 to-gray-50 border-gray-300 border-2",
+      text: "text-[#2840A1]",
       icon: (
         <svg
-          className="w-7 h-7 text-gray-500"
+          className="w-7 h-7 text-[#2840A1]"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -97,11 +99,12 @@ export default function ViewDamageTab() {
     {
       label: "Hood",
       count: hoodData.length,
-      color: "bg-yellow-100",
-      text: "text-yellow-900",
+      color:
+        "bg-gradient-to-br from-yellow-100 via-yellow-50 to-white border-yellow-300 border-2",
+      text: "text-[#2840A1]",
       icon: (
         <svg
-          className="w-7 h-7 text-yellow-500"
+          className="w-7 h-7 text-[#2840A1]"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -115,11 +118,12 @@ export default function ViewDamageTab() {
     {
       label: "Tassel",
       count: tasselData.length,
-      color: "bg-pink-100",
-      text: "text-pink-900",
+      color:
+        "bg-gradient-to-br from-pink-100 via-pink-50 to-white border-pink-300 border-2",
+      text: "text-[#2840A1]",
       icon: (
         <svg
-          className="w-7 h-7 text-pink-500"
+          className="w-7 h-7 text-[#2840A1]"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -141,7 +145,7 @@ export default function ViewDamageTab() {
         {summary.map((item) => (
           <div
             key={item.label}
-            className={`bg-white shadow-xl rounded-2xl flex flex-col items-center p-6 ${item.color}`}
+            className={`shadow-xl rounded-2xl flex flex-col items-center p-6 ${item.color}`}
           >
             <div className="flex items-center gap-2 mb-2">
               {item.icon}

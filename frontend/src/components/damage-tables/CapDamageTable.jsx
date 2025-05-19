@@ -56,7 +56,7 @@ export default function CapDamageTable({ data = capData }) {
                     {item.reason}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-600 w-[300px] truncate"
+                    className="px-4 py-3 text-gray-600  w-[320px] truncate"
                     title={item.student}
                   >
                     {item.student}

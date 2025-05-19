@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SideBar from "../../components/navigations/SideBar";
 import NavBar from "../../components/navigations/NavBar";
 import Table from "../../components/common/Table";
@@ -8,7 +8,24 @@ const ReservationPage = () => {
   const [modifyTable, setmodifyTable] = useState(false);
   const [activeTab, setActiveTab] = useState("reservation");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [sortOrder, setSortOrder] = useState(null);
+  // Reservation tab filtering/sorting states
+  const [isAll, setIsAll] = useState(true);
+  const [isReturnedTab, setIsReturnedTab] = useState(false);
+  const [isNotReturnedTab, setIsNotReturnedTab] = useState(false);
+  const [isAZ, setIsAZ] = useState(false);
+  const [isZA, setIsZA] = useState(false);
+  const [allData, setAllData] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5001/inventory")
+      .then((res) => res.json())
+      .then((data) => {
+        const filteredData = data.filter(
+          (item) => item.toga_size !== null && item.toga_size !== undefined
+        );
+        setAllData(filteredData);
+      });
+  }, []);
 
   return (
     <div
@@ -23,15 +40,26 @@ const ReservationPage = () => {
         <div className="max-md:hidden md:block w-full relative transition-transform duration-500 ease-in-out">
           <SideBar
             alwaysShowOnLarge
-            setSortOrder={setSortOrder}
             activeTab={activeTab}
+            setIsAll={setIsAll}
+            setIsReturnedTab={setIsReturnedTab}
+            setIsNotReturnedTab={setIsNotReturnedTab}
+            setIsAZ={setIsAZ}
+            setIsZA={setIsZA}
+            allCount={allData.length}
+            returnedCount={
+              allData.filter((item) => item.status === "Returned").length
+            }
+            notReturnedCount={
+              allData.filter((item) => item.status === "Not Returned").length
+            }
           />
         </div>
       )}
       {/* Main content */}
       <div className="bg-[#F3F9FF] w-full h-full">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-14 pt-15 bg-green-200 flex items-center relative">
+        <div className="w-full z-10 h-14 pt-15 flex items-center relative">
           <NavBar
             isGrid={isGrid}
             setIsGrid={setIsGrid}
@@ -41,7 +69,7 @@ const ReservationPage = () => {
             setActiveTab={setActiveTab}
           />
         </div>
-        <div className="w-full relative h-full overflow-hidden bg-amber-300 flex flex-col">
+        <div className="w-full relative h-full flex flex-col">
           <button
             className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
             onClick={() => setSidebarOpen((open) => !open)}
@@ -52,13 +80,17 @@ const ReservationPage = () => {
               {sidebarOpen ? "\u2190" : "\u2192"}
             </span>
           </button>
-
-          <div className="w-full h-full overflow-visible flex flex-col flex-1">
-            <div className="flex-1 flex mx-auto min-w-fit animate-fade-in overflow-hidden">
+          <div className="w-full h-full overflow-hidden flex flex-col flex-1">
+            <div className="overflow-hidden flex mx-auto w-full animate-fade-in ">
               <Table
                 isGrid={isGrid}
                 modifyTable={modifyTable}
-                sortOrder={sortOrder}
+                isAll={isAll}
+                isReturnedTab={isReturnedTab}
+                isNotReturnedTab={isNotReturnedTab}
+                isAZ={isAZ}
+                isZA={isZA}
+                allData={allData}
               />
             </div>
           </div>

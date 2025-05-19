@@ -10,6 +10,7 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
   ArrowRight,
+  Group,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import BoxIcon from "@/assets/icons/box.svg?react";
@@ -42,8 +43,12 @@ function AdminDashboard() {
       .then((res) => res.json())
       .then((data) => {
         setInventoryData(data); // Store all inventory data
-        setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
-        setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
+        setTotalPending(
+          data.filter((item) => item.status === "Pending").length
+        ); //get total number ng may status na "Pending"
+        setTotalEvaluated(
+          data.filter((item) => item.evaluation_status === "Evaluated").length
+        ); //get total number ng may evaluation_status na "Evaluated"
         setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
 
         // Get latest 4 registrations based on rent_date
@@ -289,12 +294,10 @@ function AdminDashboard() {
 
       {/* 2nd row: 2 columns  */}
       <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-4 px-4 lg:px-6">
-        <div className="bg-white rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px] transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl  outline-none">
-          <span className="text-black font-semibold text-lg">
-            Graph to be continued
-          </span>
+        <div className="bg-white rounded-xl shadow-lg rlative  flex items-center justify-center   max-h-[350px]  transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl  outline-none">
+          <GroupBarChart />
         </div>
-        <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] outline-none">
+        <div className="bg-white relative rounded-xl flex flex-col min-h-[350px] shadow-lg max-h-[380px] outline-none">
           <p className="text-lg  font-extrabold !font-manjari  pl-5 pt-5 h-10 flex items-center text-start">
             Overview of Items
           </p>
@@ -326,23 +329,30 @@ function AdminDashboard() {
                 const now = new Date();
                 const diffTime = Math.abs(now - rentDate);
                 const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                const diffHours = Math.floor((diffTime / (1000 * 60 * 60)) % 24);
+                const diffHours = Math.floor(
+                  (diffTime / (1000 * 60 * 60)) % 24
+                );
                 const diffMinutes = Math.floor((diffTime / (1000 * 60)) % 60);
 
                 let timeAgo;
                 if (diffDays > 0) {
-                  timeAgo = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+                  timeAgo = `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
                 } else if (diffHours > 0) {
-                  timeAgo = `${diffHours} hr${diffHours > 1 ? 's' : ''} ago`;
+                  timeAgo = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
                 } else {
-                  timeAgo = `${diffMinutes} min${diffMinutes > 1 ? 's' : ''} ago`;
+                  timeAgo = `${diffMinutes} min${
+                    diffMinutes > 1 ? "s" : ""
+                  } ago`;
                 }
 
                 // Create full name for avatar
                 const fullName = `${user.first_name} ${user.surname}`;
 
                 return (
-                  <li key={index} className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
+                  <li
+                    key={index}
+                    className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition"
+                  >
                     <img
                       src={`https://ui-avatars.com/api/?name=${user.first_name}+${user.surname}`}
                       alt={fullName}
@@ -366,7 +376,9 @@ function AdminDashboard() {
                 );
               })
             ) : (
-              <li className="text-center py-4 text-gray-500">No recent registrations found</li>
+              <li className="text-center py-4 text-gray-500">
+                No recent registrations found
+              </li>
             )}
           </ul>
         </div>

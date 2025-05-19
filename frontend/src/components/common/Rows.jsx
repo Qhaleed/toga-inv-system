@@ -8,124 +8,91 @@ import GridView from "./GridView";
 
 import { useState, useEffect, useRef } from "react";
 
-const tasselColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
-const hoodColorOptions = ["Blue", "Maroon", "Orange", "White", "Yellow"];
-const togaSizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
-
 const Rows = ({
   isGrid,
   hideActionButton,
   modifyTable,
   rowHeightClass = "h-16",
-  sortOrder,
+
   searchResults,
+  isAll,
+  isReturnedTab,
+  isNotReturnedTab,
+  isAZ,
+  isZA,
+  allData,
+  activeTab,
 }) => {
   const [dashboard, setDashboard] = useState([]);
   const [originalDashboard, setOriginalDashboard] = useState([]);
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({});
-  const [tableAnim, setTableAnim] = useState("");
-  const prevSortOrder = useRef(sortOrder);
+  // const [tableAnim, setTableAnim] = useState("");
+
   const [popupMode, setPopupMode] = useState("none");
   const [hoveredEyeId, setHoveredEyeId] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupUser, setPopupUser] = useState(false);
 
+  // Filtering/sorting logic this one
   useEffect(() => {
-    fetch("http://localhost:5001/inventory")
-      .then((res) => res.json())
-      .then((data) => {
-        // Filter out entries without toga_size
-        // This is because no toga size = no form submitted yet
-        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
-
-        const mappedData = filteredData.map((item) => ({
-          id: item.inventory_id,
-          studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
-          course: item.course,
-          tassel_color: item.tassel_color,
-          hood_color: item.hood_color,
-          toga_size: item.toga_size,
-          dateofreservation: item.rent_date
-            ? new Date(item.rent_date).toLocaleDateString()
-            : "",
-          status: item.return_status,
-          payment_status: item.payment_status,
-          evaluation_status: item.evaluation_status,
-          remarks: item.remarks,
-          return_date: item.return_date,
-          is_overdue: item.is_overdue,
-          has_cap: item.has_cap,
-          item_condition: item.item_condition,
-        }));
-        setDashboard(mappedData);
-        setOriginalDashboard(mappedData);
-        console.log("Original data:", data);
-        console.log("Mapped data for display:", mappedData[0]);
-      });
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5001/inventory?sort=${sortOrder || ""}`
-        );
-        const data = await response.json();
-
-        // Filter out entries without toga_size before mapping
-        const filteredData = data.filter(item => item.toga_size !== null && item.toga_size !== undefined);
-
-        const mappedData = filteredData.map((item) => ({
-          id: item.inventory_id,
-          studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
-          course: item.course,
-          tassel_color: item.tassel_color,
-          hood_color: item.hood_color,
-          toga_size: item.toga_size,
-          dateofreservation: item.rent_date
-            ? new Date(item.rent_date).toLocaleDateString()
-            : "",
-          status: item.return_status,
-          payment_status: item.payment_status,
-          evaluation_status: item.evaluation_status,
-          remarks: item.remarks,
-          return_date: item.return_date,
-          is_overdue: item.is_overdue,
-          has_cap: item.has_cap,
-          item_condition: item.item_condition,
-        }));
-        const sortedData = mappedData.sort((a, b) => {
-          if (sortOrder === "newest" || sortOrder === "oldest") {
-            const dateA = new Date(a.dateofreservation);
-            const dateB = new Date(b.dateofreservation);
-            return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
-          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = (a.studentname || "").toLowerCase();
-            const nameB = (b.studentname || "").toLowerCase();
-            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
-            return 0;
-          }
-          return 0;
-        });
-        setDashboard(sortedData);
-        setOriginalDashboard(sortedData);
-      } catch (error) {
-        console.error("Error fetching inventory data:", error);
-      }
-    };
-
-    fetchData();
-  }, [sortOrder]);
+    let filtered = allData;
+    console.log("[Rows.jsx] Filter state (reservation logic only):", {
+      isAll,
+      isReturnedTab,
+      isNotReturnedTab,
+      isAZ,
+      isZA,
+    });
+    // sorter logic
+    if (isReturnedTab) {
+      filtered = allData.filter((row) => row.return_status === "Returned");
+    } else if (isNotReturnedTab) {
+      filtered = allData.filter(
+        (row) =>
+          row.return_status === "Not Returned" || row.return_status === "null"
+      );
+    } else if (isAll) {
+      filtered = allData;
+    }
+    // Sorting
+    if (isAZ) {
+      filtered = [...filtered].sort((a, b) =>
+        ((a.surname || "") + ", " + (a.first_name || "")).localeCompare(
+          (b.surname || "") + ", " + (b.first_name || "")
+        )
+      );
+    } else if (isZA) {
+      filtered = [...filtered].sort((a, b) =>
+        ((b.surname || "") + ", " + (b.first_name || "")).localeCompare(
+          (a.surname || "") + ", " + (a.first_name || "")
+        )
+      );
+    }
+    // Always map to add studentname and dateofreservation property
+    const mapped = (filtered || []).map((row) => ({
+      ...row,
+      studentname:
+        row.studentname ||
+        (row.surname || "") +
+          ", " +
+          (row.first_name || "") +
+          (row.middle_initial ? " " + row.middle_initial : ""),
+      dateofreservation:
+        row.dateofreservation ||
+        (row.rent_date ? new Date(row.rent_date).toLocaleDateString() : ""),
+    }));
+    console.log("[Rows.jsx] Dashboard rows after filter/map:", mapped);
+    setDashboard(mapped);
+  }, [isAll, isReturnedTab, isNotReturnedTab, isAZ, isZA, allData]);
 
   useEffect(() => {
     if (modifyTable) {
-      setDashboard((prev) =>
+      setDashboard((prev = []) =>
         prev.map((item) => ({ ...item, eye: "hidden", trash: "block" }))
       );
     } else {
-      setDashboard((prev) =>
+      setDashboard((prev = []) =>
         prev.map((item) => ({ ...item, eye: "block", trash: "hidden" }))
       );
     }
@@ -177,20 +144,20 @@ const Rows = ({
     prevModifyTable.current = modifyTable;
   }, [modifyTable, dashboard, originalDashboard]);
 
-  const handleEditClick = (db) => {
-    setDashboard((prev) =>
+  const handleEditClick = (row) => {
+    setDashboard((prev = []) =>
       prev.map((item) =>
-        db.id === item.id
+        row.id === item.id
           ? {
-            ...item,
-            eye: item.eye === "block" ? "hidden" : "block",
-            trash: item.trash === "hidden" ? "block" : "hidden",
-          }
+              ...item,
+              eye: item.eye === "block" ? "hidden" : "block",
+              trash: item.trash === "hidden" ? "block" : "hidden",
+            }
           : item
       )
     );
-    setEditId(db.id);
-    setEditData({ ...db });
+    setEditId(row.id);
+    setEditData({ ...row });
   };
 
   const handleEditChange = (e) => {
@@ -231,10 +198,10 @@ const Rows = ({
         console.log("Update successful:", data);
 
         const updatedItem = { ...editData };
-        setDashboard((prev) =>
+        setDashboard((prev = []) =>
           prev.map((item) => (item.id === id ? updatedItem : item))
         );
-        setOriginalDashboard((prev) =>
+        setOriginalDashboard((prev = []) =>
           prev.map((item) => (item.id === id ? updatedItem : item))
         );
         setEditId(null);
@@ -251,12 +218,6 @@ const Rows = ({
   const handleCancel = () => {
     setEditId(null);
     setEditData({});
-  };
-
-  const handleCellChange = (id, name, value) => {
-    setDashboard((prev) =>
-      prev.map((row) => (row.id === id ? { ...row, [name]: value } : row))
-    );
   };
 
   const handleDelete = (id) => {
@@ -280,8 +241,10 @@ const Rows = ({
         console.log("Delete successful:", data);
 
         // Remove the deleted item from both state arrays
-        setDashboard(prev => prev.filter(item => item.id !== id));
-        setOriginalDashboard(prev => prev.filter(item => item.id !== id));
+        setDashboard((prev = []) => prev.filter((item) => item.id !== id));
+        setOriginalDashboard((prev = []) =>
+          prev.filter((item) => item.id !== id)
+        );
 
         // Clear edit state if the deleted item was being edited
         if (editId === id) {
@@ -297,24 +260,23 @@ const Rows = ({
       });
   };
 
-  const sortedDashboard =
-    !isGrid && sortOrder
-      ? [...dashboard].sort((a, b) => {
-        if (sortOrder === "newest" || sortOrder === "oldest") {
-          const dateA = new Date(a.dateofreservation);
-          const dateB = new Date(b.dateofreservation);
-          if (sortOrder === "newest") return dateB - dateA;
-          if (sortOrder === "oldest") return dateA - dateB;
-        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-          const nameA = (a.studentname || "").toLowerCase();
-          const nameB = (b.studentname || "").toLowerCase();
-          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
-          return 0;
-        }
-        return 0;
-      })
-      : dashboard;
+  const displayDashboard =
+    Array.isArray(searchResults) && searchResults.length > 0
+      ? searchResults
+      : Array.isArray(dashboard)
+      ? dashboard
+      : [];
+
+  // Extract unique dropdown options from allData
+  const tasselColorOptions = Array.from(
+    new Set((allData || []).map((item) => item.tassel_color).filter(Boolean))
+  );
+  const hoodColorOptions = Array.from(
+    new Set((allData || []).map((item) => item.hood_color).filter(Boolean))
+  );
+  const togaSizeOptions = Array.from(
+    new Set((allData || []).map((item) => item.toga_size).filter(Boolean))
+  );
 
   useEffect(() => {
     if (!isGrid) {
@@ -326,21 +288,53 @@ const Rows = ({
   }, [isGrid]);
 
   useEffect(() => {
-    if (prevSortOrder.current !== sortOrder && !isGrid) {
-      setTableAnim("animate-table-sort");
-      setTimeout(() => setTableAnim(""), 400);
-      prevSortOrder.current = sortOrder;
+    // Unified filtering/sorting logic for the reservation tab only
+    let filtered = allData;
+
+    // Reservation tab filtering
+    if (isReturnedTab) {
+      filtered = allData.filter((row) => row.return_status === "Returned");
+    } else if (isNotReturnedTab) {
+      filtered = allData.filter(
+        (row) => row.status === "null" || row.return_status === "Not Returned"
+      );
     }
-  }, [sortOrder, isGrid]);
+    // else {
+    //   // Always default to all if no other filter is set
+    //   filtered = allData;
+    // }
 
-  function handleEyeMouseEnter(event, dbId) {
-    setHoveredEyeId(dbId);
-  }
+    // Sorting
+    if (isAZ) {
+      filtered = [...filtered].sort((a, b) =>
+        ((a.surname || "") + ", " + (a.first_name || "")).localeCompare(
+          (b.surname || "") + ", " + (b.first_name || "")
+        )
+      );
+    } else if (isZA) {
+      filtered = [...filtered].sort((a, b) =>
+        ((b.surname || "") + ", " + (b.first_name || "")).localeCompare(
+          (a.surname || "") + ", " + (a.first_name || "")
+        )
+      );
+    }
 
-  const displayDashboard =
-    Array.isArray(searchResults) && searchResults.length > 0
-      ? searchResults
-      : sortedDashboard;
+    // Always map to add studentname and dateofreservation property
+    const mapped = (filtered || []).map((row) => ({
+      ...row,
+      studentname:
+        row.studentname ||
+        (row.surname || "") +
+          ", " +
+          (row.first_name || "") +
+          (row.middle_initial ? " " + row.middle_initial : ""),
+      dateofreservation:
+        row.dateofreservation ||
+        (row.rent_date ? new Date(row.rent_date).toLocaleDateString() : ""),
+    }));
+
+    setDashboard(mapped);
+  }, [isAll, isReturnedTab, isNotReturnedTab, isAZ, isZA, allData]);
 
   if (isGrid) {
     return (
@@ -369,12 +363,12 @@ const Rows = ({
   } else {
     return (
       <div
-        className={`w-full max-h-[80vh] overflow-x-auto overflow-y-auto ${tableAnim}`}
-        style={{ minWidth: "100px", maxWidth: "100vw", height: "auto" }}
+        className="w-full max-h-screen overflow-x-auto"
+        style={{ minWidth: "600px", maxWidth: "100vw" }}
       >
-        <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-1000 bg-red">
-          <table className="w-full table-fixed border-separate border-spacing-0 relative">
-            <thead className="bg-[#02327B] sticky top-0 z-30">
+        <div className="min-w-[300px] max-w-[120vw] overflow-visible relative bg-white">
+          <table className="w-full ">
+            <thead className="bg-[#02327B]  top-0 sticky">
               <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
                 <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                   <span className="block text-[10px] md:text-[15px] w-full text-center ">
@@ -429,179 +423,234 @@ const Rows = ({
                   </td>
                 </tr>
               ) : (
-                displayDashboard.map((db, idx) => {
+                displayDashboard.map((row, idx) => {
                   const rowColor = getRowColor(idx);
-                  const isEditing = modifyTable || editId === db.id;
                   return (
                     <tr
                       className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-columns`}
-                      key={db.id}
+                      key={row.id}
                     >
                       <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                         <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                          <h3 className="truncate">{db.studentname}</h3>
+                          <h3 className="truncate">{row.studentname}</h3>
                           <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
                       <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center">
-                          <h3 className="truncate">{db.course}</h3>
+                          <h3 className="truncate">{row.course}</h3>
                           <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
                       <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {isEditing ? (
+                          {modifyTable ? (
                             <CustomDropdown
-                              value={modifyTable ? db.tassel_color : editData.tassel_color}
+                              value={row.tassel_color}
+                              options={tasselColorOptions}
+                              onChange={(val) => {
+                                setDashboard((prev) =>
+                                  prev.map((item) =>
+                                    item.inventory_id === row.inventory_id
+                                      ? { ...item, tassel_color: val }
+                                      : item
+                                  )
+                                );
+                              }}
+                              disabled={false}
+                            />
+                          ) : editId === row.inventory_id ? (
+                            <CustomDropdown
+                              value={editData.tassel_color}
                               options={tasselColorOptions}
                               onChange={(val) =>
-                                modifyTable
-                                  ? handleCellChange(db.id, "tassel_color", val)
-                                  : handleEditChange({
-                                    target: { name: "tassel_color", value: val },
-                                  })
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  tassel_color: val,
+                                }))
                               }
                               disabled={false}
                             />
                           ) : (
-                            <h3 className="truncate">{db.tassel_color}</h3>
+                            <h3 className="truncate">{row.tassel_color}</h3>
                           )}
                           <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
                       <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {isEditing ? (
+                          {modifyTable ? (
                             <CustomDropdown
-                              value={modifyTable ? db.hood_color : editData.hood_color}
+                              value={row.hood_color}
+                              options={hoodColorOptions}
+                              onChange={(val) => {
+                                setDashboard((prev) =>
+                                  prev.map((item) =>
+                                    item.inventory_id === row.inventory_id
+                                      ? { ...item, hood_color: val }
+                                      : item
+                                  )
+                                );
+                              }}
+                              disabled={false}
+                            />
+                          ) : editId === row.inventory_id ? (
+                            <CustomDropdown
+                              value={editData.hood_color}
                               options={hoodColorOptions}
                               onChange={(val) =>
-                                modifyTable
-                                  ? handleCellChange(db.id, "hood_color", val)
-                                  : handleEditChange({
-                                    target: { name: "hood_color", value: val },
-                                  })
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  hood_color: val,
+                                }))
                               }
                               disabled={false}
                             />
                           ) : (
-                            <h3 className="truncate">{db.hood_color}</h3>
+                            <h3 className="truncate">{row.hood_color}</h3>
                           )}
                           <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
                       <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {isEditing ? (
+                          {modifyTable ? (
                             <CustomDropdown
-                              value={modifyTable ? db.toga_size : editData.toga_size}
+                              value={row.toga_size}
+                              options={togaSizeOptions}
+                              onChange={(val) => {
+                                setDashboard((prev) =>
+                                  prev.map((item) =>
+                                    item.inventory_id === row.inventory_id
+                                      ? { ...item, toga_size: val }
+                                      : item
+                                  )
+                                );
+                              }}
+                              disabled={false}
+                            />
+                          ) : editId === row.inventory_id ? (
+                            <CustomDropdown
+                              value={editData.toga_size}
                               options={togaSizeOptions}
                               onChange={(val) =>
-                                modifyTable
-                                  ? handleCellChange(db.id, "toga_size", val)
-                                  : handleEditChange({
-                                    target: { name: "toga_size", value: val },
-                                  })
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  toga_size: val,
+                                }))
                               }
                               disabled={false}
                             />
                           ) : (
-                            <h3 className="truncate">{db.toga_size}</h3>
+                            <h3 className="truncate">{row.toga_size}</h3>
                           )}
                           <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
                       <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center">
-                          <h3 className="truncate">{db.dateofreservation}</h3>
+                          <h3 className="truncate">{row.dateofreservation}</h3>
                           <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                         </div>
                       </td>
                       <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                         <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                          {db.status}
+                          {row.return_status}
                         </div>
                         <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                       </td>
                       <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                         <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
-                          {editId === db.id ? (
+                          {/* Eye/Trash Icon and Edit Button logic */}
+                          {editId === row.inventory_id || modifyTable ? (
                             <>
+                              {/* Trash replaces Eye when editing or in modifyTable mode */}
                               <button
                                 className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
                                 onClick={() => {
-                                  if (window.confirm(`Are you sure you want to delete ${db.studentname}'s records?`)) {
-                                    handleDelete(db.id);
+                                  if (
+                                    window.confirm(
+                                      `Are you sure you want to delete ${row.studentname}'s records?`
+                                    )
+                                  ) {
+                                    handleDelete(row.inventory_id);
                                   }
                                 }}
+                                aria-label="Delete row"
                               >
                                 <Trash className="w-4" />
                               </button>
-                              <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
-                                <button
-                                  className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
-                                  onClick={() => handleSave(db.id)}
+
+                              <button
+                                className="w-7 h-7 flex justify-center items-center rounded-md bg-gray-300 opacity-60 cursor-not-allowed"
+                                disabled
+                                aria-label="Edit row (disabled)"
+                              >
+                                <Table className="w-5" />
+                              </button>
+                              {/*eto ung single row edit  */}
+                              {editId === row.inventory_id && !modifyTable && (
+                                <div
+                                  className="absolute left-25 top-2/5 -translate-y-1/2 z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-1 border border-gray-200 animate-fade-in min-w-[80px] w-max"
+                                  style={{
+                                    minWidth: 0,
+                                    maxWidth: 180,
+                                    overflow: "visible",
+                                  }}
                                 >
-                                  Save
-                                </button>
-                                <button
-                                  className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
-                                  onClick={handleCancel}
-                                >
-                                  Cancel
-                                </button>
-                              </div>
+                                  <button
+                                    className="px-2 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1 whitespace-nowrap"
+                                    onClick={() => handleSave(row.inventory_id)}
+                                    style={{ minWidth: 0 }}
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    className="px-1 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs whitespace-nowrap"
+                                    onClick={handleCancel}
+                                    style={{ minWidth: 0 }}
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              )}
                             </>
                           ) : (
                             <>
-                              <div
-                                className="relative"
-                                onMouseLeave={() => setHoveredEyeId(null)}
+                              {/* basuc Eye icon */}
+                              <button
+                                className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
+                                  hoveredEyeId === row.inventory_id
+                                    ? "bg-blue-600"
+                                    : ""
+                                }`}
+                                style={{
+                                  background: modifyTable
+                                    ? "#bdbdbd"
+                                    : hoveredEyeId === row.inventory_id
+                                    ? "#2563eb"
+                                    : "#0C7E48",
+                                  cursor: modifyTable
+                                    ? "not-allowed"
+                                    : "pointer",
+                                }}
+                                disabled={modifyTable}
+                                onClick={() => {
+                                  setPopupUser(row);
+                                  setPopupOpen(true);
+                                  setPopupMode("full");
+                                }}
+                                aria-label="View details"
                               >
-                                <button
-                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id ? "bg-blue-600" : ""
-                                    }`}
-                                  style={{
-                                    background: modifyTable
-                                      ? "#bdbdbd"
-                                      : hoveredEyeId === db.id
-                                        ? "#2563eb"
-                                        : "#0C7E48",
-                                    cursor: modifyTable
-                                      ? "not-allowed"
-                                      : "pointer",
-                                  }}
-                                  disabled={modifyTable}
-                                  onMouseEnter={(e) =>
-                                    handleEyeMouseEnter(e, db.id)
-                                  }
-                                  onClick={() => {
-                                    setHoveredEyeId(db.id);
-                                    setPopupUser(db);
-                                    setPopupOpen(true);
-                                    setPopupMode("full");
-                                  }}
-                                >
-                                  <EyeIcon
-                                    className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
+                                <EyeIcon
+                                  className={`w-5 transition-colors duration-200 ${
+                                    hoveredEyeId === row.inventory_id
                                       ? "text-blue-200"
                                       : "text-white"
-                                      }`}
-                                  />
-                                </button>
-                                {hoveredEyeId === db.id && (
-                                  <div
-                                    className="fixed left-9/12 top-1/2 z-50 w-80 h-fit rounded-xl opacity-200 transition-all duration-300 animate-fade-in pointer-events-auto transform -translate-x-1/2 -translate-y-1/2 "
-                                    onMouseEnter={(e) =>
-                                      handleEyeMouseEnter(e, db.id)
-                                    }
-                                    onMouseLeave={() => setHoveredEyeId(null)}
-                                  >
-                                    <HoverPopup user={db} />
-                                  </div>
-                                )}
-                              </div>
+                                  }`}
+                                />
+                              </button>
+                              {/* bsic Edit button */}
                               <button
                                 className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"
                                 style={{
@@ -615,10 +664,11 @@ const Rows = ({
                                 disabled={modifyTable}
                                 onClick={() => {
                                   if (!modifyTable) {
-                                    setEditId(db.id);
-                                    setEditData({ ...db });
+                                    setEditId(row.inventory_id);
+                                    setEditData({ ...row });
                                   }
                                 }}
+                                aria-label="Edit row"
                               >
                                 <Table className="w-5" />
                               </button>
@@ -638,13 +688,21 @@ const Rows = ({
           onClose={(updatedData) => {
             setPopupOpen(false);
             if (updatedData) {
-              // Filter out entries without toga_size before mapping
-              const filteredData = updatedData.filter(item => item.toga_size !== null && item.toga_size !== undefined);
+              // filter bago mag map
+              const filteredData = updatedData.filter(
+                (item) =>
+                  item.toga_size !== null && item.toga_size !== undefined
+              );
 
-              // Map the filtered data to match our component's format
+              // Mappers
               const mappedData = filteredData.map((item) => ({
                 id: item.inventory_id,
-                studentname: item.surname + ", " + item.first_name + " " + item.middle_initial,
+                studentname:
+                  item.surname +
+                  ", " +
+                  item.first_name +
+                  " " +
+                  item.middle_initial,
                 course: item.course,
                 tassel_color: item.tassel_color,
                 hood_color: item.hood_color,
@@ -659,7 +717,7 @@ const Rows = ({
                 return_date: item.return_date,
                 is_overdue: item.is_overdue,
                 has_cap: item.has_cap,
-                item_condition: item.item_condition
+                item_condition: item.item_condition,
               }));
               setDashboard(mappedData);
               setOriginalDashboard(mappedData);
@@ -693,8 +751,9 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
-        }`}
+      className={`relative w-[80%] flex justify-center items-center ${
+        disabled ? "pointer-events-none opacity-20" : ""
+      }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -752,10 +811,11 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
-                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                  : ""
-                  }`}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
+                  opt === value
+                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                    : ""
+                }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",
@@ -771,7 +831,7 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
                 role="option"
                 aria-selected={opt === value}
                 tabIndex={0}
-                onMouseEnter={(e) => {
+                onMouseEnter={function (e) {
                   e.currentTarget.style.background = "#d9d9d9";
                   e.currentTarget.style.color = "#0C7E48";
                   if (idx === 0) {
@@ -795,15 +855,15 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
                     e.currentTarget.style.border = "none";
                   }
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={function (e) {
                   e.currentTarget.style.background =
                     opt === value ? "#E9E9E9" : "transparent";
                   e.currentTarget.style.color =
                     opt === value ? "#0C7E48" : "#000";
-                  e.currentTarget.style.borderTopLeftRadius = "4";
-                  e.currentTarget.style.borderTopRightRadius = "4";
-                  e.currentTarget.style.borderBottomLeftRadius = "4";
-                  e.currentTarget.style.borderBottomRightRadius = "4";
+                  e.currentTarget.style.borderTopLeftRadius = "4px";
+                  e.currentTarget.style.borderTopRightRadius = "4px";
+                  e.currentTarget.style.borderBottomLeftRadius = "4px";
+                  e.currentTarget.style.borderBottomRightRadius = "4px";
                   if (opt === value) {
                     e.currentTarget.style.borderLeft = "4px solid #0C7E48";
                     e.currentTarget.style.borderRight = "4px solid #0C7E48";
