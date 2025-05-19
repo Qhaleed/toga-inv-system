@@ -28,13 +28,23 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: 'Email already registered' });
         }
 
+        //check if email ends with adzu.edu.ph
+        const adzuEmail = /^[a-zA-Z0-9._%+-]+@adzu\.edu\.ph$/;
+        if (!email || !adzuEmail.test(email)) {
+            return res.status(400).json({ message: 'Invalid ADZU email address' });
+        }
+        
         // password hash
         //const hashedPass = await bcrypt.hash(password, 10);
 
         //check if password > 8 letters
         if (password.length < 8) {
             return res.status(400).json({ message: 'Password must be at least 8 characters' });
-        }        
+        }
+        
+        if (!email || !email.endsWith('@adzu.edu.ph')) {
+            return res.status(400).json({ message: 'Email must end with @adzu.edu.ph' });
+        }
 
         //check if both password are correct
         if (password != confirmPassword) {
