@@ -178,15 +178,6 @@ function AdminDashboard() {
       });
   }, []);
 
-  // Group items by type for chart display
-  const itemsByType = items.reduce((acc, item) => {
-    if (!acc[item.item_type]) {
-      acc[item.item_type] = 0;
-    }
-    acc[item.item_type] += item.quantity;
-    return acc;
-  }, {});
-
   return (
     <div className="flex flex-col overflow-auto gap-4 py-2 md:gap-4 md:pb-10 h-full w-full min-h-0 mb-8">
       <div className="md:h-4 hidden items-start md:flex">
@@ -443,6 +434,7 @@ function AdminDashboard() {
         </div>
 
         {/* 2nd col: Approval Requests */}
+        {/* 2nd col: Approval Requests */}
         <div className="bg-white w-full md:w-[32%] flex flex-col rounded-xl shadow-lg p-4 min-h-[200px] relative flex-1">
           <h3 className="text-lg font-bold text-gray-700 mb-2 flex items-center justify-between">
             Approval Requests
@@ -506,7 +498,7 @@ function AdminDashboard() {
             </button>
           </h3>
           <div className="flex flex-col gap-4 h-full">
-            {/* Item statistics cards */}
+            Item statistics cards
             <div className="grid grid-cols-2 gap-3 flex-1">
               <div className="bg-green-50 p-4 rounded-lg shadow-md flex items-center justify-between">
                 <div>
@@ -545,35 +537,7 @@ function AdminDashboard() {
                 <AlertCircle className="w-8 h-8 text-yellow-600" />
               </div>
             </div>
-            {/* Chart for item status */}
-            <div className="flex-1">
-              <RadialChart
-                data={[
-                  {
-                    label: "Good",
-                    value: itemsStats.itemStatus.goodCondition,
-                    color: "#4CAF50", // Green
-                  },
-                  {
-                    label: "Repair",
-                    value: itemsStats.itemStatus.forRepair,
-                    color: "#FFC107", // Amber
-                  },
-                  {
-                    label: "Damaged",
-                    value: itemsStats.itemStatus.damaged,
-                    color: "#F44336", // Red
-                  },
-                ]}
-                totalValue={
-                  itemsStats.itemStatus.goodCondition +
-                  itemsStats.itemStatus.forRepair +
-                  itemsStats.itemStatus.damaged
-                }
-                labelColor="#fff" // Adjust as needed for visibility
-                className="mx-auto"
-              />
-            </div>
+
           </div>
         </div>
       </div>
