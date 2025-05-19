@@ -77,8 +77,8 @@ const ItemStatus = () => {
     all: <ItemStatusAllChart items={items} />,
     cap: <ItemStatusCapChart items={items} />,
     tassel: <ItemStatusTasselChart items={items} />,
-    gown: <ItemStatusGownChart />,
-    hood: <ItemStatusHoodChart />,
+    gown: <ItemStatusGownChart items={items} />,
+    hood: <ItemStatusHoodChart items={items} />,
   };
 
   const chartLabels = {
@@ -119,7 +119,11 @@ const ItemStatus = () => {
           {/* Chart */}
           <div
             className={`${
-              selectedChart === "tassel" ? "w-full" : "md:w-2/3"
+              selectedChart === "tassel" ||
+              selectedChart === "hood" ||
+              selectedChart === "gown"
+                ? "w-full"
+                : "md:w-2/3"
             } w-full flex justify-center`}
           >
             <div className="bg-white shadow-md rounded-xl p-4 flex flex-col justify-center h-full w-full">
@@ -161,7 +165,9 @@ const ItemStatus = () => {
                 </div>
               ))}
             </div>
-          ) : selectedChart === "tassel" ? null : (
+          ) : selectedChart === "tassel" ||
+            selectedChart === "hood" ||
+            selectedChart === "gown" ? null : (
             // All Stock Summary
             <div className="md:w-1/3 w-full grid grid-cols-2 md:grid-cols-2 gap-4 mt-0">
               <div className="bg-white shadow-md rounded-xl p-4 text-center col-span-2">

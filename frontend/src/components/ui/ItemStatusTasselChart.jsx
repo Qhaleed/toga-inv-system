@@ -116,6 +116,22 @@ export default function ItemStatusTasselChart({ items = [] }) {
             axisLine={false}
             tickMargin={10}
             style={{ fontWeight: 600, fontSize: "14px" }}
+            tick={({ x, y, payload }) => {
+              const color = payload.value;
+              const isWhite = color.toLowerCase() === "white";
+              return (
+                <text
+                  x={x}
+                  y={y + 10}
+                  textAnchor="middle"
+                  fill={isWhite ? "#000000" : "#374151"} // black for white label, default for others
+                  fontWeight={600}
+                  fontSize="14px"
+                >
+                  {color}
+                </text>
+              );
+            }}
           />
           <YAxis
             allowDecimals={false}
