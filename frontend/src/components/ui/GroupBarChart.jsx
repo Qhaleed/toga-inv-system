@@ -9,17 +9,11 @@ import {
   ResponsiveContainer,
   Legend,
   Tooltip,
+  Cell,
 } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-} from "@/components/ui/chart";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
 const chartConfig = {
   views: {
@@ -27,16 +21,16 @@ const chartConfig = {
   },
   rentals: {
     label: "Rentals",
-    color: "#fffff", // Deeper blue
+    color: "#2563eb", // Deeper blue
   },
   returns: {
     label: "Returns",
-    color: "#fffff", // Light blue
+    color: "#0C7E48", // Light blue
   },
   total: {
     label: "Total Activity",
-    color: "#fffff", // Medium blue
-  }
+    color: "#fbbf24", // Medium blue
+  },
 };
 
 // Custom tooltip component
@@ -57,7 +51,9 @@ function CustomBarTooltip({ active, payload, label }) {
 
   return (
     <div className="bg-white px-3 py-2 text-xs min-w-[8rem] rounded-lg shadow-md">
-      <div className="font-bold mb-2 text-gray-800 border-b pb-1">{dateStr}</div>
+      <div className="font-bold mb-2 text-gray-800 border-b pb-1">
+        {dateStr}
+      </div>
       <div className="flex items-center gap-2 py-1">
         <span
           className="inline-block w-3 h-3 rounded-full"
@@ -72,18 +68,14 @@ function CustomBarTooltip({ active, payload, label }) {
           className="inline-block w-3 h-3 rounded-full"
           style={{ background: chartConfig.rentals.color }}
         ></span>
-        <span className="text-sm text-gray-700">
-          Rentals: {rentals}
-        </span>
+        <span className="text-sm text-gray-700">Rentals: {rentals}</span>
       </div>
       <div className="flex items-center gap-2 py-1">
         <span
           className="inline-block w-3 h-3 rounded-full"
           style={{ background: chartConfig.returns.color }}
         ></span>
-        <span className="text-sm text-gray-700">
-          Returns: {returns}
-        </span>
+        <span className="text-sm text-gray-700">Returns: {returns}</span>
       </div>
     </div>
   );
@@ -153,7 +145,7 @@ export function GroupBarChart() {
             date: dateString,
             rentals: rentals,
             returns: returns,
-            total: rentals + returns
+            total: rentals + returns,
           });
           currentDate.setDate(currentDate.getDate() + 1);
         }
@@ -176,7 +168,7 @@ export function GroupBarChart() {
     () => ({
       rentals: chartData.reduce((acc, curr) => acc + curr.rentals, 0),
       returns: chartData.reduce((acc, curr) => acc + curr.returns, 0),
-      total: chartData.reduce((acc, curr) => acc + curr.total, 0)
+      total: chartData.reduce((acc, curr) => acc + curr.total, 0),
     }),
     [chartData]
   );
@@ -199,7 +191,9 @@ export function GroupBarChart() {
                 className="inline-block w-4 h-4 rounded-full"
                 style={{ backgroundColor: chartConfig.total.color }}
               />
-              <span className="text-sm text-muted-foreground">Total Activity</span>
+              <span className="text-sm text-muted-foreground">
+                Total Activity
+              </span>
             </div>
             <span className="text-xl font-bold leading-none">
               {totals.total.toLocaleString()}
@@ -255,12 +249,30 @@ export function GroupBarChart() {
                   }}
                 />
                 <Tooltip content={<CustomBarTooltip />} />
-                <Bar
-                  dataKey="total"
-                  name="Total Activity"
-                  fill={chartConfig.total.color}
-                  barSize={30}
-                />
+                <Bar dataKey="rentals" name="Rentals" barSize={16}>
+                  {chartData.map((entry, idx) => (
+                    <Cell
+                      key={`rentals-bar-${idx}`}
+                      fill={chartConfig.rentals.color}
+                    />
+                  ))}
+                </Bar>
+                <Bar dataKey="returns" name="Returns" barSize={16}>
+                  {chartData.map((entry, idx) => (
+                    <Cell
+                      key={`returns-bar-${idx}`}
+                      fill={chartConfig.returns.color}
+                    />
+                  ))}
+                </Bar>
+                <Bar dataKey="total" name="Total Activity" barSize={16}>
+                  {chartData.map((entry, idx) => (
+                    <Cell
+                      key={`total-bar-${idx}`}
+                      fill={chartConfig.total.color}
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>

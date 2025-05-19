@@ -4,6 +4,8 @@ import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
 import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
 import InventorySidebarButtons from "../common/InventorySidebarButtons";
+import PopupWindow from "../common/PopupWindow";
+import AddStockPopup from "../common/AddStockPopup";
 
 // Add InitialsAvatar component to display user initials
 const InitialsAvatar = ({ name, className = "" }) => {
@@ -100,6 +102,7 @@ const SideBar = ({
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
+  const [showAddStockPopup, setShowAddStockPopup] = useState(false);
 
   useEffect(() => {
     function handleResize() {
@@ -364,7 +367,7 @@ const SideBar = ({
             <div className="relative w-full flex flex-col justify-between md:w-full">
               {activeTab !== "student-home" && (
                 <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
-                  ITEM STATUS
+                  {activeTab === "dashboard" ? "ACTIONS" : "ITEM STATUS"}
                 </h4>
               )}
               {activeTab === "evaluation" ? (
@@ -420,57 +423,16 @@ const SideBar = ({
                   </div>
                 </div>
               ) : activeTab === "dashboard" ? (
-                <div className="w-full  h-[90px] md:scale-100">
-                  <div className="w-full h-1/2 gap-2 flex justify-between items-center ">
+                <>
+                  <div className="w-full h-[90px] md:scale-100 flex items-center justify-center">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("all")}
+                      className="w-4/5 h-10 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-bold text-md flex items-center justify-center transition-all duration-200 shadow-lg"
+                      onClick={() => setShowAddStockPopup(true)}
                     >
-                      <p className=":text-[14px] md:text-[12px] lg:text-[13px] font-figtree font-bold text-[#1E40AF] ml-3">
-                        All
-                      </p>
-                      <div className="right-0 absolute lg:text-[12px] md:text-[10px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        123
-                      </div>
-                    </button>
-                    <button
-                      className={`relative w-[43%] h-7 rounded-md md:mr-2 lg:mr-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatus === "borrowed"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("borrowed")}
-                    >
-                      <p className="md:text-[10px] sm:text-[13px] lg:text-[13px] font-figtree font-bold text-[#B45309] ml-3">
-                        Borrowed
-                      </p>
-                      <div className="absolute right-0 lg:text-[12px] md:text-[10px] bg-[#F3B51A] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        45
-                      </div>
+                      + Add Stocks
                     </button>
                   </div>
-                  <div className="w-full h-1/2 flex justify-between items-center ">
-                    <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatus === "returned"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
-                      onClick={() => setFocusedStatus("returned")}
-                    >
-                      <p className="md:text-[10px] sm:text-[13px] lg:text-[13px] font-figtree font-bold text-[#B45309] ml-3">
-                        Returned
-                      </p>
-                      <div className="absolute right-0 lg:text-[12px] md:text-[10px] bg-[#102F5E] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        78
-                      </div>
-                    </button>
-                  </div>
-                </div>
+                </>
               ) : activeTab === "inventory" ? (
                 <InventorySidebarButtons
                   focusedStatus={focusedStatus}
@@ -731,9 +693,36 @@ const SideBar = ({
           {/* CALENDAR */}
           <div
             key={activeTab + "-calendar"}
-            className="min-w-[80%] w-[90%] relative h-70 bg-[#102F5E] flex justify-center items-center rounded-xl mt-4 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="min-w-[80%] w-[90%] static h-70 bg-[#102F5E] flex justify-center items-center rounded-xl mt-4 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <Calendar mode="single" selected={date} onSelect={setDate} />
+            <AddStockPopup
+              open={showAddStockPopup}
+              onClose={() => setShowAddStockPopup(false)}
+              onSubmit={async (data) => {
+                // API call to add stock
+                try {
+                  const response = await fetch(
+                    "http://localhost:5001/inventory",
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        toga_size: data.toga_size,
+                        hood_color: data.hood_color,
+                        tassel_color: data.tassel_color,
+                        has_cap: data.cap ? 1 : 0,
+                        quantity: data.quantity,
+                      }),
+                    }
+                  );
+                  if (!response.ok) throw new Error("Failed to add stock");
+                  alert("Stock added successfully!");
+                } catch (err) {
+                  alert("Error adding stock: " + err.message);
+                }
+              }}
+            />
           </div>
         </div>
       )}
