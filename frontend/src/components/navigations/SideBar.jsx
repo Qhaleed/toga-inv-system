@@ -74,6 +74,7 @@ const InitialsAvatar = ({ name, className = "" }) => {
 const SideBar = ({
   setSortOrder,
   activeTab,
+  setActiveTab, // <-- add this prop
   setIsAll,
   setIsReturnedTab, // add this
   setIsNotReturnedTab, // add this
@@ -99,12 +100,6 @@ const SideBar = ({
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
-  const [focusedStatusLocal, setFocusedStatusLocal] = useState(
-    focusedStatus || "all"
-  );
-  // Add state to track which sort button is focused
-  const [focusedSort, setFocusedSort] = useState("name-asc");
-  const [reservationTabFocus, setReservationTabFocus] = useState("all");
 
   useEffect(() => {
     function handleResize() {
@@ -184,28 +179,23 @@ const SideBar = ({
   // MGA HANDLER FOR SORTING
   const handleSortNameAsc = () => {
     setSortOrder && setSortOrder("name-asc");
-    setFocusedSort("name-asc"); // Update focused sort state
   };
 
   const handleSortNameDesc = () => {
     setSortOrder && setSortOrder("name-desc");
-    setFocusedSort("name-desc"); // Update focused sort state
   };
 
   const handleSortDateNewest = () => {
     setSortOrder && setSortOrder("newest");
-    setFocusedSort("newest"); // Update focused sort state
   };
 
   const handleSortDateOldest = () => {
     setSortOrder && setSortOrder("oldest");
-    setFocusedSort("oldest"); // Update focused sort state
   };
 
   // Update setFocusedStatusLocal when a sidebar button is clicked
   const All = () => {
     setFocusedStatus("all");
-    setFocusedStatusLocal("all");
     setIsAll && setIsAll(true);
     setIsEvaluationTab && setIsEvaluationTab(false);
     setIsNotEvaluationTab && setIsNotEvaluationTab(false);
@@ -213,7 +203,6 @@ const SideBar = ({
 
   const EvaluatedFilter = () => {
     setFocusedStatus("evaluated");
-    setFocusedStatusLocal("evaluated");
     setIsAll && setIsAll(false);
     setIsEvaluationTab && setIsEvaluationTab(true);
     setIsNotEvaluationTab && setIsNotEvaluationTab(false);
@@ -221,13 +210,17 @@ const SideBar = ({
 
   const NotEvaluatedFilter = () => {
     setFocusedStatus("noeval");
-    setFocusedStatusLocal("noeval");
     setIsAll && setIsAll(false);
     setIsEvaluationTab && setIsEvaluationTab(false);
     setIsNotEvaluationTab && setIsNotEvaluationTab(true);
   };
 
   // Reservation tab filters (Return Status)
+  const [reservationTabFocus, setReservationTabFocus] = useState("all");
+
+  // Sort state for reservation tab
+  const [focusedSort, setFocusedSort] = useState("name-asc");
+
   const AllReturnStatus = () => {
     setReservationTabFocus("all");
     setIsAll && setIsAll(true);
@@ -379,7 +372,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatusLocal === "all"
+                        focusedStatus === "all"
                           ? "ring-2 ring-[#f3ca91] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -394,7 +387,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${
-                        focusedStatusLocal === "evaluated"
+                        focusedStatus === "evaluated"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -411,7 +404,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${
-                        focusedStatusLocal === "noeval"
+                        focusedStatus === "noeval"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -431,7 +424,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 gap-2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatusLocal === "all"
+                        focusedStatus === "all"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -446,7 +439,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md md:mr-2 lg:mr-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatusLocal === "borrowed"
+                        focusedStatus === "borrowed"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -463,7 +456,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatusLocal === "returned"
+                        focusedStatus === "returned"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -482,13 +475,14 @@ const SideBar = ({
                 <InventorySidebarButtons
                   focusedStatus={focusedStatus}
                   setFocusedStatus={setFocusedStatus}
+                  setActiveTab={setActiveTab}
                 />
               ) : activeTab === "pending" ? (
                 <div className="w-full h-[100px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatusLocal === "all"
+                        focusedStatus === "all"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -503,7 +497,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatusLocal === "approved"
+                        focusedStatus === "approved"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -520,7 +514,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatusLocal === "pending"
+                        focusedStatus === "pending"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -535,7 +529,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FECACA] ${
-                        focusedStatusLocal === "rejected"
+                        focusedStatus === "rejected"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}

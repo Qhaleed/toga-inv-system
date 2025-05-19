@@ -4,7 +4,7 @@
  * Shows item status instead of return status and provides grid/table view options
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PendingTable from "../../components/pending-page/PendingTable";
 import SideBar from "../../components/navigations/SideBar";
 import Navbar from "../../components/navigations/NavBar";
@@ -20,6 +20,23 @@ const PendingPage = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sortOrder, setSortOrder] = useState("name-asc");
+  const [allData, setAllData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]); // for future search/filter
+  const [focusedStatus, setFocusedStatus] = useState("all");
+
+  // Fetch inventory data on mount (ReservationPage pattern)
+  useEffect(() => {
+    fetch("http://localhost:5001/inventory")
+      .then((res) => res.json())
+      .then((data) => {
+        // Filter out entries without toga_size
+        const filtered = data.filter(
+          (item) => item.toga_size !== null && item.toga_size !== undefined
+        );
+        setAllData(filtered);
+        setFilteredData(filtered); // for now, same as allData
+      });
+  }, []);
 
   // Sort handlers for the sidebar controls
   const handleSortNameAsc = () => setSortOrder("name-asc");
@@ -42,7 +59,9 @@ const PendingPage = () => {
             alwaysShowOnLarge
             setSortOrder={setSortOrder}
             activeTab={activeTab}
-            focusedSort={sortOrder}
+            setActiveTab={setActiveTab}
+            focusedStatus={focusedStatus}
+            setFocusedStatus={setFocusedStatus}
             handleSortNameAsc={handleSortNameAsc}
             handleSortNameDesc={handleSortNameDesc}
             handleSortDateNewest={handleSortDateNewest}
@@ -82,6 +101,9 @@ const PendingPage = () => {
                 isGrid={isGrid}
                 modifyTable={modifyTable}
                 sortOrder={sortOrder}
+                data={filteredData}
+                allData={allData}
+                focusedStatus={focusedStatus}
               />
             </div>
           </div>
