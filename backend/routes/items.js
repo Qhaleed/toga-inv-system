@@ -14,32 +14,8 @@ router.get("/", async (req, res) => {
       return res.status(500).json({ error: "Database connection error" });
     }
 
-    // Compute stock summary by item_status, variant, and item_type
-    const summary = {
-      byStatus: {},
-      byVariant: {},
-      byType: {},
-    };
-    for (const item of items) {
-      // By item_status
-      if (item.item_status) {
-        summary.byStatus[item.item_status] =
-          (summary.byStatus[item.item_status] || 0) + (item.quantity || 0);
-      }
-      // By variant
-      if (item.variant) {
-        summary.byVariant[item.variant] =
-          (summary.byVariant[item.variant] || 0) + (item.quantity || 0);
-      }
-      // By item_type
-      if (item.item_type) {
-        summary.byType[item.item_type] =
-          (summary.byType[item.item_type] || 0) + (item.quantity || 0);
-      }
-    }
-
-    // Return both items and summary
-    res.status(200).json({ items, summary });
+    // Return the formatted data
+    res.status(200).json(items);
   } catch (error) {
     console.log("Items table database error: ", error);
     res.status(500).json({ error: "Internal Server Error" });
