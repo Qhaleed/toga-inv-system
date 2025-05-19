@@ -60,73 +60,149 @@ export function ViewDamageTab() {
     const fetchDamageData = async () => {
       setIsLoading(true);
       try {
-        // Fetch evaluation data from backend
-        const response = await fetch("http://localhost:5001/evaluation");
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        // Fetch items data - this will be our primary source for damaged items
+        const itemsResponse = await fetch("http://localhost:5001/items");
+        if (!itemsResponse.ok) {
+          throw new Error(`HTTP error! Status: ${itemsResponse.status}`);
+        }
+        const itemsData = await itemsResponse.json();
+
+        // Process damaged items from items table
+        const damagedItems = itemsData.filter(item => item.item_status === 'Damaged');
+
+        // Group by item type
+        const capDamaged = damagedItems.filter(item => item.item_type === 'Cap');
+        const gownDamaged = damagedItems.filter(item => item.item_type === 'Gown');
+        const hoodDamaged = damagedItems.filter(item => item.item_type === 'Hood');
+        const tasselDamaged = damagedItems.filter(item => item.item_type === 'Tassel');
+
+        // Create structured damage data
+        const capItems = capDamaged.map(item => ({
+          category: item.damage_type || "Uncategorized",
+          reason: item.damage_reason || "Not specified",
+          student: item.damaged_by || "Unknown",
+          date: item.damage_date || new Date().toISOString().split('T')[0],
+          quantity: item.quantity || 1
+        }));
+
+        const gownItems = gownDamaged.map(item => ({
+          category: item.damage_type || "Uncategorized",
+          reason: item.damage_reason || "Not specified",
+          student: item.damaged_by || "Unknown",
+          date: item.damage_date || new Date().toISOString().split('T')[0],
+          quantity: item.quantity || 1
+        }));
+
+        const hoodItems = hoodDamaged.map(item => ({
+          category: item.damage_type || "Uncategorized",
+          reason: item.damage_reason || "Not specified",
+          student: item.damaged_by || "Unknown",
+          date: item.damage_date || new Date().toISOString().split('T')[0],
+          quantity: item.quantity || 1
+        }));
+
+        const tasselItems = tasselDamaged.map(item => ({
+          category: item.damage_type || "Uncategorized",
+          reason: item.damage_reason || "Not specified",
+          student: item.damaged_by || "Unknown",
+          date: item.damage_date || new Date().toISOString().split('T')[0],
+          quantity: item.quantity || 1
+        }));
+
+        // Also fetch evaluation data to enrich our damage information where possible
+        const evalResponse = await fetch("http://localhost:5001/evaluation");
+        if (evalResponse.ok) {
+          const evalData = await evalResponse.json();
+
+          // Process evaluated items with damage info
+          evalData.forEach(item => {
+            if (item.evaluation_status === "Evaluated" || item.evaluation_status === "evaluated") {
+              const studentName = `${item.surname}, ${item.first_name}${item.middle_initial ? ` ${item.middle_initial}.` : ''}`;
+              const evaluationDate = item.updated_at || new Date().toISOString().split('T')[0];
+
+              // Enrich cap damage data if applicable
+              if (item.cap_deform && item.cap_deform !== "None" && capItems.length > 0) {
+                // Replace a generic entry with this specific one if available
+                const genericIndex = capItems.findIndex(c => c.category === "Uncategorized");
+                if (genericIndex >= 0) {
+                  capItems[genericIndex] = {
+                    category: item.cap_deform,
+                    reason: item.cap_remarks || "No details provided",
+                    student: studentName,
+                    date: evaluationDate,
+                    quantity: 1
+                  };
+                }
+              }
+
+              // Enrich gown damage data
+              if (item.gown_damage && item.gown_damage !== "None" && gownItems.length > 0) {
+                const genericIndex = gownItems.findIndex(c => c.category === "Uncategorized");
+                if (genericIndex >= 0) {
+                  gownItems[genericIndex] = {
+                    category: item.gown_damage,
+                    reason: item.gown_remarks || "No details provided",
+                    student: studentName,
+                    date: evaluationDate,
+                    quantity: 1
+                  };
+                }
+              }
+
+              // Enrich hood damage data
+              if (item.hood_damage && item.hood_damage !== "None" && hoodItems.length > 0) {
+                const genericIndex = hoodItems.findIndex(c => c.category === "Uncategorized");
+                if (genericIndex >= 0) {
+                  hoodItems[genericIndex] = {
+                    category: item.hood_damage,
+                    reason: item.hood_remarks || "No details provided",
+                    student: studentName,
+                    date: evaluationDate,
+                    quantity: 1
+                  };
+                }
+              }
+
+              // Enrich tassel damage data
+              if (item.tassel_damage && item.tassel_damage !== "None" && tasselItems.length > 0) {
+                const genericIndex = tasselItems.findIndex(c => c.category === "Uncategorized");
+                if (genericIndex >= 0) {
+                  tasselItems[genericIndex] = {
+                    category: item.tassel_damage,
+                    reason: item.tassel_remarks || "No details provided",
+                    student: studentName,
+                    date: evaluationDate,
+                    quantity: 1
+                  };
+                }
+              }
+            }
+          });
         }
 
-        const data = await response.json();
-
-        // Process and categorize damaged items
-        const capItems = [];
-        const gownItems = [];
-        const hoodItems = [];
-        const tasselItems = [];
-
-        data.forEach(item => {
-          // Only process items that have been evaluated
-          if (item.evaluation_status === "Evaluated" || item.evaluation_status === "evaluated") {
-            const studentName = `${item.surname}, ${item.first_name}${item.middle_initial ? ` ${item.middle_initial}.` : ''}`;
-            const evaluationDate = item.updated_at || new Date().toISOString().split('T')[0];
-
-            // Process cap damage
-            if (item.cap_deform && item.cap_deform !== "None") {
-              capItems.push({
-                category: item.cap_deform,
-                reason: item.cap_remarks || "No details provided",
-                student: studentName,
-                date: evaluationDate
+        // Expand entries based on quantity
+        const expandByQuantity = (items) => {
+          let expanded = [];
+          items.forEach(item => {
+            const quantity = item.quantity || 1;
+            for (let i = 0; i < quantity; i++) {
+              expanded.push({
+                category: item.category,
+                reason: item.reason,
+                student: item.student,
+                date: item.date
               });
             }
+          });
+          return expanded;
+        };
 
-            // Process gown damage
-            if (item.gown_damage && item.gown_damage !== "None") {
-              gownItems.push({
-                category: item.gown_damage,
-                reason: item.gown_remarks || "No details provided",
-                student: studentName,
-                date: evaluationDate
-              });
-            }
-
-            // Process hood damage
-            if (item.hood_damage && item.hood_damage !== "None") {
-              hoodItems.push({
-                category: item.hood_damage,
-                reason: item.hood_remarks || "No details provided",
-                student: studentName,
-                date: evaluationDate
-              });
-            }
-
-            // Process tassel damage
-            if (item.tassel_damage && item.tassel_damage !== "None") {
-              tasselItems.push({
-                category: item.tassel_damage,
-                reason: item.tassel_remarks || "No details provided",
-                student: studentName,
-                date: evaluationDate
-              });
-            }
-          }
-        });
-
+        // Set the damage data with expanded items
         setDamageData({
-          capData: capItems,
-          gownData: gownItems,
-          hoodData: hoodItems,
-          tasselData: tasselItems
+          capData: expandByQuantity(capItems),
+          gownData: expandByQuantity(gownItems),
+          hoodData: expandByQuantity(hoodItems),
+          tasselData: expandByQuantity(tasselItems)
         });
 
       } catch (err) {
@@ -171,6 +247,12 @@ export function ViewDamageTab() {
     },
   ];
 
+  // Calculate total damaged items
+  const totalDamagedItems = damageData.capData.length +
+    damageData.gownData.length +
+    damageData.hoodData.length +
+    damageData.tasselData.length;
+
   return (
     <div className="w-full p-8 pb-20 flex flex-col items-center">
       <h2 className="text-2xl font-bold text-[#02327B] mb-6">
@@ -187,6 +269,14 @@ export function ViewDamageTab() {
         </div>
       ) : (
         <>
+          {/* Total count display */}
+          <div className="bg-white shadow-lg rounded-lg px-6 py-4 mb-6 w-full max-w-6xl">
+            <div className="flex justify-between items-center">
+              <span className="text-lg font-semibold text-gray-700">Total Damaged Items:</span>
+              <span className="text-2xl font-bold text-[#102F5E]">{totalDamagedItems}</span>
+            </div>
+          </div>
+
           {/* Summary cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 sm:mt-5 md:mt-0 mt-4 gap-3 px-4 lg:px-6 w-full max-w-6xl mb-8">
             {summary.map((item) => (
