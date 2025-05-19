@@ -24,7 +24,12 @@ const ReservationPage = () => {
       .then((res) => res.json())
       .then((data) => {
         const filteredData = data.filter(
-          (item) => item.toga_size !== null && item.toga_size !== undefined
+          (item) => 
+            item.toga_size !== null &&
+            item.toga_size !== undefined &&
+            item.status !== "Pending" &&
+            item.status !== null &&
+            item.status !== undefined
         );
         setAllData(filteredData);
       });
@@ -34,6 +39,18 @@ const ReservationPage = () => {
   useEffect(() => {
   setFilteredData(allData);
 }, [allData]);
+
+  const handleEvaluationSearch = (results) => {
+  const filtered = results.filter(
+    (item) =>
+      item.toga_size !== null &&
+      item.toga_size !== undefined &&
+      item.status !== "Pending" &&
+      item.status !== null &&
+      item.status !== undefined
+  );
+  setFilteredData(filtered);
+};
 
   return (
     <div
@@ -75,7 +92,7 @@ const ReservationPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            onSearch={setFilteredData}
+            onSearch={handleEvaluationSearch}
           />
         </div>
         <div className="w-full relative h-full flex flex-col">
