@@ -585,7 +585,17 @@ const PendingRow = ({
                                 Approve
                               </button>
                             ) : (
-                              <span>{db.status}</span>
+                              <span
+                                className={
+                                  db.status === "Approved"
+                                    ? "text-green-600"
+                                    : db.status === "Rejected"
+                                    ? "text-red-600"
+                                    : ""
+                                }
+                              >
+                                {db.status}
+                              </span>
                             )}
                           </div>
                           <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>

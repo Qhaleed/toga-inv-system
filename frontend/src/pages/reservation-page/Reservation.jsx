@@ -109,7 +109,7 @@ const ReservationPage = () => {
       {/* Main content */}
       <div className="bg-[#F3F9FF] w-full overflow-hidden h-full">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-14 pt-15 flex items-center relative">
+        <div className="w-full z-10 h-9 pt-12.5 flex items-center relative">
           <NavBar
             isGrid={isGrid}
             setIsGrid={setIsGrid}

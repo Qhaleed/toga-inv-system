@@ -9,20 +9,15 @@ import GrayStatistic from "../../assets/icons/gray-statistics.svg?react";
 import GrayApplication from "../../assets/icons/gray-checkgray.svg?react";
 import GrayRows from "../../assets/icons/gray-rows.svg?react";
 import GrayGrid from "../../assets/icons/gray-grid.svg?react";
-import Rows from "../../assets/icons/white-row.svg?react";
-import Grid from "../../assets/icons/white-grid.svg?react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 import MenuIcon from "@/assets/icons/menu.svg?react";
 
 const Navbar = ({
-  isGrid,
-  setIsGrid,
   modifyTable,
   setmodifyTable,
   activeTab,
-  setActiveTab, // <-- add this prop to update activeTab state
   onSearch, // <-- add this prop for search callback
 }) => {
   const editallClicked = () => {
@@ -43,25 +38,13 @@ const Navbar = ({
       : "hover:scale-105 hover:bg-blue-100 hover:text-blue-700 bg-gray-200 text-gray-500 border border-gray-400 flex ml-2 justify-center mr-2 items-center w-[60px] md:w-25 lg:w-34 xl:w4  2xl:w-48 h-6 text-[10px] md:text-xs lg:text-sm 2xl:text-base rounded-lg transition-all ease-out duration-500";
 
   const handleNavigation = (tabName, route) => {
-    if (activeTab !== tabName) {
-      setActiveTab(tabName); // Update activeTab state
-      navigate(route);
+    try {
+      localStorage.setItem("activeTab", tabName);
+    } catch {
+      // ignore localStorage errors
     }
+    navigate(route);
   };
-
-  const rowIcon = (
-    <Rows
-      className={`w-7 p-1 ${!isGrid ? "text-white fill-white" : "text-gray-500 fill-gray-500"
-        }`}
-    />
-  );
-
-  const gridIcon = (
-    <Grid
-      className={`w-7 p-1 ${isGrid ? "text-white fill-white" : "text-gray-500 fill-gray-500"
-        }`}
-    />
-  );
 
   const isEvaluation = activeTab === "evaluation" ? "hidden" : "block";
 
@@ -107,10 +90,10 @@ const Navbar = ({
           <LoaderAnimation />
         </div>
       )}
-      <div className="h-10 flex  w-full">
+      <div className="h-9 flex  w-full">
         {/* Top Navigation */}
         {/* Mobile: Only big icons, no text, small logout icon at end */}
-        <div className="flex gap-7 w-full  bg-[#102F5E] md:hidden h-14 items-center">
+        <div className="flex gap-7 w-full  bg-[#102F5E] md:hidden h-15 items-center">
           <button className="p-2 transition-all duration-200 hover:bg-blue-900/40 hover:scale-110 rounded-full">
             <MenuIcon className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
@@ -124,9 +107,6 @@ const Navbar = ({
             <Statistic className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           <button onClick={() => navigate("/evaluation-page")} className="p-2">
-            <Application className="w-6 mx-1 h-6 text-white fill-white" />
-          </button>
-          <button onClick={() => navigate("/reservation")} className="p-2">
             <Application className="w-6 mx-1 h-6 text-white fill-white" />
           </button>
           {/* Small logout icon */}
@@ -151,7 +131,7 @@ const Navbar = ({
         {/* Desktop/Tablet: Full nav with text and logout */}
         <div className="hidden md:flex h-10 flex-col w-full justify-end mt-2">
           <div className="flex  relative  w-full">
-            <div className="flex items-center relative mt-2 w-full h-14">
+            <div className="flex items-center relative mt-2 w-full h-15">
               {/* Dashboard button */}
               <button
                 onClick={() => navigate("/admin-dashboard")}
@@ -234,19 +214,16 @@ const Navbar = ({
             </div>
           </div>
           {/* Search and controls row (new line) BOTTOM NAV TO */}
-
           {activeTab === "pending" ||
           (activeTab !== "inventory" &&
             activeTab !== "dashboard" &&
             activeTab !== "pending") ? (
             <div className="flex bg-amber-700  items-center w-full animate-fade-in">
-
-
               <div className="w-full">
                 <div className="relative ml-6  ">
                   <Search className="absolute w-5 top-1/5 left-2" />
                   <input
-                    className="bg-[#E2E2E2] shadow-inner  shadow-gray-500 h-8 md:w-100 lg:w-130 px-10 py-2 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
+                    className="bg-[#E2E2E2] shadow-inner  shadow-gray-500 h-8 md:w-100 lg:w-180 px-10 py-2 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
                     type="text"
                     placeholder="Search student..."
                     value={searchValue}
@@ -255,39 +232,15 @@ const Navbar = ({
                   />
                 </div>
               </div>
-              {/* Grid/Row toggle and modify table button */}
+              {/* Removed grid/row toggle and modify table button */}
               <div className="flex items-center mr-90 ">
-                <div
-                  className={`h-8 w-23 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
-                >
-                  <button
-                    onClick={() => setIsGrid(false)}
-                    className={`h-7 w-8 md:h-8 md:w-14 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${!isGrid
-                      ? "bg-[#02327B] text-white"
-                      : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-                      } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-                    disabled={searchActive}
-                  >
-                    {rowIcon}
-                  </button>
-                  {/*Modify Table button this */}
-                  <button
-                    onClick={() => setIsGrid(true)}
-                    className={`h-7 w-8 md:h-7 md:w-13 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${isGrid
-                      ? "bg-[#02327B] text-white"
-                      : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-                      } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-                    disabled={searchActive}
-                  >
-                    {gridIcon}
-                  </button>
-                </div>
                 <div>
                   <button
-                    className={`${isEvaluation} hover:scale-105 h-8  px-3 md:w-fit text-[10px] whitespace-nowrap rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${modifyTable
-                      ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
-                      : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
-                      } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                    className={`${isEvaluation} hover:scale-105 h-8  px-3 md:w-fit text-[10px] whitespace-nowrap rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+                      modifyTable
+                        ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
+                        : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
+                    } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
                     onClick={editallClicked}
                     disabled={searchActive}
                   >
