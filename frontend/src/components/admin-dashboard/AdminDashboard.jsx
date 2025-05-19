@@ -95,7 +95,7 @@ function AdminDashboard() {
             }
             return 0;
           })
-          .slice(0, 2); // Get only the first 2
+          .slice(0, 3); // Get only the first 2
 
         setPendingApprovals(pendingItems);
 
@@ -208,8 +208,7 @@ function AdminDashboard() {
                 <BoxIcon className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center  mt-8 ml-4">
-                <Upstats className="w-4" />
-                <p className="text-[#0DDF65] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -248,8 +247,7 @@ function AdminDashboard() {
                 <List className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Upstats className="w-4" />
-                <p className="text-[#0DDF65] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -288,8 +286,7 @@ function AdminDashboard() {
                 <Time className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Downstats className="w-4" />
-                <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -328,8 +325,7 @@ function AdminDashboard() {
                 <Eval className="sm:w-24 sm:h-24 w-12 h-12 md:w-7 md:h-7 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Downstats className="w-4" />
-                <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -480,28 +476,13 @@ function AdminDashboard() {
                     </span>
                   </div>
                   <div className="text-xs text-gray-500 ml-4">
-                    ID: {item.id}
+                    ID: {item.id_number}
                   </div>
                   <div className="text-xs text-gray-500 ml-4">
                     Course: {item.course}
                   </div>
                   <div className="flex gap-2 ml-4 mt-1">
-                    <button
-                      className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 focus:bg-blue-200 transition"
-                      onClick={() =>
-                        alert(
-                          `View details for ${item.first_name} ${item.surname}`
-                        )
-                      }
-                    >
-                      View Details
-                    </button>
-                    <button className="px-2 py-1 text-xs rounded bg-green-100 text-green-700 font-semibold hover:bg-green-200 focus:bg-green-200 transition">
-                      Accept
-                    </button>
-                    <button className="px-2 py-1 text-xs rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 focus:bg-red-200 transition">
-                      Deny
-                    </button>
+
                   </div>
                 </li>
               ))
