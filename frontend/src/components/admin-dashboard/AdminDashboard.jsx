@@ -100,14 +100,18 @@ function AdminDashboard() {
         setPendingApprovals(pendingItems);
 
         // Calculate inventory statistics
-        const activeInventory = data.filter((item) => item.inventory_id !== null);
+        const activeInventory = data.filter(
+          (item) => item.inventory_id !== null
+        );
         const returnedCount = data.filter(
           (item) => item.return_status === "Returned"
         ).length;
         const notReturnedCount = data.filter(
           (item) => item.return_status === "Not Returned"
         ).length;
-        const overdueCount = data.filter((item) => item.is_overdue === 1).length;
+        const overdueCount = data.filter(
+          (item) => item.is_overdue === 1
+        ).length;
         const evaluatedCount = data.filter(
           (item) => item.evaluation_status === "Evaluated"
         ).length;
@@ -147,28 +151,42 @@ function AdminDashboard() {
         const returnStats = { returned: 0, notReturned: 0 };
         const statusStats = { goodCondition: 0, forRepair: 0, damaged: 0 };
         const itemTypeStats = {}; // Calculation for itemTypeStats can remain if needed elsewhere
-        data.forEach(item => {
-          if (item.return_status === "Returned") returnStats.returned += item.quantity;
-          else if (item.return_status === "Not Returned") returnStats.notReturned += item.quantity;
+        data.forEach((item) => {
+          if (item.return_status === "Returned")
+            returnStats.returned += item.quantity;
+          else if (item.return_status === "Not Returned")
+            returnStats.notReturned += item.quantity;
 
-          if (item.item_status === "In Good Condition") statusStats.goodCondition += item.quantity;
-          else if (item.item_status === "For Repair") statusStats.forRepair += item.quantity;
-          else if (item.item_status === "Damaged") statusStats.damaged += item.quantity;
+          if (item.item_status === "In Good Condition")
+            statusStats.goodCondition += item.quantity;
+          else if (item.item_status === "For Repair")
+            statusStats.forRepair += item.quantity;
+          else if (item.item_status === "Damaged")
+            statusStats.damaged += item.quantity;
 
           // Item type stats calculation (can be kept for other uses)
           const typeKey = item.item_type;
           if (!itemTypeStats[typeKey]) {
             itemTypeStats[typeKey] = {
-              total: 0, returned: 0, notReturned: 0,
-              goodCondition: 0, forRepair: 0, damaged: 0,
+              total: 0,
+              returned: 0,
+              notReturned: 0,
+              goodCondition: 0,
+              forRepair: 0,
+              damaged: 0,
             };
           }
           itemTypeStats[typeKey].total += item.quantity;
-          if (item.return_status === "Returned") itemTypeStats[typeKey].returned += item.quantity;
-          else if (item.return_status === "Not Returned") itemTypeStats[typeKey].notReturned += item.quantity;
-          if (item.item_status === "In Good Condition") itemTypeStats[typeKey].goodCondition += item.quantity;
-          else if (item.item_status === "For Repair") itemTypeStats[typeKey].forRepair += item.quantity;
-          else if (item.item_status === "Damaged") itemTypeStats[typeKey].damaged += item.quantity;
+          if (item.return_status === "Returned")
+            itemTypeStats[typeKey].returned += item.quantity;
+          else if (item.return_status === "Not Returned")
+            itemTypeStats[typeKey].notReturned += item.quantity;
+          if (item.item_status === "In Good Condition")
+            itemTypeStats[typeKey].goodCondition += item.quantity;
+          else if (item.item_status === "For Repair")
+            itemTypeStats[typeKey].forRepair += item.quantity;
+          else if (item.item_status === "Damaged")
+            itemTypeStats[typeKey].damaged += item.quantity;
         });
         setItemsStats({
           returnStatus: returnStats,
@@ -207,9 +225,7 @@ function AdminDashboard() {
               >
                 <BoxIcon className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center  mt-8 ml-4">
-
-              </span>
+              <span className="text-lg flex text-center items-center  mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -246,9 +262,7 @@ function AdminDashboard() {
               >
                 <List className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center mt-8 ml-4">
-
-              </span>
+              <span className="text-lg flex text-center items-center mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -285,9 +299,7 @@ function AdminDashboard() {
               >
                 <Time className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center mt-8 ml-4">
-
-              </span>
+              <span className="text-lg flex text-center items-center mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -324,9 +336,7 @@ function AdminDashboard() {
               >
                 <Eval className="sm:w-24 sm:h-24 w-12 h-12 md:w-7 md:h-7 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center mt-8 ml-4">
-
-              </span>
+              <span className="text-lg flex text-center items-center mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -400,8 +410,9 @@ function AdminDashboard() {
                 } else if (diffHours > 0) {
                   timeAgo = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
                 } else {
-                  timeAgo = `${diffMinutes} min${diffMinutes > 1 ? "s" : ""
-                    } ago`;
+                  timeAgo = `${diffMinutes} min${
+                    diffMinutes > 1 ? "s" : ""
+                  } ago`;
                 }
 
                 // Create full name for avatar
@@ -481,9 +492,7 @@ function AdminDashboard() {
                   <div className="text-xs text-gray-500 ml-4">
                     Course: {item.course}
                   </div>
-                  <div className="flex gap-2 ml-4 mt-1">
-
-                  </div>
+                  <div className="flex gap-2 ml-4 mt-1"></div>
                 </li>
               ))
             ) : (
@@ -539,7 +548,8 @@ function AdminDashboard() {
                 <div>
                   <p className="text-sm text-gray-500">Items for Repair </p>
                   <p className="text-lg font-bold text-[#102F5E]">
-                    {itemsStats.itemStatus.forRepair + itemsStats.itemStatus.damaged}
+                    {itemsStats.itemStatus.forRepair +
+                      itemsStats.itemStatus.damaged}
                   </p>
                 </div>
                 <AlertCircle className="w-8 h-8 text-yellow-600" />

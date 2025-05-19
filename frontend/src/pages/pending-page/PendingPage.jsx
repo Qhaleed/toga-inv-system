@@ -29,10 +29,11 @@ const PendingPage = () => {
 
   return (
     <div
-      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${sidebarOpen
-        ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
-        : "md:grid-cols-1"
-        }`}
+      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
+        sidebarOpen
+          ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
+          : "md:grid-cols-1"
+      }`}
     >
       {/* Sidebar: left on desktop, hidden on mobile */}
       {sidebarOpen && (
@@ -50,9 +51,9 @@ const PendingPage = () => {
         </div>
       )}
       {/* Main content */}
-      <div className="bg-[#F3F9FF] w-full overflow-hidden h-full">
+      <div className="bg-[#F3F9FF] w-ful  overflow-hidden h-full">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-14 flex items-center relative">
+        <div className="w-full z-10 h-14  pt-15 flex items-center relative">
           <Navbar
             isGrid={isGrid}
             setIsGrid={setIsGrid}
