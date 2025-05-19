@@ -18,7 +18,9 @@ const EvaluationPage = () => {
   const [isZA, setIsZA] = useState(false);
   const [focusedStatus, setFocusedStatus] = useState("all");
   const [allData, setAllData] = useState([]);
+  const [filteredData, setFilteredData] = useState(allData);
 
+  //para to sa informations sa row
   useEffect(() => {
     fetch("http://localhost:5001/evaluation")
       .then((res) => res.json())
@@ -29,6 +31,11 @@ const EvaluationPage = () => {
         setAllData(filteredData);
       });
   }, []);
+
+  //para to ma-filter ang data based sa search bar
+  useEffect(() => {
+    setFilteredData(allData); //ishow ang filtered data (refer sa handleSearch sa NavBar.jsx)
+  }, [allData]);
 
   return (
     <div
@@ -73,6 +80,7 @@ const EvaluationPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            onSearch={setFilteredData}
           />
         </div>
         <div className="w-full relative h-full flex flex-col">
@@ -98,7 +106,7 @@ const EvaluationPage = () => {
                 isnotevalTab={isNotEvaluationTab}
                 isAZ={isAZ}
                 isZA={isZA}
-                allData={allData}
+                allData={filteredData}
               />
             </div>
             <EvaluationTab
