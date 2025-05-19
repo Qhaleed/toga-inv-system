@@ -11,6 +11,10 @@ import {
   TrendingUpIcon,
   ArrowRight,
   Group,
+  BarChart3, // Retained from previous
+  CheckCircle, // Added for Items Overview
+  AlertCircle, // Added for Items Overview
+  // Tools, // Alternative for "For Repair" if needed later
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import BoxIcon from "@/assets/icons/box.svg?react";
@@ -21,12 +25,12 @@ import Eval from "@/assets/icons/eval.svg?react";
 import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
-import StudentConcernsModal from "./StudentConcernsModal";
+// import StudentConcernsModal from "./StudentConcernsModal";
 
 function AdminDashboard() {
   const navigate = useNavigate();
-  const [showConcernModal, setShowConcernModal] = useState(false);
-  const [selectedConcern, setSelectedConcern] = useState(null);
+  // const [showConcernModal, setShowConcernModal] = useState(false);
+  // const [selectedConcern, setSelectedConcern] = useState(null);
   //default is 0 since need number ang value not string
   const [totalPending, setTotalPending] = useState(0); //state for total pending
   const [totalEvaluated, setTotalEvaluated] = useState(0); //state for total evaluated
@@ -36,6 +40,27 @@ function AdminDashboard() {
   const [inventoryData, setInventoryData] = useState([]); // state to store all inventory data
   const [latestRegistrations, setLatestRegistrations] = useState([]); // state for latest registrations
   const [pendingApprovals, setPendingApprovals] = useState([]); // state for pending approvals
+  const [inventoryStats, setInventoryStats] = useState({
+    total: 0,
+    returned: 0,
+    notReturned: 0,
+    overdue: 0,
+    evaluated: 0,
+    notEvaluated: 0,
+    courses: {},
+  });
+  const [itemsStats, setItemsStats] = useState({
+    returnStatus: {
+      returned: 0,
+      notReturned: 0,
+    },
+    itemStatus: {
+      goodCondition: 0,
+      forRepair: 0,
+      damaged: 0,
+    },
+    itemTypes: {},
+  });
 
   //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
   useEffect(() => {
@@ -73,6 +98,40 @@ function AdminDashboard() {
           .slice(0, 2); // Get only the first 2
 
         setPendingApprovals(pendingItems);
+
+        // Calculate inventory statistics
+        const activeInventory = data.filter((item) => item.inventory_id !== null);
+        const returnedCount = data.filter(
+          (item) => item.return_status === "Returned"
+        ).length;
+        const notReturnedCount = data.filter(
+          (item) => item.return_status === "Not Returned"
+        ).length;
+        const overdueCount = data.filter((item) => item.is_overdue === 1).length;
+        const evaluatedCount = data.filter(
+          (item) => item.evaluation_status === "Evaluated"
+        ).length;
+        const notEvaluatedCount = data.filter(
+          (item) => item.evaluation_status === "Not Evaluated"
+        ).length;
+
+        // Count by courses
+        const courseStats = data.reduce((acc, item) => {
+          if (item.course) {
+            acc[item.course] = (acc[item.course] || 0) + 1;
+          }
+          return acc;
+        }, {});
+
+        setInventoryStats({
+          total: activeInventory.length,
+          returned: returnedCount,
+          notReturned: notReturnedCount,
+          overdue: overdueCount,
+          evaluated: evaluatedCount,
+          notEvaluated: notEvaluatedCount,
+          courses: courseStats,
+        });
       });
 
     // Fetch items data
@@ -83,6 +142,39 @@ function AdminDashboard() {
         // Calculate total stock by summing up the quantities of all items
         const totalQty = data.reduce((total, item) => total + item.quantity, 0);
         setTotalStock(totalQty);
+
+        // Calculate item statistics
+        const returnStats = { returned: 0, notReturned: 0 };
+        const statusStats = { goodCondition: 0, forRepair: 0, damaged: 0 };
+        const itemTypeStats = {}; // Calculation for itemTypeStats can remain if needed elsewhere
+        data.forEach(item => {
+          if (item.return_status === "Returned") returnStats.returned += item.quantity;
+          else if (item.return_status === "Not Returned") returnStats.notReturned += item.quantity;
+
+          if (item.item_status === "In Good Condition") statusStats.goodCondition += item.quantity;
+          else if (item.item_status === "For Repair") statusStats.forRepair += item.quantity;
+          else if (item.item_status === "Damaged") statusStats.damaged += item.quantity;
+
+          // Item type stats calculation (can be kept for other uses)
+          const typeKey = item.item_type;
+          if (!itemTypeStats[typeKey]) {
+            itemTypeStats[typeKey] = {
+              total: 0, returned: 0, notReturned: 0,
+              goodCondition: 0, forRepair: 0, damaged: 0,
+            };
+          }
+          itemTypeStats[typeKey].total += item.quantity;
+          if (item.return_status === "Returned") itemTypeStats[typeKey].returned += item.quantity;
+          else if (item.return_status === "Not Returned") itemTypeStats[typeKey].notReturned += item.quantity;
+          if (item.item_status === "In Good Condition") itemTypeStats[typeKey].goodCondition += item.quantity;
+          else if (item.item_status === "For Repair") itemTypeStats[typeKey].forRepair += item.quantity;
+          else if (item.item_status === "Damaged") itemTypeStats[typeKey].damaged += item.quantity;
+        });
+        setItemsStats({
+          returnStatus: returnStats,
+          itemStatus: statusStats,
+          itemTypes: itemTypeStats,
+        });
       });
   }, []);
 
@@ -95,49 +187,6 @@ function AdminDashboard() {
     return acc;
   }, {});
 
-  // hardcoded muna to
-  const concerns = [
-    {
-      subject: "Lost Gown",
-      status: "Resolved",
-      statusColor: "bg-green-100 text-green-700",
-      student: "Donald Lee",
-      message: "I lost my gown after the event. What should I do?",
-      response: "Please visit the admin office for assistance.",
-      date: "2025-05-15",
-      time: "10:30 AM",
-    },
-    {
-      subject: "Damaged Cap",
-      status: "Pending",
-      statusColor: "bg-yellow-100 text-yellow-700",
-      student: "Magang Magang",
-      message: "My cap is broken, can I get a replacement?",
-      response: "Awaiting admin review.",
-      date: "2025-05-15",
-      time: "09:10 AM",
-    },
-    {
-      subject: "Missing Hood",
-      status: "Pending",
-      statusColor: "bg-yellow-100 text-yellow-700",
-      student: "Johnny Sins",
-      message: "I did not receive a hood with my set.",
-      response: "Awaiting admin review.",
-      date: "2025-05-14",
-      time: "03:45 PM",
-    },
-    {
-      subject: "Wrong Toga Size",
-      status: "Resolved",
-      statusColor: "bg-green-100 text-green-700",
-      student: "Gold Neger",
-      message: "I received the wrong toga size.",
-      response: "Please exchange at the admin office.",
-      date: "2025-05-13",
-      time: "01:20 PM",
-    },
-  ];
   return (
     <div className="flex flex-col overflow-auto gap-4 py-2 md:gap-4 md:pb-10 h-full w-full min-h-0 mb-8">
       <div className="md:h-4 hidden items-start md:flex">
@@ -463,71 +512,88 @@ function AdminDashboard() {
             )}
           </ul>
         </div>
-        {/* 3rd col: Student Concerns Results */}
+        {/* 3rd col: Items Overview (Replaces Inventory Overview) */}
         <div className="bg-white w-full md:w-[32%] flex flex-col rounded-xl shadow-lg p-4 min-h-[350px] flex-1">
           <h3 className="text-lg font-bold text-gray-700 mb-2 flex items-center justify-between">
-            Student Concerns
+            Items Overview
             <button
               className="md:text-xs text-2xl text-blue-600 hover:underline focus:underline font-semibold ml-2 cursor-pointer"
-              onClick={() => {
-                setSelectedConcern(null);
-                setShowConcernModal(true);
-              }}
-              aria-label="View More Student Concerns"
+              onClick={() => navigate("/inventory")} // Or a more specific items page if available
+              aria-label="View Full Items Report"
             >
-              View More
+              <ArrowRight className="w-5 h-5 inline-block" />
             </button>
           </h3>
-          <ul className="flex flex-col gap-3">
-            {concerns.slice(0, 2).map((concern, idx) => (
-              <li
-                key={idx}
-                className="flex flex-col gap-1 border-b pb-2 last:border-b-0"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                  <span className="font-semibold text-gray-800">
-                    {concern.subject}
-                  </span>
-                  <span
-                    className={`ml-auto px-2 py-0.5 rounded-full text-xs font-semibold ${concern.statusColor}`}
-                  >
-                    {concern.status}
-                  </span>
+          <div className="flex flex-col gap-4 h-full">
+            {/* Item statistics cards */}
+            <div className="grid grid-cols-2 gap-3 flex-1">
+              <div className="bg-green-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Returned Items</p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.returnStatus.returned}
+                  </p>
                 </div>
-                <div className="flex items-center text-xs text-gray-400 ml-4 gap-2">
-                  <span>{concern.date}</span>
-                  <span>{concern.time}</span>
+                <TrendingUpIcon className="w-8 h-8 text-green-600" />
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Not Returned Items</p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.returnStatus.notReturned}
+                  </p>
                 </div>
-                <div className="text-xs text-gray-500 ml-4">
-                  Student: {concern.student}
+                <TrendingDownIcon className="w-8 h-8 text-red-600" />
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Good Condition</p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.itemStatus.goodCondition}
+                  </p>
                 </div>
-                <div className="text-xs text-gray-600 ml-4">
-                  "{concern.message}"
+                <CheckCircle className="w-8 h-8 text-blue-600" />
+              </div>
+              <div className="bg-yellow-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Items for Repair </p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.itemStatus.forRepair + itemsStats.itemStatus.damaged}
+                  </p>
                 </div>
-                <div className="text-xs text-gray-400 ml-4">
-                  Response: {concern.response}
-                </div>
-                <button
-                  className="self-end mt-1  md:text-xs  text-lg  sm:text-xl text-blue-600 hover:underline focus:underline font-semibold cursor-pointer"
-                  onClick={() => {
-                    setSelectedConcern(concern);
-                    setShowConcernModal(true);
-                  }}
-                  aria-label={`View full concern for ${concern.student}`}
-                >
-                  View
-                </button>
-              </li>
-            ))}
-          </ul>
-          {/* Floating modal para sa concerns stuffs from uyserr  new file */}
-          {showConcernModal && (
-            <StudentConcernsModal
-              concerns={selectedConcern ? [selectedConcern] : concerns}
-              onClose={() => setShowConcernModal(false)}
-            />
-          )}
+                <AlertCircle className="w-8 h-8 text-yellow-600" />
+              </div>
+            </div>
+            {/* Chart for item status */}
+            <div className="flex-1">
+              <RadialChart
+                data={[
+                  {
+                    label: "Good",
+                    value: itemsStats.itemStatus.goodCondition,
+                    color: "#4CAF50", // Green
+                  },
+                  {
+                    label: "Repair",
+                    value: itemsStats.itemStatus.forRepair,
+                    color: "#FFC107", // Amber
+                  },
+                  {
+                    label: "Damaged",
+                    value: itemsStats.itemStatus.damaged,
+                    color: "#F44336", // Red
+                  },
+                ]}
+                totalValue={
+                  itemsStats.itemStatus.goodCondition +
+                  itemsStats.itemStatus.forRepair +
+                  itemsStats.itemStatus.damaged
+                }
+                labelColor="#fff" // Adjust as needed for visibility
+                className="mx-auto"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
