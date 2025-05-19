@@ -591,7 +591,7 @@ const Rows = ({
                               {/*eto ung single row edit  */}
                               {editId === row.inventory_id && !modifyTable && (
                                 <div
-                                  className="absolute left-25 top-2/5 -translate-y-1/2 z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-1 border border-gray-200 animate-fade-in min-w-[80px] w-max"
+                                  className="absolute left-15 top-2/8 -translate-y-1/2 z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-1 border border-gray-200 animate-fade-in min-w-[80px] w-max"
                                   style={{
                                     minWidth: 0,
                                     maxWidth: 180,
