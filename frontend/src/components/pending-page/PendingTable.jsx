@@ -1,22 +1,15 @@
-/**
- * PendingTable Component
- * Main table component for the pending page that displays pending toga inventory items
- * Uses PendingRow for rendering individual rows with status instead of return_status
- */
-
 import PendingRow from "./PendingRow";
 import "../common/Table.css";
 import { useState, useEffect } from "react";
 
-/**
- * PendingTable Component
- * @param {Object} props - Component props
- * @param {boolean} props.isGrid - Whether to display in grid view
- * @param {boolean} props.modifyTable - Whether table is in edit mode
- * @param {string} props.sortOrder - Current sort order
- * @param {Array} props.data - Data to display in the table
- */
-const PendingTable = ({ isGrid, modifyTable, sortOrder, data }) => {
+const PendingTable = ({
+  isGrid,
+  modifyTable,
+  sortOrder,
+  data,
+  allData,
+  focusedStatus,
+}) => {
   // Track internal sort order state
   const [internalSortOrder, setInternalSortOrder] = useState(sortOrder || null);
 
@@ -38,7 +31,12 @@ const PendingTable = ({ isGrid, modifyTable, sortOrder, data }) => {
             {isGrid ? (
               <div className="flex-1 flex flex-col h-full">
                 <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-end p-12 sm:p-2 md:p-4 h-full">
-                  <PendingRow isGrid hideActionButton data={data} />
+                  <PendingRow
+                    isGrid
+                    hideActionButton
+                    allData={allData}
+                    focusedStatus={focusedStatus}
+                  />
                 </div>
               </div>
             ) : (
@@ -69,6 +67,8 @@ const PendingTable = ({ isGrid, modifyTable, sortOrder, data }) => {
                         rowHeightClass="h-16"
                         sortOrder={internalSortOrder}
                         data={data}
+                        allData={allData}
+                        focusedStatus={focusedStatus}
                       />
                     </table>
                   </div>

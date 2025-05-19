@@ -21,7 +21,6 @@ const Rows = ({
   isAZ,
   isZA,
   allData,
-  activeTab,
 }) => {
   const [dashboard, setDashboard] = useState([]);
   const [originalDashboard, setOriginalDashboard] = useState([]);
