@@ -523,37 +523,68 @@ const PendingRow = ({
                       >
                         <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                           <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                            <h3 className="truncate">{db.studentname}</h3>
+                            <h3
+                              className="truncate cursor-pointer"
+                              title={db.studentname}
+                            >
+                              {db.studentname}
+                            </h3>
                             <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center">
-                            <h3 className="truncate">{db.course}</h3>
+                            <h5
+                              className="truncate cursor-pointer"
+                              title={db.course}
+                            >
+                              {db.course}
+                            </h5>
                             <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center relative">
-                            <h3 className="truncate">{db.tassel_color}</h3>
+                            <h3
+                              className="truncate cursor-pointer"
+                              title={db.tassel_color}
+                            >
+                              {db.tassel_color}
+                            </h3>
                             <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center relative">
-                            <h3 className="truncate">{db.hood_color}</h3>
+                            <h3
+                              className="truncate cursor-pointer"
+                              title={db.hood_color}
+                            >
+                              {db.hood_color}
+                            </h3>
                             <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center relative">
-                            <h3 className="truncate">{db.toga_size}</h3>
+                            <h3
+                              className="truncate cursor-pointer"
+                              title={db.toga_size}
+                            >
+                              {db.toga_size}
+                            </h3>
                             <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
                         <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center">
-                            <h3 className="truncate">{db.dateofreservation}</h3>
+                            <h3
+                              className="truncate"
+                              cursor-pointer
+                              title={db.dateofreservation}
+                            >
+                              {db.dateofreservation}
+                            </h3>
                             <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>

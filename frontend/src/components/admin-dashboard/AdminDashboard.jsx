@@ -25,7 +25,7 @@ import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
 
-function AdminDashboard({ allData, approvalRequests }) {
+function AdminDashboard({ adminName = "Admin", allData, approvalRequests }) {
   const navigate = useNavigate();
   const [totalPending, setTotalPending] = useState(0);
   const [totalEvaluated, setTotalEvaluated] = useState(0);
@@ -37,6 +37,9 @@ function AdminDashboard({ allData, approvalRequests }) {
     returnStatus: { returned: 0, notReturned: 0 },
     itemStatus: { goodCondition: 0, forRepair: 0, damaged: 0 },
   });
+
+  // Extract first name for welcome message
+  const firstName = adminName.split(" ")[0];
 
   useEffect(() => {
     // Fetch inventory data for reservation, pending, evaluated totals
@@ -105,7 +108,7 @@ function AdminDashboard({ allData, approvalRequests }) {
   return (
     <div className="flex flex-col overflow-auto gap-4 py-2 md:gap-4 md:pb-10 h-full w-full min-h-0 mb-8">
       <div className="md:h-4 hidden items-start md:flex">
-        <p className="ml-6 font-bold 2xl:text-2xl xl:text-xl">{`Welcome, Admin! 👋🏻`}</p>
+        <p className="ml-6 font-bold 2xl:text-2xl xl:text-xl">{`Welcome, ${firstName}! 👋🏻`}</p>
       </div>
       {/* SectionCards: 4 boxes */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 sm:mt:5 md:mt-0 mt-10 gap-3 px-4 lg:px-6">

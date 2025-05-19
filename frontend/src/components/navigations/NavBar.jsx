@@ -218,7 +218,7 @@ const Navbar = ({
           (activeTab !== "inventory" &&
             activeTab !== "dashboard" &&
             activeTab !== "pending") ? (
-            <div className="flex bg-amber-700  items-center w-full animate-fade-in">
+            <div className="flex  items-center w-full animate-fade-in">
               <div className="w-full">
                 <div className="relative ml-6  ">
                   <Search className="absolute w-5 top-1/5 left-2" />
