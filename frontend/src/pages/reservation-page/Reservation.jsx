@@ -16,6 +16,8 @@ const ReservationPage = () => {
   const [isZA, setIsZA] = useState(false);
   const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState([]); // FOR SEARCH BAR
+  const [dashboard, setDashboard] = useState([]);
+  const [sortOrder, setSortOrder] = useState("name-asc"); // default to A-Z
 
   //fetch info from db
   useEffect(() => {
@@ -51,6 +53,29 @@ const ReservationPage = () => {
     setFilteredData(filtered);
   };
 
+  //sorting
+  useEffect(() => {
+    let filtered = [...filteredData];
+    if (sortOrder === "name-asc") {
+      filtered.sort((a, b) =>
+        (a.surname + ", " + a.first_name).localeCompare(
+          b.surname + ", " + b.first_name
+        )
+      );
+    } else if (sortOrder === "name-desc") {
+      filtered.sort((a, b) =>
+        (b.surname + ", " + b.first_name).localeCompare(
+          a.surname + ", " + a.first_name
+        )
+      );
+    } else if (sortOrder === "oldest") {
+      filtered.sort((a, b) => new Date(b.rent_date) - new Date(a.rent_date));
+    } else if (sortOrder === "newest") {
+      filtered.sort((a, b) => new Date(a.rent_date) - new Date(b.rent_date));
+    }
+    setDashboard(filtered);
+  }, [sortOrder, filteredData]);
+
   return (
     <div
       className={`w-screen h-screen overflow-x-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
@@ -77,6 +102,7 @@ const ReservationPage = () => {
             notReturnedCount={
               allData.filter((item) => item.status === "Not Returned").length
             }
+            setSortOrder={setSortOrder}
           />
         </div>
       )}
@@ -115,7 +141,7 @@ const ReservationPage = () => {
                 isNotReturnedTab={isNotReturnedTab}
                 isAZ={isAZ}
                 isZA={isZA}
-                allData={filteredData}
+                allData={dashboard}
               />
             </div>
           </div>
