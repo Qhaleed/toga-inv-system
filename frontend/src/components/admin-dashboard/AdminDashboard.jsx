@@ -1,31 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GroupBarChart } from "@/components/ui/GroupBarChart";
-import { RadialChart } from "../ui/radialchart";
-import { PendingRadial } from "../ui/pendingradial";
-import { EvaluationRadial } from "../ui/evaluationradial";
-import { CheckedOutRadial } from "../ui/checkedoutradial";
+
 import {
-  PieChart,
   TrendingDownIcon,
   TrendingUpIcon,
   ArrowRight,
-  Group,
-  BarChart3,
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+
 import BoxIcon from "@/assets/icons/box.svg?react";
-import Upstats from "@/assets/icons/upstat.svg?react";
-import Downstats from "@/assets/icons/downstat.svg?react";
+
 import List from "@/assets/icons/list.svg?react";
 import Eval from "@/assets/icons/eval.svg?react";
 import Time from "@/assets/icons/time.svg?react";
-import PieChartDash from "../ui/pie-chart";
+
 import { DashboardPie } from "../ui/dashboardpie";
 
-function AdminDashboard({ allData, approvalRequests }) {
+function AdminDashboard({ adminName = "Admin", allData, approvalRequests }) {
   const navigate = useNavigate();
   const [totalPending, setTotalPending] = useState(0);
   const [totalEvaluated, setTotalEvaluated] = useState(0);
@@ -37,7 +30,8 @@ function AdminDashboard({ allData, approvalRequests }) {
     returnStatus: { returned: 0, notReturned: 0 },
     itemStatus: { goodCondition: 0, forRepair: 0, damaged: 0 },
   });
-
+  //VARIABLESZ
+  // AllData = yung inventory , approvalRequests = yung accounts -->  props from AdminDashboardCard
   useEffect(() => {
     // Fetch inventory data for reservation, pending, evaluated totals
     fetch("http://localhost:5001/inventory")
@@ -60,17 +54,18 @@ function AdminDashboard({ allData, approvalRequests }) {
 
   useEffect(() => {
     if (!allData || !Array.isArray(allData)) return;
-    // Compute total stock (sum of all item quantities)
+    // Compute total stock
     const total = allData.reduce((sum, item) => sum + (item.quantity || 0), 0);
     setTotalStock(total);
-    // Compute itemsStats using /items schema
+    // from ttable ng /items schema
     let returned = 0,
       notReturned = 0;
     let goodCondition = 0,
       forRepair = 0,
       damaged = 0;
+
     allData.forEach((item) => {
-      const qty = item.quantity || 0;
+      const qty = item.quantity || 0; //
       if (item.return_status === "Returned") returned += qty;
       else if (item.return_status === "Not Returned") notReturned += qty;
       if (item.item_status === "In Good Condition") goodCondition += qty;
@@ -82,7 +77,7 @@ function AdminDashboard({ allData, approvalRequests }) {
       itemStatus: { goodCondition, forRepair, damaged },
     });
 
-    // Approval requests: filter students with status 'Pending', sort by latest created_at
+    // sort by latest created_at
     if (approvalRequests && Array.isArray(approvalRequests)) {
       const pending = approvalRequests
         .filter((acc) => acc.role === "student" && acc.status === "Pending")
@@ -91,7 +86,7 @@ function AdminDashboard({ allData, approvalRequests }) {
         );
       setPendingApprovals(pending);
 
-      // Latest registered users: all students, sort by created_at desc, take top 4
+      // Latest registered users tapos take top 4
       const latest = approvalRequests
         .filter((acc) => acc.role === "student")
         .sort((a, b) =>
@@ -105,7 +100,14 @@ function AdminDashboard({ allData, approvalRequests }) {
   return (
     <div className="flex flex-col overflow-auto gap-4 py-2 md:gap-4 md:pb-10 h-full w-full min-h-0 mb-8">
       <div className="md:h-4 hidden items-start md:flex">
-        <p className="ml-6 font-bold 2xl:text-2xl xl:text-xl">{`Welcome, Admin! 👋🏻`}</p>
+        <p className="ml-6 font-bold 2xl:text-2xl xl:text-xl">
+          {`Welcome, ${
+            // passed as props to sya from hero container ng sidebar
+            adminName && typeof adminName === "string"
+              ? adminName.split(" ")[0]
+              : "Admin"
+          }! 👋🏻`}
+        </p>
       </div>
       {/* SectionCards: 4 boxes */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 sm:mt:5 md:mt-0 mt-10 gap-3 px-4 lg:px-6">
