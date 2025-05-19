@@ -31,38 +31,39 @@ export function DashboardPie() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch items data from API
-    fetch("http://localhost:5001/items")
-      .then((res) => res.json())
-      .then((data) => {
-        // Group items by type and sum quantities
-        const groupedData = data.reduce((acc, item) => {
-          if (!acc[item.item_type]) {
-            acc[item.item_type] = 0;
-          }
-          acc[item.item_type] += item.quantity;
-          return acc;
-        }, {});
+  // Fetch items data from API
+  fetch("http://localhost:5001/items")
+    .then((res) => res.json())
+    .then((data) => {
+      const items = data.items || [];
+      // Group items by type and sum quantities
+      const groupedData = items.reduce((acc, item) => {
+        if (!acc[item.item_type]) {
+          acc[item.item_type] = 0;
+        }
+        acc[item.item_type] += item.quantity;
+        return acc;
+      }, {});
 
-        // Convert grouped data to chart format with colors
-        const formattedData = Object.entries(groupedData).map(([type, value]) => ({
-          item: type.charAt(0).toUpperCase() + type.slice(1), // Capitalize first letter
-          value,
-          fill: chartConfig[type]?.color || "#2563eb", // Default blue if type not in config
-        }));
+      // Convert grouped data to chart format with colors
+      const formattedData = Object.entries(groupedData).map(([type, value]) => ({
+        item: type.charAt(0).toUpperCase() + type.slice(1),
+        value,
+        fill: chartConfig[type]?.color || "#2563eb",
+      }));
 
-        // Calculate total for percentages
-        const itemTotal = formattedData.reduce((sum, item) => sum + item.value, 0);
+      // Calculate total for percentages
+      const itemTotal = formattedData.reduce((sum, item) => sum + item.value, 0);
 
-        setChartData(formattedData);
-        setTotal(itemTotal);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error("Error fetching items data:", error);
-        setLoading(false);
-      });
-  }, []);
+      setChartData(formattedData);
+      setTotal(itemTotal);
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error("Error fetching items data:", error);
+      setLoading(false);
+    });
+}, []);
 
   if (loading) {
     return (
