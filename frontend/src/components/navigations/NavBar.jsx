@@ -84,7 +84,7 @@ const Navbar = ({
     if ((e && e.key === "Enter") || e === "iconClick") {
       try {
         setLoading(true);
-        let query = `http://localhost:5001/inventory?search=${encodeURIComponent(
+        let query = `http://localhost:5001/search?search=${encodeURIComponent(
           searchValue
         )}`;
         if (sortOption) {
