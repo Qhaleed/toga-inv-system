@@ -27,15 +27,15 @@ const chartConfig = {
   },
   rentals: {
     label: "Rentals",
-    color: "#0066cc", // Deeper blue
+    color: "#fffff", // Deeper blue
   },
   returns: {
     label: "Returns",
-    color: "#66b3ff", // Light blue
+    color: "#fffff", // Light blue
   },
   total: {
     label: "Total Activity",
-    color: "#3399ff", // Medium blue
+    color: "#fffff", // Medium blue
   }
 };
 

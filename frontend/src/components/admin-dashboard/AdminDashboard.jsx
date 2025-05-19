@@ -95,19 +95,23 @@ function AdminDashboard() {
             }
             return 0;
           })
-          .slice(0, 2); // Get only the first 2
+          .slice(0, 3); // Get only the first 2
 
         setPendingApprovals(pendingItems);
 
         // Calculate inventory statistics
-        const activeInventory = data.filter((item) => item.inventory_id !== null);
+        const activeInventory = data.filter(
+          (item) => item.inventory_id !== null
+        );
         const returnedCount = data.filter(
           (item) => item.return_status === "Returned"
         ).length;
         const notReturnedCount = data.filter(
           (item) => item.return_status === "Not Returned"
         ).length;
-        const overdueCount = data.filter((item) => item.is_overdue === 1).length;
+        const overdueCount = data.filter(
+          (item) => item.is_overdue === 1
+        ).length;
         const evaluatedCount = data.filter(
           (item) => item.evaluation_status === "Evaluated"
         ).length;
@@ -147,28 +151,42 @@ function AdminDashboard() {
         const returnStats = { returned: 0, notReturned: 0 };
         const statusStats = { goodCondition: 0, forRepair: 0, damaged: 0 };
         const itemTypeStats = {}; // Calculation for itemTypeStats can remain if needed elsewhere
-        data.forEach(item => {
-          if (item.return_status === "Returned") returnStats.returned += item.quantity;
-          else if (item.return_status === "Not Returned") returnStats.notReturned += item.quantity;
+        data.forEach((item) => {
+          if (item.return_status === "Returned")
+            returnStats.returned += item.quantity;
+          else if (item.return_status === "Not Returned")
+            returnStats.notReturned += item.quantity;
 
-          if (item.item_status === "In Good Condition") statusStats.goodCondition += item.quantity;
-          else if (item.item_status === "For Repair") statusStats.forRepair += item.quantity;
-          else if (item.item_status === "Damaged") statusStats.damaged += item.quantity;
+          if (item.item_status === "In Good Condition")
+            statusStats.goodCondition += item.quantity;
+          else if (item.item_status === "For Repair")
+            statusStats.forRepair += item.quantity;
+          else if (item.item_status === "Damaged")
+            statusStats.damaged += item.quantity;
 
           // Item type stats calculation (can be kept for other uses)
           const typeKey = item.item_type;
           if (!itemTypeStats[typeKey]) {
             itemTypeStats[typeKey] = {
-              total: 0, returned: 0, notReturned: 0,
-              goodCondition: 0, forRepair: 0, damaged: 0,
+              total: 0,
+              returned: 0,
+              notReturned: 0,
+              goodCondition: 0,
+              forRepair: 0,
+              damaged: 0,
             };
           }
           itemTypeStats[typeKey].total += item.quantity;
-          if (item.return_status === "Returned") itemTypeStats[typeKey].returned += item.quantity;
-          else if (item.return_status === "Not Returned") itemTypeStats[typeKey].notReturned += item.quantity;
-          if (item.item_status === "In Good Condition") itemTypeStats[typeKey].goodCondition += item.quantity;
-          else if (item.item_status === "For Repair") itemTypeStats[typeKey].forRepair += item.quantity;
-          else if (item.item_status === "Damaged") itemTypeStats[typeKey].damaged += item.quantity;
+          if (item.return_status === "Returned")
+            itemTypeStats[typeKey].returned += item.quantity;
+          else if (item.return_status === "Not Returned")
+            itemTypeStats[typeKey].notReturned += item.quantity;
+          if (item.item_status === "In Good Condition")
+            itemTypeStats[typeKey].goodCondition += item.quantity;
+          else if (item.item_status === "For Repair")
+            itemTypeStats[typeKey].forRepair += item.quantity;
+          else if (item.item_status === "Damaged")
+            itemTypeStats[typeKey].damaged += item.quantity;
         });
         setItemsStats({
           returnStatus: returnStats,
@@ -177,15 +195,6 @@ function AdminDashboard() {
         });
       });
   }, []);
-
-  // Group items by type for chart display
-  const itemsByType = items.reduce((acc, item) => {
-    if (!acc[item.item_type]) {
-      acc[item.item_type] = 0;
-    }
-    acc[item.item_type] += item.quantity;
-    return acc;
-  }, {});
 
   return (
     <div className="flex flex-col overflow-auto gap-4 py-2 md:gap-4 md:pb-10 h-full w-full min-h-0 mb-8">
@@ -207,10 +216,7 @@ function AdminDashboard() {
               >
                 <BoxIcon className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center  mt-8 ml-4">
-                <Upstats className="w-4" />
-                <p className="text-[#0DDF65] font-semibold text-xs ml-1">4%</p>
-              </span>
+              <span className="text-lg flex text-center items-center  mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -247,10 +253,7 @@ function AdminDashboard() {
               >
                 <List className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Upstats className="w-4" />
-                <p className="text-[#0DDF65] font-semibold text-xs ml-1">4%</p>
-              </span>
+              <span className="text-lg flex text-center items-center mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -287,10 +290,7 @@ function AdminDashboard() {
               >
                 <Time className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Downstats className="w-4" />
-                <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
-              </span>
+              <span className="text-lg flex text-center items-center mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -327,10 +327,7 @@ function AdminDashboard() {
               >
                 <Eval className="sm:w-24 sm:h-24 w-12 h-12 md:w-7 md:h-7 cursor-pointer text-blue-700" />
               </button>
-              <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Downstats className="w-4" />
-                <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
-              </span>
+              <span className="text-lg flex text-center items-center mt-8 ml-4"></span>
             </div>
             <div className="h-full w-full">
               <div className="h-20 md:h-10 items-center flex w-full">
@@ -404,8 +401,9 @@ function AdminDashboard() {
                 } else if (diffHours > 0) {
                   timeAgo = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
                 } else {
-                  timeAgo = `${diffMinutes} min${diffMinutes > 1 ? "s" : ""
-                    } ago`;
+                  timeAgo = `${diffMinutes} min${
+                    diffMinutes > 1 ? "s" : ""
+                  } ago`;
                 }
 
                 // Create full name for avatar
@@ -447,6 +445,7 @@ function AdminDashboard() {
         </div>
 
         {/* 2nd col: Approval Requests */}
+        {/* 2nd col: Approval Requests */}
         <div className="bg-white w-full md:w-[32%] flex flex-col rounded-xl shadow-lg p-4 min-h-[200px] relative flex-1">
           <h3 className="text-lg font-bold text-gray-700 mb-2 flex items-center justify-between">
             Approval Requests
@@ -480,29 +479,12 @@ function AdminDashboard() {
                     </span>
                   </div>
                   <div className="text-xs text-gray-500 ml-4">
-                    ID: {item.id}
+                    ID: {item.id_number}
                   </div>
                   <div className="text-xs text-gray-500 ml-4">
                     Course: {item.course}
                   </div>
-                  <div className="flex gap-2 ml-4 mt-1">
-                    <button
-                      className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 focus:bg-blue-200 transition"
-                      onClick={() =>
-                        alert(
-                          `View details for ${item.first_name} ${item.surname}`
-                        )
-                      }
-                    >
-                      View Details
-                    </button>
-                    <button className="px-2 py-1 text-xs rounded bg-green-100 text-green-700 font-semibold hover:bg-green-200 focus:bg-green-200 transition">
-                      Accept
-                    </button>
-                    <button className="px-2 py-1 text-xs rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 focus:bg-red-200 transition">
-                      Deny
-                    </button>
-                  </div>
+                  <div className="flex gap-2 ml-4 mt-1"></div>
                 </li>
               ))
             ) : (
@@ -525,7 +507,7 @@ function AdminDashboard() {
             </button>
           </h3>
           <div className="flex flex-col gap-4 h-full">
-            {/* Item statistics cards */}
+            Item statistics cards
             <div className="grid grid-cols-2 gap-3 flex-1">
               <div className="bg-green-50 p-4 rounded-lg shadow-md flex items-center justify-between">
                 <div>
@@ -558,41 +540,14 @@ function AdminDashboard() {
                 <div>
                   <p className="text-sm text-gray-500">Items for Repair </p>
                   <p className="text-lg font-bold text-[#102F5E]">
-                    {itemsStats.itemStatus.forRepair + itemsStats.itemStatus.damaged}
+                    {itemsStats.itemStatus.forRepair +
+                      itemsStats.itemStatus.damaged}
                   </p>
                 </div>
                 <AlertCircle className="w-8 h-8 text-yellow-600" />
               </div>
             </div>
-            {/* Chart for item status */}
-            <div className="flex-1">
-              <RadialChart
-                data={[
-                  {
-                    label: "Good",
-                    value: itemsStats.itemStatus.goodCondition,
-                    color: "#4CAF50", // Green
-                  },
-                  {
-                    label: "Repair",
-                    value: itemsStats.itemStatus.forRepair,
-                    color: "#FFC107", // Amber
-                  },
-                  {
-                    label: "Damaged",
-                    value: itemsStats.itemStatus.damaged,
-                    color: "#F44336", // Red
-                  },
-                ]}
-                totalValue={
-                  itemsStats.itemStatus.goodCondition +
-                  itemsStats.itemStatus.forRepair +
-                  itemsStats.itemStatus.damaged
-                }
-                labelColor="#fff" // Adjust as needed for visibility
-                className="mx-auto"
-              />
-            </div>
+
           </div>
         </div>
       </div>

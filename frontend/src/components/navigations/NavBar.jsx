@@ -236,72 +236,67 @@ const Navbar = ({
             </div>
           </div>
           {/* Search and controls row (new line) BOTTOM NAV TO */}
-          {activeTab !== "inventory" &&
-            activeTab !== "pending" &&
-            activeTab !== "dashboard" &&
-            ({
-              /* Search bar and grid/row toggle */
-            },
-            (
-              <div className="flex bg-amber-700  items-center w-full animate-fade-in">
-                <div className="w-full">
-                  <div className="relative ml-6  ">
-                    <Search className="absolute w-5 top-1/5 left-2" />
-                    <input
-                      className="bg-[#E2E2E2] shadow-inner  shadow-gray-500 h-8 md:w-100 lg:w-130 px-10 py-2 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
-                      type="text"
-                      placeholder="Search student..."
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                      onKeyDown={handleSearch}
-                    />
-                  </div>
-                </div>
-                {/* Grid/Row toggle and modify table button */}
-                <div className="flex bg-green-400 items-center mr-90 ">
-                  <div
-                    className={`h-8 w-23 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
-                  >
-                    <button
-                      onClick={() => setIsGrid(false)}
-                      className={`h-7 w-8 md:h-8 md:w-14 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
-                        !isGrid
-                          ? "bg-[#02327B] text-white"
-                          : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-                      } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-                      disabled={searchActive}
-                    >
-                      {rowIcon}
-                    </button>
-                    {/*Modify Table button this */}
-                    <button
-                      onClick={() => setIsGrid(true)}
-                      className={`h-7 w-8 md:h-7 md:w-13 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
-                        isGrid
-                          ? "bg-[#02327B] text-white"
-                          : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
-                      } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-                      disabled={searchActive}
-                    >
-                      {gridIcon}
-                    </button>
-                  </div>
-                  <div>
-                    <button
-                      className={`${isEvaluation} hover:scale-105 h-8  px-3 md:w-fit text-[10px] whitespace-nowrap rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
-                        modifyTable
-                          ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
-                          : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
-                      } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
-                      onClick={editallClicked}
-                      disabled={searchActive}
-                    >
-                      {modifyTable ? "Save Table" : "Modify Table"}
-                    </button>
-                  </div>
+          {(activeTab !== "inventory" && activeTab !== "dashboard") ||
+          activeTab === "pending" ? (
+            <div className="flex bg-amber-700  items-center w-full animate-fade-in">
+              <div className="w-full">
+                <div className="relative ml-6  ">
+                  <Search className="absolute w-5 top-1/5 left-2" />
+                  <input
+                    className="bg-[#E2E2E2] shadow-inner  shadow-gray-500 h-8 md:w-100 lg:w-130 px-10 py-2 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
+                    type="text"
+                    placeholder="Search student..."
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    onKeyDown={handleSearch}
+                  />
                 </div>
               </div>
-            ))}
+              {/* Grid/Row toggle and modify table button */}
+              <div className="flex bg-green-400 items-center mr-90 ">
+                <div
+                  className={`h-8 w-23 bg-[#E2E2E2] shadow-inner shadow-gray-500 rounded-lg flex justify-around items-center ml-6 mr-8 md:mr-2 ${isEvaluation}`}
+                >
+                  <button
+                    onClick={() => setIsGrid(false)}
+                    className={`h-7 w-8 md:h-8 md:w-14 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+                      !isGrid
+                        ? "bg-[#02327B] text-white"
+                        : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
+                    } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                    disabled={searchActive}
+                  >
+                    {rowIcon}
+                  </button>
+                  {/*Modify Table button this */}
+                  <button
+                    onClick={() => setIsGrid(true)}
+                    className={`h-7 w-8 md:h-7 md:w-13 removeEffect flex justify-center items-center rounded-lg transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 ${
+                      isGrid
+                        ? "bg-[#02327B] text-white"
+                        : "bg-[#E2E2E2] text-gray-500 opacity-70 hover:opacity-100"
+                    } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                    disabled={searchActive}
+                  >
+                    {gridIcon}
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className={`${isEvaluation} hover:scale-105 h-8  px-3 md:w-fit text-[10px] whitespace-nowrap rounded-lg md:text-xs text-white md:ml-2 md:mr-3 mr-10 ${
+                      modifyTable
+                        ? "bg-[#0C7E48] ring-black opacity-70 shadow-[0px_0px_2px_.9px_#3f3f3f] active:opacity-60  ] hover:opacity-100"
+                        : "bg-[#0C7E48] active:font-semibold hover:bg-[#949494] hover:text-red font-semibold active:opacity-60"
+                    } ${searchActive ? "opacity-50 cursor-not-allowed" : ""}`}
+                    onClick={editallClicked}
+                    disabled={searchActive}
+                  >
+                    {modifyTable ? "Save Table" : "Modify Table"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
     </>
