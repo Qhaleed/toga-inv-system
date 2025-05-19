@@ -25,8 +25,14 @@ const EvaluationPage = () => {
     fetch("http://localhost:5001/evaluation")
       .then((res) => res.json())
       .then((data) => {
+        //ifilter out ang walang toga size and not returned
         const filteredData = data.filter(
-          (item) => item.toga_size !== null && item.toga_size !== undefined
+          (item) =>
+            item.toga_size !== null &&
+            item.toga_size !== undefined &&
+            item.return_status !== "Not Returned" &&
+            item.return_status !== null &&
+            item.return_status !== undefined
         );
         setAllData(filteredData);
       });
@@ -36,6 +42,20 @@ const EvaluationPage = () => {
   useEffect(() => {
     setFilteredData(allData); //ishow ang filtered data (refer sa handleSearch sa NavBar.jsx)
   }, [allData]);
+
+  //para ma filter ang mga lalabas sa evaluation table (same sa useeffect sa taas)
+  const handleEvaluationSearch = (results) => {
+    const filtered = results.filter(
+      (item) =>
+        item.toga_size !== null &&
+        item.toga_size !== undefined &&
+        item.return_status !== "Not Returned" &&
+        item.return_status !== null &&
+        item.return_status !== undefined
+    );
+    setFilteredData(filtered);
+  };
+
 
   return (
     <div
@@ -80,7 +100,7 @@ const EvaluationPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            onSearch={setFilteredData}
+            onSearch={handleEvaluationSearch}
           />
         </div>
         <div className="w-full relative h-full flex flex-col">
