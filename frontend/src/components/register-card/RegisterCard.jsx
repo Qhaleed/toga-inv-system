@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import UploadIcon from "../../assets/images/cloudupload.png";
 import FormWrapper from "../common/FormWrapper";
+import { useNavigate } from "react-router-dom";
 import "../../styles/animations.css";
 
 export default function RegisterForm() {
@@ -21,6 +22,9 @@ export default function RegisterForm() {
   });
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [error, setError] = useState(""); //error message
+  const navigate = useNavigate(); //used for redirecting
+  const [success, setSuccess] = useState(""); //success message
   const courseGroups = {
     Blue: [
       "Bachelor of Early Childhood Education (BECEd)",
@@ -127,11 +131,13 @@ export default function RegisterForm() {
           course: value,
         }),
       });
-      const data = await response.json();
+          const data = await response.json();
       if (response.ok) {
-        alert("Registration successful!");
+        setError(""); // Clear any previous error messages
+        setSuccess("Registered successfully! Redirecting you to login page...");
+        setTimeout(() => navigate("/"), 2000); // 2 seconds delay
       } else {
-        alert(data.message || "Registration failed");
+        setError(data.message || "Registration failed"); //set error message
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -431,7 +437,19 @@ export default function RegisterForm() {
           )}
         </div>
       </div>
-
+      {/*Success Message */}
+      {success && (
+        <div className="w-full mb-2 text-center text-green-400">
+          {success}
+        </div>
+      )}
+      {/* Error Message */}
+      {error && (
+        <div className="w-full mb-2 text-center text-red-600">
+          {error}
+        </div>
+      )}
+      
       {/* Submit Button */}
       <button
         type="submit"
