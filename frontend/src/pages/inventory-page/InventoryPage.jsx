@@ -56,7 +56,7 @@ const InventoryPage = ({ setSortOrder }) => {
         </div>
 
         <div className="w-full relative h-full  flex flex-col">
-          <div className="w-full    h-15 items-center ">
+          <div className="w-full    items-center ">
             <button
               className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
               onClick={() => setSidebarOpen((open) => !open)}

@@ -9,6 +9,7 @@ import AddStockPopup from "../common/AddStockPopup";
 import RemoveStockPopup from "../common/RemoveStockPopup";
 import BoxIcon from "../../assets/icons/box.svg";
 import BlackTrashIcon from "../../assets/icons/black-trash.svg";
+import AlertCard from "../common/AlertCard";
 
 // Add InitialsAvatar component to display user initials
 const InitialsAvatar = ({ name, className = "" }) => {
@@ -107,6 +108,12 @@ const SideBar = ({
   const [date, setDate] = useState(new Date());
   const [showAddStockPopup, setShowAddStockPopup] = useState(false);
   const [showRemoveStockPopup, setShowRemoveStockPopup] = useState(false);
+  const [alert, setAlert] = useState({ show: false, message: "", type: "success" });
+
+  const showAlert = (message, type = "success") => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => setAlert((a) => ({ ...a, show: false })), 3000);
+  };
 
   useEffect(() => {
     function handleResize() {
@@ -251,6 +258,12 @@ const SideBar = ({
 
   return (
     <>
+      <AlertCard
+        message={alert.message}
+        type={alert.type}
+        show={alert.show}
+        onClose={() => setAlert((a) => ({ ...a, show: false }))}
+      />
       {visible && (
         <div
           // Always keep z-10 here so modals (z-[99999]) can overlay SideBar
@@ -727,17 +740,15 @@ const SideBar = ({
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
                   });
-
                   if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.error || "Failed to add stock");
                   }
-
                   const result = await response.json();
                   console.log(result);
-                  alert("Stock added successfully!");
+                  showAlert("Stock added successfully!", "success");
                 } catch (err) {
-                  alert("Error adding stock: " + err.message);
+                  showAlert("Error adding stock: " + err.message, "error");
                 }
               }}
             />
@@ -755,19 +766,15 @@ const SideBar = ({
                       body: JSON.stringify(data),
                     }
                   );
-
                   if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(
-                      errorData.error || "Failed to remove stock"
-                    );
+                    throw new Error(errorData.error || "Failed to remove stock");
                   }
-
                   const result = await response.json();
                   console.log(result);
-                  alert("Stock removed successfully!");
+                  showAlert("Stock removed successfully!", "success");
                 } catch (err) {
-                  alert("Error removing stock: " + err.message);
+                  showAlert("Error removing stock: " + err.message, "error");
                 }
               }}
             />
