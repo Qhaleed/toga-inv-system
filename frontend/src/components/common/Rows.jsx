@@ -79,9 +79,9 @@ const Rows = ({
       studentname:
         row.studentname ||
         (row.surname || "") +
-          ", " +
-          (row.first_name || "") +
-          (row.middle_initial ? " " + row.middle_initial : ""),
+        ", " +
+        (row.first_name || "") +
+        (row.middle_initial ? " " + row.middle_initial : ""),
       dateofreservation:
         row.dateofreservation ||
         (row.rent_date ? new Date(row.rent_date).toLocaleDateString() : ""),
@@ -152,10 +152,10 @@ const Rows = ({
       prev.map((item) =>
         row.inventory_id === item.inventory_id
           ? {
-              ...item,
-              eye: item.eye === "block" ? "hidden" : "block",
-              trash: item.trash === "hidden" ? "block" : "hidden",
-            }
+            ...item,
+            eye: item.eye === "block" ? "hidden" : "block",
+            trash: item.trash === "hidden" ? "block" : "hidden",
+          }
           : item
       )
     );
@@ -256,8 +256,8 @@ const Rows = ({
     Array.isArray(searchResults) && searchResults.length > 0
       ? searchResults
       : Array.isArray(dashboard)
-      ? dashboard
-      : [];
+        ? dashboard
+        : [];
 
   // Extract unique dropdown options from allData
   const tasselColorOptions = Array.from(
@@ -316,9 +316,9 @@ const Rows = ({
       studentname:
         row.studentname ||
         (row.surname || "") +
-          ", " +
-          (row.first_name || "") +
-          (row.middle_initial ? " " + row.middle_initial : ""),
+        ", " +
+        (row.first_name || "") +
+        (row.middle_initial ? " " + row.middle_initial : ""),
       dateofreservation:
         row.dateofreservation ||
         (row.rent_date ? new Date(row.rent_date).toLocaleDateString() : ""),
@@ -597,7 +597,8 @@ const Rows = ({
                                 className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs"
                                 onClick={async () => {
                                   try {
-                                    const res = await fetch(
+                                    // First update the status in the inventory table
+                                    const invRes = await fetch(
                                       `http://localhost:5001/inventory/${row.inventory_id}`,
                                       {
                                         method: "PATCH",
@@ -609,7 +610,42 @@ const Rows = ({
                                         }),
                                       }
                                     );
-                                    if (!res.ok) throw new Error("Failed to update status");
+
+                                    if (!invRes.ok) throw new Error("Failed to update inventory status");
+
+                                    // Now update the items table with our dynamic approach
+                                    const itemsToUpdate = [
+                                      { item_type: "tassel", variant: row.tassel_color?.toLowerCase(), quantity: 1 },
+                                      { item_type: "hood", variant: row.hood_color?.toLowerCase(), quantity: 1 },
+                                      { item_type: "gown", variant: row.toga_size?.toLowerCase(), quantity: 1 },
+                                      { item_type: "cap", variant: null, quantity: row.has_cap ? 1 : 0 }
+                                    ];
+
+                                    console.log("Processing return for items:", itemsToUpdate);
+
+                                    // Update each item type
+                                    for (const item of itemsToUpdate) {
+                                      if (!item.item_type || item.quantity <= 0) continue;
+
+                                      const itemRes = await fetch(
+                                        `http://localhost:5001/items/set-returned/${row.inventory_id}`,
+                                        {
+                                          method: "PATCH",
+                                          headers: {
+                                            "Content-Type": "application/json",
+                                          },
+                                          body: JSON.stringify(item),
+                                        }
+                                      );
+
+                                      if (!itemRes.ok) {
+                                        console.error(`Failed to update ${item.item_type} inventory`);
+                                      } else {
+                                        console.log(`Successfully updated ${item.item_type} inventory`);
+                                      }
+                                    }
+
+                                    // Update the UI
                                     setDashboard((prev) =>
                                       prev.map((item) =>
                                         item.inventory_id === row.inventory_id
@@ -617,9 +653,10 @@ const Rows = ({
                                           : item
                                       )
                                     );
-                                    showAlert("Status set to Returned!", "success");
+                                    showAlert("Items have been returned successfully!", "success");
                                   } catch (err) {
-                                    showAlert("Failed to set status to Returned: " + err.message, "error");
+                                    console.error("Error returning items:", err);
+                                    showAlert("Failed to return items: " + err.message, "error");
                                   }
                                 }}
                               >
@@ -694,17 +731,16 @@ const Rows = ({
                               <>
                                 {/* basuc Eye icon */}
                                 <button
-                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
-                                    hoveredEyeId === row.inventory_id
-                                      ? "bg-blue-600"
-                                      : ""
-                                  }`}
+                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === row.inventory_id
+                                    ? "bg-blue-600"
+                                    : ""
+                                    }`}
                                   style={{
                                     background: modifyTable
                                       ? "#bdbdbd"
                                       : hoveredEyeId === row.inventory_id
-                                      ? "#2563eb"
-                                      : "#0C7E48",
+                                        ? "#2563eb"
+                                        : "#0C7E48",
                                     cursor: modifyTable
                                       ? "not-allowed"
                                       : "pointer",
@@ -718,11 +754,10 @@ const Rows = ({
                                   aria-label="View details"
                                 >
                                   <EyeIcon
-                                    className={`w-5 transition-colors duration-200 ${
-                                      hoveredEyeId === row.inventory_id
-                                        ? "text-blue-200"
-                                        : "text-white"
-                                    }`}
+                                    className={`w-5 transition-colors duration-200 ${hoveredEyeId === row.inventory_id
+                                      ? "text-blue-200"
+                                      : "text-white"
+                                      }`}
                                   />
                                 </button>
                                 {/* bsic Edit button */}
@@ -844,104 +879,102 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   // Render dropdown in a portal (body) so it doesn't take up table space
   const dropdownMenu = open
     ? ReactDOM.createPortal(
-        <div
-          ref={dropdownRef}
-          className="z-[9999] fixed"
-          style={{
-            top: dropdownPos.top,
-            left: dropdownPos.left,
-            width: dropdownPos.width || 120,
-            minWidth: 120,
-            background: "#E9E9E9",
-            border: "1.5px solid #0C7E48",
-            borderRadius: 8,
-            boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
-            padding: 0,
-            margin: 0,
-            overflow: "visible",
-          }}
-          role="listbox"
-        >
-          {options.map((opt, idx) => (
-            <div
-              key={opt}
-              className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                opt === value
-                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                  : ""
+      <div
+        ref={dropdownRef}
+        className="z-[9999] fixed"
+        style={{
+          top: dropdownPos.top,
+          left: dropdownPos.left,
+          width: dropdownPos.width || 120,
+          minWidth: 120,
+          background: "#E9E9E9",
+          border: "1.5px solid #0C7E48",
+          borderRadius: 8,
+          boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
+          padding: 0,
+          margin: 0,
+          overflow: "visible",
+        }}
+        role="listbox"
+      >
+        {options.map((opt, idx) => (
+          <div
+            key={opt}
+            className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
+              ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+              : ""
               }`}
-              style={{
-                background: opt === value ? "#E9E9E9" : "transparent",
-                borderRadius: "0",
-                borderLeft: opt === value ? "5px solid #0C7E48" : "none",
-                borderRight: opt === value ? "5px solid #0C7E48" : "none",
-                borderTop: "none",
-                borderBottom: "none",
-              }}
-              onClick={() => {
-                onChange(opt);
-                setOpen(false);
-              }}
-              role="option"
-              aria-selected={opt === value}
-              tabIndex={0}
-              onMouseEnter={function (e) {
-                e.currentTarget.style.background = "#d9d9d9";
-                e.currentTarget.style.color = "#0C7E48";
-                if (idx === 0) {
-                  e.currentTarget.style.borderTopLeftRadius = "5px";
-                  e.currentTarget.style.borderTopRightRadius = "5px";
-                } else if (idx === options.length - 1) {
-                  e.currentTarget.style.borderBottomLeftRadius = "5px";
-                  e.currentTarget.style.borderBottomRightRadius = "5px";
-                } else {
-                  e.currentTarget.style.borderTopLeftRadius = "0";
-                  e.currentTarget.style.borderTopRightRadius = "0";
-                  e.currentTarget.style.borderBottomLeftRadius = "0";
-                  e.currentTarget.style.borderBottomRightRadius = "0";
-                }
-                if (opt === value) {
-                  e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
-                  e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
-                  e.currentTarget.style.borderTop = "none";
-                  e.currentTarget.style.borderBottom = "none";
-                } else {
-                  e.currentTarget.style.border = "none";
-                }
-              }}
-              onMouseLeave={function (e) {
-                e.currentTarget.style.background =
-                  opt === value ? "#E9E9E9" : "transparent";
-                e.currentTarget.style.color =
-                  opt === value ? "#0C7E48" : "#000";
-                e.currentTarget.style.borderTopLeftRadius = "4px";
-                e.currentTarget.style.borderTopRightRadius = "4px";
-                e.currentTarget.style.borderBottomLeftRadius = "4px";
-                e.currentTarget.style.borderBottomRightRadius = "4px";
-                if (opt === value) {
-                  e.currentTarget.style.borderLeft = "4px solid #0C7E48";
-                  e.currentTarget.style.borderRight = "4px solid #0C7E48";
-                  e.currentTarget.style.borderTop = "none";
-                  e.currentTarget.style.borderBottom = "none";
-                } else {
-                  e.currentTarget.style.border = "none";
-                }
-              }}
-            >
-              {opt}
-            </div>
-          ))}
-        </div>,
-        document.body
-      )
+            style={{
+              background: opt === value ? "#E9E9E9" : "transparent",
+              borderRadius: "0",
+              borderLeft: opt === value ? "5px solid #0C7E48" : "none",
+              borderRight: opt === value ? "5px solid #0C7E48" : "none",
+              borderTop: "none",
+              borderBottom: "none",
+            }}
+            onClick={() => {
+              onChange(opt);
+              setOpen(false);
+            }}
+            role="option"
+            aria-selected={opt === value}
+            tabIndex={0}
+            onMouseEnter={function (e) {
+              e.currentTarget.style.background = "#d9d9d9";
+              e.currentTarget.style.color = "#0C7E48";
+              if (idx === 0) {
+                e.currentTarget.style.borderTopLeftRadius = "5px";
+                e.currentTarget.style.borderTopRightRadius = "5px";
+              } else if (idx === options.length - 1) {
+                e.currentTarget.style.borderBottomLeftRadius = "5px";
+                e.currentTarget.style.borderBottomRightRadius = "5px";
+              } else {
+                e.currentTarget.style.borderTopLeftRadius = "0";
+                e.currentTarget.style.borderTopRightRadius = "0";
+                e.currentTarget.style.borderBottomLeftRadius = "0";
+                e.currentTarget.style.borderBottomRightRadius = "0";
+              }
+              if (opt === value) {
+                e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
+                e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
+                e.currentTarget.style.borderTop = "none";
+                e.currentTarget.style.borderBottom = "none";
+              } else {
+                e.currentTarget.style.border = "none";
+              }
+            }}
+            onMouseLeave={function (e) {
+              e.currentTarget.style.background =
+                opt === value ? "#E9E9E9" : "transparent";
+              e.currentTarget.style.color =
+                opt === value ? "#0C7E48" : "#000";
+              e.currentTarget.style.borderTopLeftRadius = "4px";
+              e.currentTarget.style.borderTopRightRadius = "4px";
+              e.currentTarget.style.borderBottomLeftRadius = "4px";
+              e.currentTarget.style.borderBottomRightRadius = "4px";
+              if (opt === value) {
+                e.currentTarget.style.borderLeft = "4px solid #0C7E48";
+                e.currentTarget.style.borderRight = "4px solid #0C7E48";
+                e.currentTarget.style.borderTop = "none";
+                e.currentTarget.style.borderBottom = "none";
+              } else {
+                e.currentTarget.style.border = "none";
+              }
+            }}
+          >
+            {opt}
+          </div>
+        ))}
+      </div>,
+      document.body
+    )
     : null;
 
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${
-        disabled ? "pointer-events-none opacity-20" : ""
-      }`}
+      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
+        }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",

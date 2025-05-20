@@ -50,59 +50,33 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const { item_type, variant, item_status, return_status, quantity } = req.body;
 
-  // Validate required fields
-  if (!item_type || !item_status || !return_status || !quantity) {
-    return res.status(400).json({
-      error: "Missing required fields. Please provide item_type, item_status, return_status, and quantity.",
-    });
-  }
-
-  // Validate quantity is a positive number
-  if (typeof quantity !== "number" || quantity <= 0) {
-    return res.status(400).json({
-      error: "Quantity must be a positive number",
-    });
-  }
-
   try {
     // Check if an item with the same type, variant, status, and return status exists
     const [existingItems] = await db.pool.query(
-      "SELECT * FROM items WHERE item_type = ? AND variant = ? AND item_status = ? AND return_status = ?",
-      [item_type, variant, item_status, return_status]
+      `SELECT * FROM items WHERE item_type = ? AND 
+      (variant = ? OR (variant IS NULL AND ? IS NULL)) AND 
+      item_status = ? AND return_status = ?`,
+      [item_type, variant, variant, item_status, return_status]
     );
 
     if (existingItems.length > 0) {
-      // Item exists, update the quantity
-      const newQuantity = existingItems[0].quantity + quantity;
+      // Update the existing item's quantity
       const [result] = await db.pool.query(
-        "UPDATE items SET quantity = ? WHERE id = ?",
-        [newQuantity, existingItems[0].id]
+        `UPDATE items SET quantity = quantity + ? WHERE id = ?`,
+        [quantity, existingItems[0].id]
       );
-
-      return res.status(200).json({
-        message: "Stock quantity updated successfully",
-        id: existingItems[0].id,
-        quantity: newQuantity,
-      });
+      return res.status(200).json({ message: "Item quantity updated successfully." });
     } else {
-      // Item doesn't exist, create a new entry
+      // Insert a new item if no matching item exists
       const [result] = await db.pool.query(
-        "INSERT INTO items (item_type, variant, item_status, return_status, quantity) VALUES (?, ?, ?, ?, ?)",
+        `INSERT INTO items (item_type, variant, item_status, return_status, quantity) 
+         VALUES (?, ?, ?, ?, ?)`,
         [item_type, variant, item_status, return_status, quantity]
       );
-
-      return res.status(201).json({
-        message: "New stock item added successfully",
-        id: result.insertId,
-        item_type,
-        variant,
-        item_status,
-        return_status,
-        quantity,
-      });
+      return res.status(201).json({ message: "Item added successfully." });
     }
   } catch (error) {
-    console.log("Error adding inventory stock: ", error);
+    console.error("Error adding inventory item:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -307,6 +281,87 @@ router.patch("/lend/:id", async (req, res) => {
     });
   } catch (error) {
     console.error("Error processing lend request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// PATCH - Set items to returned
+router.patch("/set-returned/:id", async (req, res) => {
+  const { id } = req.params;
+  const { item_type, variant, quantity } = req.body;
+
+  console.log("Set Returned request received for item type:", item_type);
+  console.log("Variant:", variant);
+  console.log("Quantity to return:", quantity);
+
+  if (!item_type || typeof quantity !== "number" || quantity <= 0) {
+    console.error("Invalid request parameters:", { item_type, variant, quantity });
+    return res.status(400).json({
+      error: "Invalid request. Please provide item_type, variant, and a positive quantity.",
+    });
+  }
+
+  try {
+    // Check if sufficient items are available in "Not Returned" status
+    const [notReturnedItems] = await db.pool.query(
+      "SELECT * FROM items WHERE item_type = ? AND (variant = ? OR (variant IS NULL AND ? IS NULL)) AND return_status = 'Not Returned' AND item_status = 'In Good Condition'",
+      [item_type, variant, variant]
+    );
+
+    if (notReturnedItems.length === 0 || notReturnedItems[0].quantity < quantity) {
+      console.error("Insufficient inventory for setting to returned:", notReturnedItems);
+      return res.status(400).json({
+        error: `Insufficient inventory for ${item_type} (${variant || "N/A"}). Requested: ${quantity}, Available: ${notReturnedItems[0]?.quantity || 0}`,
+      });
+    }
+
+    // Decrease the quantity of "Not Returned" items
+    const newNotReturnedQuantity = notReturnedItems[0].quantity - quantity;
+    console.log(`Decreasing "Not Returned" quantity for item_type: ${item_type}, variant: ${variant || "N/A"}, quantity: ${quantity}`);
+    await db.pool.query("UPDATE items SET quantity = ? WHERE id = ?", [
+      newNotReturnedQuantity,
+      notReturnedItems[0].id,
+    ]);
+
+    console.log(
+      `Decreased "Not Returned" quantity for ${item_type} (${variant || "N/A"}). New quantity: ${newNotReturnedQuantity}`
+    );
+
+    // Check if "Returned" items exist for the same type and variant
+    const [returnedItems] = await db.pool.query(
+      "SELECT * FROM items WHERE item_type = ? AND (variant = ? OR (variant IS NULL AND ? IS NULL)) AND return_status = 'Returned' AND item_status = 'In Good Condition'",
+      [item_type, variant, variant]
+    );
+
+    if (returnedItems.length > 0) {
+      // Increase the quantity of "Returned" items
+      const newReturnedQuantity = returnedItems[0].quantity + quantity;
+      console.log(`Increasing "Returned" quantity for item_type: ${item_type}, variant: ${variant || "N/A"}, quantity: ${quantity}`);
+      await db.pool.query("UPDATE items SET quantity = ? WHERE id = ?", [
+        newReturnedQuantity,
+        returnedItems[0].id,
+      ]);
+
+      console.log(
+        `Increased "Returned" quantity for ${item_type} (${variant || "N/A"}). New quantity: ${newReturnedQuantity}`
+      );
+    } else {
+      // Create a new entry for "Returned" items if it doesn't exist
+      await db.pool.query(
+        "INSERT INTO items (item_type, variant, item_status, return_status, quantity) VALUES (?, ?, 'In Good Condition', 'Returned', ?)",
+        [item_type, variant, quantity]
+      );
+
+      console.log(
+        `Created new "Returned" entry for ${item_type} (${variant || "N/A"}) with quantity: ${quantity}`
+      );
+    }
+
+    res.status(200).json({
+      message: `Successfully set ${quantity} ${item_type} (${variant || "N/A"}) to returned.`,
+    });
+  } catch (error) {
+    console.error("Error processing set returned request:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });

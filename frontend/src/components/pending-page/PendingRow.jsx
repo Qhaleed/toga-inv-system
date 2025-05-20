@@ -186,10 +186,10 @@ const PendingRow = ({
       prev.map((item) =>
         db.id === item.id
           ? {
-              ...item,
-              eye: item.eye === "block" ? "hidden" : "block",
-              trash: item.trash === "hidden" ? "block" : "hidden",
-            }
+            ...item,
+            eye: item.eye === "block" ? "hidden" : "block",
+            trash: item.trash === "hidden" ? "block" : "hidden",
+          }
           : item
       )
     );
@@ -355,16 +355,14 @@ const PendingRow = ({
         );
 
         console.log(
-          `Available for ${requiredItem.item_type} (${
-            requiredItem.variant || "N/A"
+          `Available for ${requiredItem.item_type} (${requiredItem.variant || "N/A"
           }):`,
           matchingItem ? matchingItem.quantity : 0
         );
 
         if (!matchingItem || matchingItem.quantity <= 0) {
           showAlert(
-            `Insufficient inventory for ${requiredItem.item_type} (${
-              requiredItem.variant || "N/A"
+            `Insufficient inventory for ${requiredItem.item_type} (${requiredItem.variant || "N/A"
             }).`,
             "error"
           );
@@ -372,9 +370,9 @@ const PendingRow = ({
         }
       }
 
-      // Decrease the quantity of the items involved
+      // Update the quantities for the items involved
       for (const requiredItem of requiredItems) {
-        const matchingItem = inventoryItems.find(
+        const returnedItem = inventoryItems.find(
           (item) =>
             item.item_type === requiredItem.item_type &&
             (item.variant?.toLowerCase() || null) === requiredItem.variant &&
@@ -382,13 +380,48 @@ const PendingRow = ({
             item.return_status === "Returned"
         );
 
-        await fetch(`http://localhost:5001/items/${matchingItem.id}`, {
+        const notReturnedItem = inventoryItems.find(
+          (item) =>
+            item.item_type === requiredItem.item_type &&
+            (item.variant?.toLowerCase() || null) === requiredItem.variant &&
+            item.item_status === "In Good Condition" &&
+            item.return_status === "Not Returned"
+        );
+
+        // Decrement the "Returned" quantity
+        await fetch(`http://localhost:5001/items/${returnedItem.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ quantity: matchingItem.quantity - 1 }),
+          body: JSON.stringify({ quantity: returnedItem.quantity - 1 }),
         });
+
+        if (notReturnedItem) {
+          // Increment the "Not Returned" quantity
+          await fetch(`http://localhost:5001/items/${notReturnedItem.id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ quantity: notReturnedItem.quantity + 1 }),
+          });
+        } else {
+          // Create a new "Not Returned" entry if it doesn't exist
+          await fetch(`http://localhost:5001/items`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              item_type: requiredItem.item_type,
+              variant: requiredItem.variant,
+              item_status: "In Good Condition",
+              return_status: "Not Returned",
+              quantity: 1,
+            }),
+          });
+        }
       }
 
       // Approve the account
@@ -448,20 +481,20 @@ const PendingRow = ({
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
-          if (sortOrder === "newest" || sortOrder === "oldest") {
-            const dateA = new Date(a.dateofreservation);
-            const dateB = new Date(b.dateofreservation);
-            if (sortOrder === "newest") return dateB - dateA;
-            if (sortOrder === "oldest") return dateA - dateB;
-          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = (a.studentname || "").toLowerCase();
-            const nameB = (b.studentname || "").toLowerCase();
-            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
-            return 0;
-          }
+        if (sortOrder === "newest" || sortOrder === "oldest") {
+          const dateA = new Date(a.dateofreservation);
+          const dateB = new Date(b.dateofreservation);
+          if (sortOrder === "newest") return dateB - dateA;
+          if (sortOrder === "oldest") return dateA - dateB;
+        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+          const nameA = (a.studentname || "").toLowerCase();
+          const nameB = (b.studentname || "").toLowerCase();
+          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
           return 0;
-        })
+        }
+        return 0;
+      })
       : dashboard;
 
   useEffect(() => {
@@ -626,7 +659,7 @@ const PendingRow = ({
                   filterStatus === "all"
                     ? true
                     : (db.status || "").toLowerCase() ===
-                      filterStatus.toLowerCase()
+                    filterStatus.toLowerCase()
                 ).length === 0 ? (
                   <tr>
                     <td
@@ -642,7 +675,7 @@ const PendingRow = ({
                       filterStatus === "all"
                         ? true
                         : (db.status || "").toLowerCase() ===
-                          filterStatus.toLowerCase()
+                        filterStatus.toLowerCase()
                     )
                     .map((db, idx) => {
                       const rowColor = getRowColor(idx);
@@ -759,8 +792,8 @@ const PendingRow = ({
                                     db.status === "Approved"
                                       ? "text-green-600"
                                       : db.status === "Rejected"
-                                      ? "text-red-600"
-                                      : ""
+                                        ? "text-red-600"
+                                        : ""
                                   }
                                 >
                                   {db.status}
@@ -832,17 +865,16 @@ const PendingRow = ({
                                     onMouseLeave={() => setHoveredEyeId(null)}
                                   >
                                     <button
-                                      className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
-                                        hoveredEyeId === db.id
-                                          ? "bg-blue-600"
-                                          : ""
-                                      }`}
+                                      className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id
+                                        ? "bg-blue-600"
+                                        : ""
+                                        }`}
                                       style={{
                                         background: modifyTable
                                           ? "#bdbdbd"
                                           : hoveredEyeId === db.id
-                                          ? "#2563eb"
-                                          : "#0C7E48",
+                                            ? "#2563eb"
+                                            : "#0C7E48",
                                         cursor: modifyTable
                                           ? "not-allowed"
                                           : "pointer",
@@ -859,11 +891,10 @@ const PendingRow = ({
                                       }}
                                     >
                                       <EyeIcon
-                                        className={`w-5 transition-colors duration-200 ${
-                                          hoveredEyeId === db.id
-                                            ? "text-blue-200"
-                                            : "text-white"
-                                        }`}
+                                        className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
+                                          ? "text-blue-200"
+                                          : "text-white"
+                                          }`}
                                       />
                                     </button>
                                     {hoveredEyeId === db.id && (
@@ -963,104 +994,102 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   // Render dropdown in a portal (body) so it doesn't take up table space
   const dropdownMenu = open
     ? ReactDOM.createPortal(
-        <div
-          ref={dropdownRef}
-          className="z-[9999] fixed"
-          style={{
-            top: dropdownPos.top,
-            left: dropdownPos.left,
-            width: dropdownPos.width || 120,
-            minWidth: 120,
-            background: "#E9E9E9",
-            border: "1.5px solid #0C7E48",
-            borderRadius: 8,
-            boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
-            padding: 0,
-            margin: 0,
-            overflow: "visible",
-          }}
-          role="listbox"
-        >
-          {options.map((opt, idx) => (
-            <div
-              key={opt}
-              className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                opt === value
-                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                  : ""
+      <div
+        ref={dropdownRef}
+        className="z-[9999] fixed"
+        style={{
+          top: dropdownPos.top,
+          left: dropdownPos.left,
+          width: dropdownPos.width || 120,
+          minWidth: 120,
+          background: "#E9E9E9",
+          border: "1.5px solid #0C7E48",
+          borderRadius: 8,
+          boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
+          padding: 0,
+          margin: 0,
+          overflow: "visible",
+        }}
+        role="listbox"
+      >
+        {options.map((opt, idx) => (
+          <div
+            key={opt}
+            className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
+              ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+              : ""
               }`}
-              style={{
-                background: opt === value ? "#E9E9E9" : "transparent",
-                borderRadius: "0",
-                borderLeft: opt === value ? "5px solid #0C7E48" : "none",
-                borderRight: opt === value ? "5px solid #0C7E48" : "none",
-                borderTop: "none",
-                borderBottom: "none",
-              }}
-              onClick={() => {
-                onChange(opt);
-                setOpen(false);
-              }}
-              role="option"
-              aria-selected={opt === value}
-              tabIndex={0}
-              onMouseEnter={function (e) {
-                e.currentTarget.style.background = "#d9d9d9";
-                e.currentTarget.style.color = "#0C7E48";
-                if (idx === 0) {
-                  e.currentTarget.style.borderTopLeftRadius = "5px";
-                  e.currentTarget.style.borderTopRightRadius = "5px";
-                } else if (idx === options.length - 1) {
-                  e.currentTarget.style.borderBottomLeftRadius = "5px";
-                  e.currentTarget.style.borderBottomRightRadius = "5px";
-                } else {
-                  e.currentTarget.style.borderTopLeftRadius = "0";
-                  e.currentTarget.style.borderTopRightRadius = "0";
-                  e.currentTarget.style.borderBottomLeftRadius = "0";
-                  e.currentTarget.style.borderBottomRightRadius = "0";
-                }
-                if (opt === value) {
-                  e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
-                  e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
-                  e.currentTarget.style.borderTop = "none";
-                  e.currentTarget.style.borderBottom = "none";
-                } else {
-                  e.currentTarget.style.border = "none";
-                }
-              }}
-              onMouseLeave={function (e) {
-                e.currentTarget.style.background =
-                  opt === value ? "#E9E9E9" : "transparent";
-                e.currentTarget.style.color =
-                  opt === value ? "#0C7E48" : "#000";
-                e.currentTarget.style.borderTopLeftRadius = "4px";
-                e.currentTarget.style.borderTopRightRadius = "4px";
-                e.currentTarget.style.borderBottomLeftRadius = "4px";
-                e.currentTarget.style.borderBottomRightRadius = "4px";
-                if (opt === value) {
-                  e.currentTarget.style.borderLeft = "4px solid #0C7E48";
-                  e.currentTarget.style.borderRight = "4px solid #0C7E48";
-                  e.currentTarget.style.borderTop = "none";
-                  e.currentTarget.style.borderBottom = "none";
-                } else {
-                  e.currentTarget.style.border = "none";
-                }
-              }}
-            >
-              {opt}
-            </div>
-          ))}
-        </div>,
-        document.body
-      )
+            style={{
+              background: opt === value ? "#E9E9E9" : "transparent",
+              borderRadius: "0",
+              borderLeft: opt === value ? "5px solid #0C7E48" : "none",
+              borderRight: opt === value ? "5px solid #0C7E48" : "none",
+              borderTop: "none",
+              borderBottom: "none",
+            }}
+            onClick={() => {
+              onChange(opt);
+              setOpen(false);
+            }}
+            role="option"
+            aria-selected={opt === value}
+            tabIndex={0}
+            onMouseEnter={function (e) {
+              e.currentTarget.style.background = "#d9d9d9";
+              e.currentTarget.style.color = "#0C7E48";
+              if (idx === 0) {
+                e.currentTarget.style.borderTopLeftRadius = "5px";
+                e.currentTarget.style.borderTopRightRadius = "5px";
+              } else if (idx === options.length - 1) {
+                e.currentTarget.style.borderBottomLeftRadius = "5px";
+                e.currentTarget.style.borderBottomRightRadius = "5px";
+              } else {
+                e.currentTarget.style.borderTopLeftRadius = "0";
+                e.currentTarget.style.borderTopRightRadius = "0";
+                e.currentTarget.style.borderBottomLeftRadius = "0";
+                e.currentTarget.style.borderBottomRightRadius = "0";
+              }
+              if (opt === value) {
+                e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
+                e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
+                e.currentTarget.style.borderTop = "none";
+                e.currentTarget.style.borderBottom = "none";
+              } else {
+                e.currentTarget.style.border = "none";
+              }
+            }}
+            onMouseLeave={function (e) {
+              e.currentTarget.style.background =
+                opt === value ? "#E9E9E9" : "transparent";
+              e.currentTarget.style.color =
+                opt === value ? "#0C7E48" : "#000";
+              e.currentTarget.style.borderTopLeftRadius = "4px";
+              e.currentTarget.style.borderTopRightRadius = "4px";
+              e.currentTarget.style.borderBottomLeftRadius = "4px";
+              e.currentTarget.style.borderBottomRightRadius = "4px";
+              if (opt === value) {
+                e.currentTarget.style.borderLeft = "4px solid #0C7E48";
+                e.currentTarget.style.borderRight = "4px solid #0C7E48";
+                e.currentTarget.style.borderTop = "none";
+                e.currentTarget.style.borderBottom = "none";
+              } else {
+                e.currentTarget.style.border = "none";
+              }
+            }}
+          >
+            {opt}
+          </div>
+        ))}
+      </div>,
+      document.body
+    )
     : null;
 
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${
-        disabled ? "pointer-events-none opacity-20" : ""
-      }`}
+      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
+        }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
