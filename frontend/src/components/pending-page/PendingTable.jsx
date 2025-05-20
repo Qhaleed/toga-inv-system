@@ -51,7 +51,7 @@ const PendingTable = ({
                 }}
               >
                 <div className="w-full overflow-x-auto scrollbar-hide">
-                  <div className="min-w-[600px] max-w-full">
+                  <div className="min-w-[600px] relative max-w-full">
                     <table
                       className="table-auto border-none border-separate border-spacing-0 rounded-b-lg w-full min-w-[600px] max-w-full"
                       style={{
@@ -60,19 +60,18 @@ const PendingTable = ({
                         minWidth: 0,
                         maxWidth: "100%",
                       }}
-                    >
-                      <PendingRow
-                        isGrid={false}
-                        modifyTable={modifyTable}
-                        rowHeightClass="h-16"
-                        sortOrder={internalSortOrder}
-                        data={data}
-                        allData={allData}
-                        focusedStatus={focusedStatus}
-                      />
-                    </table>
+                    ></table>
                   </div>
                 </div>
+                <PendingRow
+                  isGrid={false}
+                  modifyTable={modifyTable}
+                  rowHeightClass="h-16"
+                  sortOrder={internalSortOrder}
+                  data={data}
+                  allData={allData}
+                  focusedStatus={focusedStatus}
+                />
               </div>
             )}
           </div>

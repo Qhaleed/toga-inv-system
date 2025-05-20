@@ -7,6 +7,7 @@ import HoverPopup from "./HoverPopup";
 import GridView from "./GridView";
 
 import { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 
 const Rows = ({
   isGrid,
@@ -554,7 +555,36 @@ const Rows = ({
                       </td>
                       <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                         <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                          {row.return_status}
+                          {modifyTable ? (
+                            <CustomDropdown
+                              value={row.return_status}
+                              options={["Returned", "Not Returned"]}
+                              onChange={(val) => {
+                                setDashboard((prev) =>
+                                  prev.map((item) =>
+                                    item.inventory_id === row.inventory_id
+                                      ? { ...item, return_status: val }
+                                      : item
+                                  )
+                                );
+                              }}
+                              disabled={false}
+                            />
+                          ) : editId === row.inventory_id ? (
+                            <CustomDropdown
+                              value={editData.return_status}
+                              options={["Returned", "Not Returned"]}
+                              onChange={(val) =>
+                                setEditData((prev) => ({
+                                  ...prev,
+                                  return_status: val,
+                                }))
+                              }
+                              disabled={false}
+                            />
+                          ) : (
+                            <span>{row.return_status}</span>
+                          )}
                         </div>
                         <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                       </td>
@@ -736,6 +766,7 @@ export default Rows;
 const CustomDropdown = ({ value, options, onChange, disabled }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -746,6 +777,17 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (open && ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      setDropdownPos({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  }, [open]);
 
   return (
     <div
@@ -761,6 +803,7 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
         boxSizing: "border-box",
         background: open ? "#fff" : "#F3F4F6",
         transition: "outline-color 0.3s, background 0.2s",
+        zIndex: 20,
       }}
     >
       <button
@@ -796,15 +839,24 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
           />
         </span>
       </button>
-      {open && (
-        <div className="absolute z-30 left-0 top-full w-full mt-1 animate-fade-in flex justify-center">
+      {open &&
+        ReactDOM.createPortal(
           <div
-            className="w-full h-full absolute top-0 left-0 rounded-lg border-[1.5px] border-[#0C7E48] bg-[#E9E9E9] pointer-events-none"
-            style={{ zIndex: 0 }}
-          />
-          <div
-            className="relative w-full overflow-auto flex flex-col items-center"
-            style={{ zIndex: 1 }}
+            className="absolute z-[9999] left-0 top-0"
+            style={{
+              position: "absolute",
+              top: dropdownPos.top,
+              left: dropdownPos.left,
+              width: dropdownPos.width,
+              minWidth: 120,
+              background: "#E9E9E9",
+              border: "1.5px solid #0C7E48",
+              borderRadius: 8,
+              boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
+              padding: 0,
+              margin: 0,
+              overflow: "visible",
+            }}
             role="listbox"
           >
             {options.map((opt, idx) => (
@@ -876,9 +928,9 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
                 {opt}
               </div>
             ))}
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

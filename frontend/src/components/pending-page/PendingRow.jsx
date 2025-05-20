@@ -13,6 +13,7 @@ import ChevronDown from "../../assets/icons/chevron-down.svg?react";
 import PopupWindow from "../common/PopupWindow";
 import HoverPopup from "../common/HoverPopup";
 import GridView from "../common/GridView";
+import ReactDOM from "react-dom";
 
 // Constants for dropdown options
 
@@ -174,10 +175,10 @@ const PendingRow = ({
       prev.map((item) =>
         db.id === item.id
           ? {
-            ...item,
-            eye: item.eye === "block" ? "hidden" : "block",
-            trash: item.trash === "hidden" ? "block" : "hidden",
-          }
+              ...item,
+              eye: item.eye === "block" ? "hidden" : "block",
+              trash: item.trash === "hidden" ? "block" : "hidden",
+            }
           : item
       )
     );
@@ -341,13 +342,17 @@ const PendingRow = ({
         );
 
         console.log(
-          `Available for ${requiredItem.item_type} (${requiredItem.variant || "N/A"}):`,
+          `Available for ${requiredItem.item_type} (${
+            requiredItem.variant || "N/A"
+          }):`,
           matchingItem ? matchingItem.quantity : 0
         );
 
         if (!matchingItem || matchingItem.quantity <= 0) {
           alert(
-            `Insufficient inventory for ${requiredItem.item_type} (${requiredItem.variant || "N/A"}).`
+            `Insufficient inventory for ${requiredItem.item_type} (${
+              requiredItem.variant || "N/A"
+            }).`
           );
           return;
         }
@@ -430,20 +435,20 @@ const PendingRow = ({
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
-        if (sortOrder === "newest" || sortOrder === "oldest") {
-          const dateA = new Date(a.dateofreservation);
-          const dateB = new Date(b.dateofreservation);
-          if (sortOrder === "newest") return dateB - dateA;
-          if (sortOrder === "oldest") return dateA - dateB;
-        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-          const nameA = (a.studentname || "").toLowerCase();
-          const nameB = (b.studentname || "").toLowerCase();
-          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
+          if (sortOrder === "newest" || sortOrder === "oldest") {
+            const dateA = new Date(a.dateofreservation);
+            const dateB = new Date(b.dateofreservation);
+            if (sortOrder === "newest") return dateB - dateA;
+            if (sortOrder === "oldest") return dateA - dateB;
+          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+            const nameA = (a.studentname || "").toLowerCase();
+            const nameB = (b.studentname || "").toLowerCase();
+            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
+            return 0;
+          }
           return 0;
-        }
-        return 0;
-      })
+        })
       : dashboard;
 
   useEffect(() => {
@@ -508,6 +513,50 @@ const PendingRow = ({
       >
         <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-1000 bg-red">
           <table className="w-full table-fixed border-separate border-spacing-0 relative">
+            <PopupWindow
+              open={popupOpen}
+              onClose={(updatedData) => {
+                setPopupOpen(false);
+                if (updatedData) {
+                  // Filter out entries without toga_size before mapping
+                  const filteredData = updatedData.filter(
+                    (item) =>
+                      item.toga_size !== null && item.toga_size !== undefined
+                  );
+
+                  // Map the filtered data to match our component's format
+                  const mappedData = filteredData.map((item) => ({
+                    id: item.inventory_id,
+                    studentname:
+                      item.surname +
+                      ", " +
+                      item.first_name +
+                      " " +
+                      item.middle_initial,
+                    course: item.course,
+                    tassel_color: item.tassel_color,
+                    hood_color: item.hood_color,
+                    toga_size: item.toga_size,
+                    dateofreservation: item.rent_date
+                      ? new Date(item.rent_date).toLocaleDateString()
+                      : "",
+                    status: item.status, // Using status instead of return_status here
+                    payment_status: item.payment_status,
+                    evaluation_status: item.evaluation_status,
+                    remarks: item.remarks,
+                    return_date: item.return_date,
+                    is_overdue: item.is_overdue,
+                    has_cap: item.has_cap,
+                    item_condition: item.item_condition,
+                  }));
+                  setDashboard(mappedData);
+                  setOriginalDashboard(mappedData);
+                }
+              }}
+              user={popupUser}
+              showBackButton={false}
+              fullScreen={true}
+            />
             <thead className="bg-[#02327B] sticky top-0 z-30">
               <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
                 <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
@@ -557,7 +606,7 @@ const PendingRow = ({
                 filterStatus === "all"
                   ? true
                   : (db.status || "").toLowerCase() ===
-                  filterStatus.toLowerCase()
+                    filterStatus.toLowerCase()
               ).length === 0 ? (
                 <tr>
                   <td
@@ -573,7 +622,7 @@ const PendingRow = ({
                     filterStatus === "all"
                       ? true
                       : (db.status || "").toLowerCase() ===
-                      filterStatus.toLowerCase()
+                        filterStatus.toLowerCase()
                   )
                   .map((db, idx) => {
                     const rowColor = getRowColor(idx);
@@ -662,11 +711,11 @@ const PendingRow = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "status", val)
                                     : handleEditChange({
-                                      target: {
-                                        name: "status",
-                                        value: val,
-                                      },
-                                    })
+                                        target: {
+                                          name: "status",
+                                          value: val,
+                                        },
+                                      })
                                 }
                                 disabled={false}
                               />
@@ -683,8 +732,8 @@ const PendingRow = ({
                                   db.status === "Approved"
                                     ? "text-green-600"
                                     : db.status === "Rejected"
-                                      ? "text-red-600"
-                                      : ""
+                                    ? "text-red-600"
+                                    : ""
                                 }
                               >
                                 {db.status}
@@ -695,8 +744,10 @@ const PendingRow = ({
                         </td>
                         <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                           <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
-                            {editId === db.id ? (
+                            {/* Eye/Trash Icon and Edit Button logic (copied from Rows.jsx) */}
+                            {editId === db.id || modifyTable ? (
                               <>
+                                {/* Trash replaces Eye when editing or in modifyTable mode */}
                                 <button
                                   className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
                                   onClick={() => {
@@ -708,23 +759,44 @@ const PendingRow = ({
                                       handleDelete(db.id);
                                     }
                                   }}
+                                  aria-label="Delete row"
                                 >
                                   <Trash className="w-4" />
                                 </button>
-                                <div className="absolute  left-2/8 top-10 -translate-x-1/2  z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-2 border border-gray-200 animate-fade-in">
-                                  <button
-                                    className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1"
-                                    onClick={() => handleSave(db.id)}
+
+                                <button
+                                  className="w-7 h-7 flex justify-center items-center rounded-md bg-gray-300 opacity-60 cursor-not-allowed"
+                                  disabled
+                                  aria-label="Edit row (disabled)"
+                                >
+                                  <Table className="w-5" />
+                                </button>
+                                {/* Single row edit save/cancel popup */}
+                                {editId === db.id && !modifyTable && (
+                                  <div
+                                    className="absolute left-15 top-2/8 -translate-y-1/2 z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-1 border border-gray-200 animate-fade-in min-w-[80px] w-max"
+                                    style={{
+                                      minWidth: 0,
+                                      maxWidth: 180,
+                                      overflow: "visible",
+                                    }}
                                   >
-                                    Save
-                                  </button>
-                                  <button
-                                    className="px-3 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs"
-                                    onClick={handleCancel}
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
+                                    <button
+                                      className="px-2 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1 whitespace-nowrap"
+                                      onClick={() => handleSave(db.id)}
+                                      style={{ minWidth: 0 }}
+                                    >
+                                      Save
+                                    </button>
+                                    <button
+                                      className="px-1 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs whitespace-nowrap"
+                                      onClick={handleCancel}
+                                      style={{ minWidth: 0 }}
+                                    >
+                                      Cancel
+                                    </button>
+                                  </div>
+                                )}
                               </>
                             ) : (
                               <>
@@ -733,16 +805,17 @@ const PendingRow = ({
                                   onMouseLeave={() => setHoveredEyeId(null)}
                                 >
                                   <button
-                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id
-                                      ? "bg-blue-600"
-                                      : ""
-                                      }`}
+                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
+                                      hoveredEyeId === db.id
+                                        ? "bg-blue-600"
+                                        : ""
+                                    }`}
                                     style={{
                                       background: modifyTable
                                         ? "#bdbdbd"
                                         : hoveredEyeId === db.id
-                                          ? "#2563eb"
-                                          : "#0C7E48",
+                                        ? "#2563eb"
+                                        : "#0C7E48",
                                       cursor: modifyTable
                                         ? "not-allowed"
                                         : "pointer",
@@ -759,10 +832,11 @@ const PendingRow = ({
                                     }}
                                   >
                                     <EyeIcon
-                                      className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
-                                        ? "text-blue-200"
-                                        : "text-white"
-                                        }`}
+                                      className={`w-5 transition-colors duration-200 ${
+                                        hoveredEyeId === db.id
+                                          ? "text-blue-200"
+                                          : "text-white"
+                                      }`}
                                     />
                                   </button>
                                   {hoveredEyeId === db.id && (
@@ -794,6 +868,7 @@ const PendingRow = ({
                                       setEditData({ ...db });
                                     }
                                   }}
+                                  aria-label="Edit row"
                                 >
                                   <Table className="w-5" />
                                 </button>
@@ -808,50 +883,6 @@ const PendingRow = ({
             </tbody>
           </table>
         </div>
-        <PopupWindow
-          open={popupOpen}
-          onClose={(updatedData) => {
-            setPopupOpen(false);
-            if (updatedData) {
-              // Filter out entries without toga_size before mapping
-              const filteredData = updatedData.filter(
-                (item) =>
-                  item.toga_size !== null && item.toga_size !== undefined
-              );
-
-              // Map the filtered data to match our component's format
-              const mappedData = filteredData.map((item) => ({
-                id: item.inventory_id,
-                studentname:
-                  item.surname +
-                  ", " +
-                  item.first_name +
-                  " " +
-                  item.middle_initial,
-                course: item.course,
-                tassel_color: item.tassel_color,
-                hood_color: item.hood_color,
-                toga_size: item.toga_size,
-                dateofreservation: item.rent_date
-                  ? new Date(item.rent_date).toLocaleDateString()
-                  : "",
-                status: item.status, // Using status instead of return_status here
-                payment_status: item.payment_status,
-                evaluation_status: item.evaluation_status,
-                remarks: item.remarks,
-                return_date: item.return_date,
-                is_overdue: item.is_overdue,
-                has_cap: item.has_cap,
-                item_condition: item.item_condition,
-              }));
-              setDashboard(mappedData);
-              setOriginalDashboard(mappedData);
-            }
-          }}
-          user={popupUser}
-          showBackButton={false}
-          fullScreen={true}
-        />
       </div>
     );
   }
@@ -871,6 +902,7 @@ export default PendingRow;
 const CustomDropdown = ({ value, options, onChange, disabled }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -882,11 +914,23 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (open && ref.current) {
+      const rect = ref.current.getBoundingClientRect();
+      setDropdownPos({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  }, [open]);
+
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
-        }`}
+      className={`relative w-[80%] flex justify-center items-center ${
+        disabled ? "pointer-events-none opacity-20" : ""
+      }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -895,6 +939,7 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
         boxSizing: "border-box",
         background: open ? "#fff" : "#F3F4F6",
         transition: "outline-color 0.3s, background 0.2s",
+        zIndex: 20,
       }}
     >
       <button
@@ -930,24 +975,34 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
           />
         </span>
       </button>
-      {open && (
-        <div className="absolute z-30 left-0 top-full w-full mt-1 animate-fade-in flex justify-center">
+      {open &&
+        ReactDOM.createPortal(
           <div
-            className="w-full h-full absolute top-0 left-0 rounded-lg border-[1.5px] border-[#0C7E48] bg-[#E9E9E9] pointer-events-none"
-            style={{ zIndex: 0 }}
-          />
-          <div
-            className="relative w-full overflow-auto flex flex-col items-center"
-            style={{ zIndex: 1 }}
+            className="absolute z-[9999] left-0 top-0"
+            style={{
+              position: "absolute",
+              top: dropdownPos.top,
+              left: dropdownPos.left,
+              width: dropdownPos.width,
+              minWidth: 120,
+              background: "#E9E9E9",
+              border: "1.5px solid #0C7E48",
+              borderRadius: 8,
+              boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
+              padding: 0,
+              margin: 0,
+              overflow: "visible",
+            }}
             role="listbox"
           >
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
-                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                  : ""
-                  }`}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
+                  opt === value
+                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                    : ""
+                }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",
@@ -963,7 +1018,7 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
                 role="option"
                 aria-selected={opt === value}
                 tabIndex={0}
-                onMouseEnter={(e) => {
+                onMouseEnter={function (e) {
                   e.currentTarget.style.background = "#d9d9d9";
                   e.currentTarget.style.color = "#0C7E48";
                   if (idx === 0) {
@@ -987,15 +1042,15 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
                     e.currentTarget.style.border = "none";
                   }
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={function (e) {
                   e.currentTarget.style.background =
                     opt === value ? "#E9E9E9" : "transparent";
                   e.currentTarget.style.color =
                     opt === value ? "#0C7E48" : "#000";
-                  e.currentTarget.style.borderTopLeftRadius = "4";
-                  e.currentTarget.style.borderTopRightRadius = "4";
-                  e.currentTarget.style.borderBottomLeftRadius = "4";
-                  e.currentTarget.style.borderBottomRightRadius = "4";
+                  e.currentTarget.style.borderTopLeftRadius = "4px";
+                  e.currentTarget.style.borderTopRightRadius = "4px";
+                  e.currentTarget.style.borderBottomLeftRadius = "4px";
+                  e.currentTarget.style.borderBottomRightRadius = "4px";
                   if (opt === value) {
                     e.currentTarget.style.borderLeft = "4px solid #0C7E48";
                     e.currentTarget.style.borderRight = "4px solid #0C7E48";
@@ -1009,9 +1064,9 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
                 {opt}
               </div>
             ))}
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
