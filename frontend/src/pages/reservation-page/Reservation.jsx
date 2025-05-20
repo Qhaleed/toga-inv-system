@@ -9,7 +9,7 @@ const ReservationPage = () => {
   const [activeTab, setActiveTab] = useState("reservation");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   // Reservation tab filtering/sorting states
-  const [isAll, setIsAll] = useState(true);
+  const [isAll, setIxsAll] = useState(true);
   const [isReturnedTab, setIsReturnedTab] = useState(false);
   const [isNotReturnedTab, setIsNotReturnedTab] = useState(false);
   const [isAZ, setIsAZ] = useState(false);

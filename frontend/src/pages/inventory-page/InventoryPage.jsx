@@ -51,12 +51,12 @@ const InventoryPage = ({ setSortOrder }) => {
       {/* Main content */}
       <div className="bg-[#F3F9FF] overflow-hidden  w-full h-full">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-9 flex items-center relative">
+        <div className="w-full z-10 h-15 flex items-center relative">
           <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
         <div className="w-full relative h-full  flex flex-col">
-          <div className="w-full    h-15 items-center ">
+          <div className="w-full    items-center ">
             <button
               className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
               onClick={() => setSidebarOpen((open) => !open)}
