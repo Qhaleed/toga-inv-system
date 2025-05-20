@@ -14,6 +14,10 @@ router.get("/", async (req, res) => {
       return res.status(500).json({ error: "Database connection error" });
     }
 
+    console.log("All the items in the items database: ");
+    console.log(items);
+
+
     // Return the formatted data
     res.status(200).json(items);
   } catch (error) {
