@@ -120,19 +120,19 @@ const ReservationPage = () => {
             onSearch={handleEvaluationSearch}
           />
         </div>
-        <div className="w-full relative h-full flex flex-col">
-          <button
-            className="hidden md:block absolute bg-gray-100 z-0 left-0 opacity-80 top-1/2 -translate-y-1/2 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
-            onClick={() => setSidebarOpen((open) => !open)}
-            aria-label={sidebarOpen ? "Minimize sidebar" : "Open sidebar"}
-            style={{ marginLeft: 10 }}
-          >
-            <span className="text-xl text-[#2840A1]">
-              {sidebarOpen ? "\u2190" : "\u2192"}
-            </span>
-          </button>
+        <div className="w-full flex bg-yellow-300 flex-col">
           <div className="w-full h-full overflow-hidden flex flex-col flex-1">
             <div className="overflow-hidden flex mx-auto w-full animate-fade-in ">
+              <button
+                className="hidden md:block absolute bg-gray-100 z-0 opacity-80 top-1/2 -translate-y-1/2 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-300 transition"
+                onClick={() => setSidebarOpen((open) => !open)}
+                aria-label={sidebarOpen ? "Minimize sidebar" : "Open sidebar"}
+                style={{ marginLeft: 10 }}
+              >
+                <span className="text-xl text-[#2840A1]">
+                  {sidebarOpen ? "\u2190" : "\u2192"}
+                </span>
+              </button>
               <Table
                 isGrid={isGrid}
                 modifyTable={modifyTable}
