@@ -14,7 +14,6 @@ const Rows = ({
   hideActionButton,
   modifyTable,
   rowHeightClass = "h-16",
-
   searchResults,
   isAll,
   isReturnedTab,
@@ -34,17 +33,10 @@ const Rows = ({
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupUser, setPopupUser] = useState(false);
 
-  // Filtering/sorting logic this one
+  // Filtering/sorting logic
   useEffect(() => {
     let filtered = allData;
-    console.log("[Rows.jsx] Filter state (reservation logic only):", {
-      isAll,
-      isReturnedTab,
-      isNotReturnedTab,
-      isAZ,
-      isZA,
-    });
-    // sorter logic
+    // Filter logic
     if (isReturnedTab) {
       filtered = allData.filter((row) => row.return_status === "Returned");
     } else if (isNotReturnedTab) {
@@ -82,7 +74,6 @@ const Rows = ({
         row.dateofreservation ||
         (row.rent_date ? new Date(row.rent_date).toLocaleDateString() : ""),
     }));
-    console.log("[Rows.jsx] Dashboard rows after filter/map:", mapped);
     setDashboard(mapped);
   }, [isAll, isReturnedTab, isNotReturnedTab, isAZ, isZA, allData]);
 
@@ -147,7 +138,7 @@ const Rows = ({
   const handleEditClick = (row) => {
     setDashboard((prev = []) =>
       prev.map((item) =>
-        row.id === item.id
+        row.inventory_id === item.inventory_id
           ? {
               ...item,
               eye: item.eye === "block" ? "hidden" : "block",
@@ -156,7 +147,7 @@ const Rows = ({
           : item
       )
     );
-    setEditId(row.id);
+    setEditId(row.inventory_id);
     setEditData({ ...row });
   };
 
@@ -165,21 +156,16 @@ const Rows = ({
     setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = (id) => {
-    console.log("Save button clicked for ID:", id);
-    console.log("Current editData:", editData);
-
+  const handleSave = (inventory_id) => {
     const updatedData = {
       renters_name: editData.studentname,
       course: editData.course,
       tassel_color: editData.tassel_color,
       hood_color: editData.hood_color,
       toga_size: editData.toga_size,
+      return_status: editData.return_status,
     };
-
-    console.log("Sending update to backend:", updatedData);
-
-    fetch(`http://localhost:5001/inventory/${id}`, {
+    fetch(`http://localhost:5001/inventory/${inventory_id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -188,29 +174,28 @@ const Rows = ({
       body: JSON.stringify(updatedData),
     })
       .then((response) => {
-        console.log("Response status:", response.status);
         if (!response.ok) {
           throw new Error("Network response was not ok: " + response.status);
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Update successful:", data);
-
+      .then(() => {
         const updatedItem = { ...editData };
         setDashboard((prev = []) =>
-          prev.map((item) => (item.id === id ? updatedItem : item))
+          prev.map((item) =>
+            item.inventory_id === inventory_id ? updatedItem : item
+          )
         );
         setOriginalDashboard((prev = []) =>
-          prev.map((item) => (item.id === id ? updatedItem : item))
+          prev.map((item) =>
+            item.inventory_id === inventory_id ? updatedItem : item
+          )
         );
         setEditId(null);
         setEditData({});
-
         alert("Changes saved successfully!");
       })
       .catch((error) => {
-        console.error("Error updating inventory item:", error);
         alert("Failed to save changes to the database: " + error.message);
       });
   };
@@ -220,10 +205,8 @@ const Rows = ({
     setEditData({});
   };
 
-  const handleDelete = (id) => {
-    console.log("Delete button clicked for ID:", id);
-
-    fetch(`http://localhost:5001/inventory/${id}`, {
+  const handleDelete = (inventory_id) => {
+    fetch(`http://localhost:5001/inventory/${inventory_id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -231,31 +214,25 @@ const Rows = ({
       },
     })
       .then((response) => {
-        console.log("Delete response status:", response.status);
         if (!response.ok) {
           throw new Error("Network response was not ok: " + response.status);
         }
         return response.json();
       })
-      .then((data) => {
-        console.log("Delete successful:", data);
-
-        // Remove the deleted item from both state arrays
-        setDashboard((prev = []) => prev.filter((item) => item.id !== id));
-        setOriginalDashboard((prev = []) =>
-          prev.filter((item) => item.id !== id)
+      .then(() => {
+        setDashboard((prev = []) =>
+          prev.filter((item) => item.inventory_id !== inventory_id)
         );
-
-        // Clear edit state if the deleted item was being edited
-        if (editId === id) {
+        setOriginalDashboard((prev = []) =>
+          prev.filter((item) => item.inventory_id !== inventory_id)
+        );
+        if (editId === inventory_id) {
           setEditId(null);
           setEditData({});
         }
-
         alert("Item deleted successfully!");
       })
       .catch((error) => {
-        console.error("Error deleting inventory item:", error);
         alert("Failed to delete the item: " + error.message);
       });
   };
@@ -274,9 +251,8 @@ const Rows = ({
   const hoodColorOptions = Array.from(
     new Set((allData || []).map((item) => item.hood_color).filter(Boolean))
   );
-  const togaSizeOptions = Array.from(
-    new Set((allData || []).map((item) => item.toga_size).filter(Boolean))
-  );
+  // Hardcoded to ung gown size options XS to 3XL
+  const togaSizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL", ""];
 
   useEffect(() => {
     if (!isGrid) {
@@ -571,17 +547,47 @@ const Rows = ({
                               disabled={false}
                             />
                           ) : editId === row.inventory_id ? (
-                            <CustomDropdown
-                              value={editData.return_status}
-                              options={["Returned", "Not Returned"]}
-                              onChange={(val) =>
-                                setEditData((prev) => ({
-                                  ...prev,
-                                  return_status: val,
-                                }))
-                              }
-                              disabled={false}
-                            />
+                            <div className="flex flex-col items-center w-full">
+                              <CustomDropdown
+                                value={editData.return_status}
+                                options={["Returned", "Not Returned"]}
+                                onChange={(val) =>
+                                  setEditData((prev) => ({
+                                    ...prev,
+                                    return_status: val,
+                                  }))
+                                }
+                                disabled={false}
+                              />
+                            </div>
+                          ) : row.return_status !== "Returned" ? (
+                            <button
+                              className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs"
+                              onClick={async () => {
+                                // PATCH to backend
+                                await fetch(
+                                  `http://localhost:5001/inventory/${row.inventory_id}`,
+                                  {
+                                    method: "PATCH",
+                                    headers: {
+                                      "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                      return_status: "Returned",
+                                    }),
+                                  }
+                                );
+                                setDashboard((prev) =>
+                                  prev.map((item) =>
+                                    item.inventory_id === row.inventory_id
+                                      ? { ...item, return_status: "Returned" }
+                                      : item
+                                  )
+                                );
+                              }}
+                            >
+                              Set Returned
+                            </button>
                           ) : (
                             <span>{row.return_status}</span>
                           )}
@@ -766,11 +772,16 @@ export default Rows;
 const CustomDropdown = ({ value, options, onChange, disabled }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
+  const dropdownRef = useRef();
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (
+        ref.current &&
+        !ref.current.contains(event.target) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(event.target))
+      ) {
         setOpen(false);
       }
     }
@@ -788,6 +799,101 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
       });
     }
   }, [open]);
+
+  // Render dropdown in a portal (body) so it doesn't take up table space
+  const dropdownMenu = open
+    ? ReactDOM.createPortal(
+        <div
+          ref={dropdownRef}
+          className="z-[9999] fixed"
+          style={{
+            top: dropdownPos.top,
+            left: dropdownPos.left,
+            width: dropdownPos.width || 120,
+            minWidth: 120,
+            background: "#E9E9E9",
+            border: "1.5px solid #0C7E48",
+            borderRadius: 8,
+            boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
+            padding: 0,
+            margin: 0,
+            overflow: "visible",
+          }}
+          role="listbox"
+        >
+          {options.map((opt, idx) => (
+            <div
+              key={opt}
+              className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
+                opt === value
+                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                  : ""
+              }`}
+              style={{
+                background: opt === value ? "#E9E9E9" : "transparent",
+                borderRadius: "0",
+                borderLeft: opt === value ? "5px solid #0C7E48" : "none",
+                borderRight: opt === value ? "5px solid #0C7E48" : "none",
+                borderTop: "none",
+                borderBottom: "none",
+              }}
+              onClick={() => {
+                onChange(opt);
+                setOpen(false);
+              }}
+              role="option"
+              aria-selected={opt === value}
+              tabIndex={0}
+              onMouseEnter={function (e) {
+                e.currentTarget.style.background = "#d9d9d9";
+                e.currentTarget.style.color = "#0C7E48";
+                if (idx === 0) {
+                  e.currentTarget.style.borderTopLeftRadius = "5px";
+                  e.currentTarget.style.borderTopRightRadius = "5px";
+                } else if (idx === options.length - 1) {
+                  e.currentTarget.style.borderBottomLeftRadius = "5px";
+                  e.currentTarget.style.borderBottomRightRadius = "5px";
+                } else {
+                  e.currentTarget.style.borderTopLeftRadius = "0";
+                  e.currentTarget.style.borderTopRightRadius = "0";
+                  e.currentTarget.style.borderBottomLeftRadius = "0";
+                  e.currentTarget.style.borderBottomRightRadius = "0";
+                }
+                if (opt === value) {
+                  e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
+                  e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
+                  e.currentTarget.style.borderTop = "none";
+                  e.currentTarget.style.borderBottom = "none";
+                } else {
+                  e.currentTarget.style.border = "none";
+                }
+              }}
+              onMouseLeave={function (e) {
+                e.currentTarget.style.background =
+                  opt === value ? "#E9E9E9" : "transparent";
+                e.currentTarget.style.color =
+                  opt === value ? "#0C7E48" : "#000";
+                e.currentTarget.style.borderTopLeftRadius = "4px";
+                e.currentTarget.style.borderTopRightRadius = "4px";
+                e.currentTarget.style.borderBottomLeftRadius = "4px";
+                e.currentTarget.style.borderBottomRightRadius = "4px";
+                if (opt === value) {
+                  e.currentTarget.style.borderLeft = "4px solid #0C7E48";
+                  e.currentTarget.style.borderRight = "4px solid #0C7E48";
+                  e.currentTarget.style.borderTop = "none";
+                  e.currentTarget.style.borderBottom = "none";
+                } else {
+                  e.currentTarget.style.border = "none";
+                }
+              }}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>,
+        document.body
+      )
+    : null;
 
   return (
     <div
@@ -839,98 +945,7 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
           />
         </span>
       </button>
-      {open &&
-        ReactDOM.createPortal(
-          <div
-            className="absolute z-[9999] left-0 top-0"
-            style={{
-              position: "absolute",
-              top: dropdownPos.top,
-              left: dropdownPos.left,
-              width: dropdownPos.width,
-              minWidth: 120,
-              background: "#E9E9E9",
-              border: "1.5px solid #0C7E48",
-              borderRadius: 8,
-              boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
-              padding: 0,
-              margin: 0,
-              overflow: "visible",
-            }}
-            role="listbox"
-          >
-            {options.map((opt, idx) => (
-              <div
-                key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                  opt === value
-                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                    : ""
-                }`}
-                style={{
-                  background: opt === value ? "#E9E9E9" : "transparent",
-                  borderRadius: "0",
-                  borderLeft: opt === value ? "5px solid #0C7E48" : "none",
-                  borderRight: opt === value ? "5px solid #0C7E48" : "none",
-                  borderTop: "none",
-                  borderBottom: "none",
-                }}
-                onClick={() => {
-                  onChange(opt);
-                  setOpen(false);
-                }}
-                role="option"
-                aria-selected={opt === value}
-                tabIndex={0}
-                onMouseEnter={function (e) {
-                  e.currentTarget.style.background = "#d9d9d9";
-                  e.currentTarget.style.color = "#0C7E48";
-                  if (idx === 0) {
-                    e.currentTarget.style.borderTopLeftRadius = "5px";
-                    e.currentTarget.style.borderTopRightRadius = "5px";
-                  } else if (idx === options.length - 1) {
-                    e.currentTarget.style.borderBottomLeftRadius = "5px";
-                    e.currentTarget.style.borderBottomRightRadius = "5px";
-                  } else {
-                    e.currentTarget.style.borderTopLeftRadius = "0";
-                    e.currentTarget.style.borderTopRightRadius = "0";
-                    e.currentTarget.style.borderBottomLeftRadius = "0";
-                    e.currentTarget.style.borderBottomRightRadius = "0";
-                  }
-                  if (opt === value) {
-                    e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
-                    e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
-                    e.currentTarget.style.borderTop = "none";
-                    e.currentTarget.style.borderBottom = "none";
-                  } else {
-                    e.currentTarget.style.border = "none";
-                  }
-                }}
-                onMouseLeave={function (e) {
-                  e.currentTarget.style.background =
-                    opt === value ? "#E9E9E9" : "transparent";
-                  e.currentTarget.style.color =
-                    opt === value ? "#0C7E48" : "#000";
-                  e.currentTarget.style.borderTopLeftRadius = "4px";
-                  e.currentTarget.style.borderTopRightRadius = "4px";
-                  e.currentTarget.style.borderBottomLeftRadius = "4px";
-                  e.currentTarget.style.borderBottomRightRadius = "4px";
-                  if (opt === value) {
-                    e.currentTarget.style.borderLeft = "4px solid #0C7E48";
-                    e.currentTarget.style.borderRight = "4px solid #0C7E48";
-                    e.currentTarget.style.borderTop = "none";
-                    e.currentTarget.style.borderBottom = "none";
-                  } else {
-                    e.currentTarget.style.border = "none";
-                  }
-                }}
-              >
-                {opt}
-              </div>
-            ))}
-          </div>,
-          document.body
-        )}
+      {dropdownMenu}
     </div>
   );
 };
