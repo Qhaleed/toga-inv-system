@@ -205,7 +205,7 @@ const Rows = ({
         );
         setEditId(null);
         setEditData({});
-        showAlert("Changes saved successfully!");
+        showAlert("Changes saved successfully!", "success");
       })
       .catch((error) => {
         showAlert(
@@ -245,7 +245,7 @@ const Rows = ({
           setEditId(null);
           setEditData({});
         }
-        showAlert("Item deleted successfully!");
+        showAlert("Item deleted successfully!", "success");
       })
       .catch((error) => {
         showAlert("Failed to delete the item: " + error.message, "error");
@@ -596,26 +596,31 @@ const Rows = ({
                               <button
                                 className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs"
                                 onClick={async () => {
-                                  // PATCH to backend
-                                  await fetch(
-                                    `http://localhost:5001/inventory/${row.inventory_id}`,
-                                    {
-                                      method: "PATCH",
-                                      headers: {
-                                        "Content-Type": "application/json",
-                                      },
-                                      body: JSON.stringify({
-                                        return_status: "Returned",
-                                      }),
-                                    }
-                                  );
-                                  setDashboard((prev) =>
-                                    prev.map((item) =>
-                                      item.inventory_id === row.inventory_id
-                                        ? { ...item, return_status: "Returned" }
-                                        : item
-                                    )
-                                  );
+                                  try {
+                                    const res = await fetch(
+                                      `http://localhost:5001/inventory/${row.inventory_id}`,
+                                      {
+                                        method: "PATCH",
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                          return_status: "Returned",
+                                        }),
+                                      }
+                                    );
+                                    if (!res.ok) throw new Error("Failed to update status");
+                                    setDashboard((prev) =>
+                                      prev.map((item) =>
+                                        item.inventory_id === row.inventory_id
+                                          ? { ...item, return_status: "Returned" }
+                                          : item
+                                      )
+                                    );
+                                    showAlert("Status set to Returned!", "success");
+                                  } catch (err) {
+                                    showAlert("Failed to set status to Returned: " + err.message, "error");
+                                  }
                                 }}
                               >
                                 Set Returned
