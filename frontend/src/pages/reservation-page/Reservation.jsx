@@ -9,7 +9,7 @@ const ReservationPage = () => {
   const [activeTab, setActiveTab] = useState("reservation");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   // Reservation tab filtering/sorting states
-  const [isAll, setIxsAll] = useState(true);
+  const [isAll, setIsAll] = useState(true);
   const [isReturnedTab, setIsReturnedTab] = useState(false);
   const [isNotReturnedTab, setIsNotReturnedTab] = useState(false);
   const [isAZ, setIsAZ] = useState(false);
@@ -96,10 +96,10 @@ const ReservationPage = () => {
             setIsZA={setIsZA}
             allCount={allData.length}
             returnedCount={
-              allData.filter((item) => item.return_status === "Returned").length
+              allData.filter((item) => item.status === "Returned").length
             }
             notReturnedCount={
-              allData.filter((item) => item.return_status === "Not Returned").length
+              allData.filter((item) => item.status === "Not Returned").length
             }
             setSortOrder={setSortOrder}
           />
