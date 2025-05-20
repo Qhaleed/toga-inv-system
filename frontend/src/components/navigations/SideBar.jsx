@@ -250,11 +250,10 @@ const SideBar = ({
       {visible && (
         <div
           // Always keep z-10 here so modals (z-[99999]) can overlay SideBar
-          className={`sm:col-span-2 w-full sm:w-auto min-w-[220px] overflow-visible  h-full flex flex-col justify-start items-center bg-[#001C47] sm:static   transition-all ${
-            showSidebar
-              ? "animate-slide-in-top duration-800"
-              : "animate-fade-in duration-800"
-          }`}
+          className={`sm:col-span-2 w-full sm:w-auto min-w-[220px] overflow-visible  h-full flex flex-col justify-start items-center bg-[#001C47] sm:static   transition-all ${showSidebar
+            ? "animate-slide-in-top duration-800"
+            : "animate-fade-in duration-800"
+            }`}
         >
           {/* SIDE BAR HERO CONTAINER*/}
           <div
@@ -277,10 +276,9 @@ const SideBar = ({
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
                 <p
                   className={`font-figtree font-bold max-w-[100px] md:max-w-[140px] leading-tight  
-                    ${
-                      adminName.length > 24
-                        ? "text-[11px] md:text-[14px]"
-                        : adminName.length > 16
+                    ${adminName.length > 24
+                      ? "text-[11px] md:text-[14px]"
+                      : adminName.length > 16
                         ? "text-[13px] md:text-[16px]"
                         : "text-[15px] md:text-[18px]"
                     }
@@ -291,8 +289,8 @@ const SideBar = ({
                         ? adminName.length > 24
                           ? "10px"
                           : adminName.length > 16
-                          ? "12px"
-                          : "14px"
+                            ? "12px"
+                            : "14px"
                         : "",
                   }}
                   title={adminName}
@@ -302,10 +300,9 @@ const SideBar = ({
 
                 <p
                   className={`font-manjari max-w-[100px] md:max-w-[140px] leading-tight truncate md:whitespace-normal
-                    ${
-                      adminRole.length > 24
-                        ? "text-[10px] md:text-[12px]"
-                        : adminRole.length > 16
+                    ${adminRole.length > 24
+                      ? "text-[10px] md:text-[12px]"
+                      : adminRole.length > 16
                         ? "text-[12px] md:text-[14px]"
                         : "text-[13px] md:text-[15px]"
                     }
@@ -316,8 +313,8 @@ const SideBar = ({
                         ? adminRole.length > 24
                           ? "9px"
                           : adminRole.length > 16
-                          ? "11px"
-                          : "13px"
+                            ? "11px"
+                            : "13px"
                         : "",
                   }}
                   title={adminRole}
@@ -374,11 +371,10 @@ const SideBar = ({
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
-                          ? "ring-2 ring-[#f3ca91] scale-105"
-                          : ""
-                      } hover:scale-105 transform-all ease-out duration-300`}
+                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${focusedStatus === "all"
+                        ? "ring-2 ring-[#f3ca91] scale-105"
+                        : ""
+                        } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={All}
                     >
                       <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-[#1E40AF] ml-3">
@@ -389,11 +385,10 @@ const SideBar = ({
                       </div>
                     </button>
                     <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${
-                        focusedStatus === "evaluated"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
+                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${focusedStatus === "evaluated"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={EvaluatedFilter}
                     >
                       <p className="sm:text-[11px] text-[9px] md:text-[14px] font-figtree font-bold text-[#15803D] ml-3">
@@ -406,11 +401,10 @@ const SideBar = ({
                   </div>
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${
-                        focusedStatus === "noeval"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
+                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${focusedStatus === "noeval"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={NotEvaluatedFilter}
                     >
                       <p className="sm:text-[12px] text-[13px] font-bold text-[#B91C1C] ml-3">
@@ -443,11 +437,10 @@ const SideBar = ({
                 <div className="w-full h-[100px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatus === "all"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:scale-105 transform-all ease-out duration-300`}
+                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${focusedStatus === "all"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={() => setFocusedStatus("all")}
                     >
                       <p className="sm:text-[14px] xl:text-[13px] text-[10px] md:text-[13px] font-figtree font-bold text-[#1E40AF] ml-3">
@@ -458,11 +451,10 @@ const SideBar = ({
                       </div>
                     </button>
                     <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatus === "approved"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
+                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#D1FAE5] ${focusedStatus === "approved"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={() => setFocusedStatus("approved")}
                     >
                       <p className="sm:text-[14px] 2xl:text-[14px] text-[13px] md:text-[13px] font-figtree font-bold text-[#047857]  ml-3">
@@ -475,11 +467,10 @@ const SideBar = ({
                   </div>
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatus === "pending"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
+                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEF9C3] ${focusedStatus === "pending"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={() => setFocusedStatus("pending")}
                     >
                       <p className="sm:text-[14px] 2xl:text-[14px] text-[13px] md:text-[12px] font-bold text-[#B45309] ml-3">
@@ -490,11 +481,10 @@ const SideBar = ({
                       </div>
                     </button>
                     <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FECACA] ${
-                        focusedStatus === "rejected"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
+                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FECACA] ${focusedStatus === "rejected"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={() => setFocusedStatus("rejected")}
                     >
                       <p className="sm:text-[14px] 2xl:text-[14px] text-[13px] md:text-[13px] font-figtree font-bold text-[#B91C1C] ml-3">
@@ -561,11 +551,10 @@ const SideBar = ({
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        reservationTabFocus === "all"
-                          ? "ring-2 ring-[#f3ca91] scale-105"
-                          : ""
-                      } hover:scale-105 transform-all ease-out duration-300`}
+                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${reservationTabFocus === "all"
+                        ? "ring-2 ring-[#f3ca91] scale-105"
+                        : ""
+                        } hover:scale-105 transform-all ease-out duration-300`}
                       onClick={AllReturnStatus}
                     >
                       <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-[#1E40AF] ml-3">
@@ -576,11 +565,10 @@ const SideBar = ({
                       </div>
                     </button>
                     <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${
-                        reservationTabFocus === "returned"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
+                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${reservationTabFocus === "returned"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
                       onClick={ReturnedFilter}
                     >
                       <p className="sm:text-[11px] text-[9px] md:text-[14px] font-figtree font-bold text-[#15803D] ml-3">
@@ -593,11 +581,10 @@ const SideBar = ({
                   </div>
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${
-                        reservationTabFocus === "notreturned"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
+                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${reservationTabFocus === "notreturned"
+                        ? "ring-2 ring-[#2563eb] scale-105"
+                        : ""
+                        } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
                       onClick={NotReturnedFilter}
                     >
                       <p className="sm:text-[12px] text-[13px] font-bold text-[#B91C1C] ml-3">
@@ -620,11 +607,10 @@ const SideBar = ({
                     <div className={`w-full h-[90px] md:scale-100`}>
                       <div className="w-full h-1/2 flex justify-between items-center">
                         <button
-                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
-                            focusedSort === "name-asc"
-                              ? "ring-2 ring-[#2563eb] scale-105"
-                              : ""
-                          } hover:scale-105 transform-all ease-out duration-300`}
+                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${focusedSort === "name-asc"
+                            ? "ring-2 ring-[#2563eb] scale-105"
+                            : ""
+                            } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("name-asc");
                             handleSortNameAsc && handleSortNameAsc();
@@ -635,11 +621,10 @@ const SideBar = ({
                           </p>
                         </button>
                         <button
-                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
-                            focusedSort === "name-desc"
-                              ? "ring-2 ring-[#2563eb] scale-105"
-                              : ""
-                          } hover:scale-105 transform-all ease-out duration-300`}
+                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${focusedSort === "name-desc"
+                            ? "ring-2 ring-[#2563eb] scale-105"
+                            : ""
+                            } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("name-desc");
                             handleSortNameDesc && handleSortNameDesc();
@@ -652,11 +637,10 @@ const SideBar = ({
                       </div>
                       <div className="w-full h-1/2 flex justify-between items-center">
                         <button
-                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${
-                            focusedSort === "newest"
-                              ? "ring-2 ring-[#2563eb] scale-105"
-                              : ""
-                          } hover:scale-105 transform-all ease-out duration-300`}
+                          className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 ${focusedSort === "newest"
+                            ? "ring-2 ring-[#2563eb] scale-105"
+                            : ""
+                            } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("newest");
                             handleSortDateNewest && handleSortDateNewest();
@@ -667,11 +651,10 @@ const SideBar = ({
                           </p>
                         </button>
                         <button
-                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${
-                            focusedSort === "oldest"
-                              ? "ring-2 ring-[#2563eb] scale-105"
-                              : ""
-                          } hover:scale-105 transform-all ease-out duration-300`}
+                          className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 ${focusedSort === "oldest"
+                            ? "ring-2 ring-[#2563eb] scale-105"
+                            : ""
+                            } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("oldest");
                             handleSortDateOldest && handleSortDateOldest();
@@ -700,23 +683,24 @@ const SideBar = ({
               open={showAddStockPopup}
               onClose={() => setShowAddStockPopup(false)}
               onSubmit={async (data) => {
-                // API call to add stock
+                // API call to add stock to items endpoint
                 try {
                   const response = await fetch(
-                    "http://localhost:5001/inventory",
+                    "http://localhost:5001/items",
                     {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        toga_size: data.toga_size,
-                        hood_color: data.hood_color,
-                        tassel_color: data.tassel_color,
-                        has_cap: data.cap ? 1 : 0,
-                        quantity: data.quantity,
-                      }),
+                      body: JSON.stringify(data),
                     }
                   );
-                  if (!response.ok) throw new Error("Failed to add stock");
+
+                  if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Failed to add stock");
+                  }
+
+                  const result = await response.json();
+                  console.log(result)
                   alert("Stock added successfully!");
                 } catch (err) {
                   alert("Error adding stock: " + err.message);

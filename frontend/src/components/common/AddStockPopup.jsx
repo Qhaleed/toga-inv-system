@@ -59,11 +59,10 @@ const AddStockPopup = ({ open, onClose, onSubmit }) => {
 
   return (
     <div
-      className={`fixed left-0 top-0 right-0 bottom-0 z-[10050] w-full h-full flex justify-center items-center transition-all duration-500 ${
-        open
+      className={`fixed left-0 top-0 right-0 bottom-0 z-[10050] w-full h-full flex justify-center items-center transition-all duration-500 ${open
           ? "opacity-100 pointer-events-auto backdrop-blur-sm"
           : "opacity-0 pointer-events-none"
-      }`}
+        }`}
       style={{ background: "rgba(0,0,0,0.4)" }}
     >
       <form
