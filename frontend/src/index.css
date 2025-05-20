@@ -285,3 +285,88 @@ Legacy Tailwind config for reference:
     --chart-5: 212 97% 87%;
   }
 }
+
+/* Eto ung mga prompts for success and failed modifications ng datas to db */
+
+/* HOW TO USE  */
+/*
+
+bale lagay niyo to sa mga const sa pinakataas
+
+
+const [alert, setAlert] = useState({ show: false, message: "", type: "success" });
+const showAlert = (message, type = "success") => {
+  setAlert({ show: true, message, type });
+  setTimeout(() => setAlert((a) => ({ ...a, show: false })), 3000);
+};
+
+
+
+then sa JSX: 
+
+<AlertCard
+  message={alert.message}
+  type={alert.type}
+  show={alert.show}
+  onClose={() => setAlert((a) => ({ ...a, show: false }))}
+/>
+
+
+*/
+
+/*  
+  Examples to use:
+either showAlert("message", "success") 
+or
+
+showAlert("message", "error")
+
+
+  */
+*/ .alert-card {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 240px;
+  max-width: 90vw;
+  z-index: 99999;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 24px 0 rgba(43, 43, 43, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, top 0.3s;
+}
+.alert-card.show {
+  opacity: 1;
+  pointer-events: auto;
+  top: 58px;
+}
+.alert-card.success {
+  background: #e6f9ed;
+  color: #0c7e48;
+  border: 1.5px solid #0c7e48;
+}
+.alert-card.error {
+  background: #ffeaea;
+  color: #c0392b;
+  border: 1.5px solid #c0392b;
+}
+.alert-card .close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 0.7rem;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.alert-card .close-btn:hover {
+  opacity: 1;
+}
