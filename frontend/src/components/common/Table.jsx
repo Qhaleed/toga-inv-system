@@ -1,6 +1,5 @@
 import Rows from "./Rows";
 import "./Table.css";
-import { useState, useEffect } from "react";
 
 const Table = ({
   modifyTable,
