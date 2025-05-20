@@ -38,6 +38,23 @@ const PendingPage = () => {
       });
   }, []);
 
+    useEffect(() => {
+      setFilteredData(allData); //ishow ang filtered data (refer sa handleSearch sa NavBar.jsx)
+    }, [allData]);
+
+    const handleEvaluationSearch = (results) => {
+    const filtered = results.filter(
+      (item) =>
+        item.toga_size !== null &&
+        item.toga_size !== undefined
+    );
+    setFilteredData(filtered);
+  };
+  
+
+
+  
+
   // Sort handlers for the sidebar controls
   const handleSortNameAsc = () => setSortOrder("name-asc");
   const handleSortNameDesc = () => setSortOrder("name-desc");
@@ -80,6 +97,7 @@ const PendingPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            onSearch={handleEvaluationSearch}
           />
         </div>
         <div className="w-full relative h-full overflow-hidden flex flex-col">
@@ -91,7 +109,7 @@ const PendingPage = () => {
                 modifyTable={modifyTable}
                 sortOrder={sortOrder}
                 data={filteredData}
-                allData={allData}
+                allData={filteredData}
                 focusedStatus={focusedStatus}
               />
               <button
