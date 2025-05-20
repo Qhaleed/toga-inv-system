@@ -109,14 +109,14 @@ router.post("/remove", async (req, res) => {
 
   try {
     // Check if an item with the same type, variant, status, and return status exists
+    // Use proper NULL handling for variants
     const [existingItems] = await db.pool.query(
-      "SELECT * FROM items WHERE item_type = ? AND variant = ? AND item_status = ? AND return_status = ?",
-      [item_type, variant, item_status, return_status]
+      "SELECT * FROM items WHERE item_type = ? AND (variant = ? OR (variant IS NULL AND ? IS NULL)) AND item_status = ? AND return_status = ?",
+      [item_type, variant, variant, item_status, return_status]
     );
 
 
     if (existingItems.length === 0) {
-
       return res.status(404).json({
         error: "Item not found. Cannot remove stock from a non-existent item.",
       });
