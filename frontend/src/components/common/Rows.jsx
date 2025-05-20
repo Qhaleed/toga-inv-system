@@ -136,7 +136,7 @@ const Rows = ({
           )
         )
           .then(() => {
-            showAlert("Changes saved!", "success"); // customized to sya showing success alert from index.css
+            showAlert("Changes saved!", "success"); // customized to sya showing success alert from
             setOriginalDashboard(dashboard);
           })
           .catch(() => {

@@ -290,42 +290,31 @@ Legacy Tailwind config for reference:
 
 /* HOW TO USE  */
 /*
-
 bale lagay niyo to sa mga const sa pinakataas
-
-
 const [alert, setAlert] = useState({ show: false, message: "", type: "success" });
 const showAlert = (message, type = "success") => {
   setAlert({ show: true, message, type });
   setTimeout(() => setAlert((a) => ({ ...a, show: false })), 3000);
 };
-
-
-
 then sa JSX: 
-
 <AlertCard
   message={alert.message}
   type={alert.type}
   show={alert.show}
   onClose={() => setAlert((a) => ({ ...a, show: false }))}
 />
-
-
 */
 
 /*  
   Examples to use:
 either showAlert("message", "success") 
 or
-
 showAlert("message", "error")
-
-
   */
-*/ .alert-card {
+
+.alert-card {
   position: fixed;
-  top: 20px;
+  top: 34px;
   left: 50%;
   transform: translateX(-50%);
   min-width: 240px;
@@ -343,7 +332,7 @@ showAlert("message", "error")
 .alert-card.show {
   opacity: 1;
   pointer-events: auto;
-  top: 58px;
+  top: 48px;
 }
 .alert-card.success {
   background: #e6f9ed;
