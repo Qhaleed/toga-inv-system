@@ -8,10 +8,11 @@ router.post('/', async (req, res) => {
         gown_size, tasselColor, hoodColor, cap, account_id,
     } = req.body
     try {
-        const inventory = await db.pool.query(`INSERT INTO inventory (account_id, toga_size, tassel_color, hood_color, has_cap) 
-            VALUES (?, ?, ?, ?, ?)`, 
+        const inventory = await db.pool.query(`INSERT INTO inventory (account_id, toga_size, tassel_color, hood_color, has_cap, rent_date) 
+            VALUES (?, ?, ?, ?, ?, CURDATE())`, 
             [account_id, gown_size, tasselColor, hoodColor, cap]
         );
+
         res.status(200).json({message: 'Information successfully stored in inventory'});
     } catch (error) {
         console.log("db failed:", error);
