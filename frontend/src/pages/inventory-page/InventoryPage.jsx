@@ -51,7 +51,7 @@ const InventoryPage = ({ setSortOrder }) => {
       {/* Main content */}
       <div className="bg-[#F3F9FF] overflow-hidden  w-full h-full">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-15 flex items-center relative">
+        <div className="w-full z-10 h-9 flex items-center relative">
           <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
