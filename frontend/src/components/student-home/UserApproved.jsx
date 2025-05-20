@@ -21,6 +21,7 @@ const UserApproved = ({ userData, name }) => {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const togaSizes = [
     "XS (17 inches)",
     "S (18 inches)",
@@ -33,26 +34,27 @@ const UserApproved = ({ userData, name }) => {
   ];
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      // If userData is passed as prop, use it directly
-      if (userData) {
-        setFormData({
-          firstName: userData.first_name || "",
-          middleInitial: userData.middle_initial || "",
-          surname: userData.surname || "",
-          idNumber: userData.id_number || userData.idNumber || "",
-          course: userData.course || "",
-          account_id: userData.account_id || "",
-          status: userData.status || "",
-          shoulderWidth: "",
-          togaSize: "",
-        });
-        return;
-      }
+useEffect(() => {
+  const fetchUserDetails = async () => {
+    let accountId = "";
+    let token = localStorage.getItem("token");
 
+    // If userData is passed as prop, use it directly
+    if (userData) {
+      setFormData({
+        firstName: userData.first_name || "",
+        middleInitial: userData.middle_initial || "",
+        surname: userData.surname || "",
+        idNumber: userData.id_number || userData.idNumber || "",
+        course: userData.course || "",
+        account_id: userData.account_id || "",
+        status: userData.status || "",
+        shoulderWidth: "",
+        togaSize: "",
+      });
+      accountId = userData.account_id;
+    } else {
       // Otherwise fetch from API
-      const token = localStorage.getItem("token");
       if (!token) {
         setFormData({
           firstName: "Guest",
@@ -65,6 +67,7 @@ const UserApproved = ({ userData, name }) => {
           course: "",
           status: "",
         });
+        setAlreadyRegistered(false);
         return;
       }
       try {
@@ -85,6 +88,7 @@ const UserApproved = ({ userData, name }) => {
             course: "",
             status: "",
           });
+          setAlreadyRegistered(false);
           return;
         }
         const data = await res.json();
@@ -98,6 +102,7 @@ const UserApproved = ({ userData, name }) => {
           account_id: data.account_id,
           status: data.status,
         }));
+        accountId = data.account_id;
       } catch {
         setFormData({
           firstName: "Guest",
@@ -110,10 +115,31 @@ const UserApproved = ({ userData, name }) => {
           course: "",
           status: "",
         });
+        setAlreadyRegistered(false);
+        return;
       }
-    };
-    fetchUserDetails();
-  }, [userData]);
+    }
+
+    // Check inventory if account_id is present
+    if (accountId) {
+      try {
+        const invRes = await fetch("http://localhost:5001/inventory/check-toga-size", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const invData = await invRes.json();
+        setAlreadyRegistered(invData.hasSubmitted);
+      } catch {
+        setAlreadyRegistered(false);
+      }
+    } else {
+      setAlreadyRegistered(false);
+    }
+  };
+
+  fetchUserDetails();
+}, [userData]);
 
   const getRecommendedSize = (shoulderWidth) => {
     const width = parseFloat(shoulderWidth);
@@ -549,13 +575,20 @@ const UserApproved = ({ userData, name }) => {
           </div>
         )}
 
+        {/* Already Registered Message */}
+        {alreadyRegistered && (
+          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-4 rounded">
+            <p>You have already completed your registration.</p>
+          </div>
+        )}
+
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={submitting}
+          disabled={submitting || alreadyRegistered}
           className={`w-full ${submitting ? 'bg-gray-500' : 'bg-[#2A4D89] hover:bg-primary'} py-2 transition rounded-full font-manjari text-white mb-6`}
         >
-          {submitting ? "Submitting..." : (formData.status === "Pending" ? "Complete Registration" : "Submit Toga Measurement")}
+          {submitting ? "Submitting..." : alreadyRegistered ? "Already Registered" : (formData.status === "Pending" ? "Complete Registration" : "Submit Toga Measurement")}
         </button>
 
         {/* Return Link */}
