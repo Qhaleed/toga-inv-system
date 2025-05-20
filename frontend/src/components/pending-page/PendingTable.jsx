@@ -20,7 +20,7 @@ const PendingTable = ({
 
   const mainContentHeight = "100vh";
   return (
-    <div className="w-full flex flex-col items-center animate-fade-in justify-start z-10 mt-10">
+    <div className="w-full flex flex-col items-center animate-fade-in justify-start  mt-10">
       <div className="w-full flex flex-col items-start justify-center mb-2 px-2" />
       <div
         className="w-full flex justify-center items-start px-1 sm:px-2 md:px-5 lg:ml-0 lg:w-full"

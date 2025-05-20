@@ -428,9 +428,8 @@ const PendingRow = ({
   const hoodColorOptions = Array.from(
     new Set((allData || []).map((item) => item.hood_color).filter(Boolean))
   );
-  const togaSizeOptions = Array.from(
-    new Set((allData || []).map((item) => item.toga_size).filter(Boolean))
-  );
+  // Hardcoded gown size options XS to 3XL
+  const togaSizeOptions = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
   const sortedDashboard =
     !isGrid && sortOrder
@@ -702,23 +701,26 @@ const PendingRow = ({
                         <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                           <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
                             {isEditing ? (
-                              <CustomDropdown
-                                value={
-                                  modifyTable ? db.status : editData.status
-                                }
-                                options={["Pending", "Approved", "Rejected"]}
-                                onChange={(val) =>
-                                  modifyTable
-                                    ? handleCellChange(db.id, "status", val)
-                                    : handleEditChange({
-                                        target: {
-                                          name: "status",
-                                          value: val,
-                                        },
-                                      })
-                                }
-                                disabled={false}
-                              />
+                              <div className="flex flex-col items-center w-full">
+                                <CustomDropdown
+                                  value={
+                                    modifyTable ? db.status : editData.status
+                                  }
+                                  options={["Pending", "Approved", "Rejected"]}
+                                  onChange={(val) => {
+                                    if (modifyTable) {
+                                      handleCellChange(db.id, "status", val);
+                                    } else {
+                                      setEditData((prev) => ({
+                                        ...prev,
+                                        status: val,
+                                      }));
+                                    }
+                                  }}
+                                  disabled={false}
+                                />
+                                {/* Show Save/Cancel only in single-row edit (portal) mode */}
+                              </div>
                             ) : db.status === "Pending" ? (
                               <button
                                 className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs"
@@ -902,11 +904,16 @@ export default PendingRow;
 const CustomDropdown = ({ value, options, onChange, disabled }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
+  const dropdownRef = useRef();
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (
+        ref.current &&
+        !ref.current.contains(event.target) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(event.target))
+      ) {
         setOpen(false);
       }
     }
@@ -924,6 +931,101 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
       });
     }
   }, [open]);
+
+  // Render dropdown in a portal (body) so it doesn't take up table space
+  const dropdownMenu = open
+    ? ReactDOM.createPortal(
+        <div
+          ref={dropdownRef}
+          className="z-[9999] fixed"
+          style={{
+            top: dropdownPos.top,
+            left: dropdownPos.left,
+            width: dropdownPos.width || 120,
+            minWidth: 120,
+            background: "#E9E9E9",
+            border: "1.5px solid #0C7E48",
+            borderRadius: 8,
+            boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
+            padding: 0,
+            margin: 0,
+            overflow: "visible",
+          }}
+          role="listbox"
+        >
+          {options.map((opt, idx) => (
+            <div
+              key={opt}
+              className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
+                opt === value
+                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                  : ""
+              }`}
+              style={{
+                background: opt === value ? "#E9E9E9" : "transparent",
+                borderRadius: "0",
+                borderLeft: opt === value ? "5px solid #0C7E48" : "none",
+                borderRight: opt === value ? "5px solid #0C7E48" : "none",
+                borderTop: "none",
+                borderBottom: "none",
+              }}
+              onClick={() => {
+                onChange(opt);
+                setOpen(false);
+              }}
+              role="option"
+              aria-selected={opt === value}
+              tabIndex={0}
+              onMouseEnter={function (e) {
+                e.currentTarget.style.background = "#d9d9d9";
+                e.currentTarget.style.color = "#0C7E48";
+                if (idx === 0) {
+                  e.currentTarget.style.borderTopLeftRadius = "5px";
+                  e.currentTarget.style.borderTopRightRadius = "5px";
+                } else if (idx === options.length - 1) {
+                  e.currentTarget.style.borderBottomLeftRadius = "5px";
+                  e.currentTarget.style.borderBottomRightRadius = "5px";
+                } else {
+                  e.currentTarget.style.borderTopLeftRadius = "0";
+                  e.currentTarget.style.borderTopRightRadius = "0";
+                  e.currentTarget.style.borderBottomLeftRadius = "0";
+                  e.currentTarget.style.borderBottomRightRadius = "0";
+                }
+                if (opt === value) {
+                  e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
+                  e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
+                  e.currentTarget.style.borderTop = "none";
+                  e.currentTarget.style.borderBottom = "none";
+                } else {
+                  e.currentTarget.style.border = "none";
+                }
+              }}
+              onMouseLeave={function (e) {
+                e.currentTarget.style.background =
+                  opt === value ? "#E9E9E9" : "transparent";
+                e.currentTarget.style.color =
+                  opt === value ? "#0C7E48" : "#000";
+                e.currentTarget.style.borderTopLeftRadius = "4px";
+                e.currentTarget.style.borderTopRightRadius = "4px";
+                e.currentTarget.style.borderBottomLeftRadius = "4px";
+                e.currentTarget.style.borderBottomRightRadius = "4px";
+                if (opt === value) {
+                  e.currentTarget.style.borderLeft = "4px solid #0C7E48";
+                  e.currentTarget.style.borderRight = "4px solid #0C7E48";
+                  e.currentTarget.style.borderTop = "none";
+                  e.currentTarget.style.borderBottom = "none";
+                } else {
+                  e.currentTarget.style.border = "none";
+                }
+              }}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>,
+        document.body
+      )
+    : null;
 
   return (
     <div
@@ -975,98 +1077,7 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
           />
         </span>
       </button>
-      {open &&
-        ReactDOM.createPortal(
-          <div
-            className="absolute z-[9999] left-0 top-0"
-            style={{
-              position: "absolute",
-              top: dropdownPos.top,
-              left: dropdownPos.left,
-              width: dropdownPos.width,
-              minWidth: 120,
-              background: "#E9E9E9",
-              border: "1.5px solid #0C7E48",
-              borderRadius: 8,
-              boxShadow: "0 4px 24px 0 rgba(43, 43, 43, 0.12)",
-              padding: 0,
-              margin: 0,
-              overflow: "visible",
-            }}
-            role="listbox"
-          >
-            {options.map((opt, idx) => (
-              <div
-                key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                  opt === value
-                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                    : ""
-                }`}
-                style={{
-                  background: opt === value ? "#E9E9E9" : "transparent",
-                  borderRadius: "0",
-                  borderLeft: opt === value ? "5px solid #0C7E48" : "none",
-                  borderRight: opt === value ? "5px solid #0C7E48" : "none",
-                  borderTop: "none",
-                  borderBottom: "none",
-                }}
-                onClick={() => {
-                  onChange(opt);
-                  setOpen(false);
-                }}
-                role="option"
-                aria-selected={opt === value}
-                tabIndex={0}
-                onMouseEnter={function (e) {
-                  e.currentTarget.style.background = "#d9d9d9";
-                  e.currentTarget.style.color = "#0C7E48";
-                  if (idx === 0) {
-                    e.currentTarget.style.borderTopLeftRadius = "5px";
-                    e.currentTarget.style.borderTopRightRadius = "5px";
-                  } else if (idx === options.length - 1) {
-                    e.currentTarget.style.borderBottomLeftRadius = "5px";
-                    e.currentTarget.style.borderBottomRightRadius = "5px";
-                  } else {
-                    e.currentTarget.style.borderTopLeftRadius = "0";
-                    e.currentTarget.style.borderTopRightRadius = "0";
-                    e.currentTarget.style.borderBottomLeftRadius = "0";
-                    e.currentTarget.style.borderBottomRightRadius = "0";
-                  }
-                  if (opt === value) {
-                    e.currentTarget.style.borderLeft = "1.5px solid #0C7E48";
-                    e.currentTarget.style.borderRight = "1.5px solid #0C7E48";
-                    e.currentTarget.style.borderTop = "none";
-                    e.currentTarget.style.borderBottom = "none";
-                  } else {
-                    e.currentTarget.style.border = "none";
-                  }
-                }}
-                onMouseLeave={function (e) {
-                  e.currentTarget.style.background =
-                    opt === value ? "#E9E9E9" : "transparent";
-                  e.currentTarget.style.color =
-                    opt === value ? "#0C7E48" : "#000";
-                  e.currentTarget.style.borderTopLeftRadius = "4px";
-                  e.currentTarget.style.borderTopRightRadius = "4px";
-                  e.currentTarget.style.borderBottomLeftRadius = "4px";
-                  e.currentTarget.style.borderBottomRightRadius = "4px";
-                  if (opt === value) {
-                    e.currentTarget.style.borderLeft = "4px solid #0C7E48";
-                    e.currentTarget.style.borderRight = "4px solid #0C7E48";
-                    e.currentTarget.style.borderTop = "none";
-                    e.currentTarget.style.borderBottom = "none";
-                  } else {
-                    e.currentTarget.style.border = "none";
-                  }
-                }}
-              >
-                {opt}
-              </div>
-            ))}
-          </div>,
-          document.body
-        )}
+      {dropdownMenu}
     </div>
   );
 };
