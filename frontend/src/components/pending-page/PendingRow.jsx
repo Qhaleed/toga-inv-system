@@ -174,10 +174,10 @@ const PendingRow = ({
       prev.map((item) =>
         db.id === item.id
           ? {
-              ...item,
-              eye: item.eye === "block" ? "hidden" : "block",
-              trash: item.trash === "hidden" ? "block" : "hidden",
-            }
+            ...item,
+            eye: item.eye === "block" ? "hidden" : "block",
+            trash: item.trash === "hidden" ? "block" : "hidden",
+          }
           : item
       )
     );
@@ -311,8 +311,68 @@ const PendingRow = ({
   const handleApprove = async (id) => {
     const row = dashboard.find((item) => item.id === id);
     if (!row || row.status !== "Pending") return;
+
     try {
-      // PATCH /accounts/:account_id just like the curl example
+      // Fetch items from the inventory endpoint
+      const inventoryRes = await fetch(`http://localhost:5001/items`);
+      if (!inventoryRes.ok) {
+        throw new Error(`Failed to fetch inventory: ${inventoryRes.status}`);
+      }
+
+      const inventoryItems = await inventoryRes.json();
+
+      // Convert tassel_color, hood_color, and toga_size to lowercase for case-insensitive matching
+      const requiredItems = [
+        { item_type: "tassel", variant: row.tassel_color?.toLowerCase() },
+        { item_type: "hood", variant: row.hood_color?.toLowerCase() },
+        { item_type: "gown", variant: row.toga_size?.toLowerCase() },
+        { item_type: "cap", variant: null },
+      ];
+
+      console.log("Checking inventory for the following items:", requiredItems);
+
+      for (const requiredItem of requiredItems) {
+        const matchingItem = inventoryItems.find(
+          (item) =>
+            item.item_type === requiredItem.item_type &&
+            (item.variant?.toLowerCase() || null) === requiredItem.variant &&
+            item.item_status === "In Good Condition" &&
+            item.return_status === "Returned"
+        );
+
+        console.log(
+          `Available for ${requiredItem.item_type} (${requiredItem.variant || "N/A"}):`,
+          matchingItem ? matchingItem.quantity : 0
+        );
+
+        if (!matchingItem || matchingItem.quantity <= 0) {
+          alert(
+            `Insufficient inventory for ${requiredItem.item_type} (${requiredItem.variant || "N/A"}).`
+          );
+          return;
+        }
+      }
+
+      // Decrease the quantity of the items involved
+      for (const requiredItem of requiredItems) {
+        const matchingItem = inventoryItems.find(
+          (item) =>
+            item.item_type === requiredItem.item_type &&
+            (item.variant?.toLowerCase() || null) === requiredItem.variant &&
+            item.item_status === "In Good Condition" &&
+            item.return_status === "Returned"
+        );
+
+        await fetch(`http://localhost:5001/items/${matchingItem.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ quantity: matchingItem.quantity - 1 }),
+        });
+      }
+
+      // Approve the account
       const accountRes = await fetch(
         `http://localhost:5001/accounts/${row.account_id}`,
         {
@@ -323,6 +383,7 @@ const PendingRow = ({
           body: JSON.stringify({ status: "Approved" }),
         }
       );
+
       const accountResBody = await accountRes.text();
       if (!accountRes.ok) {
         console.error(
@@ -334,6 +395,7 @@ const PendingRow = ({
           `Failed to update account status: ${accountRes.status} - ${accountResBody}`
         );
       }
+
       setDashboard((prev) =>
         prev.map((item) =>
           item.account_id === row.account_id
@@ -368,20 +430,20 @@ const PendingRow = ({
   const sortedDashboard =
     !isGrid && sortOrder
       ? [...dashboard].sort((a, b) => {
-          if (sortOrder === "newest" || sortOrder === "oldest") {
-            const dateA = new Date(a.dateofreservation);
-            const dateB = new Date(b.dateofreservation);
-            if (sortOrder === "newest") return dateB - dateA;
-            if (sortOrder === "oldest") return dateA - dateB;
-          } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
-            const nameA = (a.studentname || "").toLowerCase();
-            const nameB = (b.studentname || "").toLowerCase();
-            if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
-            if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
-            return 0;
-          }
+        if (sortOrder === "newest" || sortOrder === "oldest") {
+          const dateA = new Date(a.dateofreservation);
+          const dateB = new Date(b.dateofreservation);
+          if (sortOrder === "newest") return dateB - dateA;
+          if (sortOrder === "oldest") return dateA - dateB;
+        } else if (sortOrder === "name-asc" || sortOrder === "name-desc") {
+          const nameA = (a.studentname || "").toLowerCase();
+          const nameB = (b.studentname || "").toLowerCase();
+          if (nameA < nameB) return sortOrder === "name-asc" ? -1 : 1;
+          if (nameA > nameB) return sortOrder === "name-asc" ? 1 : -1;
           return 0;
-        })
+        }
+        return 0;
+      })
       : dashboard;
 
   useEffect(() => {
@@ -495,7 +557,7 @@ const PendingRow = ({
                 filterStatus === "all"
                   ? true
                   : (db.status || "").toLowerCase() ===
-                    filterStatus.toLowerCase()
+                  filterStatus.toLowerCase()
               ).length === 0 ? (
                 <tr>
                   <td
@@ -511,7 +573,7 @@ const PendingRow = ({
                     filterStatus === "all"
                       ? true
                       : (db.status || "").toLowerCase() ===
-                        filterStatus.toLowerCase()
+                      filterStatus.toLowerCase()
                   )
                   .map((db, idx) => {
                     const rowColor = getRowColor(idx);
@@ -600,11 +662,11 @@ const PendingRow = ({
                                   modifyTable
                                     ? handleCellChange(db.id, "status", val)
                                     : handleEditChange({
-                                        target: {
-                                          name: "status",
-                                          value: val,
-                                        },
-                                      })
+                                      target: {
+                                        name: "status",
+                                        value: val,
+                                      },
+                                    })
                                 }
                                 disabled={false}
                               />
@@ -621,8 +683,8 @@ const PendingRow = ({
                                   db.status === "Approved"
                                     ? "text-green-600"
                                     : db.status === "Rejected"
-                                    ? "text-red-600"
-                                    : ""
+                                      ? "text-red-600"
+                                      : ""
                                 }
                               >
                                 {db.status}
@@ -671,17 +733,16 @@ const PendingRow = ({
                                   onMouseLeave={() => setHoveredEyeId(null)}
                                 >
                                   <button
-                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
-                                      hoveredEyeId === db.id
-                                        ? "bg-blue-600"
-                                        : ""
-                                    }`}
+                                    className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id
+                                      ? "bg-blue-600"
+                                      : ""
+                                      }`}
                                     style={{
                                       background: modifyTable
                                         ? "#bdbdbd"
                                         : hoveredEyeId === db.id
-                                        ? "#2563eb"
-                                        : "#0C7E48",
+                                          ? "#2563eb"
+                                          : "#0C7E48",
                                       cursor: modifyTable
                                         ? "not-allowed"
                                         : "pointer",
@@ -698,11 +759,10 @@ const PendingRow = ({
                                     }}
                                   >
                                     <EyeIcon
-                                      className={`w-5 transition-colors duration-200 ${
-                                        hoveredEyeId === db.id
-                                          ? "text-blue-200"
-                                          : "text-white"
-                                      }`}
+                                      className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
+                                        ? "text-blue-200"
+                                        : "text-white"
+                                        }`}
                                     />
                                   </button>
                                   {hoveredEyeId === db.id && (
@@ -825,9 +885,8 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
   return (
     <div
       ref={ref}
-      className={`relative w-[80%] flex justify-center items-center ${
-        disabled ? "pointer-events-none opacity-20" : ""
-      }`}
+      className={`relative w-[80%] flex justify-center items-center ${disabled ? "pointer-events-none opacity-20" : ""
+        }`}
       tabIndex={0}
       style={{
         outline: open ? "1.5px solid #0C7E48" : "1.5px solid #696969",
@@ -885,11 +944,10 @@ const CustomDropdown = ({ value, options, onChange, disabled }) => {
             {options.map((opt, idx) => (
               <div
                 key={opt}
-                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${
-                  opt === value
-                    ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
-                    : ""
-                }`}
+                className={`my-1.0 text-xs font-Figtree w-full h-8 flex items-center justify-center text-black cursor-pointer transition-colors duration-150${opt === value
+                  ? " font-bold text-[#0C7E48] bg-slate-200 border-l-[1.5px] border-r-[1.5px] border-[#0C7E48]"
+                  : ""
+                  }`}
                 style={{
                   background: opt === value ? "#E9E9E9" : "transparent",
                   borderRadius: "0",

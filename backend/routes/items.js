@@ -14,8 +14,8 @@ router.get("/", async (req, res) => {
       return res.status(500).json({ error: "Database connection error" });
     }
 
-    console.log("All the items in the items database: ");
-    console.log(items);
+    // console.log("All the items in the items database: ");
+    // console.log(items);
 
 
     // Return the formatted data
@@ -186,6 +186,127 @@ router.post("/remove", async (req, res) => {
     }
   } catch (error) {
     console.log("Error removing inventory stock: ", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// PATCH - Update inventory stock items
+router.patch("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { quantity } = req.body;
+
+  console.log("PATCH request received for item ID:", id);
+  console.log("Requested quantity update:", quantity);
+
+  if (quantity === undefined || typeof quantity !== "number" || quantity < 0) {
+    console.error("Invalid quantity provided:", quantity);
+    return res.status(400).json({
+      error: "Invalid quantity. Please provide a non-negative number.",
+    });
+  }
+
+  try {
+    // Check if the item exists
+    const [existingItem] = await db.pool.query("SELECT * FROM items WHERE id = ?", [id]);
+
+    if (existingItem.length === 0) {
+      console.error("Item not found for ID:", id);
+      return res.status(404).json({ error: "Item not found." });
+    }
+
+    console.log("Existing item details:", existingItem[0]);
+
+    // Update the quantity
+    const [result] = await db.pool.query("UPDATE items SET quantity = ? WHERE id = ?", [quantity, id]);
+
+    if (result.affectedRows === 0) {
+      console.error("Failed to update item quantity for ID:", id);
+      return res.status(500).json({ error: "Failed to update item quantity." });
+    }
+
+    console.log("Item quantity updated successfully for ID:", id, "New quantity:", quantity);
+    res.status(200).json({ message: "Item quantity updated successfully.", id, quantity });
+  } catch (error) {
+    console.error("Error updating item quantity:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// PATCH - Update inventory stock items and handle lending logic
+router.patch("/lend/:id", async (req, res) => {
+  const { id } = req.params;
+  const { item_type, variant, quantity } = req.body;
+
+  console.log("Lend request received for item type:", item_type);
+  console.log("Variant:", variant);
+  console.log("Requested quantity:", quantity);
+
+  if (!item_type || typeof quantity !== "number" || quantity <= 0) {
+    console.error("Invalid request parameters:", { item_type, variant, quantity });
+    return res.status(400).json({
+      error: "Invalid request. Please provide item_type, variant, and a positive quantity.",
+    });
+  }
+
+  try {
+    // Check if sufficient items are available in "Returned" status
+    const [returnedItems] = await db.pool.query(
+      "SELECT * FROM items WHERE item_type = ? AND variant = ? AND return_status = 'Returned' AND item_status = 'In Good Condition'",
+      [item_type, variant]
+    );
+
+    if (returnedItems.length === 0 || returnedItems[0].quantity < quantity) {
+      console.error("Insufficient inventory for lending:", returnedItems);
+      return res.status(400).json({
+        error: `Insufficient inventory for ${item_type} (${variant || "N/A"}). Requested: ${quantity}, Available: ${returnedItems[0]?.quantity || 0}`,
+      });
+    }
+
+    // Decrease the quantity of "Returned" items
+    const newReturnedQuantity = returnedItems[0].quantity - quantity;
+    await db.pool.query("UPDATE items SET quantity = ? WHERE id = ?", [
+      newReturnedQuantity,
+      returnedItems[0].id,
+    ]);
+
+    console.log(
+      `Decreased "Returned" quantity for ${item_type} (${variant || "N/A"}). New quantity: ${newReturnedQuantity}`
+    );
+
+    // Check if "Not Returned" items exist for the same type and variant
+    const [notReturnedItems] = await db.pool.query(
+      "SELECT * FROM items WHERE item_type = ? AND variant = ? AND return_status = 'Not Returned' AND item_status = 'In Good Condition'",
+      [item_type, variant]
+    );
+
+    if (notReturnedItems.length > 0) {
+      // Increase the quantity of "Not Returned" items
+      const newNotReturnedQuantity = notReturnedItems[0].quantity + quantity;
+      await db.pool.query("UPDATE items SET quantity = ? WHERE id = ?", [
+        newNotReturnedQuantity,
+        notReturnedItems[0].id,
+      ]);
+
+      console.log(
+        `Increased "Not Returned" quantity for ${item_type} (${variant || "N/A"}). New quantity: ${newNotReturnedQuantity}`
+      );
+    } else {
+      // Create a new entry for "Not Returned" items if it doesn't exist
+      await db.pool.query(
+        "INSERT INTO items (item_type, variant, item_status, return_status, quantity) VALUES (?, ?, 'In Good Condition', 'Not Returned', ?)",
+        [item_type, variant, quantity]
+      );
+
+      console.log(
+        `Created new "Not Returned" entry for ${item_type} (${variant || "N/A"}) with quantity: ${quantity}`
+      );
+    }
+
+    res.status(200).json({
+      message: `Successfully lent ${quantity} ${item_type} (${variant || "N/A"}).`,
+    });
+  } catch (error) {
+    console.error("Error processing lend request:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
