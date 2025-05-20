@@ -35,6 +35,7 @@ const RemoveStockPopup = ({ open, onClose, onSubmit }) => {
             { value: "XL", label: "XL" },
             { value: "2XL", label: "2XL" },
             { value: "3XL", label: "3XL" },
+            { value: "4XL", label: "4XL" },
         ],
         hood: [
             { value: "blue", label: "Blue" },

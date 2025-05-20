@@ -431,7 +431,7 @@ export default function RegisterForm() {
                 <div key={index} className="relative group">
                   <img
                     src={URL.createObjectURL(image)}
-                    alt={`Preview ${index + 1}`}
+                    alt={`P ${index + 1}`}
                     className="w-full h-24 object-cover rounded-md"
                   />
                   <button
