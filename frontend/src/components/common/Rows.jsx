@@ -367,8 +367,8 @@ const Rows = ({
       >
         <div className="min-w-[300px] max-w-[120vw] overflow-visible relative bg-white">
           <table className="w-full ">
-            <thead className="bg-[#02327B]  top-0 sticky">
-              <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
+            <thead className="bg-[#02327B]  top-0 z-10 sticky">
+              <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-13">
                 <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
                   <span className="block text-[10px] md:text-[15px] w-full text-center ">
                     Student Name

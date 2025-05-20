@@ -1,13 +1,11 @@
-import EvaluationRows from "./EvaluationRows";
-import "../common/Table.css";
+import Rows from "./Rows";
+import "./Table.css";
 
-const EvaluationTable = ({
+const Table = ({
   modifyTable,
-  setValue,
-  setEvaluationTab,
   isAll,
-  isevalTab,
-  isnotevalTab,
+  isReturnedTab,
+  isNotReturnedTab,
   isAZ,
   isZA,
   allData,
@@ -42,15 +40,13 @@ const EvaluationTable = ({
                     maxWidth: "100%",
                   }}
                 >
-                  <EvaluationRows
+                  <Rows
                     isGrid={false}
                     modifyTable={modifyTable}
                     rowHeightClass="h-16"
-                    setValue={setValue}
-                    setEvaluationTab={setEvaluationTab}
                     isAll={isAll}
-                    isevalTab={isevalTab}
-                    isnotevalTab={isnotevalTab}
+                    isReturnedTab={isReturnedTab}
+                    isNotReturnedTab={isNotReturnedTab}
                     isAZ={isAZ}
                     isZA={isZA}
                     allData={allData}
@@ -65,4 +61,4 @@ const EvaluationTable = ({
   );
 };
 
-export default EvaluationTable;
+export default Table;
