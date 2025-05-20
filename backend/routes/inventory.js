@@ -5,6 +5,9 @@ const db = require("../database/db");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
+
+
+// Endpoint for rendering data on rows
 router.get("/", async (req, res) => {
   try {
     const fullTable = await db.getAllTable();
@@ -145,7 +148,7 @@ router.get("/check-toga-size", async (req, res) => {
   }
 });
 
-// Add POST endpoint to submit toga size and other details
+// Add POST endpoint to submit toga size and other details upon registration
 router.post("/", async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {

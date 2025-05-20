@@ -38,11 +38,11 @@ const PendingPage = () => {
       });
   }, []);
 
-    useEffect(() => {
-      setFilteredData(allData); //ishow ang filtered data (refer sa handleSearch sa NavBar.jsx)
-    }, [allData]);
+  useEffect(() => {
+    setFilteredData(allData); //ishow ang filtered data (refer sa handleSearch sa NavBar.jsx)
+  }, [allData]);
 
-    const handleEvaluationSearch = (results) => {
+  const handleEvaluationSearch = (results) => {
     const filtered = results.filter(
       (item) =>
         item.toga_size !== null &&
@@ -50,10 +50,10 @@ const PendingPage = () => {
     );
     setFilteredData(filtered);
   };
-  
 
 
-  
+
+
 
   // Sort handlers for the sidebar controls
   const handleSortNameAsc = () => setSortOrder("name-asc");
@@ -63,11 +63,10 @@ const PendingPage = () => {
 
   return (
     <div
-      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
-        sidebarOpen
-          ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
-          : "md:grid-cols-1"
-      }`}
+      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${sidebarOpen
+        ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
+        : "md:grid-cols-1"
+        }`}
     >
       {/* Sidebar: left on desktop, hidden on mobile */}
       {sidebarOpen && (

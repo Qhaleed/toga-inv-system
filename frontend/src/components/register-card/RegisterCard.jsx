@@ -131,10 +131,21 @@ export default function RegisterForm() {
           course: value,
         }),
       });
-          const data = await response.json();
+      const data = await response.json();
       if (response.ok) {
         setError(""); // Clear any previous error messages
         setSuccess("Registered successfully! Redirecting you to login page...");
+
+        console.log("Submitting data to server:", {
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          first_name: formData.firstName,
+          surname: formData.surname,
+          middleInitial: formData.middleInitial,
+          idNumber: formData.idNumber,
+          course: value,
+        });
         setTimeout(() => navigate("/"), 2000); // 2 seconds delay
       } else {
         setError(data.message || "Registration failed"); //set error message
@@ -334,9 +345,8 @@ export default function RegisterForm() {
 
               {/* Dropdown Arrow */}
               <div
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
-                  open ? "rotate-180" : "rotate-0"
-                }`}
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
+                  }`}
               >
                 ▼
               </div>
@@ -449,7 +459,7 @@ export default function RegisterForm() {
           {error}
         </div>
       )}
-      
+
       {/* Submit Button */}
       <button
         type="submit"
