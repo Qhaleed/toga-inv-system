@@ -3,7 +3,6 @@ import Table from "../common/Table";
 import SideBar from "../navigations/SideBar";
 import NavBar from "../navigations/NavBar";
 import AdminDashboard from "./AdminDashboard"; // Import the AdminDashboard component
-import profilePic from "@/assets/images/profilepicture.jpg";
 
 const AdminDashboardCard = () => {
   // States for grid and modifyTable
