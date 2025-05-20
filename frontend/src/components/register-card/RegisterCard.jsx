@@ -26,21 +26,21 @@ export default function RegisterForm() {
   const navigate = useNavigate(); //used for redirecting
   const [success, setSuccess] = useState(""); //success message
   const courseGroups = {
-    Blue: [
+    blue: [
       "Bachelor of Early Childhood Education (BECEd)",
       "Bachelor of Elementary Education (BEEd)",
       "Bachelor of Physical Education (BPEd)",
       "Bachelor of Secondary Education (BSEd)",
     ],
-    Maroon: [
+    maroon: [
       "BS Biomedical Engineering (BSBME)",
       "BS Computer Engineering (BSCE)",
       "BS Electronics Communication Engineering (BSECE)",
       "Associate in Electronics Engineering Technology (AEET)",
       "Associate in Computer Networking (ACN)",
     ],
-    Orange: ["BS Nursing (BSN)"],
-    White: [
+    orange: ["BS Nursing (BSN)"],
+    white: [
       "BS Biology (BSBio)",
       "BS Computer Science (BSCS)",
       "BS Information Technology (BSIT)",
@@ -54,7 +54,7 @@ export default function RegisterForm() {
       "BA International Studies (BAIS)",
       "BA Philosophy (BAPhil)",
     ],
-    Yellow: [
+    yellow: [
       "BS Accountancy (BSA)",
       "BS Accounting Information System (BSAIS)",
       "BS Internal Auditing (BSIA)",

@@ -261,7 +261,7 @@ router.delete("/:id", async (req, res) => {
 function determineColorsFromCourse(course) {
   // Course to color mapping
   const courseGroups = {
-    Blue: [
+    blue: [
       "Bachelor of Early Childhood Education",
       "Bachelor of Elementary Education",
       "Bachelor of Physical Education",
@@ -271,7 +271,7 @@ function determineColorsFromCourse(course) {
       "BPEd",
       "BSEd",
     ],
-    Maroon: [
+    maroon: [
       "BS Biomedical Engineering",
       "BS Computer Engineering",
       "BS Electronics Communication Engineering",
@@ -283,8 +283,8 @@ function determineColorsFromCourse(course) {
       "AEET",
       "ACN",
     ],
-    Orange: ["BS Nursing", "BSN"],
-    White: [
+    orange: ["BS Nursing", "BSN"],
+    white: [
       "BS Biology",
       "BS Computer Science",
       "BS Information Technology",
@@ -310,7 +310,7 @@ function determineColorsFromCourse(course) {
       "BAIS",
       "BAPhil",
     ],
-    Yellow: [
+    yellow: [
       "BS Accountancy",
       "BS Accounting Information System",
       "BS Internal Auditing",
@@ -329,18 +329,18 @@ function determineColorsFromCourse(course) {
   };
 
   if (!course) {
-    return { tassel_color: "Blue", hood_color: "Blue" }; // Default if no course specified
+    return { tassel_color: "blue", hood_color: "blue" }; // Default if no course specified
   }
 
   // Find the appropriate color for the course
   for (const [color, courses] of Object.entries(courseGroups)) {
     if (courses.some((c) => course.includes(c))) {
-      return { tassel_color: color, hood_color: color };
+      return { tassel_color: color.toLowerCase(), hood_color: color.toLowerCase() };
     }
   }
 
   // Default if no match is found
-  return { tassel_color: "Blue", hood_color: "Blue" };
+  return { tassel_color: "blue", hood_color: "blue" };
 }
 
 module.exports = router;

@@ -218,24 +218,24 @@ const UserApproved = ({ userData, name }) => {
   // Use the same logic as determineColorFromCourse from StudentHomeCard
   const determineColorFromCourse = (course) => {
     if (!course) {
-      return { tasselColor: "Blue", hoodColor: "Blue" };
+      return { tasselColor: "blue", hoodColor: "blue" };
     }
     const courseGroups = {
-      Blue: [
+      blue: [
         "Bachelor of Early Childhood Education (BECEd)",
         "Bachelor of Elementary Education (BEEd)",
         "Bachelor of Physical Education (BPEd)",
         "Bachelor of Secondary Education (BSEd)",
       ],
-      Maroon: [
+      maroon: [
         "BS Biomedical Engineering (BSBME)",
         "BS Computer Engineering (BSCE)",
         "BS Electronics Communication Engineering (BSECE)",
         "Associate in Electronics Engineering Technology (AEET)",
         "Associate in Computer Networking (ACN)",
       ],
-      Orange: ["BS Nursing (BSN)"],
-      White: [
+      orange: ["BS Nursing (BSN)"],
+      white: [
         "BS Biology (BSBio)",
         "BS Computer Science (BSCS)",
         "BS Information Technology (BSIT)",
@@ -249,7 +249,7 @@ const UserApproved = ({ userData, name }) => {
         "BA International Studies (BAIS)",
         "BA Philosophy (BAPhil)",
       ],
-      Yellow: [
+      yellow: [
         "BS Accountancy (BSA)",
         "BS Accounting Information System (BSAIS)",
         "BS Internal Auditing (BSIA)",
