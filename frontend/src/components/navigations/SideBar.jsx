@@ -6,6 +6,7 @@ import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
 import InventorySidebarButtons from "../common/InventorySidebarButtons";
 import PopupWindow from "../common/PopupWindow";
 import AddStockPopup from "../common/AddStockPopup";
+import RemoveStockPopup from "../common/RemoveStockPopup";
 
 // Add InitialsAvatar component to display user initials
 const InitialsAvatar = ({ name, className = "" }) => {
@@ -103,6 +104,7 @@ const SideBar = ({
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
   const [showAddStockPopup, setShowAddStockPopup] = useState(false);
+  const [showRemoveStockPopup, setShowRemoveStockPopup] = useState(false);
 
   useEffect(() => {
     function handleResize() {
@@ -418,12 +420,18 @@ const SideBar = ({
                 </div>
               ) : activeTab === "dashboard" ? (
                 <>
-                  <div className="w-full h-[90px] md:scale-100 flex items-center justify-center">
+                  <div className="w-full h-[90px] md:scale-100 flex flex-col items-center justify-center gap-3">
                     <button
                       className="w-4/5 h-10 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-bold text-md flex items-center justify-center transition-all duration-200 shadow-lg"
                       onClick={() => setShowAddStockPopup(true)}
                     >
                       + Add Stocks
+                    </button>
+                    <button
+                      className="w-4/5 h-10 rounded-md bg-red-600 hover:bg-red-700 text-white font-bold text-md flex items-center justify-center transition-all duration-200 shadow-lg"
+                      onClick={() => setShowRemoveStockPopup(true)}
+                    >
+                      - Remove Stocks
                     </button>
                   </div>
                 </>
@@ -704,6 +712,34 @@ const SideBar = ({
                   alert("Stock added successfully!");
                 } catch (err) {
                   alert("Error adding stock: " + err.message);
+                }
+              }}
+            />
+            <RemoveStockPopup
+              open={showRemoveStockPopup}
+              onClose={() => setShowRemoveStockPopup(false)}
+              onSubmit={async (data) => {
+                // API call to remove stock
+                try {
+                  const response = await fetch(
+                    "http://localhost:5001/items/remove",
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(data),
+                    }
+                  );
+
+                  if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Failed to remove stock");
+                  }
+
+                  const result = await response.json();
+                  console.log(result);
+                  alert("Stock removed successfully!");
+                } catch (err) {
+                  alert("Error removing stock: " + err.message);
                 }
               }}
             />
