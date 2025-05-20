@@ -97,10 +97,10 @@ const ReservationPage = () => {
             setIsZA={setIsZA}
             allCount={allData.length}
             returnedCount={
-              allData.filter((item) => item.status === "Returned").length
+              allData.filter((item) => item.return_status === "Returned").length
             }
             notReturnedCount={
-              allData.filter((item) => item.status === "Not Returned").length
+              allData.filter((item) => item.return_status === "Not Returned").length
             }
             setSortOrder={setSortOrder}
           />
