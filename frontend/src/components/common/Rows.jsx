@@ -5,6 +5,7 @@ import ChevronDown from "../../assets/icons/chevron-down.svg?react";
 import PopupWindow from "./PopupWindow";
 import HoverPopup from "./HoverPopup";
 import GridView from "./GridView";
+import AlertCard from "./AlertCard";
 
 import { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
@@ -32,6 +33,17 @@ const Rows = ({
   const [hoveredEyeId, setHoveredEyeId] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupUser, setPopupUser] = useState(false);
+
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+
+  const showAlert = (message, type = "success") => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => setAlert((a) => ({ ...a, show: false })), 3000);
+  };
 
   // Filtering/sorting logic
   useEffect(() => {
@@ -124,11 +136,11 @@ const Rows = ({
           )
         )
           .then(() => {
-            alert("Changes saved!");
+            showAlert("Changes saved!", "success"); // customized to sya showing success alert from
             setOriginalDashboard(dashboard);
           })
           .catch(() => {
-            alert("Failed to save changes.");
+            showAlert("Failed to save changes.", "error");
           });
       }
     }
@@ -193,10 +205,13 @@ const Rows = ({
         );
         setEditId(null);
         setEditData({});
-        alert("Changes saved successfully!");
+        showAlert("Changes saved successfully!", "success");
       })
       .catch((error) => {
-        alert("Failed to save changes to the database: " + error.message);
+        showAlert(
+          "Failed to save changes to the database: " + error.message,
+          "error"
+        );
       });
   };
 
@@ -230,10 +245,10 @@ const Rows = ({
           setEditId(null);
           setEditData({});
         }
-        alert("Item deleted successfully!");
+        showAlert("Item deleted successfully!", "success");
       })
       .catch((error) => {
-        alert("Failed to delete the item: " + error.message);
+        showAlert("Failed to delete the item: " + error.message, "error");
       });
   };
 
@@ -314,455 +329,481 @@ const Rows = ({
 
   if (isGrid) {
     return (
-      <GridView
-        dashboard={displayDashboard}
-        editId={editId}
-        editData={editData}
-        hoveredEyeId={hoveredEyeId}
-        popupMode={popupMode}
-        modifyTable={modifyTable}
-        tasselColorOptions={tasselColorOptions}
-        hoodColorOptions={hoodColorOptions}
-        togaSizeOptions={togaSizeOptions}
-        handleEditClick={handleEditClick}
-        handleEditChange={handleEditChange}
-        handleSave={handleSave}
-        handleCancel={handleCancel}
-        handleDelete={handleDelete}
-        setHoveredEyeId={setHoveredEyeId}
-        setPopupMode={setPopupMode}
-        setPopupUser={setPopupUser}
-        setPopupOpen={setPopupOpen}
-        hideActionButton={hideActionButton}
-      />
+      <>
+        <AlertCard
+          message={alert.message}
+          type={alert.type}
+          show={alert.show}
+          onClose={() => setAlert((a) => ({ ...a, show: false }))}
+        />
+        <GridView
+          dashboard={displayDashboard}
+          editId={editId}
+          editData={editData}
+          hoveredEyeId={hoveredEyeId}
+          popupMode={popupMode}
+          modifyTable={modifyTable}
+          tasselColorOptions={tasselColorOptions}
+          hoodColorOptions={hoodColorOptions}
+          togaSizeOptions={togaSizeOptions}
+          handleEditClick={handleEditClick}
+          handleEditChange={handleEditChange}
+          handleSave={handleSave}
+          handleCancel={handleCancel}
+          handleDelete={handleDelete}
+          setHoveredEyeId={setHoveredEyeId}
+          setPopupMode={setPopupMode}
+          setPopupUser={setPopupUser}
+          setPopupOpen={setPopupOpen}
+          hideActionButton={hideActionButton}
+        />
+      </>
     );
   } else {
     return (
-      <div
-        className="w-full max-h-screen overflow-x-auto"
-        style={{ minWidth: "600px", maxWidth: "100vw" }}
-      >
-        <div className="min-w-[300px] max-w-[120vw] overflow-visible relative bg-white">
-          <table className="w-full ">
-            <thead className="bg-[#02327B]  top-0 z-10 sticky">
-              <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-13">
-                <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Student Name
-                  </span>
-                </th>
-                <th className="w-[90px] min-w-[60px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Program
-                  </span>
-                </th>
-                <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Tassel
-                  </span>
-                </th>
-                <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Hood
-                  </span>
-                </th>
-                <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Gown
-                  </span>
-                </th>
-                <th className="w-[120px] min-w-[80px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Date of Reservation
-                  </span>
-                </th>
-                <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Status
-                  </span>
-                </th>
-                <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
-                  <span className="block text-[10px] md:text-[15px] w-full text-center ">
-                    Actions
-                  </span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="w-full">
-              {displayDashboard.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={8}
-                    className="text-center py-8 text-gray-500 font-semibold bg-white"
-                  >
-                    No data found
-                  </td>
+      <>
+        <AlertCard
+          message={alert.message}
+          type={alert.type}
+          show={alert.show}
+          onClose={() => setAlert((a) => ({ ...a, show: false }))}
+        />
+        <div
+          className="w-full max-h-screen overflow-x-auto"
+          style={{ minWidth: "600px", maxWidth: "100vw" }}
+        >
+          <div className="min-w-[300px] max-w-[120vw] overflow-visible relative bg-white">
+            <table className="w-full ">
+              <thead className="bg-[#02327B]  top-0 z-10 sticky">
+                <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-13">
+                  <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Student Name
+                    </span>
+                  </th>
+                  <th className="w-[90px] min-w-[60px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Program
+                    </span>
+                  </th>
+                  <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Tassel
+                    </span>
+                  </th>
+                  <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Hood
+                    </span>
+                  </th>
+                  <th className="w-[60px] min-w-[40px] max-w-[80px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Gown
+                    </span>
+                  </th>
+                  <th className="w-[120px] min-w-[80px] max-w-[120px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Date of Reservation
+                    </span>
+                  </th>
+                  <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Status
+                    </span>
+                  </th>
+                  <th className="w-[80px] min-w-[50px] max-w-[100px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
+                    <span className="block text-[10px] md:text-[15px] w-full text-center ">
+                      Actions
+                    </span>
+                  </th>
                 </tr>
-              ) : (
-                displayDashboard.map((row, idx) => {
-                  const rowColor = getRowColor(idx);
-                  return (
-                    <tr
-                      className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-columns`}
-                      key={row.id}
+              </thead>
+              <tbody className="w-full">
+                {displayDashboard.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={8}
+                      className="text-center py-8 text-gray-500 font-semibold bg-white"
                     >
-                      <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
-                        <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                          <h3 className="truncate">{row.studentname}</h3>
-                          <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
-                        </div>
-                      </td>
-                      <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center">
-                          <h3 className="truncate">{row.course}</h3>
-                          <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
-                        </div>
-                      </td>
-                      <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {modifyTable ? (
-                            <CustomDropdown
-                              value={row.tassel_color}
-                              options={tasselColorOptions}
-                              onChange={(val) => {
-                                setDashboard((prev) =>
-                                  prev.map((item) =>
-                                    item.inventory_id === row.inventory_id
-                                      ? { ...item, tassel_color: val }
-                                      : item
-                                  )
-                                );
-                              }}
-                              disabled={false}
-                            />
-                          ) : editId === row.inventory_id ? (
-                            <CustomDropdown
-                              value={editData.tassel_color}
-                              options={tasselColorOptions}
-                              onChange={(val) =>
-                                setEditData((prev) => ({
-                                  ...prev,
-                                  tassel_color: val,
-                                }))
-                              }
-                              disabled={false}
-                            />
-                          ) : (
-                            <h3 className="truncate">{row.tassel_color}</h3>
-                          )}
-                          <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
-                        </div>
-                      </td>
-                      <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {modifyTable ? (
-                            <CustomDropdown
-                              value={row.hood_color}
-                              options={hoodColorOptions}
-                              onChange={(val) => {
-                                setDashboard((prev) =>
-                                  prev.map((item) =>
-                                    item.inventory_id === row.inventory_id
-                                      ? { ...item, hood_color: val }
-                                      : item
-                                  )
-                                );
-                              }}
-                              disabled={false}
-                            />
-                          ) : editId === row.inventory_id ? (
-                            <CustomDropdown
-                              value={editData.hood_color}
-                              options={hoodColorOptions}
-                              onChange={(val) =>
-                                setEditData((prev) => ({
-                                  ...prev,
-                                  hood_color: val,
-                                }))
-                              }
-                              disabled={false}
-                            />
-                          ) : (
-                            <h3 className="truncate">{row.hood_color}</h3>
-                          )}
-                          <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
-                        </div>
-                      </td>
-                      <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center relative">
-                          {modifyTable ? (
-                            <CustomDropdown
-                              value={row.toga_size}
-                              options={togaSizeOptions}
-                              onChange={(val) => {
-                                setDashboard((prev) =>
-                                  prev.map((item) =>
-                                    item.inventory_id === row.inventory_id
-                                      ? { ...item, toga_size: val }
-                                      : item
-                                  )
-                                );
-                              }}
-                              disabled={false}
-                            />
-                          ) : editId === row.inventory_id ? (
-                            <CustomDropdown
-                              value={editData.toga_size}
-                              options={togaSizeOptions}
-                              onChange={(val) =>
-                                setEditData((prev) => ({
-                                  ...prev,
-                                  toga_size: val,
-                                }))
-                              }
-                              disabled={false}
-                            />
-                          ) : (
-                            <h3 className="truncate">{row.toga_size}</h3>
-                          )}
-                          <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
-                        </div>
-                      </td>
-                      <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center">
-                          <h3 className="truncate">{row.dateofreservation}</h3>
-                          <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
-                        </div>
-                      </td>
-                      <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
-                        <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                          {modifyTable ? (
-                            <CustomDropdown
-                              value={row.return_status}
-                              options={["Returned", "Not Returned"]}
-                              onChange={(val) => {
-                                setDashboard((prev) =>
-                                  prev.map((item) =>
-                                    item.inventory_id === row.inventory_id
-                                      ? { ...item, return_status: val }
-                                      : item
-                                  )
-                                );
-                              }}
-                              disabled={false}
-                            />
-                          ) : editId === row.inventory_id ? (
-                            <div className="flex flex-col items-center w-full">
+                      No data found
+                    </td>
+                  </tr>
+                ) : (
+                  displayDashboard.map((row, idx) => {
+                    const rowColor = getRowColor(idx);
+                    return (
+                      <tr
+                        className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-columns`}
+                        key={row.id}
+                      >
+                        <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
+                          <div className="h-full w-[100%] py-4 flex justify-center items-center">
+                            <h3 className="truncate">{row.studentname}</h3>
+                            <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                          </div>
+                        </td>
+                        <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center">
+                            <h3 className="truncate">{row.course}</h3>
+                            <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                          </div>
+                        </td>
+                        <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center relative">
+                            {modifyTable ? (
                               <CustomDropdown
-                                value={editData.return_status}
-                                options={["Returned", "Not Returned"]}
+                                value={row.tassel_color}
+                                options={tasselColorOptions}
+                                onChange={(val) => {
+                                  setDashboard((prev) =>
+                                    prev.map((item) =>
+                                      item.inventory_id === row.inventory_id
+                                        ? { ...item, tassel_color: val }
+                                        : item
+                                    )
+                                  );
+                                }}
+                                disabled={false}
+                              />
+                            ) : editId === row.inventory_id ? (
+                              <CustomDropdown
+                                value={editData.tassel_color}
+                                options={tasselColorOptions}
                                 onChange={(val) =>
                                   setEditData((prev) => ({
                                     ...prev,
-                                    return_status: val,
+                                    tassel_color: val,
                                   }))
                                 }
                                 disabled={false}
                               />
-                            </div>
-                          ) : row.return_status !== "Returned" ? (
-                            <button
-                              className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs"
-                              onClick={async () => {
-                                // PATCH to backend
-                                await fetch(
-                                  `http://localhost:5001/inventory/${row.inventory_id}`,
-                                  {
-                                    method: "PATCH",
-                                    headers: {
-                                      "Content-Type": "application/json",
-                                    },
-                                    body: JSON.stringify({
-                                      return_status: "Returned",
-                                    }),
-                                  }
-                                );
-                                setDashboard((prev) =>
-                                  prev.map((item) =>
-                                    item.inventory_id === row.inventory_id
-                                      ? { ...item, return_status: "Returned" }
-                                      : item
-                                  )
-                                );
-                              }}
-                            >
-                              Set Returned
-                            </button>
-                          ) : (
-                            <span>{row.return_status}</span>
-                          )}
-                        </div>
-                        <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
-                      </td>
-                      <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
-                        <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
-                          {/* Eye/Trash Icon and Edit Button logic */}
-                          {editId === row.inventory_id || modifyTable ? (
-                            <>
-                              {/* Trash replaces Eye when editing or in modifyTable mode */}
-                              <button
-                                className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
-                                onClick={() => {
-                                  if (
-                                    window.confirm(
-                                      `Are you sure you want to delete ${row.studentname}'s records?`
+                            ) : (
+                              <h3 className="truncate">{row.tassel_color}</h3>
+                            )}
+                            <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                          </div>
+                        </td>
+                        <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center relative">
+                            {modifyTable ? (
+                              <CustomDropdown
+                                value={row.hood_color}
+                                options={hoodColorOptions}
+                                onChange={(val) => {
+                                  setDashboard((prev) =>
+                                    prev.map((item) =>
+                                      item.inventory_id === row.inventory_id
+                                        ? { ...item, hood_color: val }
+                                        : item
                                     )
-                                  ) {
-                                    handleDelete(row.inventory_id);
+                                  );
+                                }}
+                                disabled={false}
+                              />
+                            ) : editId === row.inventory_id ? (
+                              <CustomDropdown
+                                value={editData.hood_color}
+                                options={hoodColorOptions}
+                                onChange={(val) =>
+                                  setEditData((prev) => ({
+                                    ...prev,
+                                    hood_color: val,
+                                  }))
+                                }
+                                disabled={false}
+                              />
+                            ) : (
+                              <h3 className="truncate">{row.hood_color}</h3>
+                            )}
+                            <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                          </div>
+                        </td>
+                        <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center relative">
+                            {modifyTable ? (
+                              <CustomDropdown
+                                value={row.toga_size}
+                                options={togaSizeOptions}
+                                onChange={(val) => {
+                                  setDashboard((prev) =>
+                                    prev.map((item) =>
+                                      item.inventory_id === row.inventory_id
+                                        ? { ...item, toga_size: val }
+                                        : item
+                                    )
+                                  );
+                                }}
+                                disabled={false}
+                              />
+                            ) : editId === row.inventory_id ? (
+                              <CustomDropdown
+                                value={editData.toga_size}
+                                options={togaSizeOptions}
+                                onChange={(val) =>
+                                  setEditData((prev) => ({
+                                    ...prev,
+                                    toga_size: val,
+                                  }))
+                                }
+                                disabled={false}
+                              />
+                            ) : (
+                              <h3 className="truncate">{row.toga_size}</h3>
+                            )}
+                            <span className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                          </div>
+                        </td>
+                        <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center">
+                            <h3 className="truncate">
+                              {row.dateofreservation}
+                            </h3>
+                            <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                          </div>
+                        </td>
+                        <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
+                          <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
+                            {modifyTable ? (
+                              <CustomDropdown
+                                value={row.return_status}
+                                options={["Returned", "Not Returned"]}
+                                onChange={(val) => {
+                                  setDashboard((prev) =>
+                                    prev.map((item) =>
+                                      item.inventory_id === row.inventory_id
+                                        ? { ...item, return_status: val }
+                                        : item
+                                    )
+                                  );
+                                }}
+                                disabled={false}
+                              />
+                            ) : editId === row.inventory_id ? (
+                              <div className="flex flex-col items-center w-full">
+                                <CustomDropdown
+                                  value={editData.return_status}
+                                  options={["Returned", "Not Returned"]}
+                                  onChange={(val) =>
+                                    setEditData((prev) => ({
+                                      ...prev,
+                                      return_status: val,
+                                    }))
                                   }
-                                }}
-                                aria-label="Delete row"
-                              >
-                                <Trash className="w-4" />
-                              </button>
-
-                              <button
-                                className="w-7 h-7 flex justify-center items-center rounded-md bg-gray-300 opacity-60 cursor-not-allowed"
-                                disabled
-                                aria-label="Edit row (disabled)"
-                              >
-                                <Table className="w-5" />
-                              </button>
-                              {/*eto ung single row edit  */}
-                              {editId === row.inventory_id && !modifyTable && (
-                                <div
-                                  className="absolute left-15 top-2/8 -translate-y-1/2 z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-1 border border-gray-200 animate-fade-in min-w-[80px] w-max"
-                                  style={{
-                                    minWidth: 0,
-                                    maxWidth: 180,
-                                    overflow: "visible",
-                                  }}
-                                >
-                                  <button
-                                    className="px-2 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1 whitespace-nowrap"
-                                    onClick={() => handleSave(row.inventory_id)}
-                                    style={{ minWidth: 0 }}
-                                  >
-                                    Save
-                                  </button>
-                                  <button
-                                    className="px-1 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs whitespace-nowrap"
-                                    onClick={handleCancel}
-                                    style={{ minWidth: 0 }}
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
-                              )}
-                            </>
-                          ) : (
-                            <>
-                              {/* basuc Eye icon */}
-                              <button
-                                className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
-                                  hoveredEyeId === row.inventory_id
-                                    ? "bg-blue-600"
-                                    : ""
-                                }`}
-                                style={{
-                                  background: modifyTable
-                                    ? "#bdbdbd"
-                                    : hoveredEyeId === row.inventory_id
-                                    ? "#2563eb"
-                                    : "#0C7E48",
-                                  cursor: modifyTable
-                                    ? "not-allowed"
-                                    : "pointer",
-                                }}
-                                disabled={modifyTable}
-                                onClick={() => {
-                                  setPopupUser(row);
-                                  setPopupOpen(true);
-                                  setPopupMode("full");
-                                }}
-                                aria-label="View details"
-                              >
-                                <EyeIcon
-                                  className={`w-5 transition-colors duration-200 ${
-                                    hoveredEyeId === row.inventory_id
-                                      ? "text-blue-200"
-                                      : "text-white"
-                                  }`}
+                                  disabled={false}
                                 />
-                              </button>
-                              {/* bsic Edit button */}
+                              </div>
+                            ) : row.return_status !== "Returned" ? (
                               <button
-                                className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"
-                                style={{
-                                  background: modifyTable
-                                    ? "#bdbdbd"
-                                    : "#0C7E48",
-                                  cursor: modifyTable
-                                    ? "not-allowed"
-                                    : "pointer",
-                                }}
-                                disabled={modifyTable}
-                                onClick={() => {
-                                  if (!modifyTable) {
-                                    setEditId(row.inventory_id);
-                                    setEditData({ ...row });
+                                className="px-3 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs"
+                                onClick={async () => {
+                                  try {
+                                    const res = await fetch(
+                                      `http://localhost:5001/inventory/${row.inventory_id}`,
+                                      {
+                                        method: "PATCH",
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                          return_status: "Returned",
+                                        }),
+                                      }
+                                    );
+                                    if (!res.ok) throw new Error("Failed to update status");
+                                    setDashboard((prev) =>
+                                      prev.map((item) =>
+                                        item.inventory_id === row.inventory_id
+                                          ? { ...item, return_status: "Returned" }
+                                          : item
+                                      )
+                                    );
+                                    showAlert("Status set to Returned!", "success");
+                                  } catch (err) {
+                                    showAlert("Failed to set status to Returned: " + err.message, "error");
                                   }
                                 }}
-                                aria-label="Edit row"
                               >
-                                <Table className="w-5" />
+                                Set Returned
                               </button>
-                            </>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-        <PopupWindow
-          open={popupOpen}
-          onClose={(updatedData) => {
-            setPopupOpen(false);
-            if (updatedData) {
-              // filter bago mag map
-              const filteredData = updatedData.filter(
-                (item) =>
-                  item.toga_size !== null && item.toga_size !== undefined
-              );
+                            ) : (
+                              <span>{row.return_status}</span>
+                            )}
+                          </div>
+                          <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
+                        </td>
+                        <td className="text-center max-w-[100px] w-[100px] align-middle sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
+                          <div className="h-full w-full py-2 flex justify-center items-center gap-2 relative">
+                            {/* Eye/Trash Icon and Edit Button logic */}
+                            {editId === row.inventory_id || modifyTable ? (
+                              <>
+                                {/* Trash replaces Eye when editing or in modifyTable mode */}
+                                <button
+                                  className="w-7 h-7 bg-[#C0392B] flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 hover:bg-red-700"
+                                  onClick={() => {
+                                    if (
+                                      window.confirm(
+                                        `Are you sure you want to delete ${row.studentname}'s records?`
+                                      )
+                                    ) {
+                                      handleDelete(row.inventory_id);
+                                    }
+                                  }}
+                                  aria-label="Delete row"
+                                >
+                                  <Trash className="w-4" />
+                                </button>
 
-              // Mappers
-              const mappedData = filteredData.map((item) => ({
-                id: item.inventory_id,
-                studentname:
-                  item.surname +
-                  ", " +
-                  item.first_name +
-                  " " +
-                  item.middle_initial,
-                course: item.course,
-                tassel_color: item.tassel_color,
-                hood_color: item.hood_color,
-                toga_size: item.toga_size,
-                dateofreservation: item.rent_date
-                  ? new Date(item.rent_date).toLocaleDateString()
-                  : "",
-                status: item.return_status,
-                payment_status: item.payment_status,
-                evaluation_status: item.evaluation_status,
-                remarks: item.remarks,
-                return_date: item.return_date,
-                is_overdue: item.is_overdue,
-                has_cap: item.has_cap,
-                item_condition: item.item_condition,
-              }));
-              setDashboard(mappedData);
-              setOriginalDashboard(mappedData);
-            }
-          }}
-          user={popupUser}
-          showBackButton={false}
-          fullScreen={true}
-        />
-      </div>
+                                <button
+                                  className="w-7 h-7 flex justify-center items-center rounded-md bg-gray-300 opacity-60 cursor-not-allowed"
+                                  disabled
+                                  aria-label="Edit row (disabled)"
+                                >
+                                  <Table className="w-5" />
+                                </button>
+                                {/*eto ung single row edit  */}
+                                {editId === row.inventory_id &&
+                                  !modifyTable && (
+                                    <div
+                                      className="absolute left-15 top-2/8 -translate-y-1/2 z-30 flex flex-col gap-1 bg-white shadow-lg rounded-lg p-1 border border-gray-200 animate-fade-in min-w-[80px] w-max"
+                                      style={{
+                                        minWidth: 0,
+                                        maxWidth: 180,
+                                        overflow: "visible",
+                                      }}
+                                    >
+                                      <button
+                                        className="px-2 py-1 bg-emerald-700 text-white rounded hover:bg-blue-800 text-xs mb-1 whitespace-nowrap"
+                                        onClick={() =>
+                                          handleSave(row.inventory_id)
+                                        }
+                                        style={{ minWidth: 0 }}
+                                      >
+                                        Save
+                                      </button>
+                                      <button
+                                        className="px-1 py-1 bg-[#919191] text-white rounded hover:bg-gray-600 text-xs whitespace-nowrap"
+                                        onClick={handleCancel}
+                                        style={{ minWidth: 0 }}
+                                      >
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  )}
+                              </>
+                            ) : (
+                              <>
+                                {/* basuc Eye icon */}
+                                <button
+                                  className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${
+                                    hoveredEyeId === row.inventory_id
+                                      ? "bg-blue-600"
+                                      : ""
+                                  }`}
+                                  style={{
+                                    background: modifyTable
+                                      ? "#bdbdbd"
+                                      : hoveredEyeId === row.inventory_id
+                                      ? "#2563eb"
+                                      : "#0C7E48",
+                                    cursor: modifyTable
+                                      ? "not-allowed"
+                                      : "pointer",
+                                  }}
+                                  disabled={modifyTable}
+                                  onClick={() => {
+                                    setPopupUser(row);
+                                    setPopupOpen(true);
+                                    setPopupMode("full");
+                                  }}
+                                  aria-label="View details"
+                                >
+                                  <EyeIcon
+                                    className={`w-5 transition-colors duration-200 ${
+                                      hoveredEyeId === row.inventory_id
+                                        ? "text-blue-200"
+                                        : "text-white"
+                                    }`}
+                                  />
+                                </button>
+                                {/* bsic Edit button */}
+                                <button
+                                  className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"
+                                  style={{
+                                    background: modifyTable
+                                      ? "#bdbdbd"
+                                      : "#0C7E48",
+                                    cursor: modifyTable
+                                      ? "not-allowed"
+                                      : "pointer",
+                                  }}
+                                  disabled={modifyTable}
+                                  onClick={() => {
+                                    if (!modifyTable) {
+                                      setEditId(row.inventory_id);
+                                      setEditData({ ...row });
+                                    }
+                                  }}
+                                  aria-label="Edit row"
+                                >
+                                  <Table className="w-5" />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+          <PopupWindow
+            open={popupOpen}
+            onClose={(updatedData) => {
+              setPopupOpen(false);
+              if (updatedData) {
+                // filter bago mag map
+                const filteredData = updatedData.filter(
+                  (item) =>
+                    item.toga_size !== null && item.toga_size !== undefined
+                );
+
+                // Mappers
+                const mappedData = filteredData.map((item) => ({
+                  id: item.inventory_id,
+                  studentname:
+                    item.surname +
+                    ", " +
+                    item.first_name +
+                    " " +
+                    item.middle_initial,
+                  course: item.course,
+                  tassel_color: item.tassel_color,
+                  hood_color: item.hood_color,
+                  toga_size: item.toga_size,
+                  dateofreservation: item.rent_date
+                    ? new Date(item.rent_date).toLocaleDateString()
+                    : "",
+                  status: item.return_status,
+                  payment_status: item.payment_status,
+                  evaluation_status: item.evaluation_status,
+                  remarks: item.remarks,
+                  return_date: item.return_date,
+                  is_overdue: item.is_overdue,
+                  has_cap: item.has_cap,
+                  item_condition: item.item_condition,
+                }));
+                setDashboard(mappedData);
+                setOriginalDashboard(mappedData);
+              }
+            }}
+            user={popupUser}
+            showBackButton={false}
+            fullScreen={true}
+          />
+        </div>
+      </>
     );
   }
 };
