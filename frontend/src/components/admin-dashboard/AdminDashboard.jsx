@@ -10,6 +10,11 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
   ArrowRight,
+  Group,
+  BarChart3, // Retained from previous
+  CheckCircle, // Added for Items Overview
+  AlertCircle, // Added for Items Overview
+  // Tools, // Alternative for "For Repair" if needed later
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import BoxIcon from "@/assets/icons/box.svg?react";
@@ -20,72 +25,169 @@ import Eval from "@/assets/icons/eval.svg?react";
 import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
-import StudentConcernsModal from "./StudentConcernsModal";
-import { set } from "date-fns";
+// import StudentConcernsModal from "./StudentConcernsModal";
 
 function AdminDashboard() {
   const navigate = useNavigate();
-  const [showConcernModal, setShowConcernModal] = useState(false);
-  const [selectedConcern, setSelectedConcern] = useState(null);
+  // const [showConcernModal, setShowConcernModal] = useState(false);
+  // const [selectedConcern, setSelectedConcern] = useState(null);
   //default is 0 since need number ang value not string
   const [totalPending, setTotalPending] = useState(0); //state for total pending
   const [totalEvaluated, setTotalEvaluated] = useState(0); //state for total evaluated
   const [totalReservation, setTotalReservation] = useState(0); //state for total reservation
+  const [totalStock, setTotalStock] = useState(0); // state for total stock
+  const [items, setItems] = useState([]); // state for items data
+  const [inventoryData, setInventoryData] = useState([]); // state to store all inventory data
+  const [latestRegistrations, setLatestRegistrations] = useState([]); // state for latest registrations
+  const [pendingApprovals, setPendingApprovals] = useState([]); // state for pending approvals
+  const [inventoryStats, setInventoryStats] = useState({
+    total: 0,
+    returned: 0,
+    notReturned: 0,
+    overdue: 0,
+    evaluated: 0,
+    notEvaluated: 0,
+    courses: {},
+  });
+  const [itemsStats, setItemsStats] = useState({
+    returnStatus: {
+      returned: 0,
+      notReturned: 0,
+    },
+    itemStatus: {
+      goodCondition: 0,
+      forRepair: 0,
+      damaged: 0,
+    },
+    itemTypes: {},
+  });
 
-    //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
-useEffect(() => {
-  fetch("http://localhost:5001/inventory")
-    .then((res) => res.json())
-    .then((data) => {
-      setTotalPending(data.filter((item) => item.status === "Pending").length); //get total number ng may status na "Pending"
-      setTotalEvaluated(data.filter((item) => item.evaluation_status === "Evaluated").length); //get total number ng may evaluation_status na "Evaluated"
-      setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
-    });
-}, []);
-  
-  // hardcoded muna to
-  const concerns = [
-    {
-      subject: "Lost Gown",
-      status: "Resolved",
-      statusColor: "bg-green-100 text-green-700",
-      student: "Donald Lee",
-      message: "I lost my gown after the event. What should I do?",
-      response: "Please visit the admin office for assistance.",
-      date: "2025-05-15",
-      time: "10:30 AM",
-    },
-    {
-      subject: "Damaged Cap",
-      status: "Pending",
-      statusColor: "bg-yellow-100 text-yellow-700",
-      student: "Magang Magang",
-      message: "My cap is broken, can I get a replacement?",
-      response: "Awaiting admin review.",
-      date: "2025-05-15",
-      time: "09:10 AM",
-    },
-    {
-      subject: "Missing Hood",
-      status: "Pending",
-      statusColor: "bg-yellow-100 text-yellow-700",
-      student: "Johnny Sins",
-      message: "I did not receive a hood with my set.",
-      response: "Awaiting admin review.",
-      date: "2025-05-14",
-      time: "03:45 PM",
-    },
-    {
-      subject: "Wrong Toga Size",
-      status: "Resolved",
-      statusColor: "bg-green-100 text-green-700",
-      student: "Gold Neger",
-      message: "I received the wrong toga size.",
-      response: "Please exchange at the admin office.",
-      date: "2025-05-13",
-      time: "01:20 PM",
-    },
-  ];
+  //get data from backend para sa mga total value ng mga stuff (items,pending,reservation)
+  useEffect(() => {
+    // Fetch inventory data
+    fetch("http://localhost:5001/inventory")
+      .then((res) => res.json())
+      .then((data) => {
+        setInventoryData(data); // Store all inventory data
+        setTotalPending(
+          data.filter((item) => item.status === "Pending").length
+        ); //get total number ng may status na "Pending"
+        setTotalEvaluated(
+          data.filter((item) => item.evaluation_status === "Evaluated").length
+        ); //get total number ng may evaluation_status na "Evaluated"
+        setTotalReservation(data.filter((item) => item.rent_date).length); // get total number ng may rent_date na not null/undefined/or empty string
+
+        // Get latest 4 registrations based on rent_date
+        const sortedRegistrations = [...data]
+          .filter((item) => item.rent_date) // Only items with a rent_date
+          .sort((a, b) => new Date(b.rent_date) - new Date(a.rent_date)) // Sort by date (newest first)
+          .slice(0, 4); // Get only the first 4
+
+        setLatestRegistrations(sortedRegistrations);
+
+        // Get pending approvals sorted alphabetically by first_name
+        const pendingItems = data
+          .filter((item) => item.status === "Pending")
+          .sort((a, b) => {
+            // Sort alphabetically by first name
+            if (a.first_name && b.first_name) {
+              return a.first_name.localeCompare(b.first_name);
+            }
+            return 0;
+          })
+          .slice(0, 3); // Get only the first 2
+
+        setPendingApprovals(pendingItems);
+
+        // Calculate inventory statistics
+        const activeInventory = data.filter((item) => item.inventory_id !== null);
+        const returnedCount = data.filter(
+          (item) => item.return_status === "Returned"
+        ).length;
+        const notReturnedCount = data.filter(
+          (item) => item.return_status === "Not Returned"
+        ).length;
+        const overdueCount = data.filter((item) => item.is_overdue === 1).length;
+        const evaluatedCount = data.filter(
+          (item) => item.evaluation_status === "Evaluated"
+        ).length;
+        const notEvaluatedCount = data.filter(
+          (item) => item.evaluation_status === "Not Evaluated"
+        ).length;
+
+        // Count by courses
+        const courseStats = data.reduce((acc, item) => {
+          if (item.course) {
+            acc[item.course] = (acc[item.course] || 0) + 1;
+          }
+          return acc;
+        }, {});
+
+        setInventoryStats({
+          total: activeInventory.length,
+          returned: returnedCount,
+          notReturned: notReturnedCount,
+          overdue: overdueCount,
+          evaluated: evaluatedCount,
+          notEvaluated: notEvaluatedCount,
+          courses: courseStats,
+        });
+      });
+
+    // Fetch items data
+    fetch("http://localhost:5001/items")
+      .then((res) => res.json())
+      .then((data) => {
+        setItems(data);
+        // Calculate total stock by summing up the quantities of all items
+        const totalQty = data.reduce((total, item) => total + item.quantity, 0);
+        setTotalStock(totalQty);
+
+        // Calculate item statistics
+        const returnStats = { returned: 0, notReturned: 0 };
+        const statusStats = { goodCondition: 0, forRepair: 0, damaged: 0 };
+        const itemTypeStats = {}; // Calculation for itemTypeStats can remain if needed elsewhere
+        data.forEach(item => {
+          if (item.return_status === "Returned") returnStats.returned += item.quantity;
+          else if (item.return_status === "Not Returned") returnStats.notReturned += item.quantity;
+
+          if (item.item_status === "In Good Condition") statusStats.goodCondition += item.quantity;
+          else if (item.item_status === "For Repair") statusStats.forRepair += item.quantity;
+          else if (item.item_status === "Damaged") statusStats.damaged += item.quantity;
+
+          // Item type stats calculation (can be kept for other uses)
+          const typeKey = item.item_type;
+          if (!itemTypeStats[typeKey]) {
+            itemTypeStats[typeKey] = {
+              total: 0, returned: 0, notReturned: 0,
+              goodCondition: 0, forRepair: 0, damaged: 0,
+            };
+          }
+          itemTypeStats[typeKey].total += item.quantity;
+          if (item.return_status === "Returned") itemTypeStats[typeKey].returned += item.quantity;
+          else if (item.return_status === "Not Returned") itemTypeStats[typeKey].notReturned += item.quantity;
+          if (item.item_status === "In Good Condition") itemTypeStats[typeKey].goodCondition += item.quantity;
+          else if (item.item_status === "For Repair") itemTypeStats[typeKey].forRepair += item.quantity;
+          else if (item.item_status === "Damaged") itemTypeStats[typeKey].damaged += item.quantity;
+        });
+        setItemsStats({
+          returnStatus: returnStats,
+          itemStatus: statusStats,
+          itemTypes: itemTypeStats,
+        });
+      });
+  }, []);
+
+  // Group items by type for chart display
+  /*const itemsByType = items.reduce((acc, item) => {
+    if (!acc[item.item_type]) {
+      acc[item.item_type] = 0;
+    }
+    acc[item.item_type] += item.quantity;
+    return acc;
+  }, {});
+  */
+
   return (
     <div className="flex flex-col overflow-auto gap-4 py-2 md:gap-4 md:pb-10 h-full w-full min-h-0 mb-8">
       <div className="md:h-4 hidden items-start md:flex">
@@ -107,8 +209,7 @@ useEffect(() => {
                 <BoxIcon className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center  mt-8 ml-4">
-                <Upstats className="w-4" />
-                <p className="text-[#0DDF65] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -118,7 +219,7 @@ useEffect(() => {
                 </p>
               </div>
               <div className="h-20   text-5xl sm:text-6xl md:text-3xl font-black  text-[#102F5E] w-full">
-                12
+                {totalStock}
               </div>
               <div className="flex justify-end items-end pr-4 md:pb-6 pb-3 h-10 sm:h-30 md:h-0">
                 <button
@@ -147,8 +248,7 @@ useEffect(() => {
                 <List className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Upstats className="w-4" />
-                <p className="text-[#0DDF65] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -187,8 +287,7 @@ useEffect(() => {
                 <Time className="sm:w-20 sm:h-20 w-12 h-12 md:w-6 md:h-6 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Downstats className="w-4" />
-                <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -227,8 +326,7 @@ useEffect(() => {
                 <Eval className="sm:w-24 sm:h-24 w-12 h-12 md:w-7 md:h-7 cursor-pointer text-blue-700" />
               </button>
               <span className="text-lg flex text-center items-center mt-8 ml-4">
-                <Downstats className="w-4" />
-                <p className="text-[#FF5757] font-semibold text-xs ml-1">4%</p>
+
               </span>
             </div>
             <div className="h-full w-full">
@@ -257,12 +355,10 @@ useEffect(() => {
 
       {/* 2nd row: 2 columns  */}
       <div className="grid grid-cols-1 md:grid-cols-[1.3fr_1fr] gap-4 px-4 lg:px-6">
-        <div className="bg-white rounded-xl shadow-lg px-4 py-8 flex items-center justify-center min-h-[220px] transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl  outline-none">
-          <span className="text-black font-semibold text-lg">
-            Graph to becontinued hahahahahhahahaha
-          </span>
+        <div className="bg-white rounded-xl shadow-lg rlative  flex items-center justify-center   max-h-[350px]  transition-all duration-700 ease-in-out hover:scale-102 hover:shadow-2xl focus:scale-102 focus:shadow-2xl  outline-none">
+          <GroupBarChart />
         </div>
-        <div className="bg-white relative rounded-xl flex flex-col min-h-[220px] max-h-[260px] outline-none">
+        <div className="bg-white relative rounded-xl flex flex-col min-h-[350px] shadow-lg max-h-[380px] outline-none">
           <p className="text-lg  font-extrabold !font-manjari  pl-5 pt-5 h-10 flex items-center text-start">
             Overview of Items
           </p>
@@ -281,92 +377,69 @@ useEffect(() => {
             </h3>
             <button
               className="text-xs text-blue-600 font-semibold hover:underline focus:underline transition"
-              onClick={() => alert("Show all new users")}
+              onClick={() => navigate("/reservation")}
             >
               View All
             </button>
           </div>
           <ul className="flex flex-col gap-3">
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Donald+Lee"
-                alt="Donald Lee"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Donald Lee
-                </span>
-                <span className="text-xs text-gray-400 truncate">
-                  2 min ago
-                </span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Biology (BSBio)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Magang+Magang"
-                alt="Magang Magang"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Magang Magang
-                </span>
-                <span className="text-xs text-gray-400 truncate">
-                  10 min ago
-                </span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Computer Science (BSCS)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
-            <li className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Gold+Neger"
-                alt="Gold Neger"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Gold Neger
-                </span>
-                <span className="text-xs text-gray-400 truncate">1 hr ago</span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Accountancy (BSA)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
-            <li className="flex items-center gap-3 hover:bg-blue-50 rounded-lg transition">
-              <img
-                src="https://ui-avatars.com/api/?name=Johnny+Sins"
-                alt="Johnny Sins"
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
-              />
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="font-semibold text-gray-800 truncate">
-                  Johnny Sins
-                </span>
-                <span className="text-xs text-gray-400 truncate">2 hr ago</span>
-                <span className="text-xs text-blue-700 font-medium truncate">
-                  BS Education (BSEd)
-                </span>
-              </div>
-              <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                New
-              </span>
-            </li>
+            {latestRegistrations.length > 0 ? (
+              latestRegistrations.map((user, index) => {
+                // Calculate time difference
+                const rentDate = new Date(user.rent_date);
+                const now = new Date();
+                const diffTime = Math.abs(now - rentDate);
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor(
+                  (diffTime / (1000 * 60 * 60)) % 24
+                );
+                const diffMinutes = Math.floor((diffTime / (1000 * 60)) % 60);
+
+                let timeAgo;
+                if (diffDays > 0) {
+                  timeAgo = `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+                } else if (diffHours > 0) {
+                  timeAgo = `${diffHours} hr${diffHours > 1 ? "s" : ""} ago`;
+                } else {
+                  timeAgo = `${diffMinutes} min${diffMinutes > 1 ? "s" : ""
+                    } ago`;
+                }
+
+                // Create full name for avatar
+                const fullName = `${user.first_name} ${user.surname}`;
+
+                return (
+                  <li
+                    key={index}
+                    className="flex items-center gap-3 border-b pb-2 last:border-b-0 hover:bg-blue-50 rounded-lg transition"
+                  >
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${user.first_name}+${user.surname}`}
+                      alt={fullName}
+                      className="w-10 h-10 rounded-full bg-gray-200 border-2 border-blue-200 shadow"
+                    />
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <span className="font-semibold text-gray-800 truncate">
+                        {fullName}
+                      </span>
+                      <span className="text-xs text-gray-400 truncate">
+                        {timeAgo}
+                      </span>
+                      <span className="text-xs text-blue-700 font-medium truncate">
+                        {user.course}
+                      </span>
+                    </div>
+                    <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                      New
+                    </span>
+                  </li>
+                );
+              })
+            ) : (
+              <li className="text-center py-4 text-gray-500">
+                No recent registrations found
+              </li>
+            )}
           </ul>
         </div>
 
@@ -388,131 +461,121 @@ useEffect(() => {
           </h3>
           <ul className="flex flex-col gap-3">
             {/*Newly registered students  dito */}
-            <li className="flex flex-col gap-1 border-b pb-2 last:border-b-0">
-              <div className="flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                <span className="font-semibold text-gray-800">
-                  Labazmo T. Timo
-                </span>
-                <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                  New
-                </span>
-              </div>
-              <div className="text-xs text-gray-500 ml-4">ID: 203111</div>
-              <div className="text-xs text-gray-500 ml-4">
-                Course: BS Biology (BSBio)
-              </div>
-              <div className="flex gap-2 ml-4 mt-1">
-                <button
-                  className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 focus:bg-blue-200 transition"
-                  onClick={() =>
-                    alert("Show registration form for Steven Universe")
-                  }
+            {pendingApprovals.length > 0 ? (
+              pendingApprovals.map((item, index) => (
+                <li
+                  key={index}
+                  className="flex flex-col gap-1 border-b pb-2 last:border-b-0"
                 >
-                  View Form
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-green-100 text-green-700 font-semibold hover:bg-green-200 focus:bg-green-200 transition">
-                  Accept
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 focus:bg-red-200 transition">
-                  Deny
-                </button>
-              </div>
-            </li>
-            <li className="flex flex-col gap-1 border-b pb-2 last:border-b-0">
-              <div className="flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                <span className="font-semibold text-gray-800">Pablo Jab</span>
-                <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                  New
-                </span>
-              </div>
-              <div className="text-xs text-gray-500 ml-4">ID: 333222</div>
-              <div className="text-xs text-gray-500 ml-4">
-                Course: Bachelor of Elementary Education (BEEd)
-              </div>
-              <div className="flex gap-2 ml-4 mt-1">
-                <button
-                  className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 focus:bg-blue-200 transition"
-                  onClick={() => alert("Show registration form for Pablo Jab")}
-                >
-                  View Form
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-green-100 text-green-700 font-semibold hover:bg-green-200 focus:bg-green-200 transition">
-                  Accept
-                </button>
-                <button className="px-2 py-1 text-xs rounded bg-red-100 text-red-700 font-semibold hover:bg-red-200 focus:bg-red-200 transition">
-                  Deny
-                </button>
-              </div>
-            </li>
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+                    <span className="font-semibold text-gray-800">
+                      {item.first_name} {item.surname}
+                    </span>
+                    <span className="ml-auto px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                      New
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-500 ml-4">
+                    ID: {item.id_number}
+                  </div>
+                  <div className="text-xs text-gray-500 ml-4">
+                    Course: {item.course}
+                  </div>
+                  <div className="flex gap-2 ml-4 mt-1">
+
+                  </div>
+                </li>
+              ))
+            ) : (
+              <li className="text-center py-4 text-gray-500">
+                No approval requests found
+              </li>
+            )}
           </ul>
         </div>
-        {/* 3rd col: Student Concerns Results */}
+        {/* 3rd col: Items Overview (Replaces Inventory Overview) */}
         <div className="bg-white w-full md:w-[32%] flex flex-col rounded-xl shadow-lg p-4 min-h-[350px] flex-1">
           <h3 className="text-lg font-bold text-gray-700 mb-2 flex items-center justify-between">
-            Student Concerns
+            Items Overview
             <button
               className="md:text-xs text-2xl text-blue-600 hover:underline focus:underline font-semibold ml-2 cursor-pointer"
-              onClick={() => {
-                setSelectedConcern(null);
-                setShowConcernModal(true);
-              }}
-              aria-label="View More Student Concerns"
+              onClick={() => navigate("/inventory")} // Or a more specific items page if available
+              aria-label="View Full Items Report"
             >
-              View More
+              <ArrowRight className="w-5 h-5 inline-block" />
             </button>
           </h3>
-          <ul className="flex flex-col gap-3">
-            {concerns.slice(0, 2).map((concern, idx) => (
-              <li
-                key={idx}
-                className="flex flex-col gap-1 border-b pb-2 last:border-b-0"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                  <span className="font-semibold text-gray-800">
-                    {concern.subject}
-                  </span>
-                  <span
-                    className={`ml-auto px-2 py-0.5 rounded-full text-xs font-semibold ${concern.statusColor}`}
-                  >
-                    {concern.status}
-                  </span>
+          <div className="flex flex-col gap-4 h-full">
+            {/* Item statistics cards */}
+            <div className="grid grid-cols-2 gap-3 flex-1">
+              <div className="bg-green-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Returned Items</p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.returnStatus.returned}
+                  </p>
                 </div>
-                <div className="flex items-center text-xs text-gray-400 ml-4 gap-2">
-                  <span>{concern.date}</span>
-                  <span>{concern.time}</span>
+                <TrendingUpIcon className="w-8 h-8 text-green-600" />
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Not Returned Items</p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.returnStatus.notReturned}
+                  </p>
                 </div>
-                <div className="text-xs text-gray-500 ml-4">
-                  Student: {concern.student}
+                <TrendingDownIcon className="w-8 h-8 text-red-600" />
+              </div>
+              <div className="bg-blue-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Good Condition</p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.itemStatus.goodCondition}
+                  </p>
                 </div>
-                <div className="text-xs text-gray-600 ml-4">
-                  "{concern.message}"
+                <CheckCircle className="w-8 h-8 text-blue-600" />
+              </div>
+              <div className="bg-yellow-50 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-500">Items for Repair </p>
+                  <p className="text-lg font-bold text-[#102F5E]">
+                    {itemsStats.itemStatus.forRepair + itemsStats.itemStatus.damaged}
+                  </p>
                 </div>
-                <div className="text-xs text-gray-400 ml-4">
-                  Response: {concern.response}
-                </div>
-                <button
-                  className="self-end mt-1  md:text-xs  text-lg  sm:text-xl text-blue-600 hover:underline focus:underline font-semibold cursor-pointer"
-                  onClick={() => {
-                    setSelectedConcern(concern);
-                    setShowConcernModal(true);
-                  }}
-                  aria-label={`View full concern for ${concern.student}`}
-                >
-                  View
-                </button>
-              </li>
-            ))}
-          </ul>
-          {/* Floating modal para sa concerns stuffs from uyserr  new file */}
-          {showConcernModal && (
-            <StudentConcernsModal
-              concerns={selectedConcern ? [selectedConcern] : concerns}
-              onClose={() => setShowConcernModal(false)}
-            />
-          )}
+                <AlertCircle className="w-8 h-8 text-yellow-600" />
+              </div>
+            </div>
+            {/* Chart for item status */}
+            <div className="flex-1">
+              <RadialChart
+                data={[
+                  {
+                    label: "Good",
+                    value: itemsStats.itemStatus.goodCondition,
+                    color: "#4CAF50", // Green
+                  },
+                  {
+                    label: "Repair",
+                    value: itemsStats.itemStatus.forRepair,
+                    color: "#FFC107", // Amber
+                  },
+                  {
+                    label: "Damaged",
+                    value: itemsStats.itemStatus.damaged,
+                    color: "#F44336", // Red
+                  },
+                ]}
+                totalValue={
+                  itemsStats.itemStatus.goodCondition +
+                  itemsStats.itemStatus.forRepair +
+                  itemsStats.itemStatus.damaged
+                }
+                labelColor="#fff" // Adjust as needed for visibility
+                className="mx-auto"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

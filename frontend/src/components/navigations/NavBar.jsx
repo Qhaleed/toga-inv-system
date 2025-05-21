@@ -84,7 +84,7 @@ const Navbar = ({
     if ((e && e.key === "Enter") || e === "iconClick") {
       try {
         setLoading(true);
-        let query = `http://localhost:5001/inventory?search=${encodeURIComponent(
+        let query = `http://localhost:5001/search?search=${encodeURIComponent(
           searchValue
         )}`;
         if (sortOption) {
@@ -219,7 +219,7 @@ const Navbar = ({
               >
                 <svg
                   width="10"
-                  height="10-"
+                  height="10"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="#ef4444"

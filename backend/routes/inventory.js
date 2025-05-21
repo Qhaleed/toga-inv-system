@@ -36,7 +36,7 @@ router.get('/', async (req, res) => {
 // Add PATCH endpoint to update inventory items
 router.patch("/:id", async (req, res) => {
   const { id } = req.params;
-  const { tassel_color, hood_color, toga_size, return_status, has_cap } = req.body;
+  const { tassel_color, hood_color, toga_size, return_status, has_cap, status } = req.body;
 
   try {
     // Build dynamic query based on provided fields
@@ -68,22 +68,25 @@ router.patch("/:id", async (req, res) => {
       queryParams.push(has_cap);
     }
 
-    // If no fields to update, return error
-    if (updateFields.length === 0) {
-      return res.status(400).json({ error: "No fields to update" });
+    // If status is provided, update it directly using the new function
+    if (status !== undefined) {
+      await db.updateInventoryStatus(id, status);
     }
 
-    // Add the ID parameter to queryParams array
-    queryParams.push(id);
+    // If there are other fields to update besides status
+    if (updateFields.length > 0) {
+      // Add the ID parameter to queryParams array
+      queryParams.push(id);
 
-    const query = `UPDATE inventory SET ${updateFields.join(", ")} WHERE inventory_id = ?`;
+      const query = `UPDATE inventory SET ${updateFields.join(", ")} WHERE inventory_id = ?`;
 
-    console.log("Executing query:", query, "with params:", queryParams);
+      console.log("Executing query:", query, "with params:", queryParams);
 
-    const [result] = await db.pool.query(query, queryParams);
+      const [result] = await db.pool.query(query, queryParams);
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Inventory item not found" });
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Inventory item not found" });
+      }
     }
 
     // Fetch the updated record with all the joined information
@@ -202,6 +205,41 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error("Error submitting toga details:", error);
     res.status(500).json({ error: "Failed to submit toga details: " + error.message });
+  }
+});
+
+// Add DELETE endpoint to remove inventory items
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // First check if the inventory item exists
+    const [existingItem] = await db.pool.query(
+      "SELECT * FROM inventory WHERE inventory_id = ?",
+      [id]
+    );
+
+    if (existingItem.length === 0) {
+      return res.status(404).json({ error: "Inventory item not found" });
+    }
+
+    // If item exists, delete it
+    const [result] = await db.pool.query(
+      "DELETE FROM inventory WHERE inventory_id = ?",
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Inventory item not found" });
+    }
+
+    res.json({
+      message: "Inventory item deleted successfully",
+      deletedId: id
+    });
+  } catch (error) {
+    console.error("Error deleting inventory item:", error);
+    res.status(500).json({ error: "Failed to delete inventory item: " + error.message });
   }
 });
 

@@ -7,158 +7,82 @@ import {
   CartesianGrid,
   XAxis,
   ResponsiveContainer,
+  Legend,
+  Tooltip,
 } from "recharts";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
-
-export const description = "An interactive bar chart";
-
-// Type hint for reference only (not used in code):
-// ChartDataPoint = { date: string, desktop: number, mobile: number }
-
-const chartData = [
-  { date: "2024-04-01", desktop: 222, mobile: 150 },
-  { date: "2024-04-02", desktop: 97, mobile: 180 },
-  { date: "2024-04-03", desktop: 167, mobile: 120 },
-  { date: "2024-04-04", desktop: 242, mobile: 260 },
-  { date: "2024-04-05", desktop: 373, mobile: 290 },
-  { date: "2024-04-06", desktop: 301, mobile: 340 },
-  { date: "2024-04-07", desktop: 245, mobile: 180 },
-  { date: "2024-04-08", desktop: 409, mobile: 320 },
-  { date: "2024-04-09", desktop: 59, mobile: 110 },
-  { date: "2024-04-10", desktop: 261, mobile: 190 },
-  { date: "2024-04-11", desktop: 327, mobile: 350 },
-  { date: "2024-04-12", desktop: 292, mobile: 210 },
-  { date: "2024-04-13", desktop: 342, mobile: 380 },
-  { date: "2024-04-14", desktop: 137, mobile: 220 },
-  { date: "2024-04-15", desktop: 120, mobile: 170 },
-  { date: "2024-04-16", desktop: 138, mobile: 190 },
-  { date: "2024-04-17", desktop: 446, mobile: 360 },
-  { date: "2024-04-18", desktop: 364, mobile: 410 },
-  { date: "2024-04-19", desktop: 243, mobile: 180 },
-  { date: "2024-04-20", desktop: 89, mobile: 150 },
-  { date: "2024-04-21", desktop: 137, mobile: 200 },
-  { date: "2024-04-22", desktop: 224, mobile: 170 },
-  { date: "2024-04-23", desktop: 138, mobile: 230 },
-  { date: "2024-04-24", desktop: 387, mobile: 290 },
-  { date: "2024-04-25", desktop: 215, mobile: 250 },
-  { date: "2024-04-26", desktop: 75, mobile: 130 },
-  { date: "2024-04-27", desktop: 383, mobile: 420 },
-  { date: "2024-04-28", desktop: 122, mobile: 180 },
-  { date: "2024-04-29", desktop: 315, mobile: 240 },
-  { date: "2024-04-30", desktop: 454, mobile: 380 },
-  { date: "2024-05-01", desktop: 165, mobile: 220 },
-  { date: "2024-05-02", desktop: 293, mobile: 310 },
-  { date: "2024-05-03", desktop: 247, mobile: 190 },
-  { date: "2024-05-04", desktop: 385, mobile: 420 },
-  { date: "2024-05-05", desktop: 481, mobile: 390 },
-  { date: "2024-05-06", desktop: 498, mobile: 520 },
-  { date: "2024-05-07", desktop: 388, mobile: 300 },
-  { date: "2024-05-08", desktop: 149, mobile: 210 },
-  { date: "2024-05-09", desktop: 227, mobile: 180 },
-  { date: "2024-05-10", desktop: 293, mobile: 330 },
-  { date: "2024-05-11", desktop: 335, mobile: 270 },
-  { date: "2024-05-12", desktop: 197, mobile: 240 },
-  { date: "2024-05-13", desktop: 197, mobile: 160 },
-  { date: "2024-05-14", desktop: 448, mobile: 490 },
-  { date: "2024-05-15", desktop: 473, mobile: 380 },
-  { date: "2024-05-16", desktop: 338, mobile: 400 },
-  { date: "2024-05-17", desktop: 499, mobile: 420 },
-  { date: "2024-05-18", desktop: 315, mobile: 350 },
-  { date: "2024-05-19", desktop: 235, mobile: 180 },
-  { date: "2024-05-20", desktop: 177, mobile: 230 },
-  { date: "2024-05-21", desktop: 82, mobile: 140 },
-  { date: "2024-05-22", desktop: 81, mobile: 120 },
-  { date: "2024-05-23", desktop: 252, mobile: 290 },
-  { date: "2024-05-24", desktop: 294, mobile: 220 },
-  { date: "2024-05-25", desktop: 201, mobile: 250 },
-  { date: "2024-05-26", desktop: 213, mobile: 170 },
-  { date: "2024-05-27", desktop: 420, mobile: 460 },
-  { date: "2024-05-28", desktop: 233, mobile: 190 },
-  { date: "2024-05-29", desktop: 78, mobile: 130 },
-  { date: "2024-05-30", desktop: 340, mobile: 280 },
-  { date: "2024-05-31", desktop: 178, mobile: 230 },
-  { date: "2024-06-01", desktop: 178, mobile: 200 },
-  { date: "2024-06-02", desktop: 470, mobile: 410 },
-  { date: "2024-06-03", desktop: 103, mobile: 160 },
-  { date: "2024-06-04", desktop: 439, mobile: 380 },
-  { date: "2024-06-05", desktop: 88, mobile: 140 },
-  { date: "2024-06-06", desktop: 294, mobile: 250 },
-  { date: "2024-06-07", desktop: 323, mobile: 370 },
-  { date: "2024-06-08", desktop: 385, mobile: 320 },
-  { date: "2024-06-09", desktop: 438, mobile: 480 },
-  { date: "2024-06-10", desktop: 155, mobile: 200 },
-  { date: "2024-06-11", desktop: 92, mobile: 150 },
-  { date: "2024-06-12", desktop: 492, mobile: 420 },
-  { date: "2024-06-13", desktop: 81, mobile: 130 },
-  { date: "2024-06-14", desktop: 426, mobile: 380 },
-  { date: "2024-06-15", desktop: 307, mobile: 350 },
-  { date: "2024-06-16", desktop: 371, mobile: 310 },
-  { date: "2024-06-17", desktop: 475, mobile: 520 },
-  { date: "2024-06-18", desktop: 107, mobile: 170 },
-  { date: "2024-06-19", desktop: 341, mobile: 290 },
-  { date: "2024-06-20", desktop: 408, mobile: 450 },
-  { date: "2024-06-21", desktop: 169, mobile: 210 },
-  { date: "2024-06-22", desktop: 317, mobile: 270 },
-  { date: "2024-06-23", desktop: 480, mobile: 530 },
-  { date: "2024-06-24", desktop: 132, mobile: 180 },
-  { date: "2024-06-25", desktop: 141, mobile: 190 },
-  { date: "2024-06-26", desktop: 434, mobile: 380 },
-  { date: "2024-06-27", desktop: 448, mobile: 490 },
-  { date: "2024-06-28", desktop: 149, mobile: 200 },
-  { date: "2024-06-29", desktop: 103, mobile: 160 },
-  { date: "2024-06-30", desktop: 446, mobile: 400 },
-];
 
 const chartConfig = {
   views: {
-    label: "Page Views",
+    label: "Daily Activity",
   },
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  rentals: {
+    label: "Rentals",
+    color: "#fffff", // Deeper blue
   },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
+  returns: {
+    label: "Returns",
+    color: "#fffff", // Light blue
   },
+  total: {
+    label: "Total Activity",
+    color: "#fffff", // Medium blue
+  }
 };
 
+// Custom tooltip component
 function CustomBarTooltip({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null;
-  // Find the bar for the current active chart (desktop or mobile)
-  const bar = payload[0];
-  const value = bar.value;
-  const key = bar.dataKey;
-  // Format the date label
+
   const date = new Date(label);
   const dateStr = date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
+
+  // Find the rentals and returns values from the original data
+  const rentals = payload[0]?.payload?.rentals || 0;
+  const returns = payload[0]?.payload?.returns || 0;
+  const total = rentals + returns;
+
   return (
-    <div className="bg-white px-3 py-2 text-xs min-w-[8rem]">
-      <div className="font-bold mb-1 text-gray-800">{dateStr}</div>
-      <div className="flex items-center gap-2">
+    <div className="bg-white px-3 py-2 text-xs min-w-[8rem] rounded-lg shadow-md">
+      <div className="font-bold mb-2 text-gray-800 border-b pb-1">{dateStr}</div>
+      <div className="flex items-center gap-2 py-1">
         <span
-          className="inline-block w-2 h-2 rounded-full"
-          style={{ background: chartConfig[key]?.color || "#888" }}
+          className="inline-block w-3 h-3 rounded-full"
+          style={{ background: chartConfig.total.color }}
         ></span>
         <span className="font-semibold text-base text-gray-900">
-          {chartConfig[key]?.label || key}: {value?.toLocaleString()}
-          <span className="text-xs font-normal"> views</span>
+          Total: {total}
+        </span>
+      </div>
+      <div className="flex items-center gap-2 py-1">
+        <span
+          className="inline-block w-3 h-3 rounded-full"
+          style={{ background: chartConfig.rentals.color }}
+        ></span>
+        <span className="text-sm text-gray-700">
+          Rentals: {rentals}
+        </span>
+      </div>
+      <div className="flex items-center gap-2 py-1">
+        <span
+          className="inline-block w-3 h-3 rounded-full"
+          style={{ background: chartConfig.returns.color }}
+        ></span>
+        <span className="text-sm text-gray-700">
+          Returns: {returns}
         </span>
       </div>
     </div>
@@ -166,46 +90,153 @@ function CustomBarTooltip({ active, payload, label }) {
 }
 
 export function GroupBarChart() {
-  const [activeChart, setActiveChart] = React.useState("desktop");
+  const [chartData, setChartData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
-  const total = React.useMemo(
+  React.useEffect(() => {
+    const fetchRentalData = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/inventory");
+        const data = await response.json();
+
+        // Group rentals and returns by date
+        const dateMap = data.reduce((acc, item) => {
+          // Handle rental date
+          if (item.rent_date) {
+            const rentDate = new Date(item.rent_date)
+              .toISOString()
+              .split("T")[0];
+            if (!acc[rentDate]) {
+              acc[rentDate] = { rentals: 0, returns: 0 };
+            }
+            acc[rentDate].rentals += 1;
+          }
+
+          // Handle return date - check if item is returned
+          if (item.return_status === "Returned" && item.updated_at) {
+            const returnDate = new Date(item.updated_at)
+              .toISOString()
+              .split("T")[0];
+            if (!acc[returnDate]) {
+              acc[returnDate] = { rentals: 0, returns: 0 };
+            }
+            acc[returnDate].returns += 1;
+          }
+          return acc;
+        }, {});
+
+        // Get min and max dates
+        const dates = Object.keys(dateMap);
+        if (dates.length === 0) {
+          setChartData([]);
+          setLoading(false);
+          return;
+        }
+
+        const minDate = new Date(
+          Math.min(...dates.map((date) => new Date(date)))
+        );
+        const maxDate = new Date(
+          Math.max(...dates.map((date) => new Date(date)))
+        );
+
+        // Fill in missing dates with 0 rentals and returns
+        const allDates = [];
+        const currentDate = new Date(minDate);
+
+        while (currentDate <= maxDate) {
+          const dateString = currentDate.toISOString().split("T")[0];
+          const rentals = dateMap[dateString]?.rentals || 0;
+          const returns = dateMap[dateString]?.returns || 0;
+
+          allDates.push({
+            date: dateString,
+            rentals: rentals,
+            returns: returns,
+            total: rentals + returns
+          });
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        // Sort by date
+        allDates.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        setChartData(allDates);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching rental data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchRentalData();
+  }, []);
+
+  const totals = React.useMemo(
     () => ({
-      desktop: chartData.reduce((acc, curr) => acc + curr.desktop, 0),
-      mobile: chartData.reduce((acc, curr) => acc + curr.mobile, 0),
+      rentals: chartData.reduce((acc, curr) => acc + curr.rentals, 0),
+      returns: chartData.reduce((acc, curr) => acc + curr.returns, 0),
+      total: chartData.reduce((acc, curr) => acc + curr.total, 0)
     }),
-    []
+    [chartData]
   );
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        Loading rental data...
+      </div>
+    );
+  }
+
   return (
-    <Card className="flex overflow-hidden  flex-col w-full h-full">
-      <CardHeader className="flex flex-col w-full p-0 ">
-        <div className="flex w-full">
-          {["desktop", "mobile"].map((key) => {
-            const chart = key;
-            return (
-              <button
-                key={chart}
-                data-active={activeChart === chart}
-                className="relative z-30 flex flex-1 flex-col justify-center gap-1 border-t text-left even:border-l sm:border-l sm:border-t-0 sm:px-4 sm:py-2"
-                onClick={() => setActiveChart(chart)}
-              >
-                <span className="text-xs text-muted-foreground">
-                  {chartConfig[chart].label}
-                </span>
-                <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total[key].toLocaleString()}
-                </span>
-              </button>
-            );
-          })}
+    <div className="flex overflow-hidden flex-col w-full h-full">
+      <CardHeader className="flex flex-col w-full p-10">
+        <div className="flex w-full justify-around">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-2 mb-2">
+              <span
+                className="inline-block w-4 h-4 rounded-full"
+                style={{ backgroundColor: chartConfig.total.color }}
+              />
+              <span className="text-sm text-muted-foreground">Total Activity</span>
+            </div>
+            <span className="text-xl font-bold leading-none">
+              {totals.total.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-2 mb-2">
+              <span
+                className="inline-block w-4 h-4 rounded-full"
+                style={{ backgroundColor: chartConfig.rentals.color }}
+              />
+              <span className="text-sm text-muted-foreground">Rentals</span>
+            </div>
+            <span className="text-xl font-bold leading-none">
+              {totals.rentals.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-2 mb-2">
+              <span
+                className="inline-block w-4 h-4 rounded-full"
+                style={{ backgroundColor: chartConfig.returns.color }}
+              />
+              <span className="text-sm text-muted-foreground">Returns</span>
+            </div>
+            <span className="text-xl font-bold leading-none">
+              {totals.returns.toLocaleString()}
+            </span>
+          </div>
         </div>
       </CardHeader>
-      <CardContent className="flex  ">
+      <CardContent className="flex">
         <ChartContainer
           config={chartConfig}
           className="flex-1 w-full mt-2 overflow-x-hidden h-full"
         >
-          <div className="w-full h-57   bg-white  ">
+          <div className="w-full h-40 bg-white">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ left: 12, right: 12 }}>
                 <CartesianGrid vertical={false} />
@@ -223,16 +254,18 @@ export function GroupBarChart() {
                     });
                   }}
                 />
-                <ChartTooltip content={<CustomBarTooltip />} />
+                <Tooltip content={<CustomBarTooltip />} />
                 <Bar
-                  dataKey={activeChart}
-                  fill={`var(--color-${activeChart})`}
+                  dataKey="total"
+                  name="Total Activity"
+                  fill={chartConfig.total.color}
+                  barSize={30}
                 />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </ChartContainer>
       </CardContent>
-    </Card>
+    </div>
   );
 }

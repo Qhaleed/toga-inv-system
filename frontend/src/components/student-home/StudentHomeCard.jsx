@@ -1,67 +1,18 @@
 import React, { useState, useEffect } from "react";
 import SideBar from "../navigations/SideBar";
 import PendingApproval from "./UserPending";
-import ApprovedView from "./UserApproved";
+import UserApproved from "./UserApproved";
 
 const Dashboard = () => {
   const [userStatus, setUserStatus] = useState(null);
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
-  const [togaSize, setTogaSize] = useState("");
-  const [tasselColor, setTasselColor] = useState("");
-  const [hoodColor, setHoodColor] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [formSubmitting, setFormSubmitting] = useState(false);
-  const [course, setCourse] = useState("");
-
-  // Course to color mapping - extracted to a higher scope for reuse
-  const courseGroups = {
-    Blue: [
-      "Bachelor of Early Childhood Education (BECEd)",
-      "Bachelor of Elementary Education (BEEd)",
-      "Bachelor of Physical Education (BPEd)",
-      "Bachelor of Secondary Education (BSEd)",
-    ],
-    Maroon: [
-      "BS Biomedical Engineering (BSBME)",
-      "BS Computer Engineering (BSCE)",
-      "BS Electronics Communication Engineering (BSECE)",
-      "Associate in Electronics Engineering Technology (AEET)",
-      "Associate in Computer Networking (ACN)",
-    ],
-    Orange: ["BS Nursing (BSN)"],
-    White: [
-      "BS Biology (BSBio)",
-      "BS Computer Science (BSCS)",
-      "BS Information Technology (BSIT)",
-      "BS Mathematics (BSMath)",
-      "BS Mathematics Sciences (BSMS)",
-      "BS New Media and Computer Animation (BSNMCA)",
-      "BS Psychology (BSPsych)",
-      "BA Communication (BAC)",
-      "BA English Language Studies (BAELS)",
-      "BA Interdisciplinary Studies (BAIDS)",
-      "BA International Studies (BAIS)",
-      "BA Philosophy (BAPhil)",
-    ],
-    Yellow: [
-      "BS Accountancy (BSA)",
-      "BS Accounting Information System (BSAIS)",
-      "BS Internal Auditing (BSIA)",
-      "BS Management Accounting (BSMA)",
-      "BS Business Administration (BSBA)",
-      "BS Office Management (BSOM)",
-      "BS Legal Management (BSLM)",
-    ],
-  };
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const authToken = localStorage.getItem("token");
-
-        // Fetch user's basic info
         const userResponse = await fetch("http://localhost:5001/users", {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -69,29 +20,7 @@ const Dashboard = () => {
         });
         const userData = await userResponse.json();
         setUserName(userData.first_name + " " + userData.surname);
-        setCourse(userData.course || "");
-
-        // Set colors based on course automatically
-        const colors = determineColorFromCourse(userData.course);
-        setTasselColor(colors.tasselColor);
-        setHoodColor(colors.hoodColor);
-
-        // Check toga size submission status
-        const togaResponse = await fetch("http://localhost:5001/inventory/check-toga-size", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        const togaData = await togaResponse.json();
-
-        if (togaData.hasSubmitted) {
-          setUserStatus("approved");
-          setShowForm(false);
-          setTogaSize(togaData.togaSize);
-        } else {
-          setUserStatus("pending");
-          setShowForm(true);
-        }
+        setUserStatus(userData.status); // Use DB status directly
       } catch (error) {
         console.error("Error fetching data:", error);
         setUserStatus("error");
@@ -103,52 +32,6 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  const determineColorFromCourse = (course) => {
-    if (!course) {
-      return { tasselColor: "Blue", hoodColor: "Blue" }; // Default if no course specified
-    }
-
-    // Find the appropriate color for the course
-    for (const [color, courses] of Object.entries(courseGroups)) {
-      if (courses.some(c => course.includes(c))) {
-        return { tasselColor: color, hoodColor: color };
-      }
-    }
-
-    // Default if no match is found
-    return { tasselColor: "Blue", hoodColor: "Blue" };
-  };
-
-  const handleTogaSizeSubmit = async (e) => {
-    e.preventDefault();
-    setFormSubmitting(true);
-    try {
-      const authToken = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5001/inventory", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: JSON.stringify({
-          toga_size: togaSize,
-          tassel_color: tasselColor,
-          hood_color: hoodColor,
-          has_cap: 1 // Default to having a cap
-        }),
-      });
-
-      if (response.ok) {
-        setUserStatus("approved");
-        setShowForm(false);
-      }
-    } catch (error) {
-      console.error("Error submitting toga size:", error);
-    } finally {
-      setFormSubmitting(false);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-[#001C47] text-white">
@@ -158,8 +41,11 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="max-w-full relative grid grid-cols-1 sm:grid-cols-5 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 sm:gap-0 sm:top-0 sm:left-0 sm:h-screen sm:w-screen">
-      <div className="w-full stik sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 2xl:col-span-1 bg-[#001C47] text-white hidden sm:block h-full">
+    <div
+      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]`}
+    >
+      {/* Sidebar: left on desktop, hidden on mobile */}
+      <div className="max-md:hidden md:block w-full relative transition-transform duration-500 ease-in-out">
         <SideBar
           alwaysShowOnLarge
           activeTab="student-home"
@@ -168,64 +54,14 @@ const Dashboard = () => {
           dateDue="May 17, 2025"
         />
       </div>
-
-      <div className="w-full flex-1 md:col-span-3 xl:col-span-3 2xl:col-span-4 sm:col-span-3 overflow-x-auto sm:overflow-x-visible col-span-1 h-full">
-        {showForm ? (
-          <div className="flex flex-col items-center justify-center h-full bg-[#001C47] p-8">
-            <h2 className="text-2xl text-white mb-8">Welcome {userName}</h2>
-            <form onSubmit={handleTogaSizeSubmit} className="w-full max-w-md">
-              <div className="mb-6">
-                <label htmlFor="togaSize" className="block text-white mb-2">
-                  Please select your toga size:
-                </label>
-                <select
-                  id="togaSize"
-                  value={togaSize}
-                  onChange={(e) => setTogaSize(e.target.value)}
-                  required
-                  className="w-full p-2 rounded bg-white text-black"
-                  disabled={formSubmitting}
-                >
-                  <option value="">Select size...</option>
-                  <option value="XS">XS</option>
-                  <option value="S">S</option>
-                  <option value="M">M</option>
-                  <option value="L">L</option>
-                  <option value="XL">XL</option>
-                  <option value="2XL">2XL</option>
-                  <option value="3XL">3XL</option>
-                </select>
-              </div>
-
-              <div className="mb-6">
-                <div className="bg-gray-100 p-4 rounded text-gray-800">
-                  <h3 className="font-semibold mb-2">Colors Based on Your Program</h3>
-                  <p className="mb-1"><span className="font-medium">Program:</span> {course || "Not specified"}</p>
-                  <p className="mb-1"><span className="font-medium">Tassel Color:</span> {tasselColor}</p>
-                  <p><span className="font-medium">Hood Color:</span> {hoodColor}</p>
-                  <p className="mt-2 text-sm text-gray-600">These colors are automatically assigned based on your academic program and cannot be changed.</p>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={formSubmitting || !togaSize}
-                className="w-full bg-[#0C7E48] text-white py-2 rounded hover:bg-[#0A6F40] transition-colors disabled:opacity-50"
-              >
-                {formSubmitting ? "Submitting..." : "Submit"}
-              </button>
-            </form>
+      {/* Main content */}
+      <div className="bg-[#F3F9FF] w-full h-full flex flex-col">
+        {userStatus === "Pending" && <PendingApproval name={userName} />}
+        {userStatus === "Approved" && <UserApproved name={userName} />}
+        {userStatus === "error" && (
+          <div className="flex justify-center items-center text-red-500">
+            <p>Failed to load user data. Please try again later.</p>
           </div>
-        ) : (
-          <>
-            {userStatus === "pending" && <PendingApproval name={userName} />}
-            {userStatus === "approved" && <ApprovedView name={userName} />}
-            {userStatus === "error" && (
-              <div className="flex justify-center items-center text-red-500">
-                <p>Failed to load user data. Please try again later.</p>
-              </div>
-            )}
-          </>
         )}
       </div>
     </div>

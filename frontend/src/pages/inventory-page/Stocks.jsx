@@ -8,72 +8,154 @@ import StocksCapChart from "@/components/ui/StocksCapChart";
 import StocksHoodChart from "@/components/ui/StocksHoodChart";
 
 const Stocks = () => {
-  const [totals, setTotals] = useState({
-    cap: 0,
-    tassel: 0,
-    gown: 0,
-    hood: 0,
-    capSizes: {},
+  // New state for items data from our API
+  const [itemsData, setItemsData] = useState({
+    totalItems: 0,
+    totalCap: 0,
+    totalTassel: 0,
+    totalGown: 0,
+    totalHood: 0,
     tasselColors: {},
     gownSizes: {},
     hoodColors: {},
+    capQuantity: 0,
+    statusBreakdown: {
+      goodCondition: 0,
+      forRepair: 0,
+      damaged: 0,
+    },
+    returnStatusBreakdown: {
+      returned: 0,
+      notReturned: 0,
+      na: 0,
+    }
   });
 
-  /*  I DID NOT USE THIS FETCH FOR THE DATA FOR THE STOCKS
-   NUMBERS CUZ KAY CLYDE TO, CONTINUE IT NALANG IF EVER OR MODIFY, 
-  YUNG MGA GRAPHS/CHARTS MAHAHANAP LANG SA UI FOLDER KASI STATIC
-   LANG RIN YUNG DATA DOON*/
-
+  // Fetch data from the items endpoint
   useEffect(() => {
-    fetch("http://localhost:5001/inventory")
-      .then((res) => res.json())
-      .then((data) => {
-        let cap = 0,
-          tassel = 0,
-          gown = 0,
-          hood = 0;
-        let capSizes = {},
-          tasselColors = {},
-          gownSizes = {},
-          hoodColors = {};
+    console.log("Fetching items data from API...");
+    fetch("http://localhost:5001/items")
+    .then((res) => res.json())
+    .then((data) => {
+      const items = data.items || [];
+        console.log("Raw items data from API:", data);
+
+        // Initialize counters and storage objects
+        let totalCap = 0;
+        let totalTassel = 0;
+        let totalGown = 0;
+        let totalHood = 0;
+
+        let tasselColors = {};
+        let gownSizes = {};
+        let hoodColors = {};
+        let capQuantity = 0;
+        let totalItems = 0;
+
+        // Status tracking
+        let goodCondition = 0;
+        let forRepair = 0;
+        let damaged = 0;
+
+        // Return status tracking
+        let returned = 0;
+        let notReturned = 0;
+        let na = 0;
+
+        // Process the items according to our actual schema
         data.forEach((item) => {
-          // Cap: count by size if has_cap is 1 kumbaga true
-          if (item.has_cap === 1 && item.toga_size) {
-            cap += 1;
-            capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
+          // Add to total items count based on quantity
+          const itemQuantity = item.quantity || 0;
+          totalItems += itemQuantity;
+
+          // Track status counts
+          if (item.item_status === "In Good Condition") {
+            goodCondition += itemQuantity;
+          } else if (item.item_status === "For Repair") {
+            forRepair += itemQuantity;
+          } else if (item.item_status === "Damaged") {
+            damaged += itemQuantity;
           }
-          // Tassel: count ng color
-          if (item.tassel_color) {
-            tassel += 1;
-            tasselColors[item.tassel_color] =
-              (tasselColors[item.tassel_color] || 0) + 1;
+
+          // Track return status
+          if (item.return_status === "Returned") {
+            returned += itemQuantity;
+          } else if (item.return_status === "Not Returned") {
+            notReturned += itemQuantity;
+          } else { // N/A or other values
+            na += itemQuantity;
           }
-          // Gown: count ng  size
-          if (item.toga_size) {
-            gown += 1;
-            gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
-          }
-          // Hood:counter color
-          if (item.hood_color) {
-            hood += 1;
-            hoodColors[item.hood_color] =
-              (hoodColors[item.hood_color] || 0) + 1;
+
+          // Process based on item_type
+          if (item.item_type === "cap") {
+            capQuantity += itemQuantity;
+            totalCap += itemQuantity;
+          } else if (item.item_type === "tassle" || item.item_type === "tassel") {
+            // Handle possible typo in DB
+            totalTassel += itemQuantity;
+
+            // Group by variant (color)
+            if (item.variant) {
+              // Convert first letter to uppercase for display consistency
+              const color = item.variant.charAt(0).toUpperCase() + item.variant.slice(1);
+              tasselColors[color] = (tasselColors[color] || 0) + itemQuantity;
+            }
+          } else if (item.item_type === "gown") {
+            totalGown += itemQuantity;
+
+            // Group by variant (size)
+            if (item.variant) {
+              gownSizes[item.variant] = (gownSizes[item.variant] || 0) + itemQuantity;
+            }
+          } else if (item.item_type === "hood") {
+            totalHood += itemQuantity;
+
+            // Group by variant (color)
+            if (item.variant) {
+              // Convert first letter to uppercase for display consistency
+              const color = item.variant.charAt(0).toUpperCase() + item.variant.slice(1);
+              hoodColors[color] = (hoodColors[color] || 0) + itemQuantity;
+            }
           }
         });
-        setTotals({
-          cap,
-          tassel,
-          gown,
-          hood,
-          capSizes,
+
+        const processedData = {
+          totalItems,
+          totalCap,
+          totalTassel,
+          totalGown,
+          totalHood,
           tasselColors,
           gownSizes,
           hoodColors,
-        });
+          capQuantity,
+          statusBreakdown: {
+            goodCondition,
+            forRepair,
+            damaged
+          },
+          returnStatusBreakdown: {
+            returned,
+            notReturned,
+            na
+          }
+        };
+
+        console.log("Processed items data:", processedData);
+        console.log("Item status breakdown:", processedData.statusBreakdown);
+        console.log("Return status breakdown:", processedData.returnStatusBreakdown);
+
+        setItemsData(processedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching items data:", error);
       });
   }, []);
 
-  const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
+  // Log whenever itemsData changes
+  useEffect(() => {
+    console.log("Current itemsData state:", itemsData);
+  }, [itemsData]);
 
   const [all, setAll] = useState(true);
   const [cap, setCap] = useState(false);
@@ -138,75 +220,93 @@ const Stocks = () => {
     ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
     : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
-  return (
-    <>
-      {" "}
-      <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 mt-5 text-center">
-        <span className="z-1000 hover:opacity-40 cursor-pointer text-[#001C47] font-semibold">
-          {" "}
-          Inventory {">"}
+  // Calculate available (usable) items by excluding damaged items
+  const availableCap = itemsData.totalCap - (itemsData.statusBreakdown?.damaged || 0);
+  const availableTassel = itemsData.totalTassel - (itemsData.statusBreakdown?.damaged || 0);
+  const availableGown = itemsData.totalGown - (itemsData.statusBreakdown?.damaged || 0);
+  const availableHood = itemsData.totalHood - (itemsData.statusBreakdown?.damaged || 0);
+  const availableTotal = itemsData.totalItems - (itemsData.statusBreakdown?.damaged || 0);
+
+  const getButtonClass = (isActive) =>
+  isActive
+    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium shadow-md scale-105 transition-all duration-200 hover:bg-[#1e293b] hover:shadow-lg"
+    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-105 hover:bg-[#e0e7ef] hover:text-[#02327B] hover:shadow-md";
+
+return (
+  <>
+    {/* Breadcrumb Title (styled like ItemStatus.jsx) */}
+    <div className="w-full px-8 pt-6">
+      <h2 className="text-2xl font-figtree tracking-tight text-[#1e293b] mb-2 drop-shadow-sm">
+        <span className="text-black font-bold">Inventory</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-primary">Stocks</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-[#2563eb]">
+          {all && "All"}{cap && "Cap"}{tassel && "Tassel"}{gown && "Gown"}{hood && "Hood"}
         </span>
-        <span className="text-[#02327B] hover:opacity-70 cursor-pointer">
-          {" "}
-          Stocks
-        </span>
-      </div>
-      <div className="w-full relative h-screen p-8 flex flex-col items-center">
-        <div className="w-full flex flex-col 2xl:flex-row items-center gap-8 justify-center mt-10 transition-all ease-out duration-300">
-          <div className="flex-1 flex flex-col items-center">
-            <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
-              {all && <StocksAllChart />}
-              {cap && <StocksCapChart />}
-              {tassel && <StocksTasselChart />}
-              {gown && <StocksGownChart />}
-              {hood && <StocksHoodChart />}
+      </h2>
+    </div>
+    <div className="w-full relative h-screen p-8 flex flex-col items-center">
+      <div className="w-full flex flex-col 2xl:flex-row items-center gap-8 justify-center mt-10 transition-all ease-out duration-300">
+        <div className="flex-1 flex flex-col items-center">
+          <div className="border border-gray-500 rounded-2xl shadow-lg hidden lg:flex items-center justify-center h-[520px] w-full mb-4 transition-all ease-out duration-300">
+            {all && <StocksAllChart data={itemsData} />}
+            {cap && <StocksCapChart data={itemsData} />}
+            {tassel && <StocksTasselChart stocksData={itemsData} />}
+            {gown && <StocksGownChart stocksData={itemsData} />}
+            {hood && <StocksHoodChart stocksData={itemsData} />}
+          </div>
+          {/* Chart Type Selector - styled like ItemStatus.jsx */}
+          <div className="w-full h-10 flex justify-between items-center mt-5">
+            <div className="w-[280px] md:w-[350px] lg:w-[500px] xl:w-[600px] h-10 flex justify-start items-center ml-3 transition-all ease-out duration-300 gap-2">
+              <button className={getButtonClass(all)} onClick={allToggle}>
+                All
+              </button>
+              <button className={getButtonClass(cap)} onClick={capToggle}>
+                Cap
+              </button>
+              <button className={getButtonClass(tassel)} onClick={tasselToggle}>
+                Tassel
+              </button>
+              <button className={getButtonClass(gown)} onClick={gownToggle}>
+                Gown
+              </button>
+              <button className={getButtonClass(hood)} onClick={hoodToggle}>
+                Hood
+              </button>
             </div>
-            <div className="w-full h-10 flex justify-between items-center mt-5">
-              <div className="w-[280px] md:w-[350px] lg:w-[500px] xl:w-[600px] h-10 flex justify-start items-center ml-3 transition-all ease-out duration-300">
-                <button className={allBtn} onClick={allToggle}>
-                  All
-                </button>
-                <button className={capBtn} onClick={capToggle}>
-                  Cap
-                </button>
-                <button className={tasselBtn} onClick={tasselToggle}>
-                  Tassel
-                </button>
-                <button className={gownBtn} onClick={gownToggle}>
-                  Gown
-                </button>
-                <button className={hoodBtn} onClick={hoodToggle}>
-                  Hood
-                </button>
-              </div>
-              <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3 w-32">
-                <h3 className="pl-3">
-                  {all && "All Stocks"}
-                  {cap && "Cap Stocks"}
-                  {tassel && "Tassel Stocks"}
-                  {gown && "Gown Stocks"}
-                  {hood && "Hood Stocks"}
-                </h3>
-              </div>
+            <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3 w-32">
+              <h3 className="pl-3">
+                {all && "All Stocks"}
+                {cap && "Cap Stocks"}
+                {tassel && "Tassel Stocks"}
+                {gown && "Gown Stocks"}
+                {hood && "Hood Stocks"}
+              </h3>
             </div>
           </div>
-          {/* Stock Summary Section */}
-          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4">
+        </div>
+        <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4 border border-red-500">
             {all && (
               <>
                 {" "}
                 {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
-                    12 {/*CHANGE VALUE LANG HERE*/}
+                    {availableTotal} <span className="text-sm">(Total: {itemsData.totalItems})</span>
                   </span>
                   <span className="text-sm text-gray-700 mt-1">
                     Total Items Available
                   </span>
+                  <span className="text-xs text-gray-700">
+                    Good: {itemsData.statusBreakdown?.goodCondition || 0},
+                    For Repair: {itemsData.statusBreakdown?.forRepair || 0},
+                    Damaged: {itemsData.statusBreakdown?.damaged || 0}
+                  </span>
                 </div>
                 <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#dadada]">
-                    12 {/*CHANGE VALUE LANG HERE*/}
+                    {availableCap} <span className="text-sm">(Total: {itemsData.totalCap})</span>
                   </span>
                   <span className="text-sm text-[#dadada] mt-1">
                     Total Cap Available
@@ -214,48 +314,71 @@ const Stocks = () => {
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
-                    12 {/*CHANGE VALUE LANG HERE*/}
+                    {availableTassel} <span className="text-sm">(Total: {itemsData.totalTassel})</span>
                   </span>
                   <span className="text-sm text-[#001d5a] mt-1">
                     Total Tassel Available
                   </span>
                   <span className="text-xs text-[#001d5a] mt-1">
-                    {" "}
-                    {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
-                    {Object.entries(totals.tasselColors || {})
+                    {Object.entries(itemsData.tasselColors || {})
                       .map(([color, count]) => `${color}: ${count}`)
                       .join(", ")}
                   </span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
-                    12 {/*CHANGE VALUE LANG HERE*/}
+                    {availableGown} <span className="text-sm">(Total: {itemsData.totalGown})</span>
                   </span>
                   <span className="text-sm text-gray-800 mt-1">
                     Total Gown Available
                   </span>
                   <span className="text-xs text-gray-800 mt-1">
-                    {" "}
-                    {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
-                    {Object.entries(totals.gownSizes || {})
+                    {Object.entries(itemsData.gownSizes || {})
                       .map(([size, count]) => `${size}: ${count}`)
                       .join(", ")}
+                  </span>
+                  <span className="text-xs text-gray-600 mt-1">
+                    Returned: {itemsData.returnStatusBreakdown?.returned || 0},
+                    Not Returned: {itemsData.returnStatusBreakdown?.notReturned || 0}
                   </span>
                 </div>
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {availableHood} <span className="text-sm">(Total: {itemsData.totalHood})</span>
                   </span>
                   <span className="text-sm text-black mt-1">
                     Total Hood Available
                   </span>
                   <span className="text-xs text-black mt-1">
-                    {" "}
-                    {/*PACHANGE NALANG RIN ETO FOR THE DATA, ITS A SAMPLE LANG KAY CLYDE*/}
-                    {Object.entries(totals.hoodColors || {})
+                    {Object.entries(itemsData.hoodColors || {})
                       .map(([color, count]) => `${color}: ${count}`)
                       .join(", ")}
                   </span>
+                </div>
+                <div className="bg-[#d1d5db] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-xl font-bold text-black">
+                    Condition Summary
+                  </span>
+                  <div className="flex justify-between w-full mt-2">
+                    <div className="text-center">
+                      <span className="text-lg ">
+                        {itemsData.statusBreakdown?.goodCondition || 0}
+                      </span>
+                      <p className="text-xs">Good</p>
+                    </div>
+                    <div className="text-center">
+                      <span className="text-lg ">
+                        {itemsData.statusBreakdown?.forRepair || 0}
+                      </span>
+                      <p className="text-xs">For Repair</p>
+                    </div>
+                    <div className="text-center">
+                      <span className="text-lg">
+                        {itemsData.statusBreakdown?.damaged || 0}
+                      </span>
+                      <p className="text-xs">Damaged</p>
+                    </div>
+                  </div>
                 </div>
               </>
             )}
@@ -263,21 +386,38 @@ const Stocks = () => {
               <>
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {availableCap} <span className="text-sm">(Total: {itemsData.totalCap})</span>
                   </span>
                   <span className="text-sm text-gray-700 mt-1">
                     Total Cap Available
                   </span>
                 </div>
+                <div className="bg-[#d1d5db] rounded-lg p-6 flex flex-col items-center shadow">
+                  <span className="text-xl font-bold text-black">
+                    Cap Condition
+                  </span>
+                  <div className="flex justify-between w-full mt-2 px-4">
+                    <div className="text-center">
+                      <span className="text-s ">Good</span>
+                      <p className="text-s mt-1">{itemsData.statusBreakdown?.goodCondition || 0}</p>
+                    </div>
+                    <div className="text-center">
+                      <span className="text-s ">For Repair</span>
+                      <p className="text-s mt-1">{itemsData.statusBreakdown?.forRepair || 0}</p>
+                    </div>
+                    <div className="text-center">
+                      <span className="text-s">Damaged</span>
+                      <p className="text-s mt-1">{itemsData.statusBreakdown?.damaged || 0}</p>
+                    </div>
+                  </div>
+                </div>
               </>
             )}
             {tassel && (
               <>
-                {" "}
-                {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {availableTassel} <span className="text-sm">(Total: {itemsData.totalTassel})</span>
                   </span>
                   <span className="text-sm text-gray-700 mt-1">
                     Total Tassel Available
@@ -285,31 +425,31 @@ const Stocks = () => {
                 </div>
                 <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#dadada]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.tasselColors["Blue"] || 0}
                   </span>
                   <span className="text-sm text-[#dadada] mt-1">Blue</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.tasselColors["Maroon"] || 0}
                   </span>
                   <span className="text-sm text-[#001d5a] mt-1">Maroon</span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.tasselColors["Orange"] || 0}
                   </span>
                   <span className="text-sm text-gray-800 mt-1">Orange</span>
                 </div>
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.tasselColors["White"] || 0}
                   </span>
                   <span className="text-sm text-black mt-1">White</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.tasselColors["Yellow"] || 0}
                   </span>
                   <span className="text-sm text-black mt-1">Yellow</span>
                 </div>
@@ -317,55 +457,57 @@ const Stocks = () => {
             )}
             {gown && (
               <>
-                {" "}
-                {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {availableGown} <span className="text-sm">(Total: {itemsData.totalGown})</span>
                   </span>
                   <span className="text-sm text-gray-700 mt-1">
                     Total Gown Available
                   </span>
+                  <div className="text-xs mt-2">
+                    <div>Returned: {itemsData.returnStatusBreakdown?.returned || 0}</div>
+                    <div>Not Returned: {itemsData.returnStatusBreakdown?.notReturned || 0}</div>
+                  </div>
                 </div>
                 <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#dadada]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.gownSizes["XS"] || 0}
                   </span>
                   <span className="text-sm text-[#dadada] mt-1">XS</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.gownSizes["S"] || 0}
                   </span>
                   <span className="text-sm text-[#001d5a] mt-1">S</span>
                 </div>
                 <div className="bg-[#4f89cf] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.gownSizes["M"] || 0}
                   </span>
                   <span className="text-sm text-[#001d5a] mt-1">M</span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.gownSizes["L"] || 0}
                   </span>
                   <span className="text-sm text-gray-800 mt-1">L</span>
                 </div>
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.gownSizes["XL"] || 0}
                   </span>
                   <span className="text-sm text-black mt-1">XL</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.gownSizes["2XL"] || 0}
                   </span>
                   <span className="text-sm text-black mt-1">2XL</span>
                 </div>
                 <div className="bg-[#2563eb] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#dadada]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.gownSizes["3XL"] || 0}
                   </span>
                   <span className="text-sm text-[#dadada] mt-1">3XL</span>
                 </div>
@@ -373,11 +515,9 @@ const Stocks = () => {
             )}
             {hood && (
               <>
-                {" "}
-                {/*IF CLICKED ALL*/}
                 <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#1E40AF]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {availableHood} <span className="text-sm">(Total: {itemsData.totalHood})</span>
                   </span>
                   <span className="text-sm text-gray-700 mt-1">
                     Total Hood Available
@@ -385,66 +525,70 @@ const Stocks = () => {
                 </div>
                 <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#dadada]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.hoodColors["Blue"] || 0}
                   </span>
                   <span className="text-sm text-[#dadada] mt-1">Blue</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-[#001d5a]">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.hoodColors["Maroon"] || 0}
                   </span>
                   <span className="text-sm text-[#001d5a] mt-1">Maroon</span>
                 </div>
                 <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-gray-800">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.hoodColors["Orange"] || 0}
                   </span>
                   <span className="text-sm text-gray-800 mt-1">Orange</span>
                 </div>
                 <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.hoodColors["White"] || 0}
                   </span>
                   <span className="text-sm text-black mt-1">White</span>
                 </div>
                 <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                   <span className="text-3xl font-bold text-black">
-                    10 {/*CHANGE VALUE LANG HERE*/}
+                    {itemsData.hoodColors["Yellow"] || 0}
                   </span>
                   <span className="text-sm text-black mt-1">Yellow</span>
                 </div>
               </>
             )}
           </div>
-        </div>
-        {/* Low Stock Alert Section */}
-        <div className=" absolute bottom-0 w-full max-w-3xl mt-10 hidden">
-          <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
-            Low Stock Alerts
-          </h2>
-          <div className="bg-[#FFF3CD] border-l-4 border-[#B91C1C] text-[#B91C1C] p-2 rounded flex items-center gap-3">
-            <svg
-              className="w-6 h-6 text-[#B91C1C]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>
-              Some items are running low! Please review your stock levels and
-              reorder as needed.
-            </span>
-          </div>
-        </div>
       </div>
-    </>
-  );
-};
+      {/* ...existing code for Low Stock Alert Section... */}
+      {(itemsData.totalCap < 20 || itemsData.totalTassel < 20 || itemsData.totalGown < 20 || itemsData.totalHood < 20) && (
+          <div className="w-full max-w-3xl mt-10">
+            <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
+              Low Stock Alerts
+            </h2>
+            <div className="bg-[#FFF3CD] border-l-4 border-[#B91C1C] text-[#B91C1C] p-2 rounded flex items-center gap-3">
+              <svg
+                className="w-6 h-6 text-[#B91C1C]"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>
+                Some items are running low! Please review your stock levels and
+                reorder as needed.
+              </span>
+            </div>
+          </div>
+        )}
+    </div>
+  </>
+);
+}
+
+// ...existing code...
 
 export default Stocks;

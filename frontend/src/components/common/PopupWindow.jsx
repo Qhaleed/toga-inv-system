@@ -168,7 +168,38 @@ const PopupWindow = ({
               </button>
             </div>
             <div className="h-full w-24 flex justify-center items-center text-sm pr-2">
-              <button className="border border-red-500 text-red-500 w-20 h-10 rounded-lg text-xs hover:bg-red-500 hover:text-white hover:scale-105 transition-all duration-200">
+              <button
+                className="border border-red-500 text-red-500 w-20 h-10 rounded-lg text-xs hover:bg-red-500 hover:text-white hover:scale-105 transition-all duration-200"
+                onClick={() => {
+                  if (window.confirm(`Are you sure you want to delete ${user.studentname}'s records?`)) {
+                    // Send delete request to backend
+                    fetch(`http://localhost:5001/inventory/${user.id}`, {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "Cache-Control": "no-cache",
+                      },
+                    })
+                      .then((response) => {
+                        if (!response.ok) {
+                          throw new Error("Network response was not ok: " + response.status);
+                        }
+                        return response.json();
+                      })
+                      .then(() => {
+                        // Close popup and pass empty data to trigger refresh
+                        alert("Item deleted successfully!");
+                        if (onClose) {
+                          onClose([]);
+                        }
+                      })
+                      .catch((error) => {
+                        console.error("Error deleting inventory item:", error);
+                        alert("Failed to delete the item: " + error.message);
+                      });
+                  }
+                }}
+              >
                 <h3>DELETE</h3>
               </button>
             </div>

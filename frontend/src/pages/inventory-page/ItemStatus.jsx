@@ -1,270 +1,230 @@
-import React, { useEffect, useState } from "react";
-import { CarouselPlugin } from "../../components/ui/my-carousel";
-import Profile from "../../assets/images/dump.jpg";
-import ItemStatusAllChart from "@/components/ui/ItemStatusAllChart";
+import { useState, useEffect, useMemo } from "react";
+import ItemStatusAllChart from "../../components/ui/ItemStatusAllChart";
+import ItemStatusCapChart from "../../components/ui/ItemStatusCapChart";
+import ItemStatusTasselChart from "../../components/ui/ItemStatusTasselChart";
+import ItemStatusGownChart from "../../components/ui/ItemStatusGownChart";
+import ItemStatusHoodChart from "../../components/ui/ItemStatusHoodChart";
 
 const ItemStatus = () => {
-    const [totals, setTotals] = useState({
-        cap: 0,
-        tassel: 0,
-        gown: 0,
-        hood: 0,
-        capSizes: {},
-        tasselColors: {},
-        gownSizes: {},
-        hoodColors: {},
-      });
-    
-      useEffect(() => {
-        fetch("http://localhost:5001/inventory")
-          .then((res) => res.json())
-          .then((data) => {
-            let cap = 0,
-              tassel = 0,
-              gown = 0,
-              hood = 0;
-            let capSizes = {},
-              tasselColors = {},
-              gownSizes = {},
-              hoodColors = {};
-            data.forEach((item) => {
-              // Cap: count by size if has_cap is 1
-              if (item.has_cap === 1 && item.toga_size) {
-                cap += 1;
-                capSizes[item.toga_size] = (capSizes[item.toga_size] || 0) + 1;
-              }
-              // Tassel: count by color
-              if (item.tassel_color) {
-                tassel += 1;
-                tasselColors[item.tassel_color] =
-                  (tasselColors[item.tassel_color] || 0) + 1;
-              }
-              // Gown: count by size
-              if (item.toga_size) {
-                gown += 1;
-                gownSizes[item.toga_size] = (gownSizes[item.toga_size] || 0) + 1;
-              }
-              // Hood: count by color
-              if (item.hood_color) {
-                hood += 1;
-                hoodColors[item.hood_color] =
-                  (hoodColors[item.hood_color] || 0) + 1;
-              }
-            });
-            setTotals({
-              cap,
-              tassel,
-              gown,
-              hood,
-              capSizes,
-              tasselColors,
-              gownSizes,
-              hoodColors,
-            });
-          });
-      }, []);
-    
-      const totalItems = totals.cap + totals.tassel + totals.gown + totals.hood;
-    
-      const [all, setAll] = useState(true);
-      const [cap, setCap] = useState(false);
-      const [tassel, setTassel] = useState(false);
-      const [gown, setGown] = useState(false);
-      const [hood, setHood] = useState(false);
-    
-      const allToggle = () => {
-        setAll(true);
-        setCap(false);
-        setTassel(false);
-        setGown(false);
-        setHood(false);
-      };
-    
-      const capToggle = () => {
-        setAll(false);
-        setCap(true);
-        setTassel(false);
-        setGown(false);
-        setHood(false);
-      };
-      const tasselToggle = () => {
-        setAll(false);
-        setCap(false);
-        setTassel(true);
-        setGown(false);
-        setHood(false);
-      };
-      const gownToggle = () => {
-        setAll(false);
-        setCap(false);
-        setTassel(false);
-        setGown(true);
-        setHood(false);
-      };
-      const hoodToggle = () => {
-        setAll(false);
-        setCap(false);
-        setTassel(false);
-        setGown(false);
-        setHood(true);
-      };
-    
-      let allBtn = all
-        ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-        : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-    
-      let capBtn = cap
-        ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-        : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-    
-      let tasselBtn = tassel
-        ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-        : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-    
-      let gownBtn = gown
-        ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-        : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-    
-      let hoodBtn = hood
-        ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium"
-        : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-      return (
-        <>
-          {" "}
-          <div className="  left-15 2xl:top-0 lg:top-0 absolute text-xl sm:text-xl font-bold text-[#0C7E48] mb-2 mt-5 text-center">
-            <span className="z-1000 hover:opacity-40 cursor-pointer text-[#001C47] font-semibold">
-              {" "}
-              Inventory {">"}
-            </span>
-            <span className="text-[#02327B] hover:opacity-70 cursor-pointer">
-              {" "}
-              Item Status
-            </span>
-          </div>
-          <div className="w-full relative h-screen p-8 flex flex-col items-center">
-            <div className="w-full flex flex-col md:flex-row items-center gap-8 justify-center mt-5">
-              <div className="flex-1 flex flex-col items-start">
-                <div className="border border-gray-500 rounded-2xl shadow-lg flex items-center justify-center min-h-[420px] min-w-[600px] max-w-700px] w-full mb-4">
-                  {all && <ItemStatusAllChart />}
-                </div>
-                <div className="w-full h-10 flex justify-between items-center">
-                  <div className="w-[700px] h-10 flex justify-between items-center ml-3">
-                    <button className={allBtn} onClick={allToggle}>
-                      All
-                    </button>
-                    <button className={capBtn} onClick={capToggle}>
-                      Cap
-                    </button>
-                    <button className={tasselBtn} onClick={tasselToggle}>
-                      Tassel
-                    </button>
-                    <button className={gownBtn} onClick={gownToggle}>
-                      Gown
-                    </button>
-                    <button className={hoodBtn} onClick={hoodToggle}>
-                      Hood
-                    </button>
-                  </div>
-                  <div className="text-[#02327B] text-xl h-8 flex justify-end items-center border-l-2 border-[#F3B51A] mr-3">
-                    <h3 className="pl-3">
-                      {all && "All Item Status"}
-                      {cap && "Cap Status"}
-                      {tassel && "Tassel Status"}
-                      {gown && "Gown Status"}
-                      {hood && "Hood Status"}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              {/* Stock Summary Section */}
-              <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full max-w-md grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#1E40AF]">
-                    {totalItems}
-                  </span>
-                  <span className="text-sm text-gray-700 mt-1">
-                    Total Item Status
-                  </span>
-                </div>
-    
-                {/* Add more stock summary items here */}
-                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#dadada]">
-                    {totals.cap}
-                  </span>
-                  <span className="text-sm text-[#dadada] mt-1">
-                    Cap Status
-                  </span>
-                </div>
-                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#001d5a]">
-                    {totals.tassel}
-                  </span>
-                  <span className="text-base text-[#001d5a] mt-1">
-                    Tassel Status
-                  </span>
-                  <span className="text-xs text-[#001d5a] mt-1">
-                    {Object.entries(totals.tasselColors || {})
-                      .map(([color, count]) => `${color}: ${count}`)
-                      .join(", ")}
-                  </span>
-                </div>
-                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-gray-800">
-                    {totals.gown}
-                  </span>
-                  <span className="text-base text-gray-800 mt-1">
-                    Gown Status
-                  </span>
-                  <span className="text-xs text-gray-800 mt-1">
-                    {Object.entries(totals.gownSizes || {})
-                      .map(([size, count]) => `${size}: ${count}`)
-                      .join(", ")}
-                  </span>
-                </div>
-                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-black">
-                    {totals.hood}
-                  </span>
-                  <span className="text-base text-black mt-1">
-                    Hood Status
-                  </span>
-                  <span className="text-xs text-black mt-1">
-                    {Object.entries(totals.hoodColors || {})
-                      .map(([color, count]) => `${color}: ${count}`)
-                      .join(", ")}
-                  </span>
-                </div>
-              </div>
+  const [selectedChart, setSelectedChart] = useState("all");
+  const [items, setItems] = useState([]);
+  const [summary, setSummary] = useState({
+    byStatus: {},
+    byVariant: {},
+    byType: {},
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:5001/items")
+      .then((res) => res.json())
+      .then((data) => {
+        setItems(data.items || []);
+        setSummary(data.summary || { byStatus: {}, byVariant: {}, byType: {} });
+      })
+      .catch(console.error);
+  }, []);
+
+  const totalItems = useMemo(() => {
+    // Sum all quantities by type
+    return Object.values(summary.byType).reduce((sum, count) => sum + count, 0);
+  }, [summary]);
+
+  // Calculate total caps for summary when cap chart is selected
+  const totalCaps = useMemo(() => {
+    return items
+      .filter((item) => item.item_type === "cap")
+      .reduce((sum, item) => sum + (item.quantity || 0), 0);
+  }, [items]);
+
+  // Calculate cap status breakdown for summary when cap chart is selected
+  const capStatusSummary = useMemo(() => {
+    const STATUS = ["In Good Condition", "For Repair", "Damaged"];
+    const COLORS = [
+      "text-[#2563eb] font-bold", // blue bold
+      "text-[#f59e42] font-semibold", // orange semi-bold
+      "text-[#e11d48] font-bold italic", // red bold italic
+    ];
+    const statusCounts = {
+      [STATUS[0]]: 0,
+      [STATUS[1]]: 0,
+      [STATUS[2]]: 0,
+    };
+    items.forEach((item) => {
+      if (item.item_type === "cap") {
+        statusCounts[item.item_status] =
+          (statusCounts[item.item_status] || 0) + (item.quantity || 0);
+      }
+    });
+    return STATUS.map((status, idx) => ({
+      status,
+      count: statusCounts[status],
+      className: COLORS[idx],
+    }));
+  }, [items]);
+
+  const getButtonClass = (isActive) =>
+    isActive
+      ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium shadow-md scale-105 transition-all duration-200 hover:bg-[#1e293b] hover:shadow-lg"
+      : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-105 hover:bg-[#e0e7ef] hover:text-[#02327B] hover:shadow-md";
+
+  const statusColors = {
+    "In Good Condition": "text-green-600",
+    "For Repair": "text-yellow-600",
+    Damaged: "text-red-600",
+  };
+
+  const chartComponents = {
+    all: <ItemStatusAllChart items={items} />,
+    cap: <ItemStatusCapChart items={items} />,
+    tassel: <ItemStatusTasselChart items={items} />,
+    gown: <ItemStatusGownChart items={items} />,
+    hood: <ItemStatusHoodChart items={items} />,
+  };
+
+  const chartLabels = {
+    all: "All Items",
+    cap: "Caps",
+    tassel: "Tassels",
+    gown: "Gowns",
+    hood: "Hoods",
+  };
+
+  return (
+    <div className="w-full p-6 flex flex-col gap-6">
+      {/* Page Title (Breadcrumb Style) */}
+      <h2 className="text-2xl font-figtree tracking-tight text-[#1e293b] mb-2 drop-shadow-sm">
+        <span className="text-black font-bold">Inventory</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-primary">Item Status</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-[#2563eb]">{chartLabels[selectedChart]}</span>
+      </h2>
+      {/* Chart Type Selector */}
+      <div className="flex flex-wrap justify-center gap-4">
+        {Object.keys(chartLabels).map((key) => (
+          <button
+            key={key}
+            className={getButtonClass(selectedChart === key)}
+            onClick={() => setSelectedChart(key)}
+          >
+            {key.charAt(0).toUpperCase() + key.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Chart and Stock Summary Side by Side */}
+      <div className="w-full flex flex-col lg:flex-row justify-center items-start gap-4 mt-6">
+        {/* Chart and Stock Summary Grouped */}
+        <div className="w-full flex flex-col md:flex-row gap-4 items-stretch overflow-visible">
+          {/* Chart */}
+          <div
+            className={`${
+              selectedChart === "tassel" ||
+              selectedChart === "hood" ||
+              selectedChart === "gown"
+                ? "w-full"
+                : "md:w-2/3"
+            } w-full flex justify-center`}
+          >
+            <div className="bg-white shadow-md rounded-xl p-4 flex flex-col justify-center h-full w-full">
+              {chartComponents[selectedChart]}
             </div>
-            {/* Low Stock Alert Section */}
-            <div className=" absolute  bottom-0 w-full max-w-3xl mt-10">
-              <h2 className="text-lg font-semibold text-[#ffffff] mb-2">
-                Low Stock Alerts
-              </h2>
-              <div className="bg-[#FFF3CD] border-l-4 border-[#B91C1C] text-[#B91C1C] p-2 rounded flex items-center gap-3">
-                <svg
-                  className="w-6 h-6 text-[#B91C1C]"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
+          </div>
+
+          {/* Stock Summary or Cap Summary */}
+          {/*Cap Summary*/}
+          {selectedChart === "cap" ? (
+            <div className="md:w-1/3 w-full grid grid-cols-1 gap-4">
+              <div className="bg-white shadow-md rounded-xl p-4 text-center">
+                <h3 className="text-lg font-semibold text-[#02327B]">
+                  Total Caps
+                </h3>
+                <p className="text-2xl font-extrabold text-gray-700">
+                  {totalCaps}
+                </p>
+              </div>
+              {capStatusSummary.map((entry, idx) => (
+                <div
+                  key={entry.status}
+                  className="bg-white shadow-md rounded-xl p-4 text-center flex flex-col justify-center"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span>
-                  Some items are running low! Please review your stock levels and
-                  reorder as needed.
-                </span>
-              </div>
+                  <h3 className="text-lg font-semibold text-[#02327B]">
+                    {entry.status}
+                  </h3>
+                  <p
+                    className={
+                      idx === 0
+                        ? "text-green-600 text-2xl font-extrabold mt-1"
+                        : idx === 1
+                        ? "text-yellow-600 text-2xl font-extrabold mt-1"
+                        : "text-red-600 text-2xl font-extrabold mt-1"
+                    }
+                  >
+                    {entry.count}
+                  </p>
+                </div>
+              ))}
             </div>
-          </div>
-        </>
-      );
-}
- 
+          ) : selectedChart === "tassel" ||
+            selectedChart === "hood" ||
+            selectedChart === "gown" ? null : (
+            // All Stock Summary
+            <div className="md:w-1/3 w-full grid grid-cols-2 md:grid-cols-2 gap-4 mt-0">
+              <div className="bg-white shadow-md rounded-xl p-4 text-center col-span-2">
+                <h3 className="text-lg font-semibold text-[#02327B]">
+                  Total Items
+                </h3>
+                <p className="text-2xl font-extrabold text-gray-700">
+                  {totalItems}
+                </p>
+              </div>
+              {Object.entries(summary.byType).map(([type, count]) => {
+                // Filter statuses for this type only
+                const typeStatuses = items
+                  .filter((item) => item.item_type === type)
+                  .reduce((acc, item) => {
+                    acc[item.item_status] =
+                      (acc[item.item_status] || 0) + (item.quantity || 0);
+                    return acc;
+                  }, {});
+                return (
+                  <div
+                    key={type}
+                    className="bg-white shadow-md rounded-xl p-4 text-center col-span-1 h-full"
+                  >
+                    <h3 className="text-lg font-semibold text-[#02327B] capitalize">
+                      {type}s
+                    </h3>
+                    <p className="text-xl font-bold text-gray-700">{count}</p>
+                    <div className="mt-2 text-xs space-y-1">
+                      {Object.entries(typeStatuses).map(
+                        ([status, statusCount]) => (
+                          <div
+                            key={status}
+                            className={`flex justify-between ${
+                              statusColors[status] || "text-gray-500"
+                            }`}
+                          >
+                            <span>{status}</span>
+                            <span className="font-bold">{statusCount}</span>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Chart Label */}
+      <h3 className="text-center text-xl font-bold text-[#02327B] mt-8">
+        {chartLabels[selectedChart]}
+      </h3>
+    </div>
+  );
+};
+
 export default ItemStatus;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 import Profile from "../../assets/images/dump.jpg";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
 
@@ -44,7 +44,7 @@ export function ItemStatusTab() {
   /* CHECK RETURN */
 }
 export function CheckReturnTab() {
-  return(
+  return (
     <>
       <CheckReturn />
     </>
@@ -124,7 +124,7 @@ export function ViewDamageTab() {
 export function ViewRepairTab() {
   return (
     <div className="h-full flex justify-center w-full">
-      <CarouselPlugin />
+      <h1>DI KO NA TO ICAROUSEL, same ko nalng sa view damage items</h1>
     </div>
   );
 }

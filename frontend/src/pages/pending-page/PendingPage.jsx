@@ -1,16 +1,27 @@
+/**
+ * PendingPage Component
+ * Main page component for displaying pending toga inventory items
+ * Shows item status instead of return status and provides grid/table view options
+ */
+
 import React, { useState } from "react";
-import Table from "../../components/common/Table";
+import PendingTable from "../../components/pending-page/PendingTable";
 import SideBar from "../../components/navigations/SideBar";
 import Navbar from "../../components/navigations/NavBar";
 
+/**
+ * PendingPage Component
+ * Manages the layout and state for the pending items view
+ */
 const PendingPage = () => {
+  // View state management
   const [isGrid, setIsGrid] = useState(false);
   const [modifyTable, setmodifyTable] = useState(false);
   const [activeTab, setActiveTab] = useState("pending");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sortOrder, setSortOrder] = useState("name-asc");
 
-  // Handler functions for sort buttons (for SideBar)
+  // Sort handlers for the sidebar controls
   const handleSortNameAsc = () => setSortOrder("name-asc");
   const handleSortNameDesc = () => setSortOrder("name-desc");
   const handleSortDateNewest = () => setSortOrder("newest");
@@ -18,11 +29,10 @@ const PendingPage = () => {
 
   return (
     <div
-      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
-        sidebarOpen
-          ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
-          : "md:grid-cols-1"
-      }`}
+      className={`w-screen h-screen overflow-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${sidebarOpen
+        ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
+        : "md:grid-cols-1"
+        }`}
     >
       {/* Sidebar: left on desktop, hidden on mobile */}
       {sidebarOpen && (
@@ -65,9 +75,9 @@ const PendingPage = () => {
               </span>
             </button>
           </div>
-          <div className="w-full h-full overflow-visible flex flex-col flex-1">
+          <div className="w-full h-full overflow-visible flex flex-col">
             <div className="flex-1 flex mx-auto min-w-fit animate-fade-in overflow-hidden">
-              <Table
+              <PendingTable
                 isGrid={isGrid}
                 modifyTable={modifyTable}
                 sortOrder={sortOrder}

@@ -1,24 +1,95 @@
 import React, { useState, useEffect } from "react";
-import Profile from "../../assets/images/profilepicture.jpg";
+// Remove the static profile import
 import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
 import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
 import InventorySidebarButtons from "../common/InventorySidebarButtons";
 
+// Add InitialsAvatar component to display user initials
+const InitialsAvatar = ({ name, className = "" }) => {
+  // Get initials from the name (first letter of first and last name)
+  const getInitials = (fullName) => {
+    if (
+      !fullName ||
+      fullName === "Not logged in" ||
+      fullName === "Fetch error" ||
+      fullName === "No user found"
+    ) {
+      return "?";
+    }
+
+    const names = fullName.split(" ");
+    if (names.length === 1) {
+      return names[0].charAt(0).toUpperCase();
+    }
+    return (
+      names[0].charAt(0) + names[names.length - 1].charAt(0)
+    ).toUpperCase();
+  };
+
+  // Generate a consistent color based on the name
+  const getColorClass = (name) => {
+    if (
+      !name ||
+      name === "Not logged in" ||
+      name === "Fetch error" ||
+      name === "No user found"
+    ) {
+      return "bg-gray-500";
+    }
+
+    const colors = [
+      "bg-blue-600",
+      "bg-green-600",
+      "bg-yellow-600",
+      "bg-purple-600",
+      "bg-pink-600",
+      "bg-indigo-600",
+      "bg-red-600",
+      "bg-teal-600",
+    ];
+
+    // Simple hash function to get consistent color for the same name
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    return colors[Math.abs(hash) % colors.length];
+  };
+
+  const initials = getInitials(name);
+  const colorClass = getColorClass(name);
+
+  return (
+    <div
+      className={`rounded-full flex items-center justify-center text-white font-bold ${colorClass} ${className}`}
+      style={{ objectFit: "cover" }}
+    >
+      {initials}
+    </div>
+  );
+};
+
 const SideBar = ({
   setSortOrder,
   activeTab,
   setIsAll,
+  setIsReturnedTab, // add this
+  setIsNotReturnedTab, // add this
   setIsEvaluationTab,
   setIsNotEvaluationTab,
-  setIsAZ,
-  setIsZA,
+  focusedStatus,
+  setFocusedStatus,
+  allCount = 0,
+  evaluatedCount = 0,
+  NotEvaluatedCount = 0,
+  returnedCount = 0,
+  notReturnedCount = 0,
   userStatus,
   dateReserved,
   dateDue,
-  focusedStatus, //setter kada click ng button
-  setFocusedStatus, // hover effects to
-  onAdminName, // adminname passere this
+  onAdminName,
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -28,9 +99,12 @@ const SideBar = ({
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
-  const [focusedStatusLocal, setFocusedStatusLocal] = useState("all");
+  const [focusedStatusLocal, setFocusedStatusLocal] = useState(
+    focusedStatus || "all"
+  );
   // Add state to track which sort button is focused
   const [focusedSort, setFocusedSort] = useState("name-asc");
+  const [reservationTabFocus, setReservationTabFocus] = useState("all");
 
   useEffect(() => {
     function handleResize() {
@@ -69,17 +143,29 @@ const SideBar = ({
           setAdminName("Bug log in pero nasa inside ka parin");
           setAdminRole(errorMsg);
           onAdminName && onAdminName("Bug log in pero nasa inside ka parin");
+          // Kailangan sya redirect so login page once mag expire yung session
           console.error("Sidebar /users fetch error:", errorMsg);
           return;
         }
         return res.json();
       })
       .then((data) => {
-        if (data && data.name && data.role) {
-          setAdminName(data.name);
+        // Prefer full name if available, otherwise fallback to first_name
+        let displayName = "";
+        if (data) {
+          if (data.name) {
+            displayName = data.name;
+          } else if (data.first_name && data.surname) {
+            displayName = `${data.first_name} ${data.surname}`;
+          } else if (data.first_name) {
+            displayName = data.first_name;
+          }
+        }
+        if (displayName && data.role) {
+          setAdminName(displayName);
           setAdminRole(data.role);
-          onAdminName && onAdminName(data.name);
-        } else if (data) {
+          onAdminName && onAdminName(displayName);
+        } else {
           setAdminName("No user found");
           setAdminRole("N/A");
           onAdminName && onAdminName("No user found");
@@ -141,6 +227,26 @@ const SideBar = ({
     setIsNotEvaluationTab && setIsNotEvaluationTab(true);
   };
 
+  // Reservation tab filters (Return Status)
+  const AllReturnStatus = () => {
+    setReservationTabFocus("all");
+    setIsAll && setIsAll(true);
+    setIsReturnedTab && setIsReturnedTab(false);
+    setIsNotReturnedTab && setIsNotReturnedTab(false);
+  };
+  const ReturnedFilter = () => {
+    setReservationTabFocus("returned");
+    setIsAll && setIsAll(false);
+    setIsReturnedTab && setIsReturnedTab(true);
+    setIsNotReturnedTab && setIsNotReturnedTab(false);
+  };
+  const NotReturnedFilter = () => {
+    setReservationTabFocus("notreturned");
+    setIsAll && setIsAll(false);
+    setIsReturnedTab && setIsReturnedTab(false);
+    setIsNotReturnedTab && setIsNotReturnedTab(true);
+  };
+
   console.log(activeTab);
 
   return (
@@ -161,11 +267,15 @@ const SideBar = ({
           >
             <div className="flex justify-center">
               <div className="h-full ml-1 w-16 flex justify-center items-center">
-                <img
+                {/* <img
                   className="w-10 md:w-16 rounded-full max-w-full"
                   src={Profile}
                   alt="profile"
                   style={{ objectFit: "cover" }}
+                /> */}
+                <InitialsAvatar
+                  name={adminName}
+                  className="w-10 h-10 md:w-16 md:h-16"
                 />
               </div>
               <div className="h-full ml-3 flex flex-col justify-center items-start text-white">
@@ -259,9 +369,11 @@ const SideBar = ({
             className="min-w-full md:w-11/12 md:scale-100 md:min-w-48 md:h-fit py-6 bg-[#102F5E] flex items-center rounded-xl md:mt-5 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <div className="relative w-full flex flex-col justify-between md:w-full">
-              <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
-                ITEM STATUS
-              </h4>
+              {activeTab !== "student-home" && (
+                <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
+                  ITEM STATUS
+                </h4>
+              )}
               {activeTab === "evaluation" ? (
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
@@ -277,7 +389,7 @@ const SideBar = ({
                         All
                       </p>
                       <div className="right-0 absolute sm:text-[10px] text-[11px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2  py-0.5 px-2">
-                        123
+                        {allCount}
                       </div>
                     </button>
                     <button
@@ -292,7 +404,7 @@ const SideBar = ({
                         Evaluated
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        13
+                        {evaluatedCount}
                       </div>
                     </button>
                   </div>
@@ -309,7 +421,7 @@ const SideBar = ({
                         No Evaluation
                       </p>
                       <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        19
+                        {NotEvaluatedCount}
                       </div>
                     </button>
                   </div>
@@ -439,90 +551,109 @@ const SideBar = ({
                   </div>
                 </div>
               ) : activeTab === "student-home" ? (
-                <div className="w-full h-[90px] md:scale-100">
-                  <div className="w-full h-1/2 flex justify-between items-center">
-                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
-                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                        Status
-                      </p>
-                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        {userStatus || "N/A"}
-                      </p>
-                    </div>
-                    <div className="relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-gray-200 cursor-default">
-                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                        Reserved
-                      </p>
-                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        {dateReserved || "N/A"}
-                      </p>
+                <div className="w-full max-w-sm bg-[#0C2A66] text-white p-4 rounded-lg shadow-md space-y-4">
+                  <div>
+                    <p className="text-sm font-semibold">CURRENT STATUS</p>
+                    <div className="mt-1 bg-white text-black rounded-md px-3 py-2 flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="w-3 h-3 rounded-full bg-[#F4C430]"></span>
+                        <span className="text-sm">
+                          {userStatus || "Pending Approval"}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="w-full h-1/2 flex justify-between items-center">
-                    <div className="relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-gray-200 cursor-default">
-                      <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
-                        Due
-                      </p>
-                      <p className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        {dateDue || "N/A"}
-                      </p>
+
+                  <div>
+                    <p className="text-sm font-semibold">DATE APPROVED</p>
+                    <div className="mt-1 bg-white text-black rounded-md px-3 py-2 flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="w-3 h-3 rounded-full bg-[#F4C430]"></span>
+                        <span className="text-sm">{dateReserved || "N/A"}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-semibold">DATE DUE</p>
+                    <div className="mt-1 bg-white text-black rounded-md px-3 py-2 flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="w-3 h-3 rounded-full bg-[#F4C430]"></span>
+                        <span className="text-sm">
+                          {dateDue || "May 2, 2026"}
+                        </span>
+                      </div>
+                      {/* Notification bell icon (you can use Heroicons or Lucide) */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-gray-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                        />
+                      </svg>
                     </div>
                   </div>
                 </div>
-              ) : (
-                // Dashboard buttons (default)
+              ) : activeTab === "reservation" ? (
                 <div className="w-full h-[90px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatusLocal === "all"
-                          ? "ring-2 ring-[#2563eb] scale-105"
+                        reservationTabFocus === "all"
+                          ? "ring-2 ring-[#f3ca91] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("all")}
+                      onClick={AllReturnStatus}
                     >
                       <p className="sm:text-[14px] text-[12px] md:text-[15px] font-figtree font-bold text-[#1E40AF] ml-3">
                         All
                       </p>
-                      <div className="right-0 absolute sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        123
+                      <div className="right-0 absolute sm:text-[10px] text-[11px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2  py-0.5 px-2">
+                        {allCount}
                       </div>
                     </button>
                     <button
-                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatusLocal === "evaluated"
+                      className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${
+                        reservationTabFocus === "returned"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("evaluated")}
+                      onClick={ReturnedFilter}
                     >
-                      <p className="sm:text-[14px] text-[13px] md:text-[15px] font-figtree font-bold text-[#B45309] ml-3">
-                        Evaluated
+                      <p className="sm:text-[11px] text-[9px] md:text-[14px] font-figtree font-bold text-[#15803D] ml-3">
+                        Returned
                       </p>
-                      <div className="absolute right-0 sm:text-[14px] text-[13px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        13
+                      <div className="absolute right-0 sm:text-[10px] text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
+                        {returnedCount}
                       </div>
                     </button>
                   </div>
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${
-                        focusedStatusLocal === "noeval"
+                        reservationTabFocus === "notreturned"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
-                      onClick={() => setFocusedStatus("noeval")}
+                      onClick={NotReturnedFilter}
                     >
                       <p className="sm:text-[12px] text-[13px] font-bold text-[#B91C1C] ml-3">
-                        No Evaluation
+                        Not Returned
                       </p>
-                      <div className="absolute right-0 sm:text-[14px] text-[13px] md:sm:text-[14px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        19
+                      <div className="absolute right-0 sm:text-[10px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
+                        {notReturnedCount}
                       </div>
                     </button>
                   </div>
                 </div>
-              )}
+              ) : null}
               {/* REMOVE SORT BY BUTTONS FOR INVENTORY TAB */}
               {activeTab !== "student-home" && activeTab !== "inventory" ? (
                 activeTab === "reservation" ? (
