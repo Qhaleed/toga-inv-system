@@ -19,6 +19,7 @@ const registerRoute = require("./routes/register");
 const itemsRoute = require("./routes/items");
 const studentHomeRoute = require("./routes/student-home");
 const searchRoute = require("./routes/search");
+const statusesRoute = require("./routes/statuses");
 
 // Routes for db
 const accountsRoute = require("./routes/accounts");
@@ -36,6 +37,7 @@ app.use("/accounts", accountsRoute);
 app.use("/items", itemsRoute);
 app.use("/student-home", studentHomeRoute);
 app.use("/search", searchRoute);
+app.use("/statuses", statusesRoute);
 
 // Root Test
 app.get("/", (req, res) => {

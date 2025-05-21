@@ -4,6 +4,12 @@ import MenuIcon from "../../assets/icons/white-row.svg?react";
 import { Calendar } from "@/components/ui/calendar";
 import CalendarHeroIcon from "../../assets/icons/black-calendar.svg?react";
 import InventorySidebarButtons from "../common/InventorySidebarButtons";
+import PopupWindow from "../common/PopupWindow";
+import AddStockPopup from "../common/AddStockPopup";
+import RemoveStockPopup from "../common/RemoveStockPopup";
+import BoxIcon from "../../assets/icons/box.svg";
+import BlackTrashIcon from "../../assets/icons/black-trash.svg";
+import AlertCard from "../common/AlertCard";
 
 // Add InitialsAvatar component to display user initials
 const InitialsAvatar = ({ name, className = "" }) => {
@@ -74,6 +80,7 @@ const InitialsAvatar = ({ name, className = "" }) => {
 const SideBar = ({
   setSortOrder,
   activeTab,
+  setActiveTab, // <-- add this prop
   setIsAll,
   setIsReturnedTab, // add this
   setIsNotReturnedTab, // add this
@@ -99,12 +106,14 @@ const SideBar = ({
   const [adminName, setAdminName] = useState("");
   const [adminRole, setAdminRole] = useState("");
   const [date, setDate] = useState(new Date());
-  const [focusedStatusLocal, setFocusedStatusLocal] = useState(
-    focusedStatus || "all"
-  );
-  // Add state to track which sort button is focused
-  const [focusedSort, setFocusedSort] = useState("name-asc");
-  const [reservationTabFocus, setReservationTabFocus] = useState("all");
+  const [showAddStockPopup, setShowAddStockPopup] = useState(false);
+  const [showRemoveStockPopup, setShowRemoveStockPopup] = useState(false);
+  const [alert, setAlert] = useState({ show: false, message: "", type: "success" });
+
+  const showAlert = (message, type = "success") => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => setAlert((a) => ({ ...a, show: false })), 3000);
+  };
 
   useEffect(() => {
     function handleResize() {
@@ -184,28 +193,23 @@ const SideBar = ({
   // MGA HANDLER FOR SORTING
   const handleSortNameAsc = () => {
     setSortOrder && setSortOrder("name-asc");
-    setFocusedSort("name-asc"); // Update focused sort state
   };
 
   const handleSortNameDesc = () => {
     setSortOrder && setSortOrder("name-desc");
-    setFocusedSort("name-desc"); // Update focused sort state
   };
 
   const handleSortDateNewest = () => {
     setSortOrder && setSortOrder("newest");
-    setFocusedSort("newest"); // Update focused sort state
   };
 
   const handleSortDateOldest = () => {
     setSortOrder && setSortOrder("oldest");
-    setFocusedSort("oldest"); // Update focused sort state
   };
 
   // Update setFocusedStatusLocal when a sidebar button is clicked
   const All = () => {
     setFocusedStatus("all");
-    setFocusedStatusLocal("all");
     setIsAll && setIsAll(true);
     setIsEvaluationTab && setIsEvaluationTab(false);
     setIsNotEvaluationTab && setIsNotEvaluationTab(false);
@@ -213,7 +217,6 @@ const SideBar = ({
 
   const EvaluatedFilter = () => {
     setFocusedStatus("evaluated");
-    setFocusedStatusLocal("evaluated");
     setIsAll && setIsAll(false);
     setIsEvaluationTab && setIsEvaluationTab(true);
     setIsNotEvaluationTab && setIsNotEvaluationTab(false);
@@ -221,13 +224,17 @@ const SideBar = ({
 
   const NotEvaluatedFilter = () => {
     setFocusedStatus("noeval");
-    setFocusedStatusLocal("noeval");
     setIsAll && setIsAll(false);
     setIsEvaluationTab && setIsEvaluationTab(false);
     setIsNotEvaluationTab && setIsNotEvaluationTab(true);
   };
 
   // Reservation tab filters (Return Status)
+  const [reservationTabFocus, setReservationTabFocus] = useState("all");
+
+  // Sort state for reservation tab
+  const [focusedSort, setFocusedSort] = useState("name-asc");
+
   const AllReturnStatus = () => {
     setReservationTabFocus("all");
     setIsAll && setIsAll(true);
@@ -251,6 +258,12 @@ const SideBar = ({
 
   return (
     <>
+      <AlertCard
+        message={alert.message}
+        type={alert.type}
+        show={alert.show}
+        onClose={() => setAlert((a) => ({ ...a, show: false }))}
+      />
       {visible && (
         <div
           // Always keep z-10 here so modals (z-[99999]) can overlay SideBar
@@ -371,7 +384,7 @@ const SideBar = ({
             <div className="relative w-full flex flex-col justify-between md:w-full">
               {activeTab !== "student-home" && (
                 <h4 className="text-white text-[13px] md:text-[13px] mt-1 ml-4 md:scale-100">
-                  ITEM STATUS
+                  {activeTab === "dashboard" ? "ACTIONS" : "ITEM STATUS"}
                 </h4>
               )}
               {activeTab === "evaluation" ? (
@@ -379,7 +392,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatusLocal === "all"
+                        focusedStatus === "all"
                           ? "ring-2 ring-[#f3ca91] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -394,7 +407,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#DCFCE7] ${
-                        focusedStatusLocal === "evaluated"
+                        focusedStatus === "evaluated"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -411,7 +424,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEE2E2] ${
-                        focusedStatusLocal === "noeval"
+                        focusedStatus === "noeval"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -427,68 +440,44 @@ const SideBar = ({
                   </div>
                 </div>
               ) : activeTab === "dashboard" ? (
-                <div className="w-full  h-[90px] md:scale-100">
-                  <div className="w-full h-1/2 gap-2 flex justify-between items-center ">
+                <>
+                  <div className="w-full flex flex-col items-center gap-4 py-4">
                     <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatusLocal === "all"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("all")}
+                      className="w-4/5 flex items-center gap-3 px-4 py-1 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 shadow-md hover:from-blue-700 hover:to-blue-600 focus:ring-2 focus:ring-blue-300 text-white font-semibold text-base transition-all duration-200 group"
+                      onClick={() => setShowAddStockPopup(true)}
                     >
-                      <p className=":text-[14px] md:text-[12px] lg:text-[13px] font-figtree font-bold text-[#1E40AF] ml-3">
-                        All
-                      </p>
-                      <div className="right-0 absolute lg:text-[12px] md:text-[10px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        123
-                      </div>
+                      <img
+                        src={BoxIcon}
+                        alt="Add Stocks"
+                        className="w-5 h-5 drop-shadow group-hover:scale-110 transition-transform"
+                      />
+                      <span className="flex-1 text-left">Add Stocks</span>
                     </button>
                     <button
-                      className={`relative w-[43%] h-7 rounded-md md:mr-2 lg:mr-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatusLocal === "borrowed"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
-                      onClick={() => setFocusedStatus("borrowed")}
+                      className="w-4/5 flex items-center gap-3 px-4 py-1 rounded-xl bg-gradient-to-r from-red-600 to-red-500 shadow-md hover:from-red-700 hover:to-red-600 focus:ring-2 focus:ring-red-300 text-white font-semibold text-base transition-all duration-200 group"
+                      onClick={() => setShowRemoveStockPopup(true)}
                     >
-                      <p className="md:text-[10px] sm:text-[13px] lg:text-[13px] font-figtree font-bold text-[#B45309] ml-3">
-                        Borrowed
-                      </p>
-                      <div className="absolute right-0 lg:text-[12px] md:text-[10px] bg-[#F3B51A] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        45
-                      </div>
+                      <img
+                        src={BlackTrashIcon}
+                        alt="Remove Stocks"
+                        className="w-5 h-5 drop-shadow group-hover:scale-110 transition-transform"
+                      />
+                      <span className="flex-1 text-left">Remove Stocks</span>
                     </button>
                   </div>
-                  <div className="w-full h-1/2 flex justify-between items-center ">
-                    <button
-                      className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatusLocal === "returned"
-                          ? "ring-2 ring-[#2563eb] scale-105"
-                          : ""
-                      } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
-                      onClick={() => setFocusedStatus("returned")}
-                    >
-                      <p className="md:text-[10px] sm:text-[13px] lg:text-[13px] font-figtree font-bold text-[#B45309] ml-3">
-                        Returned
-                      </p>
-                      <div className="absolute right-0 lg:text-[12px] md:text-[10px] bg-[#102F5E] rounded-lg text-white mr-1 sm:mr-2 px-2">
-                        78
-                      </div>
-                    </button>
-                  </div>
-                </div>
+                </>
               ) : activeTab === "inventory" ? (
                 <InventorySidebarButtons
                   focusedStatus={focusedStatus}
                   setFocusedStatus={setFocusedStatus}
+                  setActiveTab={setActiveTab}
                 />
               ) : activeTab === "pending" ? (
                 <div className="w-full h-[100px] md:scale-100">
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#E0E7FF] ${
-                        focusedStatusLocal === "all"
+                        focusedStatus === "all"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:scale-105 transform-all ease-out duration-300`}
@@ -503,7 +492,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#D1FAE5] ${
-                        focusedStatusLocal === "approved"
+                        focusedStatus === "approved"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 hover:scale-105 transform-all ease-out duration-300`}
@@ -520,7 +509,7 @@ const SideBar = ({
                   <div className="w-full h-1/2 flex justify-between items-center ">
                     <button
                       className={`relative w-[43%] h-7 rounded-md ml-4 flex justify-between items-center bg-[#FEF9C3] ${
-                        focusedStatusLocal === "pending"
+                        focusedStatus === "pending"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -535,7 +524,7 @@ const SideBar = ({
                     </button>
                     <button
                       className={`relative w-[43%] h-7 rounded-md mr-4 flex justify-between items-center bg-[#FECACA] ${
-                        focusedStatusLocal === "rejected"
+                        focusedStatus === "rejected"
                           ? "ring-2 ring-[#2563eb] scale-105"
                           : ""
                       } hover:bg-blue-200 transform-all ease-out duration-300 hover:scale-105`}
@@ -737,9 +726,58 @@ const SideBar = ({
           {/* CALENDAR */}
           <div
             key={activeTab + "-calendar"}
-            className="min-w-[80%] w-[90%] relative h-70 bg-[#102F5E] flex justify-center items-center rounded-xl mt-4 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="min-w-[80%] w-[90%] static h-70 bg-[#102F5E] flex justify-center items-center rounded-xl mt-4 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <Calendar mode="single" selected={date} onSelect={setDate} />
+            <AddStockPopup
+              open={showAddStockPopup}
+              onClose={() => setShowAddStockPopup(false)}
+              onSubmit={async (data) => {
+                // API call to add stock to items endpoint
+                try {
+                  const response = await fetch("http://localhost:5001/items", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                  });
+                  if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Failed to add stock");
+                  }
+                  const result = await response.json();
+                  console.log(result);
+                  showAlert("Stock added successfully!", "success");
+                } catch (err) {
+                  showAlert("Error adding stock: " + err.message, "error");
+                }
+              }}
+            />
+            <RemoveStockPopup
+              open={showRemoveStockPopup}
+              onClose={() => setShowRemoveStockPopup(false)}
+              onSubmit={async (data) => {
+                // API call to remove stock
+                try {
+                  const response = await fetch(
+                    "http://localhost:5001/items/remove",
+                    {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(data),
+                    }
+                  );
+                  if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || "Failed to remove stock");
+                  }
+                  const result = await response.json();
+                  console.log(result);
+                  showAlert("Stock removed successfully!", "success");
+                } catch (err) {
+                  showAlert("Error removing stock: " + err.message, "error");
+                }
+              }}
+            />
           </div>
         </div>
       )}

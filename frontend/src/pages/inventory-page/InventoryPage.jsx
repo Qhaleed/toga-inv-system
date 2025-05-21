@@ -29,10 +29,11 @@ const InventoryPage = ({ setSortOrder }) => {
 
   return (
     <div
-      className={`w-screen h-screen overflow-x-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${sidebarOpen
+      className={`w-screen h-screen overflow-x-hidden grid grid-rows-1 md:grid-rows-1 transition-transform duration-500 ease-in-out ${
+        sidebarOpen
           ? "md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] 2xl:grid-cols-[400px_1fr]"
           : "md:grid-cols-1"
-        }`}
+      }`}
     >
       {/* Sidebar:mobile view */}
       {sidebarOpen && (
@@ -41,6 +42,7 @@ const InventoryPage = ({ setSortOrder }) => {
             alwaysShowOnLarge
             setSortOrder={setSortOrder}
             activeTab={activeTab}
+            setActiveTab={setActiveTab}
             focusedStatus={focusedStatus}
             setFocusedStatus={setFocusedStatus}
           />
@@ -49,13 +51,12 @@ const InventoryPage = ({ setSortOrder }) => {
       {/* Main content */}
       <div className="bg-[#F3F9FF] overflow-hidden  w-full h-full">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-14 flex items-center relative">
+        <div className="w-full z-10 h-9 flex items-center relative">
           <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
-
         <div className="w-full relative h-full  flex flex-col">
-          <div className="w-full    h-15 items-center ">
+          <div className="w-full    items-center ">
             <button
               className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
               onClick={() => setSidebarOpen((open) => !open)}
@@ -69,9 +70,6 @@ const InventoryPage = ({ setSortOrder }) => {
           </div>
           <div className="w-full h-full overflow-visible flex flex-col flex-1">
             <div className="relative flex flex-col items-center justify-start gap-3 min-w-0 overflow-auto w-full animate-fade-in">
-
-
-
               {/* Inventory tab content switching components yk */}
               {activeTab === "inventory" &&
                 (() => {

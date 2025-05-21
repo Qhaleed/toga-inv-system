@@ -36,6 +36,7 @@ const buttonConfigs = [
 export default function InventorySidebarButtons({
   focusedStatus,
   setFocusedStatus,
+  setActiveTab, // <-- add this prop
 }) {
   return (
     <div className="w-full h-fill md:scale-100 flex flex-col gap-4 px-3 py-2">
@@ -49,7 +50,10 @@ export default function InventorySidebarButtons({
               ? "ring-2 ring-[#3645efbd] scale-105"
               : "hover:scale-105"
           }`}
-          onClick={() => setFocusedStatus(btn.key)}
+          onClick={() => {
+            setFocusedStatus(btn.key);
+            setActiveTab && setActiveTab("inventory"); // ensure inventory tab is active
+          }}
         >
           {btn.label}
         </button>

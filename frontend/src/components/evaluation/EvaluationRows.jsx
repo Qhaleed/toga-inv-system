@@ -3,6 +3,7 @@ import EyeIcon from "../../assets/icons/eye-icon.svg?react";
 import Trash from "../../assets/icons/black-trash.svg?react";
 import ChevronDown from "../../assets/icons/chevron-down.svg?react";
 import { useState, useEffect } from "react";
+import AlertCard from "../common/AlertCard";
 
 const EvaluationRows = ({
   rowHeightClass = "h-16",
@@ -16,10 +17,20 @@ const EvaluationRows = ({
   allData,
 }) => {
   const [dashboard, setDashboard] = useState([]);
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
   const openTab = (db) => {
     setValue(db);
     setEvaluationTab("block");
+  };
+
+  const showAlert = (message, type = "success") => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => setAlert((a) => ({ ...a, show: false })), 3000);
   };
 
   useEffect(() => {
@@ -53,16 +64,16 @@ const EvaluationRows = ({
 
   // Table/column view with sticky header and scrollable table
   return (
-    <div
-      className="w-full  max-h-screen overflow-x-auto"
-      style={{
-        minWidth: "600px",
-        maxWidth: "100vw",
-      }}
-    >
-      <div className="min-w-[300px] max-w-[120vw] overflow-visible relative bg-white">
-        <table className="w-full ">
-          <thead className="bg-[#02327B]  top-0 sticky">
+    <>
+      <AlertCard
+        message={alert.message}
+        type={alert.type}
+        show={alert.show}
+        onClose={() => setAlert((a) => ({ ...a, show: false }))}
+      />
+      <div className="w-full max-h-screen overflow-x-auto bg-white">
+        <table className="w-full min-w-[700px] max-w-full">
+          <thead className="bg-[#02327B] top-0 sticky">
             <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
               <th className="md:w-[23%] text-white text-[7px] md:text-[11px] xs:text-xs font-bold text-center align-middle min-w-[150px]">
                 <span className="block text-[10px] md:text-[15px] w-full text-center ">
@@ -124,7 +135,17 @@ const EvaluationRows = ({
                   >
                     <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                       <div className="h-full w-[100%] py-4 flex justify-center items-center">
-                        <h3 className="truncate">
+                        <h3
+                          className="truncate cursor-pointer"
+                          title={
+                            db.surname +
+                            ", " +
+                            db.first_name +
+                            " " +
+                            db.middle_initial +
+                            "."
+                          }
+                        >
                           {db.surname +
                             ", " +
                             db.first_name +
@@ -132,12 +153,16 @@ const EvaluationRows = ({
                             db.middle_initial +
                             "."}
                         </h3>
-                        {/* Removed the span that was under student name only */}
                       </div>
                     </td>
                     <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center">
-                        <h3 className="truncate">{db.course}</h3>
+                        <h3
+                          className="truncate cursor-pointer"
+                          title={db.course}
+                        >
+                          {db.course}
+                        </h3>
                         <span
                           className="absolute right-0 top-1/6 h-7 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -147,7 +172,12 @@ const EvaluationRows = ({
                     {/* Tassel */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.tassel_color}</h3>
+                        <h3
+                          className="truncate cursor-pointer"
+                          title={db.tassel_color}
+                        >
+                          {db.tassel_color}
+                        </h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -157,7 +187,12 @@ const EvaluationRows = ({
                     {/* Hood */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.hood_color}</h3>
+                        <h3
+                          className="truncate cursor-pointer"
+                          title={db.hood_color}
+                        >
+                          {db.hood_color}
+                        </h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -167,7 +202,12 @@ const EvaluationRows = ({
                     {/* Gown */}
                     <td className="text-center max-w-[80px] w-[80px] align-middle relative sm:max-w-[40px] sm:w-[40px] sm:text-[9px] md:max-w-[80px] md:w-[80px] md:text-xs">
                       <div className="h-full w-full py-2 flex justify-center items-center relative">
-                        <h3 className="truncate">{db.toga_size}</h3>
+                        <h3
+                          className="truncate cursor-pointer"
+                          title={db.toga_size}
+                        >
+                          {db.toga_size}
+                        </h3>
                         <span
                           className="absolute right-0 top-1/4 h-1/2 w-0.5 bg-gray-600 opacity-50"
                           style={{ borderRadius: "2px" }}
@@ -179,7 +219,8 @@ const EvaluationRows = ({
                       <div className="h-full w-full py-2 flex justify-center items-center">
                         <button
                           onClick={() => openTab(db)}
-                          className="truncate bg-[#0C7E48] text-white text-[10px] w-20 rounded-full lg:w-24 lg:text-xs hover:scale-105 transition-all duration-150 ease-out"
+                          className="truncate bg-[#0C7E48] text-white text-[10px] w-20 rounded-full lg:w-24 lg:text-xs hover:scale-105 transition-all duration-150 ease-out cursor-pointer"
+                          title={db.evaluation_status}
                         >
                           Evaluate
                         </button>
@@ -192,7 +233,12 @@ const EvaluationRows = ({
                     {/* Status */}
                     <td className="w-[100px] align-middle relative sm:max-w-[50px] sm:w-[50px] sm:text-[9px] md:max-w-[100px] md:w-[100px] md:text-xs">
                       <div className="w-full flex justify-center items-center text-black text-xs font-semibold tracking-widest h-full">
-                        {db.evaluation_status}
+                        <span
+                          className="cursor-pointer"
+                          title={db.evaluation_status}
+                        >
+                          {db.evaluation_status}
+                        </span>
                       </div>
                     </td>
                   </tr>,
@@ -214,7 +260,7 @@ const EvaluationRows = ({
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 };
 

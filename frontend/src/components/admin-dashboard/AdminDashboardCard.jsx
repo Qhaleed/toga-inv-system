@@ -1,9 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Table from "../common/Table";
 import SideBar from "../navigations/SideBar";
 import NavBar from "../navigations/NavBar";
 import AdminDashboard from "./AdminDashboard"; // Import the AdminDashboard component
-import profilePic from "@/assets/images/profilepicture.jpg";
 
 const AdminDashboardCard = () => {
   // States for grid and modifyTable
@@ -12,9 +11,31 @@ const AdminDashboardCard = () => {
   const [activeTab, setActiveTab] = useState("dashboard"); // State for active tab
   const [sidebarOpen, setSidebarOpen] = useState(true); // Sidebar toggle state
   const [adminName, setAdminName] = useState("Admin");
+  const [allData, setAllData] = useState([]);
+  const [approvalRequests, setApprovalRequests] = useState([]); // New state for approval requests
 
   const handleAdminName = useCallback((name) => setAdminName(name), []);
-  const firstName = adminName.split(" ")[0];
+
+  // Fetch inventory data on mount (like PendingPage)
+  useEffect(() => {
+    fetch("http://localhost:5001/items")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllData(data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch items data:", err);
+      });
+    // Fetch approval requests from accounts
+    fetch("http://localhost:5001/accounts")
+      .then((res) => res.json())
+      .then((data) => {
+        setApprovalRequests(data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch accounts data:", err);
+      });
+  }, []);
 
   return (
     <div
@@ -37,7 +58,7 @@ const AdminDashboardCard = () => {
       {/* Main content with NavBar above */}
       <div className="bg-[#F3F9FF] w-full h-full flex flex-col">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-14 flex items-center relative">
+        <div className="w-full z-10 h-15 flex items-center relative">
           <NavBar
             isGrid={isGrid}
             setIsGrid={setIsGrid}
@@ -50,7 +71,11 @@ const AdminDashboardCard = () => {
 
         {/* Main content below navbar */}
         <div className="w-full h-full overflow-visible relative flex flex-col flex-1">
-          <AdminDashboard adminName={adminName} />
+          <AdminDashboard
+            adminName={adminName}
+            allData={allData}
+            approvalRequests={approvalRequests}
+          />
           <button
             className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
             onClick={() => setSidebarOpen((open) => !open)}

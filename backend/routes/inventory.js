@@ -5,7 +5,10 @@ const db = require("../database/db");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-router.get('/', async (req, res) => {
+
+
+// Endpoint for rendering data on rows
+router.get("/", async (req, res) => {
   try {
     const fullTable = await db.getAllTable();
 
@@ -16,14 +19,14 @@ router.get('/', async (req, res) => {
     }
 
     // filter only students lang ang isend sa query
-    const filteredTable = fullTable.filter(row => row.role === 'student');
+    const filteredTable = fullTable.filter((row) => row.role === "student");
 
     // loops each row and split the updated_at date to get only the date
-    const formattedTable = filteredTable.map(row => ({
+    const formattedTable = filteredTable.map((row) => ({
       ...row,
       updated_at: row.updated_at
-        ? row.updated_at.toISOString().split('T')[0] //remove time part
-        : null
+        ? row.updated_at.toISOString().split("T")[0] //remove time part
+        : null,
     }));
 
     res.status(200).json(formattedTable);
@@ -36,7 +39,14 @@ router.get('/', async (req, res) => {
 // Add PATCH endpoint to update inventory items
 router.patch("/:id", async (req, res) => {
   const { id } = req.params;
-  const { tassel_color, hood_color, toga_size, return_status, has_cap, status } = req.body;
+  const {
+    tassel_color,
+    hood_color,
+    toga_size,
+    return_status,
+    has_cap,
+    status,
+  } = req.body;
 
   try {
     // Build dynamic query based on provided fields
@@ -71,6 +81,16 @@ router.patch("/:id", async (req, res) => {
     // If status is provided, update it directly using the new function
     if (status !== undefined) {
       await db.updateInventoryStatus(id, status);
+      // If only status is being updated, return early
+      if (
+        tassel_color === undefined &&
+        hood_color === undefined &&
+        toga_size === undefined &&
+        status === undefined &&
+        has_cap === undefined
+      ) {
+        return res.status(200).json({ message: "Status updated successfully" });
+      }
     }
 
     // If there are other fields to update besides status
@@ -78,39 +98,27 @@ router.patch("/:id", async (req, res) => {
       // Add the ID parameter to queryParams array
       queryParams.push(id);
 
-      const query = `UPDATE inventory SET ${updateFields.join(", ")} WHERE inventory_id = ?`;
-
-      console.log("Executing query:", query, "with params:", queryParams);
-
-      const [result] = await db.pool.query(query, queryParams);
-
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: "Inventory item not found" });
-      }
+      const query = `UPDATE inventory SET ${updateFields.join(
+        ", "
+      )} WHERE inventory_id = ?`;
+      await db.pool.query(query, queryParams);
+      return res
+        .status(200)
+        .json({ message: "Inventory updated successfully" });
     }
 
-    // Fetch the updated record with all the joined information
-    const [updatedItems] = await db.pool.query(
-      `SELECT a.*, i.*
-       FROM accounts a
-       LEFT JOIN inventory i ON a.account_id = i.account_id
-       WHERE i.inventory_id = ?`,
-      [id]
-    );
-
-    if (!updatedItems || updatedItems.length === 0) {
-      return res.status(404).json({ error: "Updated item not found" });
-    }
-
-    res.json(updatedItems[0]);
+    // If nothing was updated
+    res.status(400).json({ error: "No valid fields provided for update" });
   } catch (error) {
     console.error("Error updating inventory item:", error);
-    res.status(500).json({ error: "Failed to update inventory item: " + error.message });
+    res
+      .status(500)
+      .json({ error: "Failed to update inventory item: " + error.message });
   }
 });
 
 // Add endpoint to check if user has submitted toga size
-router.get('/check-toga-size', async (req, res) => {
+router.get("/check-toga-size", async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ error: "No token provided" });
@@ -127,10 +135,12 @@ router.get('/check-toga-size', async (req, res) => {
     );
 
     res.json({
-      hasSubmitted: existingEntry.length > 0 && existingEntry[0].toga_size !== null,
+      hasSubmitted:
+        existingEntry.length > 0 && existingEntry[0].toga_size !== null,
       togaSize: existingEntry.length > 0 ? existingEntry[0].toga_size : null,
-      tasselColor: existingEntry.length > 0 ? existingEntry[0].tassel_color : null,
-      hoodColor: existingEntry.length > 0 ? existingEntry[0].hood_color : null
+      tasselColor:
+        existingEntry.length > 0 ? existingEntry[0].tassel_color : null,
+      hoodColor: existingEntry.length > 0 ? existingEntry[0].hood_color : null,
     });
   } catch (error) {
     console.error("Error checking toga size:", error);
@@ -138,8 +148,8 @@ router.get('/check-toga-size', async (req, res) => {
   }
 });
 
-// Add POST endpoint to submit toga size and other details
-router.post('/', async (req, res) => {
+// Add POST endpoint to submit toga size and other details upon registration
+router.post("/", async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ error: "No token provided" });
@@ -186,7 +196,7 @@ router.post('/', async (req, res) => {
 
       res.status(200).json({
         message: "Toga details updated successfully",
-        inventory_id: existingEntry[0].inventory_id
+        inventory_id: existingEntry[0].inventory_id,
       });
     } else {
       // Create new entry with default values
@@ -199,12 +209,14 @@ router.post('/', async (req, res) => {
 
       res.status(201).json({
         message: "Toga details submitted successfully",
-        inventory_id: result.insertId
+        inventory_id: result.insertId,
       });
     }
   } catch (error) {
     console.error("Error submitting toga details:", error);
-    res.status(500).json({ error: "Failed to submit toga details: " + error.message });
+    res
+      .status(500)
+      .json({ error: "Failed to submit toga details: " + error.message });
   }
 });
 
@@ -235,11 +247,13 @@ router.delete("/:id", async (req, res) => {
 
     res.json({
       message: "Inventory item deleted successfully",
-      deletedId: id
+      deletedId: id,
     });
   } catch (error) {
     console.error("Error deleting inventory item:", error);
-    res.status(500).json({ error: "Failed to delete inventory item: " + error.message });
+    res
+      .status(500)
+      .json({ error: "Failed to delete inventory item: " + error.message });
   }
 });
 
@@ -247,7 +261,7 @@ router.delete("/:id", async (req, res) => {
 function determineColorsFromCourse(course) {
   // Course to color mapping
   const courseGroups = {
-    Blue: [
+    blue: [
       "Bachelor of Early Childhood Education",
       "Bachelor of Elementary Education",
       "Bachelor of Physical Education",
@@ -257,7 +271,7 @@ function determineColorsFromCourse(course) {
       "BPEd",
       "BSEd",
     ],
-    Maroon: [
+    maroon: [
       "BS Biomedical Engineering",
       "BS Computer Engineering",
       "BS Electronics Communication Engineering",
@@ -269,8 +283,8 @@ function determineColorsFromCourse(course) {
       "AEET",
       "ACN",
     ],
-    Orange: ["BS Nursing", "BSN"],
-    White: [
+    orange: ["BS Nursing", "BSN"],
+    white: [
       "BS Biology",
       "BS Computer Science",
       "BS Information Technology",
@@ -296,7 +310,7 @@ function determineColorsFromCourse(course) {
       "BAIS",
       "BAPhil",
     ],
-    Yellow: [
+    yellow: [
       "BS Accountancy",
       "BS Accounting Information System",
       "BS Internal Auditing",
@@ -315,18 +329,18 @@ function determineColorsFromCourse(course) {
   };
 
   if (!course) {
-    return { tassel_color: "Blue", hood_color: "Blue" }; // Default if no course specified
+    return { tassel_color: "blue", hood_color: "blue" }; // Default if no course specified
   }
 
   // Find the appropriate color for the course
   for (const [color, courses] of Object.entries(courseGroups)) {
-    if (courses.some(c => course.includes(c))) {
-      return { tassel_color: color, hood_color: color };
+    if (courses.some((c) => course.includes(c))) {
+      return { tassel_color: color.toLowerCase(), hood_color: color.toLowerCase() };
     }
   }
 
   // Default if no match is found
-  return { tassel_color: "Blue", hood_color: "Blue" };
+  return { tassel_color: "blue", hood_color: "blue" };
 }
 
 module.exports = router;

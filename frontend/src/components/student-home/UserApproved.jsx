@@ -4,7 +4,7 @@ import FormWrapper from "../common/FormWrapper";
 import measureInstruct from "../../assets/images/measureinstruct.png";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 
-const UserApproved = () => {
+const UserApproved = ({ userData, name }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     middleInitial: "",
@@ -13,9 +13,15 @@ const UserApproved = () => {
     shoulderWidth: "",
     togaSize: "",
     account_id: "",
+    course: "",
+    status: ""
   });
   const [openDropdown, setOpenDropdown] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   const togaSizes = [
     "XS (17 inches)",
     "S (18 inches)",
@@ -28,9 +34,27 @@ const UserApproved = () => {
   ];
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      const token = localStorage.getItem("token");
+useEffect(() => {
+  const fetchUserDetails = async () => {
+    let accountId = "";
+    let token = localStorage.getItem("token");
+
+    // If userData is passed as prop, use it directly
+    if (userData) {
+      setFormData({
+        firstName: userData.first_name || "",
+        middleInitial: userData.middle_initial || "",
+        surname: userData.surname || "",
+        idNumber: userData.id_number || userData.idNumber || "",
+        course: userData.course || "",
+        account_id: userData.account_id || "",
+        status: userData.status || "",
+        shoulderWidth: "",
+        togaSize: "",
+      });
+      accountId = userData.account_id;
+    } else {
+      // Otherwise fetch from API
       if (!token) {
         setFormData({
           firstName: "Guest",
@@ -40,7 +64,10 @@ const UserApproved = () => {
           shoulderWidth: "",
           togaSize: "",
           account_id: "",
+          course: "",
+          status: "",
         });
+        setAlreadyRegistered(false);
         return;
       }
       try {
@@ -58,7 +85,10 @@ const UserApproved = () => {
             shoulderWidth: "",
             togaSize: "",
             account_id: "",
+            course: "",
+            status: "",
           });
+          setAlreadyRegistered(false);
           return;
         }
         const data = await res.json();
@@ -70,8 +100,9 @@ const UserApproved = () => {
           idNumber: data.id_number || data.idNumber || "",
           course: data.course,
           account_id: data.account_id,
-          status: data.status, // <-- add status to formData
+          status: data.status,
         }));
+        accountId = data.account_id;
       } catch {
         setFormData({
           firstName: "Guest",
@@ -81,11 +112,34 @@ const UserApproved = () => {
           shoulderWidth: "",
           togaSize: "",
           account_id: "",
+          course: "",
+          status: "",
         });
+        setAlreadyRegistered(false);
+        return;
       }
-    };
-    fetchUserDetails();
-  }, []);
+    }
+
+    // Check inventory if account_id is present
+    if (accountId) {
+      try {
+        const invRes = await fetch("http://localhost:5001/inventory/check-toga-size", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const invData = await invRes.json();
+        setAlreadyRegistered(invData.hasSubmitted);
+      } catch {
+        setAlreadyRegistered(false);
+      }
+    } else {
+      setAlreadyRegistered(false);
+    }
+  };
+
+  fetchUserDetails();
+}, [userData]);
 
   const getRecommendedSize = (shoulderWidth) => {
     const width = parseFloat(shoulderWidth);
@@ -110,9 +164,23 @@ const UserApproved = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Clear previous messages
+    setSubmitError("");
+    setSubmitSuccess("");
+    setSubmitting(true);
+
+    // Validate form data
+    if (!formData.togaSize) {
+      setSubmitError("Please select a toga size");
+      setSubmitting(false);
+      return;
+    }
+
     const trimmedTogaSize = formData.togaSize
       ? formData.togaSize.split(" ")[0]
-      : ""; //remove the parenthesis sa gown size
+      : "";
+
     try {
       const response = await fetch("http://localhost:5001/student-home", {
         method: "POST",
@@ -127,9 +195,24 @@ const UserApproved = () => {
           account_id: formData.account_id,
         }),
       });
-      alert(JSON.stringify(formData, null, 2));
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to submit toga measurements");
+      }
+
+      setSubmitSuccess("Your toga measurements have been successfully submitted!");
+
+      // If the user had "Pending" status, we could update status to reflect the change
+      setTimeout(() => {
+        window.location.reload(); // Reload to get updated status
+      }, 2000);
+
     } catch (error) {
       console.log("Error submitting form:", error);
+      setSubmitError(error.message || "Error submitting form. Please try again later.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -161,24 +244,24 @@ const UserApproved = () => {
   // Use the same logic as determineColorFromCourse from StudentHomeCard
   const determineColorFromCourse = (course) => {
     if (!course) {
-      return { tasselColor: "Blue", hoodColor: "Blue" };
+      return { tasselColor: "blue", hoodColor: "blue" };
     }
     const courseGroups = {
-      Blue: [
+      blue: [
         "Bachelor of Early Childhood Education (BECEd)",
         "Bachelor of Elementary Education (BEEd)",
         "Bachelor of Physical Education (BPEd)",
         "Bachelor of Secondary Education (BSEd)",
       ],
-      Maroon: [
+      maroon: [
         "BS Biomedical Engineering (BSBME)",
         "BS Computer Engineering (BSCE)",
         "BS Electronics Communication Engineering (BSECE)",
         "Associate in Electronics Engineering Technology (AEET)",
         "Associate in Computer Networking (ACN)",
       ],
-      Orange: ["BS Nursing (BSN)"],
-      White: [
+      orange: ["BS Nursing (BSN)"],
+      white: [
         "BS Biology (BSBio)",
         "BS Computer Science (BSCS)",
         "BS Information Technology (BSIT)",
@@ -192,7 +275,7 @@ const UserApproved = () => {
         "BA International Studies (BAIS)",
         "BA Philosophy (BAPhil)",
       ],
-      Yellow: [
+      yellow: [
         "BS Accountancy (BSA)",
         "BS Accounting Information System (BSAIS)",
         "BS Internal Auditing (BSIA)",
@@ -210,11 +293,19 @@ const UserApproved = () => {
     return { tasselColor: "Blue", hoodColor: "Blue" };
   };
 
+  // Get title text based on status
+  const getFormTitle = () => {
+    if (formData.status === "Pending") {
+      return "Complete Your Registration";
+    }
+    return "Toga Sizing Form";
+  };
+
   return (
     <>
       {isLoggingOut && <LoaderAnimation isLogin={false} />}
       <FormWrapper
-        title="Toga Sizing Form"
+        title={getFormTitle()}
         onSubmit={handleSubmit}
         className="register-card"
       >
@@ -300,6 +391,14 @@ const UserApproved = () => {
           />
         </div>
 
+        {/* Status indicator for pending users */}
+        {formData.status === "Pending" && (
+          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-4 rounded">
+            <p className="font-bold">Registration Status: Pending</p>
+            <p>Please complete your toga measurements to finalize your registration.</p>
+          </div>
+        )}
+
         {/* STEP : Toga Measurement */}
         <div className="mt-6">
           <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
@@ -373,9 +472,8 @@ const UserApproved = () => {
 
             {/* Dropdown Arrow */}
             <div
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
-                openDropdown ? "rotate-180" : "rotate-0"
-              }`}
+              className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${openDropdown ? "rotate-180" : "rotate-0"
+                }`}
             >
               ▼
             </div>
@@ -463,12 +561,34 @@ const UserApproved = () => {
           </div>
         </div>
 
+        {/* Error Message */}
+        {submitError && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 my-4 rounded">
+            <p>{submitError}</p>
+          </div>
+        )}
+
+        {/* Success Message */}
+        {submitSuccess && (
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 my-4 rounded">
+            <p>{submitSuccess}</p>
+          </div>
+        )}
+
+        {/* Already Registered Message */}
+        {alreadyRegistered && (
+          <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-4 rounded">
+            <p>You have already completed your registration.</p>
+          </div>
+        )}
+
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white mb-6"
+          disabled={submitting || alreadyRegistered}
+          className={`w-full ${submitting ? 'bg-gray-500' : 'bg-[#2A4D89] hover:bg-primary'} py-2 transition rounded-full font-manjari text-white mb-6`}
         >
-          Submit Toga Measurement
+          {submitting ? "Submitting..." : alreadyRegistered ? "Already Registered" : (formData.status === "Pending" ? "Complete Registration" : "Submit Toga Measurement")}
         </button>
 
         {/* Return Link */}
@@ -476,6 +596,7 @@ const UserApproved = () => {
           <button
             type="button"
             onClick={handleLogout}
+            disabled={submitting}
             className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300 mb-6"
           >
             Logout
