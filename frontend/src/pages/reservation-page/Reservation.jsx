@@ -119,7 +119,7 @@ const ReservationPage = () => {
             onSearch={handleEvaluationSearch}
           />
         </div>
-        <div className="w-full flex bg-yellow-300 flex-col">
+        <div className="w-full flex flex-col">
           <div className="w-full h-full overflow-hidden flex flex-col flex-1">
             <div className="overflow-hidden flex mx-auto w-full animate-fade-in ">
               <button
