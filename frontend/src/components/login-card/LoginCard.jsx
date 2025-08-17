@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import LoaderAnimation from "../login-card/LoaderAnimation";
-import FormWrapper from "../common/FormWrapper";
+import FormWrapper from "../common/FormWrapperTest";
 import LoginLoaderAnimation from "./LoginLoaderAnimation";
 
 function LoginCard() {
@@ -50,17 +50,7 @@ function LoginCard() {
   };
 
   return (
-    <FormWrapper
-      title="Toga Inventory Management System"
-      onSubmit={handleSubmit}
-    >
-      {/* Title */}
-      <div className="mt-4 mb-4">
-        <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
-          LOGIN TO YOUR ACCOUNT
-        </span>
-      </div>
-
+    <FormWrapper title="LOGIN TO YOUR ACCOUNT" onSubmit={handleSubmit}>
       {/* Email */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 space-y-6 sm:gap-4 mb-6">
         <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold mt-8">
