@@ -4,13 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Railway.app specific connection handling
-const connectionConfig = process.env.DATABASE_URL
-  ? {
-      // If DATABASE_URL is provided (Railway standard), use that
-      uri: process.env.DATABASE_URL,
-    }
-  : {
-      // Otherwise use individual connection parameters
+const connectionConfig = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
