@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import UploadIcon from "../../assets/images/cloudupload.png";
 import FormWrapper from "../common/FormWrapper";
+import { useNavigate } from "react-router-dom";
 import "../../styles/animations.css";
 
 export default function RegisterForm() {
@@ -21,22 +22,25 @@ export default function RegisterForm() {
   });
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [error, setError] = useState(""); //error message
+  const navigate = useNavigate(); //used for redirecting
+  const [success, setSuccess] = useState(""); //success message
   const courseGroups = {
-    Blue: [
+    blue: [
       "Bachelor of Early Childhood Education (BECEd)",
       "Bachelor of Elementary Education (BEEd)",
       "Bachelor of Physical Education (BPEd)",
       "Bachelor of Secondary Education (BSEd)",
     ],
-    Maroon: [
+    maroon: [
       "BS Biomedical Engineering (BSBME)",
       "BS Computer Engineering (BSCE)",
       "BS Electronics Communication Engineering (BSECE)",
       "Associate in Electronics Engineering Technology (AEET)",
       "Associate in Computer Networking (ACN)",
     ],
-    Orange: ["BS Nursing (BSN)"],
-    White: [
+    orange: ["BS Nursing (BSN)"],
+    white: [
       "BS Biology (BSBio)",
       "BS Computer Science (BSCS)",
       "BS Information Technology (BSIT)",
@@ -50,7 +54,7 @@ export default function RegisterForm() {
       "BA International Studies (BAIS)",
       "BA Philosophy (BAPhil)",
     ],
-    Yellow: [
+    yellow: [
       "BS Accountancy (BSA)",
       "BS Accounting Information System (BSAIS)",
       "BS Internal Auditing (BSIA)",
@@ -129,9 +133,22 @@ export default function RegisterForm() {
       });
       const data = await response.json();
       if (response.ok) {
-        alert("Registration successful!");
+        setError(""); // Clear any previous error messages
+        setSuccess("Registered successfully! Redirecting you to login page...");
+
+        console.log("Submitting data to server:", {
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          first_name: formData.firstName,
+          surname: formData.surname,
+          middleInitial: formData.middleInitial,
+          idNumber: formData.idNumber,
+          course: value,
+        });
+        setTimeout(() => navigate("/"), 2000); // 2 seconds delay
       } else {
-        alert(data.message || "Registration failed");
+        setError(data.message || "Registration failed"); //set error message
       }
     } catch (error) {
       console.error("Registration error:", error);
@@ -328,9 +345,8 @@ export default function RegisterForm() {
 
               {/* Dropdown Arrow */}
               <div
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
-                  open ? "rotate-180" : "rotate-0"
-                }`}
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
+                  }`}
               >
                 ▼
               </div>
@@ -415,7 +431,7 @@ export default function RegisterForm() {
                 <div key={index} className="relative group">
                   <img
                     src={URL.createObjectURL(image)}
-                    alt={`Preview ${index + 1}`}
+                    alt={`P ${index + 1}`}
                     className="w-full h-24 object-cover rounded-md"
                   />
                   <button
@@ -431,6 +447,18 @@ export default function RegisterForm() {
           )}
         </div>
       </div>
+      {/*Success Message */}
+      {success && (
+        <div className="w-full mb-2 text-center text-green-400">
+          {success}
+        </div>
+      )}
+      {/* Error Message */}
+      {error && (
+        <div className="w-full mb-2 text-center text-red-600">
+          {error}
+        </div>
+      )}
 
       {/* Submit Button */}
       <button

@@ -2,7 +2,7 @@
 
 import { TrendingUp } from "lucide-react";
 import { Pie, PieChart, Cell } from "recharts";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 
 import {
   Card,
@@ -15,9 +15,6 @@ import {
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { DashboardPieTooltip } from "./DashboardPieTooltip";
 
-// PIE CHART DATA FOR ITEMS (Cap, Tassel, Gown, Hood)
-const itemTypes = ["cap", "tassle", "gown", "hood"];
-
 const chartConfig = {
   cap: { label: "Cap", color: "hsl(var(--chart-1))" },
   tassle: { label: "Tassel", color: "hsl(var(--chart-2))" },
@@ -25,50 +22,34 @@ const chartConfig = {
   hood: { label: "Hood", color: "hsl(var(--chart-4))" },
 };
 
-export function DashboardPie() {
-  const [chartData, setChartData] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+export function DashboardPie({ items = [] }) {
+  // Compute chart data from items prop
+  const { chartData, total } = useMemo(() => {
+    // Group items by type and sum quantities
+    const groupedData = items.reduce((acc, item) => {
+      if (!acc[item.item_type]) {
+        acc[item.item_type] = 0;
+      }
+      acc[item.item_type] += item.quantity;
+      return acc;
+    }, {});
 
-  useEffect(() => {
-  // Fetch items data from API
-  fetch("http://localhost:5001/items")
-    .then((res) => res.json())
-    .then((data) => {
-      const items = data.items || [];
-      // Group items by type and sum quantities
-      const groupedData = items.reduce((acc, item) => {
-        if (!acc[item.item_type]) {
-          acc[item.item_type] = 0;
-        }
-        acc[item.item_type] += item.quantity;
-        return acc;
-      }, {});
+    // Convert grouped data to chart format with colors
+    const formattedData = Object.entries(groupedData).map(([type, value]) => ({
+      item: type.charAt(0).toUpperCase() + type.slice(1),
+      value,
+      fill: chartConfig[type]?.color || "#2563eb",
+    }));
 
-      // Convert grouped data to chart format with colors
-      const formattedData = Object.entries(groupedData).map(([type, value]) => ({
-        item: type.charAt(0).toUpperCase() + type.slice(1),
-        value,
-        fill: chartConfig[type]?.color || "#2563eb",
-      }));
+    // Calculate total for percentages
+    const itemTotal = formattedData.reduce((sum, item) => sum + item.value, 0);
+    return { chartData: formattedData, total: itemTotal };
+  }, [items]);
 
-      // Calculate total for percentages
-      const itemTotal = formattedData.reduce((sum, item) => sum + item.value, 0);
-
-      setChartData(formattedData);
-      setTotal(itemTotal);
-      setLoading(false);
-    })
-    .catch(error => {
-      console.error("Error fetching items data:", error);
-      setLoading(false);
-    });
-}, []);
-
-  if (loading) {
+  if (!items.length) {
     return (
       <div className="flex items-center justify-center h-full">
-        <span className="text-gray-400">Loading data...</span>
+        <span className="text-gray-400">No data available</span>
       </div>
     );
   }
@@ -86,7 +67,7 @@ export function DashboardPie() {
               data={chartData}
               dataKey="value"
               nameKey="item"
-              innerRadius={45}
+              innerRadius={35}
               isAnimationActive={true}
             >
               {chartData.map((entry, idx) => (

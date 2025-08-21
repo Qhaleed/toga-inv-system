@@ -20,12 +20,10 @@ const EvaluationPage = () => {
   const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState(allData);
 
-  //para to sa informations sa row
   useEffect(() => {
     fetch("http://localhost:5001/evaluation")
       .then((res) => res.json())
       .then((data) => {
-        //ifilter out ang walang toga size and not returned
         const filteredData = data.filter(
           (item) =>
             item.toga_size !== null &&
@@ -38,12 +36,10 @@ const EvaluationPage = () => {
       });
   }, []);
 
-  //para to ma-filter ang data based sa search bar
   useEffect(() => {
-    setFilteredData(allData); //ishow ang filtered data (refer sa handleSearch sa NavBar.jsx)
+    setFilteredData(allData);
   }, [allData]);
 
-  //para ma filter ang mga lalabas sa evaluation table (same sa useeffect sa taas)
   const handleEvaluationSearch = (results) => {
     const filtered = results.filter(
       (item) =>
@@ -55,7 +51,6 @@ const EvaluationPage = () => {
     );
     setFilteredData(filtered);
   };
-
 
   return (
     <div
@@ -92,9 +87,9 @@ const EvaluationPage = () => {
         </div>
       )}
       {/* Main content */}
-      <div className="bg-[#F3F9FF] w-full h-full">
+      <div className="bg-[#F3F9FF] w-full h-full overflow-hidden">
         {/* NavBar always at the top */}
-        <div className="w-full z-10 h-14 pt-15 bg-green-200 flex items-center relative">
+        <div className="w-full h-10 pt-12.5 flex items-center relative">
           <Navbar
             modifyTable={modifyTable}
             setmodifyTable={setmodifyTable}
@@ -103,20 +98,9 @@ const EvaluationPage = () => {
             onSearch={handleEvaluationSearch}
           />
         </div>
-        <div className="w-full relative h-full flex flex-col">
-          <button
-            className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
-            onClick={() => setSidebarOpen((open) => !open)}
-            aria-label={sidebarOpen ? "Minimize sidebar" : "Open sidebar"}
-            style={{ marginLeft: 10 }}
-          >
-            <span className="text-xl text-[#2840A1]">
-              {sidebarOpen ? "\u2190" : "\u2192"}
-            </span>
-          </button>{" "}
+        <div className="w-full flex flex-col">
           <div className="w-full h-full overflow-hidden flex flex-col flex-1">
-            {/* Main evaluation table and tab */}
-            <div className="  overflow-hidden flex mx-auto w-full animate-fade-in ">
+            <div className="overflow-hidden flex mx-auto w-full animate-fade-in ">
               <EvaluationTable
                 modifyTable={modifyTable}
                 setValue={setValue}
@@ -128,6 +112,16 @@ const EvaluationPage = () => {
                 isZA={isZA}
                 allData={filteredData}
               />
+              <button
+                className="hidden md:block absolute bg-gray-100 z-0  opacity-80 top-1/2 -translate-y-1/2 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"
+                onClick={() => setSidebarOpen((open) => !open)}
+                aria-label={sidebarOpen ? "Minimize sidebar" : "Open sidebar"}
+                style={{ marginLeft: 10 }}
+              >
+                <span className="text-xl text-[#2840A1]">
+                  {sidebarOpen ? "\u2190" : "\u2192"}
+                </span>
+              </button>
             </div>
             <EvaluationTab
               value={value}

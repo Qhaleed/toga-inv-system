@@ -119,10 +119,11 @@ const PopupWindow = ({
 
   return (
     <div
-      className={`fixed left-0 top-0 right-0 bottom-0 z-[9999] w-full h-full flex justify-center items-center transition-all duration-500 ${open
-        ? "opacity-100 pointer-events-auto backdrop-blur-sm"
-        : "opacity-0 pointer-events-none"
-        }`}
+      className={`fixed left-0 top-0 right-0 bottom-0 z-1000 w-full h-full flex justify-center items-center transition-all duration-500 ${
+        open
+          ? "opacity-100 pointer-events-auto backdrop-blur-sm"
+          : "opacity-0 pointer-events-none"
+      }`}
       style={{ background: "rgba(0,0,0,0.4)" }}
     >
       <div className="bg-[#001C47] border border-white w-[450px] md:w-3xl h-[630px] rounded-2xl shadow-2xl p-0 relative animate-slide-up overflow-x-hidden overflow-auto transition-all duration-300">
@@ -158,10 +159,11 @@ const PopupWindow = ({
           <div className="h-full w-80 flex justify-end items-center">
             <div className="h-full w-24 flex justify-center items-center text-sm pr-1">
               <button
-                className={`w-20 h-10 rounded-lg text-xs ${!edit
-                  ? "border border-green-400 text-green-400"
-                  : "bg-green-400 text-white"
-                  } hover:bg-green-400 hover:text-white hover:scale-105 transition-all duration-200`}
+                className={`w-20 h-10 rounded-lg text-xs ${
+                  !edit
+                    ? "border border-green-400 text-green-400"
+                    : "bg-green-400 text-white"
+                } hover:bg-green-400 hover:text-white hover:scale-105 transition-all duration-200`}
                 onClick={EditMode}
               >
                 <h3>EDIT</h3>
@@ -171,7 +173,11 @@ const PopupWindow = ({
               <button
                 className="border border-red-500 text-red-500 w-20 h-10 rounded-lg text-xs hover:bg-red-500 hover:text-white hover:scale-105 transition-all duration-200"
                 onClick={() => {
-                  if (window.confirm(`Are you sure you want to delete ${user.studentname}'s records?`)) {
+                  if (
+                    window.confirm(
+                      `Are you sure you want to delete ${user.studentname}'s records?`
+                    )
+                  ) {
                     // Send delete request to backend
                     fetch(`http://localhost:5001/inventory/${user.id}`, {
                       method: "DELETE",
@@ -182,7 +188,9 @@ const PopupWindow = ({
                     })
                       .then((response) => {
                         if (!response.ok) {
-                          throw new Error("Network response was not ok: " + response.status);
+                          throw new Error(
+                            "Network response was not ok: " + response.status
+                          );
                         }
                         return response.json();
                       })
@@ -358,10 +366,7 @@ const PopupWindow = ({
                       className="w-20 h-5 bg-[#404078] rounded-full text-center"
                       value={formData.has_cap ? "Yes" : "No"}
                       onChange={(e) =>
-                        handleInputChange(
-                          "has_cap",
-                          e.target.value === "Yes"
-                        )
+                        handleInputChange("has_cap", e.target.value === "Yes")
                       }
                     >
                       <option value="Yes">Yes</option>
@@ -372,8 +377,9 @@ const PopupWindow = ({
               </div>
             </div>
             <div
-              className={`h-20 w-full flex justify-center items-center ${!edit && "opacity-50"
-                }`}
+              className={`h-20 w-full flex justify-center items-center ${
+                !edit && "opacity-50"
+              }`}
             >
               <div className="bg-[#40407888] h-[45px] w-[85%] rounded-2xl flex justify-start items-center">
                 <div className="h-6 w-32 border-r-2 border-gray-400 flex justify-start items-center text-white text-lg">
@@ -381,20 +387,22 @@ const PopupWindow = ({
                 </div>
                 <div className="bg-[#1B1B42] w-50 h-8 ml-6 rounded-lg flex justify-center items-center">
                   <button
-                    className={`${formData.return_status === "Not Returned"
-                      ? "bg-[#86E4A1] w-[55%] h-[75%] ml-1 rounded-md text-black text-sm"
-                      : "bg-[#1B1B42] w-[45%] h-[75%] mr-1 rounded-md text-gray-500 text-sm"
-                      }`}
+                    className={`${
+                      formData.return_status === "Not Returned"
+                        ? "bg-[#86E4A1] w-[55%] h-[75%] ml-1 rounded-md text-black text-sm"
+                        : "bg-[#1B1B42] w-[45%] h-[75%] mr-1 rounded-md text-gray-500 text-sm"
+                    }`}
                     disabled={!edit}
                     onClick={() => handleStatusChange("Not Returned")}
                   >
                     <h4>Not Returned</h4>
                   </button>
                   <button
-                    className={`${formData.return_status === "Returned"
-                      ? "bg-[#86E4A1] w-[55%] h-[75%] mr-1 rounded-md text-black text-sm"
-                      : "bg-[#1B1B42] w-[45%] h-[75%] ml-1 rounded-md text-gray-500 text-sm"
-                      }`}
+                    className={`${
+                      formData.return_status === "Returned"
+                        ? "bg-[#86E4A1] w-[55%] h-[75%] mr-1 rounded-md text-black text-sm"
+                        : "bg-[#1B1B42] w-[45%] h-[75%] ml-1 rounded-md text-gray-500 text-sm"
+                    }`}
                     disabled={!edit}
                     onClick={() => handleStatusChange("Returned")}
                   >
@@ -419,8 +427,9 @@ const PopupWindow = ({
               </div>
             </div>
             <div
-              className={`w-full h-20 flex justify-end items-center ${!edit && "hidden"
-                }`}
+              className={`w-full h-20 flex justify-end items-center ${
+                !edit && "hidden"
+              }`}
             >
               <button
                 className="w-28 h-10 bg-[#86E4A1] mr-8 rounded-2xl text-black text-lg hover:scale-105 hover:bg-[#57b27f] transition-all duration-200"

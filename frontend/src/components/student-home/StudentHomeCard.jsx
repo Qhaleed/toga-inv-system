@@ -7,12 +7,14 @@ const Dashboard = () => {
   const [userStatus, setUserStatus] = useState(null);
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const authToken = localStorage.getItem("token");
+        // There is no users
         const userResponse = await fetch("http://localhost:5001/users", {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -21,6 +23,7 @@ const Dashboard = () => {
         const userData = await userResponse.json();
         setUserName(userData.first_name + " " + userData.surname);
         setUserStatus(userData.status); // Use DB status directly
+        setUserData(userData); // Store full user data
       } catch (error) {
         console.error("Error fetching data:", error);
         setUserStatus("error");
@@ -56,7 +59,7 @@ const Dashboard = () => {
       </div>
       {/* Main content */}
       <div className="bg-[#F3F9FF] w-full h-full flex flex-col">
-        {userStatus === "Pending" && <PendingApproval name={userName} />}
+        {userStatus === "Pending" && userData && <UserApproved userData={userData} />}
         {userStatus === "Approved" && <UserApproved name={userName} />}
         {userStatus === "error" && (
           <div className="flex justify-center items-center text-red-500">

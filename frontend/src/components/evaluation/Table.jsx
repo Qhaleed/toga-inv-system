@@ -11,6 +11,7 @@ const Table = ({
   allData,
 }) => {
   const mainContentHeight = "83vh";
+
   return (
     <div className="w-full animate-fade-in flex flex-col items-center justify-start mt-12">
       <div
@@ -20,13 +21,11 @@ const Table = ({
         <div className="h-full w-full flex items-stretch justify-center">
           <div className="h-full w-full flex flex-col justify-start items-center">
             <div
-              className="relative w-full flex flex-col  min-w-fit max-w-full border  shadow outline-none bg-white"
-              style={{
-                maxHeight: mainContentHeight,
-              }}
+              className="relative w-full flex flex-col min-w-fit max-w-full border shadow outline-none bg-white"
+              style={{ maxHeight: mainContentHeight }}
             >
               <div
-                className="w-full overflow-visible "
+                className="w-full overflow-visible"
                 style={{
                   maxWidth: "100vw",
                   position: "relative",

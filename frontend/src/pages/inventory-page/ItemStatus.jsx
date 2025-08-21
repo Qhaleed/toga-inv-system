@@ -90,7 +90,7 @@ const ItemStatus = () => {
   };
 
   return (
-    <div className="w-full p-6 flex flex-col gap-6">
+    <div className="w-full  p-6 flex flex-col gap-6">
       {/* Page Title (Breadcrumb Style) */}
       <h2 className="text-2xl font-figtree tracking-tight text-[#1e293b] mb-2 drop-shadow-sm">
         <span className="text-black font-bold">Inventory</span>
