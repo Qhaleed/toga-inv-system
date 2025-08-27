@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import LoaderAnimation from "../login-card/LoaderAnimation";
-import FormWrapper from "../common/FormWrapperTest";
+import FormWrapper from "../common/FormWrapper";
 import LoginLoaderAnimation from "./LoginLoaderAnimation";
 
 function LoginCard() {
@@ -50,7 +50,16 @@ function LoginCard() {
   };
 
   return (
-    <FormWrapper title="LOGIN TO YOUR ACCOUNT" onSubmit={handleSubmit}>
+    <FormWrapper
+      title="TogaTrack: The Toga Inventory Management System"
+      onSubmit={handleSubmit}
+    >
+      <div className="mt-6 mb-0">
+        <span className="text-primary text-lg pt-4 sm:text-xl font-figtree font-extrabold mr-1 mb-6">
+          LOGIN TO YOUR ACCOUNT
+        </span>
+      </div>
+
       {/* Email */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 space-y-6 sm:gap-4 mb-6">
         <label className="w-full sm:w-20 text-primary text-m font-manjari font-bold mt-8">
@@ -123,7 +132,7 @@ function LoginCard() {
       <div className="mb-6">
         <button
           type="submit"
-          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white"
+          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-xl font-manjari text-white"
         >
           Login
         </button>
@@ -133,7 +142,7 @@ function LoginCard() {
       <div className="flex justify-center items-center text-center">
         <a
           href="/register"
-          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300 mb-6"
+          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-xl transition duration-300 mb-6"
         >
           Register
         </a>

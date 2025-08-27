@@ -44,8 +44,8 @@ const CheckReturn = () => {
   });
 
   useEffect(() => {
-    console.log('Current totals:', setTotals);
-    console.log('Return data:', returnData);
+    console.log("Current totals:", setTotals);
+    console.log("Return data:", returnData);
   }, [setTotals, returnData]);
 
   /*  I DID NOT USE THIS FETCH FOR THE DATA FOR THE CHECK RETURN
@@ -116,29 +116,33 @@ const CheckReturn = () => {
           // Process return status data
           if (returnStatus === "Returned") {
             totalReturned += quantity;
-            if (itemType === "cap")
-              returnByType.cap.returned += quantity;
+            if (itemType === "cap") returnByType.cap.returned += quantity;
             else if (itemType === "tassle" || itemType === "tassel")
               returnByType.tassel.returned += quantity;
-            else if (itemType === "gown") returnByType.gown.returned += quantity;
-            else if (itemType === "hood") returnByType.hood.returned += quantity;
+            else if (itemType === "gown")
+              returnByType.gown.returned += quantity;
+            else if (itemType === "hood")
+              returnByType.hood.returned += quantity;
 
             // Track returns by variant
             if (variant) {
               if (itemType === "cap") {
-                returnByVariant.cap[variant] = (returnByVariant.cap[variant] || 0) + quantity;
+                returnByVariant.cap[variant] =
+                  (returnByVariant.cap[variant] || 0) + quantity;
               } else if (itemType === "tassle" || itemType === "tassel") {
-                returnByVariant.tassel[variant] = (returnByVariant.tassel[variant] || 0) + quantity;
+                returnByVariant.tassel[variant] =
+                  (returnByVariant.tassel[variant] || 0) + quantity;
               } else if (itemType === "gown") {
-                returnByVariant.gown[variant] = (returnByVariant.gown[variant] || 0) + quantity;
+                returnByVariant.gown[variant] =
+                  (returnByVariant.gown[variant] || 0) + quantity;
               } else if (itemType === "hood") {
-                returnByVariant.hood[variant] = (returnByVariant.hood[variant] || 0) + quantity;
+                returnByVariant.hood[variant] =
+                  (returnByVariant.hood[variant] || 0) + quantity;
               }
             }
           } else if (returnStatus === "Not Returned") {
             totalMissing += quantity;
-            if (itemType === "cap")
-              returnByType.cap.missing += quantity;
+            if (itemType === "cap") returnByType.cap.missing += quantity;
             else if (itemType === "tassle" || itemType === "tassel")
               returnByType.tassel.missing += quantity;
             else if (itemType === "gown") returnByType.gown.missing += quantity;
@@ -254,64 +258,106 @@ const CheckReturn = () => {
     : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
   const getButtonClass = (isActive) =>
-  isActive
-    ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium shadow-md scale-105 transition-all duration-200 hover:bg-[#1e293b] hover:shadow-lg"
-    : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-105 hover:bg-[#e0e7ef] hover:text-[#02327B] hover:shadow-md";
+    isActive
+      ? "bg-[#02327B] text-white h-full w-32 rounded-lg font-figtree-medium shadow-md scale-105 transition-all duration-200 hover:bg-[#1e293b] hover:shadow-lg"
+      : "border border-[#02327B] text-[#02327B] h-full w-32 rounded-lg font-figtree-medium transition-all duration-200 opacity-80 hover:opacity-100 hover:scale-105 hover:bg-[#e0e7ef] hover:text-[#02327B] hover:shadow-md";
 
   return (
-  <div className="w-full p-6 flex flex-col gap-6">
-    {/* Breadcrumb Title (styled like ItemStatus.jsx) */}
-    <h2 className="text-2xl font-figtree tracking-tight text-[#1e293b] mb-2 drop-shadow-sm">
-      <span className="text-black font-bold">Inventory</span>
-      <span className="mx-2 text-gray-400 font-bold">&gt;</span>
-      <span className="text-primary">Check Return</span>
-      <span className="mx-2 text-gray-400 font-bold">&gt;</span>
-      <span className="text-[#2563eb]">
-        {all && (returnToggle ? "Returned All" : "Missing All")}
-        {cap && (returnToggle ? "Returned Cap" : "Missing Cap")}
-        {tassel && (returnToggle ? "Returned Tassel" : "Missing Tassel")}
-        {gown && (returnToggle ? "Returned Gown" : "Missing Gown")}
-        {hood && (returnToggle ? "Returned Hood" : "Missing Hood")}
-      </span>
-    </h2>
-    {/* Chart Type Selector */}
-    <div className="flex flex-wrap justify-center gap-4">
-      <button className={getButtonClass(all)} onClick={allToggle}>All</button>
-      <button className={getButtonClass(cap)} onClick={capToggle}>Cap</button>
-      <button className={getButtonClass(tassel)} onClick={tasselToggle}>Tassel</button>
-      <button className={getButtonClass(gown)} onClick={gownToggle}>Gown</button>
-      <button className={getButtonClass(hood)} onClick={hoodToggle}>Hood</button>
-    </div>
-    {/* Returned / Not Returned Toggle */}
-    <div className="flex flex-wrap justify-center gap-4 mt-4">
-      <button className={getButtonClass(returnToggle)} onClick={returnToggler}>Returned</button>
-      <button className={getButtonClass(!returnToggle)} onClick={notreturnToggler}>Not Returned</button>
-    </div>
-    {/* Chart and Stock Summary Side by Side */}
-    <div className="w-full flex flex-col lg:flex-row justify-center items-start gap-4 mt-6">
-      <div className="w-full flex flex-col md:flex-row gap-4 items-stretch overflow-visible">
-        {/* Chart */}
-        <div className="md:w-2/3 w-full flex justify-center">
-          <div className="bg-white shadow-md rounded-xl p-4 flex flex-col justify-center h-full w-full">
-            {returnToggle && all && <ReturnedAllChart returnData={returnData} />}
-            {returnToggle && cap && <ReturnedCapChart returnData={returnData} />}
-            {returnToggle && tassel && <ReturnedTasselChart returnData={returnData} />}
-            {returnToggle && gown && <ReturnedGownChart returnData={returnData} />}
-            {returnToggle && hood && <ReturnedHoodChart returnData={returnData} />}
-            {!returnToggle && all && <MissingAllChart returnData={returnData} />}
-            {!returnToggle && cap && <MissingCapChart returnData={returnData} />}
-            {!returnToggle && tassel && <MissingTasselChart returnData={returnData} />}
-            {!returnToggle && gown && <MissingGownChart returnData={returnData} />}
-            {!returnToggle && hood && <MissingHoodChart returnData={returnData} />}
+    <div className="w-full p-6 flex flex-col gap-6">
+      {/* Breadcrumb Title (styled like ItemStatus.jsx) */}
+      <h2 className="text-2xl font-figtree tracking-tight text-[#1e293b] mb-2 drop-shadow-sm">
+        <span className="text-black font-bold">Inventory</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-primary">Check Return</span>
+        <span className="mx-2 text-gray-400 font-bold">&gt;</span>
+        <span className="text-[#2563eb]">
+          {all && (returnToggle ? "Returned All" : "Missing All")}
+          {cap && (returnToggle ? "Returned Cap" : "Missing Cap")}
+          {tassel && (returnToggle ? "Returned Tassel" : "Missing Tassel")}
+          {gown && (returnToggle ? "Returned Gown" : "Missing Gown")}
+          {hood && (returnToggle ? "Returned Hood" : "Missing Hood")}
+        </span>
+      </h2>
+      {/* Chart Type Selector */}
+      <div className="flex flex-wrap justify-center gap-4">
+        <button className={getButtonClass(all)} onClick={allToggle}>
+          All
+        </button>
+        <button className={getButtonClass(cap)} onClick={capToggle}>
+          Cap
+        </button>
+        <button className={getButtonClass(tassel)} onClick={tasselToggle}>
+          Tassel
+        </button>
+        <button className={getButtonClass(gown)} onClick={gownToggle}>
+          Gown
+        </button>
+        <button className={getButtonClass(hood)} onClick={hoodToggle}>
+          Hood
+        </button>
+      </div>
+      {/* Returned / Not Returned Toggle */}
+      <div className="flex flex-wrap justify-center gap-4 mt-4">
+        <button
+          className={getButtonClass(returnToggle)}
+          onClick={returnToggler}
+        >
+          Returned
+        </button>
+        <button
+          className={getButtonClass(!returnToggle)}
+          onClick={notreturnToggler}
+        >
+          Not Returned
+        </button>
+      </div>
+      {/* Chart and Stock Summary Side by Side */}
+      <div className="w-full flex flex-col lg:flex-row justify-center items-start gap-4 mt-6">
+        <div className="w-full flex flex-col md:flex-row gap-4 items-stretch overflow-visible">
+          {/* Chart */}
+          <div className="w-full flex justify-center">
+            <div className="bg-white shadow-md rounded-xl p-4 flex flex-col justify-center h-full w-full">
+              {returnToggle && all && (
+                <ReturnedAllChart returnData={returnData} />
+              )}
+              {returnToggle && cap && (
+                <ReturnedCapChart returnData={returnData} />
+              )}
+              {returnToggle && tassel && (
+                <ReturnedTasselChart returnData={returnData} />
+              )}
+              {returnToggle && gown && (
+                <ReturnedGownChart returnData={returnData} />
+              )}
+              {returnToggle && hood && (
+                <ReturnedHoodChart returnData={returnData} />
+              )}
+              {!returnToggle && all && (
+                <MissingAllChart returnData={returnData} />
+              )}
+              {!returnToggle && cap && (
+                <MissingCapChart returnData={returnData} />
+              )}
+              {!returnToggle && tassel && (
+                <MissingTasselChart returnData={returnData} />
+              )}
+              {!returnToggle && gown && (
+                <MissingGownChart returnData={returnData} />
+              )}
+              {!returnToggle && hood && (
+                <MissingHoodChart returnData={returnData} />
+              )}
+            </div>
           </div>
-        </div>
-        {/* Stock Summary Section */}
-        <div className="md:w-1/3 w-full grid grid-cols-1 gap-4">
+
+          {/* Stock Summary Section (Only for "All") */}
           {all && (
-            <>
+            <div className="md:w-1/3 w-full grid grid-cols-1 gap-4">
               <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
                 <span className="text-3xl font-bold text-[#1E40AF]">
-                  {returnToggle ? returnData.totalReturned : returnData.totalMissing}
+                  {returnToggle
+                    ? returnData.totalReturned
+                    : returnData.totalMissing}
                 </span>
                 <span className="text-sm text-gray-700 mt-1">
                   {returnToggle ? "Total Returned Item" : "Total Missing Items"}
@@ -319,7 +365,9 @@ const CheckReturn = () => {
               </div>
               <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
                 <span className="text-3xl font-bold text-[#dadada]">
-                  {returnToggle ? returnData.returnByType.cap.returned : returnData.returnByType.cap.missing}
+                  {returnToggle
+                    ? returnData.returnByType.cap.returned
+                    : returnData.returnByType.cap.missing}
                 </span>
                 <span className="text-sm text-[#dadada] mt-1">
                   {returnToggle ? "Returned Cap" : "Missing Cap"}
@@ -327,241 +375,61 @@ const CheckReturn = () => {
               </div>
               <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
                 <span className="text-3xl font-bold text-[#001d5a]">
-                  {returnToggle ? returnData.returnByType.tassel.returned : returnData.returnByType.tassel.missing}
+                  {returnToggle
+                    ? returnData.returnByType.tassel.returned
+                    : returnData.returnByType.tassel.missing}
                 </span>
                 <span className="text-sm text-[#001d5a] mt-1">
                   {returnToggle ? "Returned Tassel" : "Missing Tassel"}
                 </span>
                 <span className="text-xs text-[#001d5a] mt-1">
-                  {Object.entries(returnToggle ? returnData.returnByVariant?.tassel || {} : {})
+                  {Object.entries(
+                    returnToggle ? returnData.returnByVariant?.tassel || {} : {}
+                  )
                     .map(([color, count]) => `${color}: ${count}`)
                     .join(", ")}
                 </span>
               </div>
               <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
                 <span className="text-3xl font-bold text-gray-800">
-                  {returnToggle ? returnData.returnByType.gown.returned : returnData.returnByType.gown.missing}
+                  {returnToggle
+                    ? returnData.returnByType.gown.returned
+                    : returnData.returnByType.gown.missing}
                 </span>
                 <span className="text-sm text-gray-800 mt-1">
                   {returnToggle ? "Returned Gown" : "Missing Gown"}
                 </span>
                 <span className="text-xs text-gray-800 mt-1">
-                  {Object.entries(returnToggle ? returnData.returnByVariant?.gown || {} : {})
+                  {Object.entries(
+                    returnToggle ? returnData.returnByVariant?.gown || {} : {}
+                  )
                     .map(([size, count]) => `${size}: ${count}`)
                     .join(", ")}
                 </span>
               </div>
               <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
                 <span className="text-3xl font-bold text-black">
-                  {returnToggle ? returnData.returnByType.hood.returned : returnData.returnByType.hood.missing}
+                  {returnToggle
+                    ? returnData.returnByType.hood.returned
+                    : returnData.returnByType.hood.missing}
                 </span>
                 <span className="text-sm text-black mt-1">
                   {returnToggle ? "Returned Hood" : "Missing Hood"}
                 </span>
                 <span className="text-xs text-black mt-1">
-                  {Object.entries(returnToggle ? returnData.returnByVariant?.hood || {} : {})
+                  {Object.entries(
+                    returnToggle ? returnData.returnByVariant?.hood || {} : {}
+                  )
                     .map(([color, count]) => `${color}: ${count}`)
                     .join(", ")}
                 </span>
               </div>
-            </>
+            </div>
           )}
-          {/* ...keep the rest of your summary sections for cap, tassel, gown, hood as before... */}
-          <div className="bg-[#02327B] flex-1 shadow-lg p-15 rounded-3xl w-full min-w-[400px] grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {all && (
-              <>
-                {" "}
-                {/*IF CLICKED ALL*/}
-                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#1E40AF]">
-                    {returnToggle ? returnData.totalReturned : returnData.totalMissing}
-                  </span>
-                  <span className="text-sm text-gray-700 mt-1">
-                    {returnToggle
-                      ? "Total Returned Item"
-                      : "Total Missing Items"}
-                  </span>
-                </div>
-                <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#dadada]">
-                    {returnToggle ? returnData.returnByType.cap.returned : returnData.returnByType.cap.missing}
-                  </span>
-                  <span className="text-sm text-[#dadada] mt-1">
-                    {returnToggle ? "Returned Cap" : "Missing Cap"}
-                  </span>
-                </div>
-                <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#001d5a]">
-                    {returnToggle ? returnData.returnByType.tassel.returned : returnData.returnByType.tassel.missing}
-                  </span>
-                  <span className="text-sm text-[#001d5a] mt-1">
-                    {returnToggle ? "Returned Tassel" : "Missing Tassel"}
-                  </span>
-                  <span className="text-xs text-[#001d5a] mt-1">
-                    {Object.entries(returnToggle ? returnData.returnByVariant?.tassel || {} : {})
-                      .map(([color, count]) => `${color}: ${count}`)
-                      .join(", ")}
-                  </span>
-                </div>
-                <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-gray-800">
-                    {returnToggle ? returnData.returnByType.gown.returned : returnData.returnByType.gown.missing}
-                  </span>
-                  <span className="text-sm text-gray-800 mt-1">
-                    {returnToggle ? "Returned Gown" : "Missing Gown"}
-                  </span>
-                  <span className="text-xs text-gray-800 mt-1">
-                    {Object.entries(returnToggle ? returnData.returnByVariant?.gown || {} : {})
-                      .map(([size, count]) => `${size}: ${count}`)
-                      .join(", ")}
-                  </span>
-                </div>
-                <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-black">
-                    {returnToggle ? returnData.returnByType.hood.returned : returnData.returnByType.hood.missing}
-                  </span>
-                  <span className="text-sm text-black mt-1">
-                    {returnToggle ? "Returned Hood" : "Missing Hood"}
-                  </span>
-                  <span className="text-xs text-black mt-1">
-                    {Object.entries(returnToggle ? returnData.returnByVariant?.hood || {} : {})
-                      .map(([color, count]) => `${color}: ${count}`)
-                      .join(", ")}
-                  </span>
-                </div>
-              </>
-            )}
-            {cap && (
-              <>
-                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#1E40AF]">
-                    {returnToggle ? returnData.returnByType.cap.returned : returnData.returnByType.cap.missing}
-                  </span>
-                  <span className="text-sm text-gray-700 mt-1">
-                    {returnToggle ? "Total Returned Cap" : "Total Missing Cap"}
-                  </span>
-                </div>
-                {Object.entries(returnData.returnByVariant.cap).length > 0 && (
-                  <div className="bg-[#2563eb] rounded-lg p-7 flex flex-col items-center shadow">
-                    <span className="text-sm text-[#dadada] mt-1">
-                      Cap Variants
-                    </span>
-                    <span className="text-xs text-[#dadada] mt-1">
-                      {Object.entries(returnToggle ? returnData.returnByVariant.cap : {})
-                        .map(([variant, count]) => `${variant || 'Standard'}: ${count}`)
-                        .join(", ")}
-                    </span>
-                  </div>
-                )}
-              </>
-            )}
-            {tassel && (
-              <>
-                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#1E40AF]">
-                    {returnToggle ? returnData.returnByType.tassel.returned : returnData.returnByType.tassel.missing}
-                  </span>
-                  <span className="text-sm text-gray-700 mt-1">
-                    {returnToggle ? "Total Returned Tassel" : "Total Missing Tassel"}
-                  </span>
-                </div>
-                {/* Display tassel colors dynamically based on the API data */}
-                {Object.entries(returnData.returnByVariant.tassel).map(([color, count]) => (
-                  <div key={color} className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
-                    <span className="text-3xl font-bold text-[#001d5a]">
-                      {count}
-                    </span>
-                    <span className="text-sm text-[#001d5a] mt-1">
-                      {returnToggle ? `Returned ${color}` : `Missing ${color}`}
-                    </span>
-                  </div>
-                ))}
-                {/* If no variants are found, show a message */}
-                {Object.entries(returnData.returnByVariant.tassel).length === 0 && (
-                  <div className="bg-[#60a5fa] rounded-lg p-6 flex flex-col items-center shadow">
-                    <span className="text-sm text-[#001d5a] mt-1">
-                      No {returnToggle ? "returned" : "missing"} tassels to show
-                    </span>
-                  </div>
-                )}
-              </>
-            )}
-            {gown && (
-              <>
-                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#1E40AF]">
-                    {returnToggle ? returnData.returnByType.gown.returned : returnData.returnByType.gown.missing}
-                  </span>
-                  <span className="text-sm text-gray-700 mt-1">
-                    {returnToggle ? "Total Returned Gown" : "Total Missing Gown"}
-                  </span>
-                </div>
-                {/* Display gown sizes dynamically based on API data */}
-                {Object.entries(returnData.returnByVariant.gown).map(([size, count]) => (
-                  <div key={size} className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
-                    <span className="text-3xl font-bold text-gray-800">
-                      {count}
-                    </span>
-                    <span className="text-sm text-gray-800 mt-1">
-                      {returnToggle ? `Returned ${size}` : `Missing ${size}`}
-                    </span>
-                  </div>
-                ))}
-                {/* If no variants are found, show a message */}
-                {Object.entries(returnData.returnByVariant.gown).length === 0 && (
-                  <div className="bg-[#b6c2e0] rounded-lg p-6 flex flex-col items-center shadow">
-                    <span className="text-sm text-gray-800 mt-1">
-                      No {returnToggle ? "returned" : "missing"} gowns to show
-                    </span>
-                  </div>
-                )}
-              </>
-            )}
-            {hood && (
-              <>
-                <div className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                  <span className="text-3xl font-bold text-[#1E40AF]">
-                    {returnToggle ? returnData.returnByType.hood.returned : returnData.returnByType.hood.missing}
-                  </span>
-                  <span className="text-sm text-gray-700 mt-1">
-                    {returnToggle ? "Total Returned Hood" : "Total Missing Hood"}
-                  </span>
-                </div>
-                {/* Display hood colors dynamically based on API data */}
-                {Object.entries(returnData.returnByVariant.hood).map(([color, count]) => (
-                  <div key={color} className="bg-[#E0E7FF] rounded-lg p-6 flex flex-col items-center shadow">
-                    <span className="text-3xl font-bold text-black">
-                      {count}
-                    </span>
-                    <span className="text-sm text-black mt-1">
-                      {returnToggle ? `Returned ${color}` : `Missing ${color}`}
-                    </span>
-                  </div>
-                ))}
-                {/* If no variants are found, show a message */}
-                {Object.entries(returnData.returnByVariant.hood).length === 0 && (
-                  <div className="bg-[#fbbf24] rounded-lg p-6 flex flex-col items-center shadow">
-                    <span className="text-sm text-black mt-1">
-                      No {returnToggle ? "returned" : "missing"} hoods to show
-                    </span>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
         </div>
       </div>
     </div>
-    {/* Chart Label */}
-    <h3 className="text-center text-xl font-bold text-[#02327B] mt-8">
-      {all && (returnToggle ? "Returned All" : "Missing All")}
-      {cap && (returnToggle ? "Returned Cap" : "Missing Cap")}
-      {tassel && (returnToggle ? "Returned Tassel" : "Missing Tassel")}
-      {gown && (returnToggle ? "Returned Gown" : "Missing Gown")}
-      {hood && (returnToggle ? "Returned Hood" : "Missing Hood")}
-    </h3>
-  </div>
-);
+  );
 };
 
 export default CheckReturn;
