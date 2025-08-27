@@ -19,8 +19,8 @@ export default function FormWrapper({ title, children, onSubmit, className }) {
             </h2>
             <ul className="text-primary text-sm font-manjari hidden md:block md:text-sm list-disc list-inside mt-6 space-y-2">
               <li>Streamlined management</li>
-              <li>Other point</li>
-              <li>More text</li>
+              <li>All-in-one handling</li>
+              <li>Easy to use</li>
             </ul>
           </div>
 

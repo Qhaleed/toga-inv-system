@@ -345,8 +345,9 @@ export default function RegisterForm() {
 
               {/* Dropdown Arrow */}
               <div
-                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"
-                  }`}
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-white transition-transform duration-300 ${
+                  open ? "rotate-180" : "rotate-0"
+                }`}
               >
                 ▼
               </div>
@@ -449,21 +450,17 @@ export default function RegisterForm() {
       </div>
       {/*Success Message */}
       {success && (
-        <div className="w-full mb-2 text-center text-green-400">
-          {success}
-        </div>
+        <div className="w-full mb-2 text-center text-green-400">{success}</div>
       )}
       {/* Error Message */}
       {error && (
-        <div className="w-full mb-2 text-center text-red-600">
-          {error}
-        </div>
+        <div className="w-full mb-2 text-center text-red-600">{error}</div>
       )}
 
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white mb-6"
+        className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-xl font-manjari text-white mb-6"
       >
         Register and Verify Account
       </button>
@@ -472,7 +469,7 @@ export default function RegisterForm() {
       <div className="flex justify-center items-center text-center">
         <a
           href="/"
-          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300 mb-6"
+          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-xl transition duration-300 mb-6"
         >
           Return to Login
         </a>

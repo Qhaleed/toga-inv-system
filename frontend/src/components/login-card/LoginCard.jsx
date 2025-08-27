@@ -51,12 +51,11 @@ function LoginCard() {
 
   return (
     <FormWrapper
-      title="Toga Inventory Management System"
+      title="TogaTrack: The Toga Inventory Management System"
       onSubmit={handleSubmit}
     >
-      {/* Title */}
-      <div className="mt-4 mb-4">
-        <span className="text-primary text-lg sm:text-xl font-figtree font-extrabold mr-1">
+      <div className="mt-6 mb-0">
+        <span className="text-primary text-lg pt-4 sm:text-xl font-figtree font-extrabold mr-1 mb-6">
           LOGIN TO YOUR ACCOUNT
         </span>
       </div>
@@ -133,7 +132,7 @@ function LoginCard() {
       <div className="mb-6">
         <button
           type="submit"
-          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-full font-manjari text-white"
+          className="w-full bg-[#2A4D89] hover:bg-primary py-2 transition rounded-xl font-manjari text-white"
         >
           Login
         </button>
@@ -143,7 +142,7 @@ function LoginCard() {
       <div className="flex justify-center items-center text-center">
         <a
           href="/register"
-          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-full transition duration-300 mb-6"
+          className="w-full text-[#17153B] font-manjari bg-white hover:bg-gray-300 px-6 py-2 rounded-xl transition duration-300 mb-6"
         >
           Register
         </a>
