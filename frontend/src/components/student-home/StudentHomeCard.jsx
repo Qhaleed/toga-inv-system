@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SideBar from "../navigations/SideBar";
-import PendingApproval from "./UserPending";
+import UserPending from "./UserPending";
 import UserApproved from "./UserApproved";
 
 const Dashboard = () => {
@@ -21,6 +21,7 @@ const Dashboard = () => {
           },
         });
         const userData = await userResponse.json();
+        
         setUserName(userData.first_name + " " + userData.surname);
         setUserStatus(userData.status); // Use DB status directly
         setUserData(userData); // Store full user data
@@ -28,7 +29,7 @@ const Dashboard = () => {
         console.error("Error fetching data:", error);
         setUserStatus("error");
       } finally {
-        setLoading(false);
+        setLoading(false);  
       }
     };
 
@@ -59,8 +60,8 @@ const Dashboard = () => {
       </div>
       {/* Main content */}
       <div className="bg-[#F3F9FF] w-full h-full flex flex-col">
-        {userStatus === "Pending" && userData && <UserApproved userData={userData} />}
-        {userStatus === "Approved" && <UserApproved name={userName} />}
+        {userStatus === "pending" && userData && <UserPending userData={userData} />}
+        {userStatus === "approved" && <UserApproved name={userName} />}
         {userStatus === "error" && (
           <div className="flex justify-center items-center text-red-500">
             <p>Failed to load user data. Please try again later.</p>
