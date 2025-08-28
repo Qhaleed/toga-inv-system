@@ -1,6 +1,6 @@
 -- Toga Inventory System Database Schema
 -- Guide niyo guys
--- Based to sa db natin (serverless
+-- Based to sa db natin (serverless)
 
 -- Student/Admin accounts table
 -- Tracks user registration, status changes with timestamps
