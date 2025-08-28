@@ -93,10 +93,16 @@ const SideBar = ({
   NotEvaluatedCount = 0,
   returnedCount = 0,
   notReturnedCount = 0,
+  // Pending page specific props
+  allRequestsCount = 0,
+  approvedCount = 0,
+  pendingCount = 0,
+  rejectedCount = 0,
   userStatus,
   dateReserved,
   dateDue,
   onAdminName,
+  refreshData, // auto refresher to kapag mag update stocks sa addstock and deletestock 
 }) => {
   // Track screen size for responsive sidebar
   const [isLargeScreen, setIsLargeScreen] = useState(
@@ -190,21 +196,29 @@ const SideBar = ({
   // Responsivenesss show/hide sidebar on small screens, always show on large screens
   const visible = isLargeScreen ? true : showSidebar;
 
-  // MGA HANDLER FOR SORTING
+  // MGA HANDLER FOR SORTING (specifically for reservation tab)
   const handleSortNameAsc = () => {
-    setSortOrder && setSortOrder("name-asc");
+    if (activeTab === "reservation" && setSortOrder) {
+      setSortOrder("name-asc");
+    }
   };
 
   const handleSortNameDesc = () => {
-    setSortOrder && setSortOrder("name-desc");
+    if (activeTab === "reservation" && setSortOrder) {
+      setSortOrder("name-desc");
+    }
   };
 
   const handleSortDateNewest = () => {
-    setSortOrder && setSortOrder("newest");
+    if (activeTab === "reservation" && setSortOrder) {
+      setSortOrder("newest");
+    }
   };
 
   const handleSortDateOldest = () => {
-    setSortOrder && setSortOrder("oldest");
+    if (activeTab === "reservation" && setSortOrder) {
+      setSortOrder("oldest");
+    }
   };
 
   // Update setFocusedStatusLocal when a sidebar button is clicked
@@ -487,7 +501,7 @@ const SideBar = ({
                         All Requests
                       </p>
                       <div className="right-0 absolute 2xl:text-[11px] sm:text-[10px] md:text-[12px] text-[8px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        50
+                        {allRequestsCount}
                       </div>
                     </button>
                     <button
@@ -502,7 +516,7 @@ const SideBar = ({
                         Approved
                       </p>
                       <div className="absolute right-0 2xl:text-[11px] sm:text-[10px] text-[8px] md:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        30
+                        {approvedCount}
                       </div>
                     </button>
                   </div>
@@ -519,7 +533,7 @@ const SideBar = ({
                         Pending
                       </p>
                       <div className="absolute right-0 2xl:text-[11px] sm:text-[10px] text-[8px] md:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        15
+                        {pendingCount}
                       </div>
                     </button>
                     <button
@@ -534,7 +548,7 @@ const SideBar = ({
                         Rejected
                       </p>
                       <div className="absolute right-0 2xl:text-[11px] sm:text-[10px] text-[8px] md:text-[12px] bg-[#0C7E48] rounded-lg text-white mr-1 sm:mr-2 py-0.5 px-2">
-                        5
+                        {rejectedCount}
                       </div>
                     </button>
                   </div>
@@ -660,7 +674,7 @@ const SideBar = ({
                           } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("name-asc");
-                            handleSortNameAsc && handleSortNameAsc();
+                            handleSortNameAsc();
                           }}
                         >
                           <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
@@ -675,7 +689,7 @@ const SideBar = ({
                           } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("name-desc");
-                            handleSortNameDesc && handleSortNameDesc();
+                            handleSortNameDesc();
                           }}
                         >
                           <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
@@ -692,7 +706,7 @@ const SideBar = ({
                           } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("newest");
-                            handleSortDateNewest && handleSortDateNewest();
+                            handleSortDateNewest();
                           }}
                         >
                           <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
@@ -707,7 +721,7 @@ const SideBar = ({
                           } hover:scale-105 transform-all ease-out duration-300`}
                           onClick={() => {
                             setFocusedSort("oldest");
-                            handleSortDateOldest && handleSortDateOldest();
+                            handleSortDateOldest();
                           }}
                         >
                           <p className="sm:text-[14px] text-[12px] font-bold text-black ml-3">
@@ -726,7 +740,7 @@ const SideBar = ({
           {/* CALENDAR */}
           <div
             key={activeTab + "-calendar"}
-            className="min-w-[80%] w-[90%] static h-70 bg-[#102F5E] flex justify-center items-center rounded-xl mt-4 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
+            className="min-w-[80%] w-[90%]  h-fit bg-[#102F5E] flex justify-center items-center rounded-xl mt-4 transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in"
           >
             <Calendar mode="single" selected={date} onSelect={setDate} />
             <AddStockPopup
@@ -748,6 +762,8 @@ const SideBar = ({
                   const result = await response.json();
                   console.log(result);
                   showAlert("Stock added successfully!", "success");
+                  // Refresh data to update dashboard
+                  if (refreshData) refreshData();
                 } catch (err) {
                   showAlert("Error adding stock: " + err.message, "error");
                 }
@@ -774,6 +790,8 @@ const SideBar = ({
                   const result = await response.json();
                   console.log(result);
                   showAlert("Stock removed successfully!", "success");
+                  // Refresh data to update dashboard
+                  if (refreshData) refreshData();
                 } catch (err) {
                   showAlert("Error removing stock: " + err.message, "error");
                 }

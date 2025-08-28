@@ -142,9 +142,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
                       {value.surname +
                         ", " +
                         value.first_name +
-                        " " +
-                        value.middle_initial +
-                        "."}
+                        (value.middle_initial ? " " + value.middle_initial + "." : "")}
                     </h3>
                   </td>
                   <td>

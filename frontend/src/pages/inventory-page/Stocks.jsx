@@ -15,6 +15,12 @@ const Stocks = () => {
     totalTassel: 0,
     totalGown: 0,
     totalHood: 0,
+    // Available items (good condition only)
+    availableCap: 0,
+    availableTassel: 0,
+    availableGown: 0,
+    availableHood: 0,
+    availableTotal: 0,
     tasselColors: {},
     gownSizes: {},
     hoodColors: {},
@@ -37,7 +43,6 @@ const Stocks = () => {
     fetch("http://localhost:5001/items")
     .then((res) => res.json())
     .then((data) => {
-      const items = data.items || [];
         console.log("Raw items data from API:", data);
 
         // Initialize counters and storage objects
@@ -45,6 +50,12 @@ const Stocks = () => {
         let totalTassel = 0;
         let totalGown = 0;
         let totalHood = 0;
+
+        // Available (good condition) counters by type
+        let availableCapCount = 0;
+        let availableTasselCount = 0;
+        let availableGownCount = 0;
+        let availableHoodCount = 0;
 
         let tasselColors = {};
         let gownSizes = {};
@@ -62,7 +73,7 @@ const Stocks = () => {
         let notReturned = 0;
         let na = 0;
 
-        // Process the items according to our actual schema
+        // Process the items directly (backend returns array directly, not wrapped in .items)
         data.forEach((item) => {
           // Add to total items count based on quantity
           const itemQuantity = item.quantity || 0;
@@ -90,9 +101,17 @@ const Stocks = () => {
           if (item.item_type === "cap") {
             capQuantity += itemQuantity;
             totalCap += itemQuantity;
+            // Track available caps (good condition only)
+            if (item.item_status === "In Good Condition") {
+              availableCapCount += itemQuantity;
+            }
           } else if (item.item_type === "tassle" || item.item_type === "tassel") {
             // Handle possible typo in DB
             totalTassel += itemQuantity;
+            // Track available tassels (good condition only)
+            if (item.item_status === "In Good Condition") {
+              availableTasselCount += itemQuantity;
+            }
 
             // Group by variant (color)
             if (item.variant) {
@@ -102,6 +121,10 @@ const Stocks = () => {
             }
           } else if (item.item_type === "gown") {
             totalGown += itemQuantity;
+            // Track available gowns (good condition only)
+            if (item.item_status === "In Good Condition") {
+              availableGownCount += itemQuantity;
+            }
 
             // Group by variant (size)
             if (item.variant) {
@@ -109,6 +132,10 @@ const Stocks = () => {
             }
           } else if (item.item_type === "hood") {
             totalHood += itemQuantity;
+            // Track available hoods (good condition only)
+            if (item.item_status === "In Good Condition") {
+              availableHoodCount += itemQuantity;
+            }
 
             // Group by variant (color)
             if (item.variant) {
@@ -125,6 +152,12 @@ const Stocks = () => {
           totalTassel,
           totalGown,
           totalHood,
+          // Available counts (good condition only)
+          availableCap: availableCapCount,
+          availableTassel: availableTasselCount,
+          availableGown: availableGownCount,
+          availableHood: availableHoodCount,
+          availableTotal: goodCondition,
           tasselColors,
           gownSizes,
           hoodColors,
@@ -200,32 +233,15 @@ const Stocks = () => {
     setHood(true);
   };
 
-  let allBtn = all
-    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
-  let capBtn = cap
-    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
 
-  let tasselBtn = tassel
-    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-
-  let gownBtn = gown
-    ? "bg-[#02327B] text-white h-full w-24 rounded-lg mr-2 font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-
-  let hoodBtn = hood
-    ? "bg-[#02327B] text-white h-full w-24 mr-2 rounded-lg font-figtree-medium"
-    : "border border-[#02327B] text-[#02327B] h-full w-24 mr-2 rounded-lg font-figtree-medium transition-all duration-500 opacity-70 scale-90";
-
-  // Calculate available (usable) items by excluding damaged items
-  const availableCap = itemsData.totalCap - (itemsData.statusBreakdown?.damaged || 0);
-  const availableTassel = itemsData.totalTassel - (itemsData.statusBreakdown?.damaged || 0);
-  const availableGown = itemsData.totalGown - (itemsData.statusBreakdown?.damaged || 0);
-  const availableHood = itemsData.totalHood - (itemsData.statusBreakdown?.damaged || 0);
-  const availableTotal = itemsData.totalItems - (itemsData.statusBreakdown?.damaged || 0);
+  // Use pre-calculated available counts from the processed data
+  // These represent only items in "Good Condition" that are actually usable
+  const availableCap = itemsData.availableCap || 0;
+  const availableTassel = itemsData.availableTassel || 0;
+  const availableGown = itemsData.availableGown || 0;
+  const availableHood = itemsData.availableHood || 0;
+  const availableTotal = itemsData.availableTotal || 0;
 
   const getButtonClass = (isActive) =>
   isActive

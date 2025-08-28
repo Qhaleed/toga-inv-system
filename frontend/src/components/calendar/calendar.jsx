@@ -90,93 +90,92 @@ export default function Example() {
   )
 
   return (
-    <div className="pt-10">
-      <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
-        <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
-          <div className="md:pr-14">
-            <div className="flex items-center">
-              <h2 className="flex-auto font-semibold text-gray-900">
+    <div className="pt-10 px-4 max-w-7xl mx-auto min-h-screen">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 h-fit">
+        <div className="lg:grid lg:grid-cols-2 lg:divide-x lg:divide-gray-200 lg:min-h-[600px]">
+          <div className="p-6 lg:pr-8 h-full">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">
                 {format(firstDayCurrentMonth, 'MMMM yyyy')}
               </h2>
-              <button
-                type="button"
-                onClick={previousMonth}
-                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-              >
-                <span className="sr-only">Previous month</span>
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
-              </button>
-              <button
-                onClick={nextMonth}
-                type="button"
-                className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-              >
-                <span className="sr-only">Next month</span>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
-              </button>
-            </div>
-            <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
-              <div>S</div>
-              <div>M</div>
-              <div>T</div>
-              <div>W</div>
-              <div>T</div>
-              <div>F</div>
-              <div>S</div>
-            </div>
-            <div className="grid grid-cols-7 mt-2 text-sm">
-              {days.map((day, dayIdx) => (
-                <div
-                  key={day.toString()}
-                  className={classNames(
-                    dayIdx === 0 && colStartClasses[getDay(day)],
-                    'py-1.5'
-                  )}
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={previousMonth}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200"
                 >
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDay(day)}
+                  <span className="sr-only">Previous month</span>
+                  <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                </button>
+                <button
+                  onClick={nextMonth}
+                  type="button"
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors duration-200"
+                >
+                  <span className="sr-only">Next month</span>
+                  <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+            <div className="mb-4 flex-1">
+              <div className="grid grid-cols-7 gap-px bg-gray-200 text-xs leading-6 text-center text-gray-700 font-medium rounded-t-lg overflow-hidden">
+                <div className="bg-gray-50 py-3 px-1">Sun</div>
+                <div className="bg-gray-50 py-3 px-1">Mon</div>
+                <div className="bg-gray-50 py-3 px-1">Tue</div>
+                <div className="bg-gray-50 py-3 px-1">Wed</div>
+                <div className="bg-gray-50 py-3 px-1">Thu</div>
+                <div className="bg-gray-50 py-3 px-1">Fri</div>
+                <div className="bg-gray-50 py-3 px-1">Sat</div>
+              </div>
+              <div className="grid grid-cols-7 gap-px bg-gray-200 text-sm rounded-b-lg overflow-hidden shadow-inner auto-rows-fr max-h-96">{days.map((day, dayIdx) => (
+                  <div
+                    key={day.toString()}
                     className={classNames(
-                      isEqual(day, selectedDay) && 'text-white',
-                      !isEqual(day, selectedDay) &&
-                        isToday(day) &&
-                        'text-red-500',
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        isSameMonth(day, firstDayCurrentMonth) &&
-                        'text-gray-900',
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentMonth) &&
-                        'text-gray-400',
-                      isEqual(day, selectedDay) && isToday(day) && 'bg-red-500',
-                      isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        'bg-gray-900',
-                      !isEqual(day, selectedDay) && 'hover:bg-gray-200',
-                      (isEqual(day, selectedDay) || isToday(day)) &&
-                        'font-semibold',
-                      'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
+                      dayIdx === 0 && colStartClasses[getDay(day)],
+                      'bg-white h-14 relative flex items-center justify-center hover:bg-blue-50 transition-colors duration-200 cursor-pointer group overflow-hidden',
+                      !isSameMonth(day, firstDayCurrentMonth) && 'bg-gray-50'
                     )}
                   >
-                    <time dateTime={format(day, 'yyyy-MM-dd')}>
-                      {format(day, 'd')}
-                    </time>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDay(day)}
+                      className={classNames(
+                        isEqual(day, selectedDay) && 'text-white bg-blue-600 shadow-md',
+                        !isEqual(day, selectedDay) &&
+                          isToday(day) &&
+                          'text-blue-600 bg-blue-100',
+                        !isEqual(day, selectedDay) &&
+                          !isToday(day) &&
+                          isSameMonth(day, firstDayCurrentMonth) &&
+                          'text-gray-900 hover:bg-blue-100',
+                        !isEqual(day, selectedDay) &&
+                          !isToday(day) &&
+                          !isSameMonth(day, firstDayCurrentMonth) &&
+                          'text-gray-400',
+                        (isEqual(day, selectedDay) || isToday(day)) &&
+                          'font-semibold',
+                        'w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-200 text-xs group-hover:scale-105 z-10'
+                      )}
+                    >
+                      <time dateTime={format(day, 'yyyy-MM-dd')} className="truncate">
+                        {format(day, 'd')}
+                      </time>
+                    </button>
 
-                  <div className="w-1 h-1 mx-auto mt-1">
-                    {meetings.some((meeting) =>
-                      isSameDay(parseISO(meeting.startDatetime), day)
-                    ) && (
-                      <div className="w-1 h-1 rounded-full bg-sky-500"></div>
-                    )}
+                    <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 z-0">
+                      {meetings.some((meeting) =>
+                        isSameDay(parseISO(meeting.startDatetime), day)
+                      ) && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm"></div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-          <section className="mt-12 md:mt-0 md:pl-14">
-            <h2 className="font-semibold text-gray-900">
+          <section className="p-6 md:pl-8 lg:max-h-[600px] lg:overflow-y-auto">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
               Schedule for{' '}
               <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
                 {format(selectedDay, 'MMM dd, yyy')}
@@ -203,15 +202,15 @@ function Meeting({ meeting }) {
   let endDateTime = parseISO(meeting.endDatetime)
 
   return (
-    <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
+    <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100 min-h-fit">
       <img
         src={meeting.imageUrl}
         alt=""
-        className="flex-none w-10 h-10 rounded-full"
+        className="flex-none w-10 h-10 rounded-full object-cover"
       />
-      <div className="flex-auto">
-        <p className="text-gray-900">{meeting.name}</p>
-        <p className="mt-0.5">
+      <div className="flex-auto min-w-0">
+        <p className="text-gray-900 truncate">{meeting.name}</p>
+        <p className="mt-0.5 text-xs truncate">
           <time dateTime={meeting.startDatetime}>
             {format(startDateTime, 'h:mm a')}
           </time>{' '}

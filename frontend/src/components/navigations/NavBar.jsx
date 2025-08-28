@@ -72,11 +72,11 @@ const Navbar = ({
           query += `&sort=${encodeURIComponent(sortOption)}`;
         }
         const res = await fetch(query);
-        if (!res.ok) throw new Error("Failed to fetch inventory");
+        if (!res.ok) throw new Error("Failed to fetch search results");
         const data = await res.json();
         if (onSearch) onSearch(data);
       } catch (err) {
-        alert("Error searching inventory: " + err.message);
+        alert("Error searching: " + err.message);
       } finally {
         setLoading(false);
       }
@@ -221,7 +221,10 @@ const Navbar = ({
             <div className="flex  items-center w-full animate-fade-in">
               <div className="w-full">
                 <div className="relative ml-6  ">
-                  <Search className="absolute w-5 top-1/5 left-2" />
+                  <Search 
+                    className="absolute w-5 top-1/5 left-2 cursor-pointer hover:text-blue-600 transition-colors" 
+                    onClick={() => handleSearch("iconClick")}
+                  />
                   <input
                     className="bg-[#E2E2E2] shadow-inner  shadow-gray-500 h-8 md:w-100 lg:w-180 px-10 py-2 text-xs text-[#02327B] rounded-lg outline-none placeholder:text-[#02327B] focus:outline focus:outline-1.5 focus:outline-[#02327B]"
                     type="text"

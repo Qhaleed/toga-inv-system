@@ -4,12 +4,10 @@ const router = express.Router();
 const db = require("../database/db");
 
 // GET items and summary (for ItemStatus page)
-router.get("/", async (req, res) => {
-  try {
-    const [items] = await db.pool.query("SELECT * FROM items");
-
-    if (!items) {
-      console.log("Database returned no data");
+router.get("/", (req, res) => {
+  db.db.all("SELECT * FROM items", [], (err, items) => {
+    if (err) {
+      console.log("Database error:", err);
       return res.status(500).json({ error: "Database connection error" });
     }
 
@@ -36,10 +34,7 @@ router.get("/", async (req, res) => {
     }
 
     res.status(200).json({ items, summary });
-  } catch (error) {
-    console.log("Statuses route error: ", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+  });
 });
 
 module.exports = router;

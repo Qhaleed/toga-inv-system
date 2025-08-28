@@ -1,8 +1,7 @@
 import React from "react";
-import { hoodData } from "./damageData";
-
 import HoodIcon from "@/assets/icons/hood.svg?react";
-export default function HoodDamageTable({ data = hoodData }) {
+
+export default function HoodDamageTable({ data = [] }) {
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-2">
@@ -14,10 +13,13 @@ export default function HoodDamageTable({ data = hoodData }) {
       </div>
       <div className="overflow-x-auto rounded-xl shadow">
         <table className="min-w-full bg-white border border-gray-200 rounded-xl">
-          <thead className="bg-yellow-100">
+          <thead className="bg-blue-100">
             <tr>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                 Category
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Color
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                 Reason
@@ -28,52 +30,67 @@ export default function HoodDamageTable({ data = hoodData }) {
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                 Date
               </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center text-gray-400 py-4">
-                  No damaged items
+                <td colSpan={6} className="text-center text-gray-400 py-4">
+                  No damaged hoods found
                 </td>
               </tr>
             ) : (
-              data.map(
-                (
-                  item,
-                  idx // array mapper schuhu
-                ) => (
-                  <tr
-                    key={idx}
-                    className="border-b last:border-b-0 hover:bg-gray-50 transition"
+              data.map((item, idx) => (
+                <tr
+                  key={idx}
+                  className="border-b last:border-b-0 hover:bg-gray-50 transition"
+                >
+                  <td
+                    className="px-4 py-3 text-gray-700 font-semibold bg-amber-100 w-[250px] truncate"
+                    title={item.category}
                   >
-                    <td
-                      className="px-4 py-3 text-gray-700 font-semibold bg-amber-100 w-[250px]  truncate"
-                      title={item.category}
+                    {item.category}
+                  </td>
+                  <td
+                    className="px-4 py-3 text-gray-700 w-[150px] truncate"
+                    title={item.color}
+                  >
+                    {item.color}
+                  </td>
+                  <td
+                    className="px-4 py-3 text-gray-800 bg-red-400 w-[350px] truncate"
+                    title={item.reason}
+                  >
+                    {item.reason}
+                  </td>
+                  <td
+                    className="px-4 py-3 text-gray-600 w-[300px] truncate"
+                    title={item.student}
+                  >
+                    {item.student}
+                  </td>
+                  <td
+                    className="px-4 py-3 text-gray-500 w-[120px] truncate"
+                    title={item.date}
+                  >
+                    {item.date}
+                  </td>
+                  <td className="px-4 py-3 w-[100px]">
+                    <span 
+                      className={`px-2 py-1 text-xs font-medium rounded-full capitalize ${
+                        item.status === 'damaged' 
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}
                     >
-                      {item.category}
-                    </td>
-                    <td
-                      className="px-4 py-3 text-gray-800 bg-red-400 w-[470px] truncate"
-                      title={item.reason}
-                    >
-                      {item.reason}
-                    </td>
-                    <td
-                      className="px-4 py-3 text-gray-600 w-[320px] truncate"
-                      title={item.student}
-                    >
-                      {item.student}
-                    </td>
-                    <td
-                      className="px-4 py-3 text-gray-500 max-w-[10px] truncate"
-                      title={item.date}
-                    >
-                      {item.date}
-                    </td>
-                  </tr>
-                )
-              )
+                      {item.status}
+                    </span>
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>

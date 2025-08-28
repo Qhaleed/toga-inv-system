@@ -12,6 +12,8 @@ const UserApproved = ({ userData, name }) => {
     idNumber: "",
     shoulderWidth: "",
     togaSize: "",
+    tasselColor: "",
+    hoodColor: "",
     account_id: "",
     course: "",
     status: ""

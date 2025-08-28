@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { GroupBarChart } from "@/components/ui/GroupBarChart";
 import { RadialChart } from "../ui/radialchart";
@@ -25,7 +25,8 @@ import Time from "@/assets/icons/time.svg?react";
 import PieChartDash from "../ui/pie-chart";
 import { DashboardPie } from "../ui/dashboardpie";
 
-function AdminDashboard({ adminName = "Admin", allData, approvalRequests }) {
+function AdminDashboard({ adminName = "Admin", 
+  allData, approvalRequests, refreshData }) {
   const navigate = useNavigate();
   const [totalPending, setTotalPending] = useState(0);
   const [totalEvaluated, setTotalEvaluated] = useState(0);
@@ -41,18 +42,22 @@ function AdminDashboard({ adminName = "Admin", allData, approvalRequests }) {
   // Extract first name for welcome message
   const firstName = adminName.split(" ")[0];
 
-  useEffect(() => {
-    // Fetch inventory data for reservation, pending, evaluated totals
+  // Function to refresh inventory stats
+  const refreshInventoryStats = useCallback(() => {
     fetch("http://localhost:5001/inventory")
       .then((res) => res.json())
       .then((data) => {
-        setTotalReservation(data.filter((item) => item.rent_date).length);
-        setTotalPending(
-          data.filter((item) => item.status === "Pending").length
-        );
-        setTotalEvaluated(
-          data.filter((item) => item.evaluation_status === "Evaluated").length
-        );
+        // Calculate dynamic stats from actual inventory data
+        const currentStock = data.filter((item) => item.return_status === "Not Returned").length;
+        const reserved = data.filter((item) => item.return_status === "Reserved").length;
+        const pendingEval = data.filter((item) => item.evaluation_status === "Pending Evaluation").length;
+        const evaluated = data.filter((item) => item.evaluation_status === "Evaluated").length;
+
+        setTotalReservation(currentStock); // Current stock (borrowed/not returned)
+        setTotalPending(pendingEval); // Pending evaluation
+        setTotalEvaluated(evaluated); // Evaluated items
+        
+        console.log("Dashboard Stats Refreshed:", { currentStock, reserved, pendingEval, evaluated });
       })
       .catch(() => {
         setTotalReservation(0);
@@ -62,28 +67,48 @@ function AdminDashboard({ adminName = "Admin", allData, approvalRequests }) {
   }, []);
 
   useEffect(() => {
+    // Initial fetch of inventory data
+    refreshInventoryStats();
+  }, [refreshInventoryStats]);
+
+  // Also refresh inventory stats when allData changes (after add/remove operations)
+  useEffect(() => {
+    if (allData && refreshData) {
+      refreshInventoryStats();
+    }
+  }, [allData, refreshData, refreshInventoryStats]);
+
+  useEffect(() => {
     if (!allData || !Array.isArray(allData)) return;
+    
+    // Use all the clean data from our database
+    const cleanData = allData;
+    
     // Compute total stock (sum of all item quantities)
-    const total = allData.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const total = cleanData.reduce((sum, item) => sum + (item.quantity || 0), 0);
     setTotalStock(total);
-    // Compute itemsStats using /items schema
-    let returned = 0,
-      notReturned = 0;
-    let goodCondition = 0,
-      forRepair = 0,
-      damaged = 0;
-    allData.forEach((item) => {
+    
+    // Compute itemsStats using all /items data
+    let returned = 0, notReturned = 0;
+    let goodCondition = 0, forRepair = 0, damaged = 0;
+    
+    cleanData.forEach((item) => {
       const qty = item.quantity || 0;
       if (item.return_status === "Returned") returned += qty;
       else if (item.return_status === "Not Returned") notReturned += qty;
+      else if (item.return_status === "Missing") notReturned += qty;
+      
       if (item.item_status === "In Good Condition") goodCondition += qty;
       else if (item.item_status === "For Repair") forRepair += qty;
       else if (item.item_status === "Damaged") damaged += qty;
     });
+
     setItemsStats({
       returnStatus: { returned, notReturned },
       itemStatus: { goodCondition, forRepair, damaged },
     });
+    
+    console.log("Items Stats:", { total, returned, notReturned, goodCondition, forRepair, damaged });
 
     // Approval requests: filter students with status 'Pending', sort by latest created_at
     if (approvalRequests && Array.isArray(approvalRequests)) {

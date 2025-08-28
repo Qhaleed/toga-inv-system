@@ -16,6 +16,31 @@ const AdminDashboardCard = () => {
 
   const handleAdminName = useCallback((name) => setAdminName(name), []);
 
+  // Function to refresh data after stock operations
+  const refreshData = useCallback(() => {
+    // Refresh items data
+    fetch("http://localhost:5001/items")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllData(data);
+        console.log("Items data refreshed:", data.length, "items");
+      })
+      .catch((err) => {
+        console.error("Failed to refresh items data:", err);
+      });
+    
+    // Refresh accounts data
+    fetch("http://localhost:5001/accounts")
+      .then((res) => res.json())
+      .then((data) => {
+        setApprovalRequests(data);
+        console.log("Accounts data refreshed:", data.length, "accounts");
+      })
+      .catch((err) => {
+        console.error("Failed to refresh accounts data:", err);
+      });
+  }, []);
+
   // Fetch inventory data on mount (like PendingPage)
   useEffect(() => {
     fetch("http://localhost:5001/items")
@@ -52,6 +77,7 @@ const AdminDashboardCard = () => {
             alwaysShowOnLarge
             activeTab="dashboard"
             onAdminName={handleAdminName}
+            refreshData={refreshData}
           />
         </div>
       )}
@@ -75,6 +101,7 @@ const AdminDashboardCard = () => {
             adminName={adminName}
             allData={allData}
             approvalRequests={approvalRequests}
+            refreshData={refreshData}
           />
           <button
             className="hidden md:block absolute bg-gray-100 left-0 opacity-80 top-1/2 -translate-y-1/2 z-50 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-100 transition"

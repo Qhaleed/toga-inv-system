@@ -28,12 +28,15 @@ export default function CapDamageTable({ data = capData }) {
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                 Date
               </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center text-gray-400 py-4">
+                <td colSpan={5} className="text-center text-gray-400 py-4">
                   No damaged items
                 </td>
               </tr>
@@ -44,28 +47,33 @@ export default function CapDamageTable({ data = capData }) {
                   className="border-b last:border-b-0 hover:bg-gray-50 transition"
                 >
                   <td
-                    className="px-4 py-3 text-gray-700 bg-red-200 font-semibold w-[250px] truncate"
+                    className="px-4 py-3 text-gray-700 font-semibold w-[200px] truncate"
                     title={item.category}
                   >
                     {item.category}
                   </td>
                   <td
-                    className="px-4 py-3 bg-amber-300  text-gray-800 w-[470px] truncate"
+                    className="px-4 py-3 text-gray-800 w-[350px] truncate"
                     title={item.reason}
                   >
                     {item.reason}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-600  w-[320px] truncate"
+                    className="px-4 py-3 text-gray-600 w-[250px] truncate"
                     title={item.student}
                   >
                     {item.student}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-500 max-w-[110px] truncate"
+                    className="px-4 py-3 text-gray-500 w-[100px] truncate"
                     title={item.date}
                   >
                     {item.date}
+                  </td>
+                  <td className="px-4 py-3 w-[120px]">
+                    <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+                      Damaged
+                    </span>
                   </td>
                 </tr>
               ))

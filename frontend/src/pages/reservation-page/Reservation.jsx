@@ -27,10 +27,7 @@ const ReservationPage = () => {
         const filteredData = data.filter(
           (item) =>
             item.toga_size !== null &&
-            item.toga_size !== undefined &&
-            item.status !== "Pending" &&
-            item.status !== null &&
-            item.status !== undefined
+            item.toga_size !== undefined
         );
         setAllData(filteredData);
       });
@@ -45,10 +42,7 @@ const ReservationPage = () => {
     const filtered = results.filter(
       (item) =>
         item.toga_size !== null &&
-        item.toga_size !== undefined &&
-        item.status !== "Pending" &&
-        item.status !== null &&
-        item.status !== undefined
+        item.toga_size !== undefined
     );
     setFilteredData(filtered);
   };
@@ -96,10 +90,10 @@ const ReservationPage = () => {
             setIsZA={setIsZA}
             allCount={allData.length}
             returnedCount={
-              allData.filter((item) => item.status === "Returned").length
+              allData.filter((item) => item.return_status === "Returned").length
             }
             notReturnedCount={
-              allData.filter((item) => item.status === "Not Returned").length
+              allData.filter((item) => item.return_status === "Not Returned").length
             }
             setSortOrder={setSortOrder}
           />
@@ -122,6 +116,7 @@ const ReservationPage = () => {
         <div className="w-full flex flex-col">
           <div className="w-full h-full overflow-hidden flex flex-col flex-1">
             <div className="overflow-hidden flex mx-auto w-full animate-fade-in ">
+              {/* sidebar opener */}
               <button
                 className="hidden md:block absolute bg-gray-100 z-0 opacity-80 top-1/2 -translate-y-1/2 border border-gray-300 rounded-full shadow p-1 hover:bg-gray-300 transition"
                 onClick={() => setSidebarOpen((open) => !open)}

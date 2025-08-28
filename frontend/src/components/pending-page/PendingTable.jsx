@@ -9,6 +9,8 @@ const PendingTable = ({
   data,
   allData,
   focusedStatus,
+  searchResults,
+  refreshData,
 }) => {
   // Track internal sort order state
   const [internalSortOrder, setInternalSortOrder] = useState(sortOrder || null);
@@ -36,12 +38,13 @@ const PendingTable = ({
                     hideActionButton
                     allData={allData}
                     focusedStatus={focusedStatus}
+                    searchResults={searchResults}
                   />
                 </div>
               </div>
             ) : (
               <div
-                className="relative w-full flex flex-col min-h-fit max-w-full border border-black shadow outline-none bg-white z-0"
+                className="relative w-full flex flex-col min-h-fit max-w-full border border-black shadow outline-none bg-white "
                 style={{
                   maxHeight: mainContentHeight,
                   minWidth: 300,
@@ -71,6 +74,8 @@ const PendingTable = ({
                   data={data}
                   allData={allData}
                   focusedStatus={focusedStatus}
+                  searchResults={searchResults}
+                  refreshData={refreshData}
                 />
               </div>
             )}

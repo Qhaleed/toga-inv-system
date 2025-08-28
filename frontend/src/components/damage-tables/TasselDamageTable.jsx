@@ -20,6 +20,9 @@ export default function TasselDamageTable({ data = tasselData }) {
                 Category
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Color
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                 Reason
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
@@ -28,12 +31,15 @@ export default function TasselDamageTable({ data = tasselData }) {
               <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                 Date
               </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center text-gray-400 py-4">
+                <td colSpan={6} className="text-center text-gray-400 py-4">
                   No damaged items
                 </td>
               </tr>
@@ -44,28 +50,45 @@ export default function TasselDamageTable({ data = tasselData }) {
                   className="border-b last:border-b-0 hover:bg-gray-50 transition"
                 >
                   <td
-                    className="px-4 py-3 text-gray-700 font-semibold w-[250px] truncate"
+                    className="px-4 py-3 text-gray-700 font-semibold bg-purple-100 w-[250px] truncate"
                     title={item.category}
                   >
                     {item.category}
                   </td>
                   <td
-                    className="px-4 py-3  text-gray-800 w-[470px] truncate"
+                    className="px-4 py-3 text-gray-700 w-[150px] truncate"
+                    title={item.color}
+                  >
+                    {item.color}
+                  </td>
+                  <td
+                    className="px-4 py-3 text-gray-800 bg-red-400 w-[350px] truncate"
                     title={item.reason}
                   >
                     {item.reason}
                   </td>
                   <td
-                    className="px-4 py-3  text-gray-600 w-[300px] truncate"
+                    className="px-4 py-3 text-gray-600 w-[300px] truncate"
                     title={item.student}
                   >
                     {item.student}
                   </td>
                   <td
-                    className="px-4 py-3 text-gray-500  max-w-[30px] truncate"
+                    className="px-4 py-3 text-gray-500 w-[120px] truncate"
                     title={item.date}
                   >
                     {item.date}
+                  </td>
+                  <td className="px-4 py-3 w-[100px]">
+                    <span 
+                      className={`px-2 py-1 text-xs font-medium rounded-full capitalize ${
+                        item.status === 'damaged' 
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}
+                    >
+                      {item.status}
+                    </span>
                   </td>
                 </tr>
               ))

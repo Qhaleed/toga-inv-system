@@ -141,17 +141,13 @@ const EvaluationRows = ({
                             db.surname +
                             ", " +
                             db.first_name +
-                            " " +
-                            db.middle_initial +
-                            "."
+                            (db.middle_initial ? " " + db.middle_initial + "." : "")
                           }
                         >
                           {db.surname +
                             ", " +
                             db.first_name +
-                            " " +
-                            db.middle_initial +
-                            "."}
+                            (db.middle_initial ? " " + db.middle_initial + "." : "")}
                         </h3>
                       </div>
                     </td>

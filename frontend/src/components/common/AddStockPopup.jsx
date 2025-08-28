@@ -8,22 +8,14 @@ const AddStockPopup = ({ open, onClose, onSubmit }) => {
   const [returnStatus, setReturnStatus] = useState("Returned");
   const [quantity, setQuantity] = useState(1);
 
-  // Options dynamic na sya based sa /items + hardcoded options
+  // Options that match our database variants exactly
   const itemTypes = [
+    { value: "gown", label: "Gown" },
     { value: "cap", label: "Cap" },
     { value: "tassel", label: "Tassel" },
-    { value: "gown", label: "Gown" },
     { value: "hood", label: "Hood" },
   ];
   const variants = {
-    cap: [{ value: null, label: "N/A" }],
-    tassel: [
-      { value: "blue", label: "Blue" },
-      { value: "maroon", label: "Maroon" },
-      { value: "orange", label: "Orange" },
-      { value: "white", label: "White" },
-      { value: "yellow", label: "Yellow" },
-    ],
     gown: [
       { value: "XS", label: "XS" },
       { value: "S", label: "S" },
@@ -34,12 +26,20 @@ const AddStockPopup = ({ open, onClose, onSubmit }) => {
       { value: "3XL", label: "3XL" },
       { value: "4XL", label: "4XL" },
     ],
+    cap: [
+      { value: "S", label: "S" },
+      { value: "M", label: "M" },
+    ],
+    tassel: [
+      { value: "Red", label: "Red" },
+      { value: "Blue", label: "Blue" },
+      { value: "Green", label: "Green" },
+      { value: "Yellow", label: "Yellow" },
+      { value: "Orange", label: "Orange" },
+    ],
     hood: [
-      { value: "blue", label: "Blue" },
-      { value: "maroon", label: "Maroon" },
-      { value: "orange", label: "Orange" },
-      { value: "white", label: "White" },
-      { value: "yellow", label: "Yellow" },
+      { value: "Black", label: "Black" },
+      { value: "White", label: "White" },
     ],
   };
   const itemStatuses = ["In Good Condition", "For Repair", "Damaged"];

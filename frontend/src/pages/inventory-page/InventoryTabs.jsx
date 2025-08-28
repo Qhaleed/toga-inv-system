@@ -73,54 +73,65 @@ export function ViewDamageTab() {
 
         // Process damaged items from items table
         const damagedItems = itemsData.filter(
-          (item) => item.item_status === "Damaged"
+          (item) => item.item_status === "Damaged" && 
+                   item.damage_type && 
+                   item.damage_type !== "Uncategorized" &&
+                   item.damage_type.trim() !== ""
         );
 
-        // Group by item type
+        // Group by item type (case insensitive matching)
         const capDamaged = damagedItems.filter(
-          (item) => item.item_type === "Cap"
+          (item) => item.item_type?.toLowerCase() === "cap"
         );
         const gownDamaged = damagedItems.filter(
-          (item) => item.item_type === "Gown"
+          (item) => item.item_type?.toLowerCase() === "gown"
         );
         const hoodDamaged = damagedItems.filter(
-          (item) => item.item_type === "Hood"
+          (item) => item.item_type?.toLowerCase() === "hood"
         );
         const tasselDamaged = damagedItems.filter(
-          (item) => item.item_type === "Tassel"
+          (item) => item.item_type?.toLowerCase() === "tassel"
         );
 
         // Create structured damage data
         const capItems = capDamaged.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          size: item.variant || "N/A", // Cap variant is size
+          status: item.item_status || "Damaged"
         }));
 
         const gownItems = gownDamaged.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          size: item.variant ? item.variant.toUpperCase() : "N/A", // Gown variant is size
+          status: item.item_status || "Damaged"
         }));
 
         const hoodItems = hoodDamaged.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          color: item.variant || "N/A", // Hood variant is color
+          status: item.item_status || "Damaged"
         }));
 
         const tasselItems = tasselDamaged.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          color: item.variant || "N/A", // Tassel variant is color
+          status: item.item_status || "Damaged"
         }));
 
         // Also fetch evaluation data to enrich our damage information where possible
@@ -235,6 +246,9 @@ export function ViewDamageTab() {
                 reason: item.reason,
                 student: item.student,
                 date: item.date,
+                size: item.size, // Preserve size for caps and gowns
+                color: item.color, // Preserve color for hoods and tassels
+                status: item.status, // Preserve status
               });
             }
           });
@@ -385,51 +399,62 @@ export function ViewRepairTab() {
 
         // Filter items with item_status 'For Repair'
         const repairItems = itemsData.filter(
-          (item) => item.item_status === "For Repair"
+          (item) => item.item_status === "For Repair" && 
+                   item.damage_type && 
+                   item.damage_type !== "Uncategorized" &&
+                   item.damage_type.trim() !== ""
         );
 
-        // Group by item type
+        // Group by item type (case insensitive matching)
         const capRepair = repairItems.filter(
-          (item) => item.item_type === "Cap"
+          (item) => item.item_type?.toLowerCase() === "cap"
         );
         const gownRepair = repairItems.filter(
-          (item) => item.item_type === "Gown"
+          (item) => item.item_type?.toLowerCase() === "gown"
         );
         const hoodRepair = repairItems.filter(
-          (item) => item.item_type === "Hood"
+          (item) => item.item_type?.toLowerCase() === "hood"
         );
         const tasselRepair = repairItems.filter(
-          (item) => item.item_type === "Tassel"
+          (item) => item.item_type?.toLowerCase() === "tassel"
         );
 
         // Structure repair data
         const capItems = capRepair.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          size: item.variant || "N/A", // Cap variant is size
+          status: item.item_status || "For Repair"
         }));
         const gownItems = gownRepair.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          size: item.variant ? item.variant.toUpperCase() : "N/A", // Gown variant is size
+          status: item.item_status || "For Repair"
         }));
         const hoodItems = hoodRepair.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          color: item.variant || "N/A", // Hood variant is color
+          status: item.item_status || "For Repair"
         }));
         const tasselItems = tasselRepair.map((item) => ({
-          category: item.damage_type || "Uncategorized",
+          category: item.damage_type || "N/A",
           reason: item.damage_reason || "Not specified",
           student: item.damaged_by || "Unknown",
           date: item.damage_date || new Date().toISOString().split("T")[0],
           quantity: item.quantity || 1,
+          color: item.variant || "N/A", // Tassel variant is color
+          status: item.item_status || "For Repair"
         }));
 
         // Expand entries based on quantity
@@ -443,6 +468,9 @@ export function ViewRepairTab() {
                 reason: item.reason,
                 student: item.student,
                 date: item.date,
+                size: item.size, // Preserve size for caps and gowns
+                color: item.color, // Preserve color for hoods and tassels
+                status: item.status, // Preserve status
               });
             }
           });

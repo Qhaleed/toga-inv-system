@@ -11,7 +11,6 @@ import EyeIcon from "../../assets/icons/eye-icon.svg?react";
 import Trash from "../../assets/icons/black-trash.svg?react";
 import ChevronDown from "../../assets/icons/chevron-down.svg?react";
 import PopupWindow from "../common/PopupWindow";
-import HoverPopup from "../common/HoverPopup";
 import GridView from "../common/GridView";
 import ReactDOM from "react-dom";
 import AlertCard from "../common/AlertCard";
@@ -27,6 +26,7 @@ const PendingRow = ({
   searchResults,
   allData,
   focusedStatus, // New prop for focused status from sidebar
+  refreshData, // Function to refresh data after deletion
 }) => {
   // State management
   const [dashboard, setDashboard] = useState([]);
@@ -36,7 +36,6 @@ const PendingRow = ({
   const [tableAnim, setTableAnim] = useState("");
   const prevSortOrder = useRef(sortOrder);
   const [popupMode, setPopupMode] = useState("none");
-  const [hoveredEyeId, setHoveredEyeId] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupUser, setPopupUser] = useState(false);
   const [filterStatus, setFilterStatus] = useState(focusedStatus || "all"); // 'all', 'Approved', 'Pending', 'Rejected'
@@ -51,37 +50,161 @@ const PendingRow = ({
     setTimeout(() => setAlert((a) => ({ ...a, show: false })), 3000);
   };
 
+  // Function to fetch and refresh inventory data
+  const fetchLatestData = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/inventory", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Remove duplicates by account_id - only keep the latest inventory record per user
+        const uniqueData = data.reduce((acc, item) => {
+          const existing = acc.find(x => x.account_id === item.account_id);
+          
+          if (!existing) {
+            acc.push(item);
+          } else {
+            // Keep the one with inventory_id (actual inventory record) over null
+            if (item.inventory_id && !existing.inventory_id) {
+              const index = acc.findIndex(x => x.account_id === item.account_id);
+              acc[index] = item;
+            }
+          }
+          
+          return acc;
+        }, []);
+        
+        // Process the data the same way as the useEffect
+        const mapped = uniqueData.map((item) => {
+          const studentname = (item.surname || "") +
+            ", " +
+            (item.first_name || "") +
+            (item.middle_initial ? " " + item.middle_initial : "");
+          
+          return {
+            id: item.inventory_id || `acc_${item.account_id}`,
+            account_id: item.account_id,
+            studentname: studentname,
+            course: item.course || "N/A",
+            tassel_color: item.tassel_color || "N/A",
+            hood_color: item.hood_color || "N/A",
+            toga_size: item.toga_size || "N/A",
+            dateofreservation: item.rent_date
+              ? new Date(item.rent_date).toLocaleDateString()
+              : item.status_updated_at
+                ? new Date(item.status_updated_at).toLocaleDateString()
+                : item.created_at
+                  ? new Date(item.created_at).toLocaleDateString()
+                  : "Not Set",
+            return_status: item.return_status || "Not Returned",
+            status: item.status || "pending",
+            payment_status: item.payment_status,
+            evaluation_status: item.evaluation_status,
+            remarks: item.remarks,
+            return_date: item.return_date,
+            is_overdue: item.is_overdue,
+            has_cap: item.has_cap,
+            item_condition: item.item_condition,
+            email: item.email,
+            id_number: item.id_number,
+            // Add default UI state for edit/trash icons
+            eye: "block",
+            trash: "hidden",
+          };
+        });
+        
+        setDashboard(mapped);
+        setOriginalDashboard(mapped);
+      }
+    } catch (error) {
+      console.error("Error fetching latest data:", error);
+    }
+  };
+
   // Use allData for dashboard, like Rows.jsx
   useEffect(() => {
+    console.log("=== DEBUGGING PendingRow allData ===");
+    console.log("allData:", allData);
     if (allData && Array.isArray(allData)) {
-      // Show all inventory records (remove hardcoded account_id filter)
-      const mapped = allData.map((item) => ({
-        id: item.inventory_id,
-        account_id: item.account_id, // <-- add account_id for PATCH
-        studentname:
-          (item.surname || "") +
+      console.log("allData length:", allData.length);
+      
+      // Remove duplicates by account_id - only keep the latest inventory record per user
+      const uniqueData = allData.reduce((acc, item) => {
+        const existing = acc.find(x => x.account_id === item.account_id);
+        
+        if (!existing) {
+          acc.push(item);
+        } else {
+          // Keep the one with inventory_id (actual inventory record) over null
+          if (item.inventory_id && !existing.inventory_id) {
+            const index = acc.findIndex(x => x.account_id === item.account_id);
+            acc[index] = item;
+          }
+        }
+        
+        return acc;
+      }, []);
+      
+      console.log("Unique data after deduplication:", uniqueData);
+      
+      const mapped = uniqueData.map((item) => {
+        const studentname = (item.surname || "") +
           ", " +
           (item.first_name || "") +
-          (item.middle_initial ? " " + item.middle_initial : ""),
-        course: item.course,
-        tassel_color: item.tassel_color,
-        hood_color: item.hood_color,
-        toga_size: item.toga_size,
-        dateofreservation: item.rent_date
-          ? new Date(item.rent_date).toLocaleDateString()
-          : "",
-        status: item.status, // Using status instead of return_status here
-        payment_status: item.payment_status,
-        evaluation_status: item.evaluation_status,
-        remarks: item.remarks,
-        return_date: item.return_date,
-        is_overdue: item.is_overdue,
-        has_cap: item.has_cap,
-        item_condition: item.item_condition,
-        // Add default UI state for edit/trash icons
-        eye: "block",
-        trash: "hidden",
-      }));
+          (item.middle_initial ? " " + item.middle_initial : "");
+        
+        console.log("Mapping item:", {
+          inventory_id: item.inventory_id,
+          account_id: item.account_id,
+          surname: item.surname,
+          first_name: item.first_name,
+          middle_initial: item.middle_initial,
+          calculated_studentname: studentname,
+          rent_date: item.rent_date,
+          tassel_color: item.tassel_color,
+          hood_color: item.hood_color,
+          toga_size: item.toga_size
+        });
+        
+        return {
+          id: item.inventory_id || `acc_${item.account_id}`, // Use inventory_id or fallback to account_id
+          account_id: item.account_id,
+          studentname: studentname,
+          course: item.course || "N/A",
+          tassel_color: item.tassel_color || "N/A",
+          hood_color: item.hood_color || "N/A", 
+          toga_size: item.toga_size || "N/A",
+          dateofreservation: item.rent_date
+            ? new Date(item.rent_date).toLocaleDateString()
+            : item.status_updated_at
+              ? new Date(item.status_updated_at).toLocaleDateString()
+              : item.created_at
+                ? new Date(item.created_at).toLocaleDateString()
+                : "Not Set",
+          return_status: item.return_status || "Not Returned",
+          status: item.status || "pending",
+          payment_status: item.payment_status,
+          evaluation_status: item.evaluation_status,
+          remarks: item.remarks,
+          return_date: item.return_date,
+          is_overdue: item.is_overdue,
+          has_cap: item.has_cap,
+          item_condition: item.item_condition,
+          email: item.email,
+          id_number: item.id_number,
+          // Add default UI state for edit/trash icons
+          eye: "block",
+          trash: "hidden",
+        };
+      });
+      console.log("Final mapped data:", mapped);
       setDashboard(mapped);
       setOriginalDashboard(mapped);
     }
@@ -153,17 +276,39 @@ const PendingRow = ({
             // PATCH other fields to inventory if changed
             let inventoryPromise = Promise.resolve();
             if (Object.keys(payload).length > 0) {
-              inventoryPromise = fetch(
-                `http://localhost:5001/inventory/${row.id}`,
-                {
-                  method: "PATCH",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(payload),
-                }
-              ).then((res) => {
-                if (!res.ok) throw new Error("Failed to update inventory");
-                return res.json();
-              });
+              // Check if this row has an inventory record
+              if (row.inventory_id) {
+                // Update existing inventory record
+                inventoryPromise = fetch(
+                  `http://localhost:5001/inventory/${row.inventory_id}`,
+                  {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                  }
+                ).then((res) => {
+                  if (!res.ok) throw new Error("Failed to update inventory");
+                  return res.json();
+                });
+              } else {
+                // Create new inventory record for this student
+                const newInventoryData = {
+                  account_id: row.account_id,
+                  ...payload,
+                  rent_date: new Date().toISOString().split('T')[0] // Today's date
+                };
+                inventoryPromise = fetch(
+                  `http://localhost:5001/inventory`,
+                  {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newInventoryData),
+                  }
+                ).then((res) => {
+                  if (!res.ok) throw new Error("Failed to create inventory record");
+                  return res.json();
+                });
+              }
             }
 
             await Promise.all([statusPromise, inventoryPromise]);
@@ -231,17 +376,43 @@ const PendingRow = ({
 
     let inventoryPromise = Promise.resolve();
     if (Object.keys(updatedData).length > 0) {
-      inventoryPromise = fetch(`http://localhost:5001/inventory/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-        },
-        body: JSON.stringify(updatedData),
-      }).then((res) => {
-        if (!res.ok) throw new Error("Failed to update inventory");
-        return res.json();
-      });
+      // Check if this student has an inventory record
+      if (editData.inventory_id) {
+        // Update existing inventory record
+        inventoryPromise = fetch(`http://localhost:5001/inventory/${editData.inventory_id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+          },
+          body: JSON.stringify(updatedData),
+        }).then((res) => {
+          if (!res.ok) throw new Error("Failed to update inventory");
+          return res.json();
+        });
+      } else {
+        // Create new inventory record for this student
+        const newInventoryData = {
+          account_id: editData.account_id,
+          ...updatedData,
+          rent_date: new Date().toISOString().split('T')[0] // Today's date
+        };
+        inventoryPromise = fetch(`http://localhost:5001/inventory`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+          },
+          body: JSON.stringify(newInventoryData),
+        }).then((res) => {
+          if (!res.ok) throw new Error("Failed to create inventory record");
+          return res.json();
+        }).then((newRecord) => {
+          // Update the editData with the new inventory_id for future operations
+          editData.inventory_id = newRecord.inventory_id;
+          return newRecord;
+        });
+      }
     }
 
     if (
@@ -284,41 +455,65 @@ const PendingRow = ({
     );
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     console.log("Delete button clicked for ID:", id);
 
-    fetch(`http://localhost:5001/inventory/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-      },
-    })
-      .then((response) => {
-        console.log("Delete response status:", response.status);
-        if (!response.ok) {
-          throw new Error("Network response was not ok: " + response.status);
+    try {
+      const row = dashboard.find((item) => item.id === id);
+      if (!row) {
+        throw new Error("User record not found");
+      }
+
+      // Delete from inventory table if inventory_id exists
+      if (row.inventory_id) {
+        const inventoryRes = await fetch(`http://localhost:5001/inventory/${row.inventory_id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+          },
+        });
+
+        if (!inventoryRes.ok) {
+          throw new Error(`Failed to delete inventory: ${inventoryRes.status}`);
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Delete successful:", data);
+      }
 
-        // Remove the deleted item from both state arrays
-        setDashboard((prev) => prev.filter((item) => item.id !== id));
-        setOriginalDashboard((prev) => prev.filter((item) => item.id !== id));
+      // Delete from accounts table using account_id
+      if (row.account_id) {
+        const accountRes = await fetch(`http://localhost:5001/accounts/${row.account_id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+          },
+        });
 
-        // Clear edit state if the deleted item was being edited
-        if (editId === id) {
-          setEditId(null);
-          setEditData({});
+        if (!accountRes.ok) {
+          throw new Error(`Failed to delete account: ${accountRes.status}`);
         }
+      }
 
-        showAlert("Item deleted successfully!", "success");
-      })
-      .catch((error) => {
-        showAlert("Failed to delete the item: " + error.message, "error");
-      });
+      // Remove the deleted item from both state arrays
+      setDashboard((prev) => prev.filter((item) => item.id !== id));
+      setOriginalDashboard((prev) => prev.filter((item) => item.id !== id));
+
+      // Clear edit state if the deleted item was being edited
+      if (editId === id) {
+        setEditId(null);
+        setEditData({});
+      }
+
+      showAlert("User request deleted successfully!", "success");
+      
+      // Refresh the data to update counts in sidebar
+      if (refreshData) {
+        setTimeout(() => refreshData(), 500); // Small delay to ensure backend has processed the deletion
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      showAlert("Failed to delete the user request: " + error.message, "error");
+    }
   };
 
   // Approve handler: PATCH status to accounts and inventory
@@ -432,7 +627,7 @@ const PendingRow = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ status: "Approved" }),
+          body: JSON.stringify({ status: "approved" }),
         }
       );
 
@@ -451,14 +646,14 @@ const PendingRow = ({
       setDashboard((prev) =>
         prev.map((item) =>
           item.account_id === row.account_id
-            ? { ...item, status: "Approved" }
+            ? { ...item, status: "approved" }
             : item
         )
       );
       setOriginalDashboard((prev) =>
         prev.map((item) =>
           item.account_id === row.account_id
-            ? { ...item, status: "Approved" }
+            ? { ...item, status: "approved" }
             : item
         )
       );
@@ -497,6 +692,16 @@ const PendingRow = ({
       })
       : dashboard;
 
+  console.log("=== SORTED DASHBOARD DEBUG ===");
+  console.log("dashboard state:", dashboard);
+  console.log("dashboard length:", dashboard.length);
+  console.log("sortedDashboard:", sortedDashboard);
+  console.log("sortedDashboard length:", sortedDashboard.length);
+  if (dashboard.length > 0) {
+    console.log("First dashboard item:", dashboard[0]);
+    console.log("First dashboard item studentname:", dashboard[0].studentname);
+  }
+
   useEffect(() => {
     if (!isGrid) {
       const scrollContainer = document.querySelector(".table-scroll-container");
@@ -514,14 +719,17 @@ const PendingRow = ({
     }
   }, [sortOrder, isGrid]);
 
-  function handleEyeMouseEnter(event, dbId) {
-    setHoveredEyeId(dbId);
-  }
+  const displayDashboard = sortedDashboard;
 
-  const displayDashboard =
-    Array.isArray(searchResults) && searchResults.length > 0
-      ? searchResults
-      : sortedDashboard;
+  console.log("=== DISPLAY DASHBOARD DEBUG ===");
+  console.log("searchResults:", searchResults);
+  console.log("searchResults length:", searchResults?.length);
+  console.log("sortedDashboard:", sortedDashboard);
+  console.log("displayDashboard:", displayDashboard);
+  console.log("displayDashboard length:", displayDashboard.length);
+  console.log("First item in displayDashboard:", displayDashboard[0]);
+  console.log("displayDashboard === searchResults:", displayDashboard === searchResults);
+  console.log("displayDashboard === sortedDashboard:", displayDashboard === sortedDashboard);
 
   useEffect(() => {
     setFilterStatus(focusedStatus || "all");
@@ -533,7 +741,6 @@ const PendingRow = ({
         dashboard={displayDashboard}
         editId={editId}
         editData={editData}
-        hoveredEyeId={hoveredEyeId}
         popupMode={popupMode}
         modifyTable={modifyTable}
         tasselColorOptions={tasselColorOptions}
@@ -544,7 +751,6 @@ const PendingRow = ({
         handleSave={handleSave}
         handleCancel={handleCancel}
         handleDelete={handleDelete}
-        setHoveredEyeId={setHoveredEyeId}
         setPopupMode={setPopupMode}
         setPopupUser={setPopupUser}
         setPopupOpen={setPopupOpen}
@@ -560,56 +766,57 @@ const PendingRow = ({
           show={alert.show}
           onClose={() => setAlert((a) => ({ ...a, show: false }))}
         />
+        <PopupWindow
+          open={popupOpen}
+          onClose={() => {
+            setPopupOpen(false);
+            // Refresh the data using both methods
+            if (refreshData) {
+              refreshData();
+            }
+            fetchLatestData();
+          }}
+          onUpdate={(updatedUser) => {
+            // Update the specific user in the dashboard
+            setDashboard(prevDashboard => 
+              prevDashboard.map(item => 
+                item.id === updatedUser.id ? {...item, ...updatedUser} : item
+              )
+            );
+            setOriginalDashboard(prevDashboard => 
+              prevDashboard.map(item => 
+                item.id === updatedUser.id ? {...item, ...updatedUser} : item
+              )
+            );
+            // Also refresh parent data
+            if (refreshData) {
+              refreshData();
+            }
+          }}
+          onDelete={(deletedUserId) => {
+            // Remove the deleted user from the dashboard
+            setDashboard(prevDashboard => 
+              prevDashboard.filter(item => item.id !== deletedUserId)
+            );
+            setOriginalDashboard(prevDashboard => 
+              prevDashboard.filter(item => item.id !== deletedUserId)
+            );
+            setPopupOpen(false);
+            // Also refresh parent data
+            if (refreshData) {
+              refreshData();
+            }
+          }}
+          user={popupUser}
+          showBackButton={false}
+          fullScreen={true}
+        />
         <div
           className={`w-full max-h-[80vh] overflow-x-auto overflow-y-auto ${tableAnim}`}
           style={{ minWidth: "100px", maxWidth: "100vw", height: "auto" }}
         >
-          <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0 z-1000 bg-red">
+          <div className="min-w-[300px] max-w-[120vw] sticky overflow-visible top-0  bg-red">
             <table className="w-full table-fixed border-separate border-spacing-0 relative">
-              <PopupWindow
-                open={popupOpen}
-                onClose={(updatedData) => {
-                  setPopupOpen(false);
-                  if (updatedData) {
-                    // Filter out entries without toga_size before mapping
-                    const filteredData = updatedData.filter(
-                      (item) =>
-                        item.toga_size !== null && item.toga_size !== undefined
-                    );
-
-                    // Map the filtered data to match our component's format
-                    const mappedData = filteredData.map((item) => ({
-                      id: item.inventory_id,
-                      studentname:
-                        item.surname +
-                        ", " +
-                        item.first_name +
-                        " " +
-                        item.middle_initial,
-                      course: item.course,
-                      tassel_color: item.tassel_color,
-                      hood_color: item.hood_color,
-                      toga_size: item.toga_size,
-                      dateofreservation: item.rent_date
-                        ? new Date(item.rent_date).toLocaleDateString()
-                        : "",
-                      status: item.status, // Using status instead of return_status here
-                      payment_status: item.payment_status,
-                      evaluation_status: item.evaluation_status,
-                      remarks: item.remarks,
-                      return_date: item.return_date,
-                      is_overdue: item.is_overdue,
-                      has_cap: item.has_cap,
-                      item_condition: item.item_condition,
-                    }));
-                    setDashboard(mappedData);
-                    setOriginalDashboard(mappedData);
-                  }
-                }}
-                user={popupUser}
-                showBackButton={false}
-                fullScreen={true}
-              />
               <thead className="bg-[#02327B] sticky top-0 z-30">
                 <tr className="h-6 relative xs:h-8 sm:h-10 w-full md:h-12">
                   <th className="w-[120px] min-w-[90px] max-w-[180px] text-white text-[10px] xs:text-xs md:text-[11px] font-bold text-center align-middle">
@@ -666,7 +873,7 @@ const PendingRow = ({
                       colSpan={8}
                       className="text-center py-8 text-gray-500 font-semibold bg-white"
                     >
-                      No data found
+                      No data found (Total records: {displayDashboard.length}, Filter: {filterStatus})
                     </td>
                   </tr>
                 ) : (
@@ -683,7 +890,7 @@ const PendingRow = ({
                       return (
                         <tr
                           className={`${rowHeightClass} w-[1417px] ${rowColor} text-xs font-normal table-columns`}
-                          key={db.id}
+                          key={`pending_row_${db.account_id}_${db.id}`}
                         >
                           <td className="text-center max-w-[180px] align-middle relative sm:max-w-[90px] sm:w-[90px] sm:text-[9px] md:max-w-[180px] md:w-[180px] md:text-xs">
                             <div className="h-full w-[100%] py-4 flex justify-center items-center">
@@ -691,7 +898,8 @@ const PendingRow = ({
                                 className="truncate cursor-pointer"
                                 title={db.studentname}
                               >
-                                {db.studentname}
+                                {console.log("RENDER DEBUG - db.studentname:", JSON.stringify(db.studentname), "type:", typeof db.studentname)}
+                                {db.studentname || "[NAME NOT FOUND]"}
                               </h3>
                               <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                             </div>
@@ -747,7 +955,7 @@ const PendingRow = ({
                                 cursor-pointer
                                 title={db.dateofreservation}
                               >
-                                {db.dateofreservation}
+                                {db.dateofreservation || "[DATE NOT FOUND]"}
                               </h3>
                               <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                             </div>
@@ -761,9 +969,9 @@ const PendingRow = ({
                                       modifyTable ? db.status : editData.status
                                     }
                                     options={[
-                                      "Pending",
-                                      "Approved",
-                                      "Rejected",
+                                      "pending",
+                                      "approved", 
+                                      "rejected",
                                     ]}
                                     onChange={(val) => {
                                       if (modifyTable) {
@@ -789,9 +997,9 @@ const PendingRow = ({
                               ) : (
                                 <span
                                   className={
-                                    db.status === "Approved"
+                                    db.status === "approved"
                                       ? "text-green-600"
-                                      : db.status === "Rejected"
+                                      : db.status === "rejected"
                                         ? "text-red-600"
                                         : ""
                                   }
@@ -860,56 +1068,26 @@ const PendingRow = ({
                                 </>
                               ) : (
                                 <>
-                                  <div
-                                    className="relative"
-                                    onMouseLeave={() => setHoveredEyeId(null)}
-                                  >
+                                  <div className="relative">
                                     <button
-                                      className={`w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110 ${hoveredEyeId === db.id
-                                        ? "bg-blue-600"
-                                        : ""
-                                        }`}
+                                      className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"
                                       style={{
                                         background: modifyTable
                                           ? "#bdbdbd"
-                                          : hoveredEyeId === db.id
-                                            ? "#2563eb"
-                                            : "#0C7E48",
+                                          : "#0C7E48",
                                         cursor: modifyTable
                                           ? "not-allowed"
                                           : "pointer",
                                       }}
                                       disabled={modifyTable}
-                                      onMouseEnter={(e) =>
-                                        handleEyeMouseEnter(e, db.id)
-                                      }
                                       onClick={() => {
-                                        setHoveredEyeId(db.id);
                                         setPopupUser(db);
                                         setPopupOpen(true);
                                         setPopupMode("full");
                                       }}
                                     >
-                                      <EyeIcon
-                                        className={`w-5 transition-colors duration-200 ${hoveredEyeId === db.id
-                                          ? "text-blue-200"
-                                          : "text-white"
-                                          }`}
-                                      />
+                                      <EyeIcon className="w-5 text-white" />
                                     </button>
-                                    {hoveredEyeId === db.id && (
-                                      <div
-                                        className="fixed left-9/12 top-1/2 z-50 w-80 h-fit rounded-xl opacity-200 transition-all duration-300 animate-fade-in pointer-events-auto transform -translate-x-1/2 -translate-y-1/2 "
-                                        onMouseEnter={(e) =>
-                                          handleEyeMouseEnter(e, db.id)
-                                        }
-                                        onMouseLeave={() =>
-                                          setHoveredEyeId(null)
-                                        }
-                                      >
-                                        <HoverPopup user={db} />
-                                      </div>
-                                    )}
                                   </div>
                                   <button
                                     className="w-7 h-7 flex justify-center items-center rounded-md transition-transform duration-300 hover:scale-110"

@@ -2,27 +2,32 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const db = require("../database/db");
-require("dotenv").config();
 
-const SECRET_KEY = process.env.SECRET_KEY;
+// Use a local secret key for JWT (no need for .env)
+const SECRET_KEY = "your-local-secret-key-12345";
 
 // Login Route
-router.post("/login", async (req, res) => {
+router.post("/login", (req, res) => {
   const { email, password } = req.body;
-  try {
-    // Find user by email
-    const [users] = await db.pool.query(
-      "SELECT * FROM accounts WHERE email = ?",
-      [email]
-    );
+
+  // Find user by email using SQLite
+  db.db.all("SELECT * FROM accounts WHERE email = ?", [email], (err, users) => {
+    if (err) {
+      console.error("Login error:", err);
+      return res.status(500).json({ message: "Server error during login" });
+    }
+
     if (users.length === 0) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
+
     const user = users[0];
+
     // In a real app, compare hashed passwords
     if (user.password !== password) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
+
     // Generate JWT token
     const token = jwt.sign(
       {
@@ -33,15 +38,13 @@ router.post("/login", async (req, res) => {
       SECRET_KEY,
       { expiresIn: "1h" }
     );
+
     res.json({
       message: "Login successful",
       token,
       role: user.role,
     });
-  } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ message: "Server error during login" });
-  }
+  });
 });
 
 module.exports = router;

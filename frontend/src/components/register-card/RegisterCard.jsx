@@ -19,6 +19,7 @@ export default function RegisterForm() {
     idNumber: "",
     idImage: [],
     course: "",
+    togaSize: "",
   });
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -116,8 +117,36 @@ export default function RegisterForm() {
   const handleSubmit = async (e) => {
     //send values to the backend
     e.preventDefault();
+    
+    // Prevent double submission
+    if (success) return;
+    
+    setError(""); // Clear any previous errors
+    
+    // Frontend validation
+    if (!formData.email || !formData.password || !formData.confirmPassword || 
+        !formData.firstName || !formData.surname || !formData.idNumber || !value) {
+      setError("Please fill in all required fields");
+      return;
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
+    
+    if (!formData.email.endsWith('@adzu.edu.ph')) {
+      setError("Please use a valid ADZU email address");
+      return;
+    }
+    
     try {
-      const response = await fetch("http://localhost:5001/register", {
+            const response = await fetch("http://localhost:5001/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -152,6 +181,7 @@ export default function RegisterForm() {
       }
     } catch (error) {
       console.error("Registration error:", error);
+      setError("Server error during registration. Please try again.");
     }
   };
 

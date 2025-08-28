@@ -3,14 +3,14 @@
 
 // Example: Fetch all accounts
 export async function fetchAccounts() {
-  const response = await fetch("/api/accounts");
+  const response = await fetch("http://localhost:5001/accounts");
   if (!response.ok) throw new Error("Failed to fetch accounts");
   return response.json();
 }
 
 // Example: Update account status
 export async function updateAccountStatus(accountId, status) {
-  const response = await fetch(`/api/accounts/${accountId}/status`, {
+  const response = await fetch(`http://localhost:5001/accounts/${accountId}/status`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status }),
@@ -21,7 +21,7 @@ export async function updateAccountStatus(accountId, status) {
 
 // Example: Fetch all items
 export async function fetchItems() {
-  const response = await fetch("/api/statuses");
+  const response = await fetch("http://localhost:5001/statuses");
   if (!response.ok) throw new Error("Failed to fetch items");
   return response.json();
 }

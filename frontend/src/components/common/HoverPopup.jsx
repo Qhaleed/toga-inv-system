@@ -26,7 +26,7 @@ const HoverPopup = ({ user }) => {
         <div className="bg-gray-200 flex flex-col items-center justify-center font-semibold text-base w-full h-20 rounded-xl col-span-2">
           <div>Date: {user.dateofreservation}</div>
           <div>Status: {user.status}</div>
-          <div className="text-xs text-gray-500 mt-1">ID: {user.id}</div>
+          <div className="text-xs text-gray-500 mt-1">ID: {user.id_number}</div>
         </div>
       </div>
     </div>

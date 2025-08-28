@@ -19,13 +19,16 @@ const RemoveStockPopup = ({ open, onClose, onSubmit }) => {
         { value: "hood", label: "Hood" },
     ];
     const variants = {
-        cap: [{ value: null, label: "N/A" }],
+        cap: [
+            { value: "S", label: "S" },
+            { value: "M", label: "M" },
+        ],
         tassel: [
-            { value: "blue", label: "Blue" },
-            { value: "maroon", label: "Maroon" },
-            { value: "orange", label: "Orange" },
-            { value: "white", label: "White" },
-            { value: "yellow", label: "Yellow" },
+            { value: "Red", label: "Red" },
+            { value: "Blue", label: "Blue" },
+            { value: "Green", label: "Green" },
+            { value: "Yellow", label: "Yellow" },
+            { value: "Orange", label: "Orange" },
         ],
         gown: [
             { value: "XS", label: "XS" },
@@ -38,11 +41,8 @@ const RemoveStockPopup = ({ open, onClose, onSubmit }) => {
             { value: "4XL", label: "4XL" },
         ],
         hood: [
-            { value: "blue", label: "Blue" },
-            { value: "maroon", label: "Maroon" },
-            { value: "orange", label: "Orange" },
-            { value: "white", label: "White" },
-            { value: "yellow", label: "Yellow" },
+            { value: "Black", label: "Black" },
+            { value: "White", label: "White" },
         ],
     };
     const itemStatuses = ["In Good Condition", "For Repair", "Damaged"];
