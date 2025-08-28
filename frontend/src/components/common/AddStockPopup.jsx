@@ -50,10 +50,11 @@ const AddStockPopup = ({ open, onClose, onSubmit }) => {
     if (onSubmit)
       onSubmit({
         item_type: itemType,
-        variant: variant || null,
+        variant: 'XS',
+        quantity: Number(quantity),
         item_status: itemStatus,
         return_status: returnStatus,
-        quantity: Number(quantity),
+
       });
     onClose();
   };

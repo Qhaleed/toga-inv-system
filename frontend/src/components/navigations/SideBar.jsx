@@ -735,6 +735,7 @@ const SideBar = ({
               onSubmit={async (data) => {
                 // API call to add stock to items endpoint
                 try {
+                  console.log(data);
                   const response = await fetch("http://localhost:5001/items", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

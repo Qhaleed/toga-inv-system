@@ -60,8 +60,13 @@ const Dashboard = () => {
       </div>
       {/* Main content */}
       <div className="bg-[#F3F9FF] w-full h-full flex flex-col">
+<<<<<<< HEAD
         {userStatus === "pending" && userData && <UserPending userData={userData} />}
         {userStatus === "approved" && <UserApproved name={userName} />}
+=======
+        {userStatus === "pending" && userData && <UserApproved userData={userData} />}
+        {userStatus === "Approved" && <UserApproved name={userName} />}
+>>>>>>> e734b50 (Hardcoded 'xs' at AddStockPopup on onsubmit,)
         {userStatus === "error" && (
           <div className="flex justify-center items-center text-red-500">
             <p>Failed to load user data. Please try again later.</p>
