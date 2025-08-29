@@ -360,14 +360,7 @@ const SideBar = ({
             </div>
 
             <div className="h-full flex justify-end items-center mr-4">
-              <button className="bg-[#F3B51A] hover:bg-[#dc9f2d] scale-75 md:scale-100 hover:scale-105 h-12 w-12 rounded-full flex justify-center items-center border border-gray-700 transform-all ease-out duration-500">
-                <CalendarHeroIcon className="w-6" />
-                <div className="relative">
-                  <div className="bg-[#0C7E48] rounded-full text-white text-xs absolute px-1 bottom-2">
-                    4 {/* Notification counts logic adnkjasndkjasndkajsnd */}
-                  </div>
-                </div>
-              </button>
+             
             </div>
           </div>
 
