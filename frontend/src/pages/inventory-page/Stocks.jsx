@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useQuery } from '@tanstack/react-query';
 import Profile from "../../assets/images/dump.jpg";
 import StocksAllChart from "../../components/ui/StocksAllChart";
 import StocksGownChart from "../../components/ui/StocksGownChart";
@@ -6,45 +7,17 @@ import StocksTasselChart from "../../components/ui/StocksTasselChart";
 import { CarouselPlugin } from "../../components/ui/my-carousel";
 import StocksCapChart from "@/components/ui/StocksCapChart";
 import StocksHoodChart from "@/components/ui/StocksHoodChart";
+import { itemsAPI } from "../../lib/api";
 
 const Stocks = () => {
-  // New state for items data from our API
-  const [itemsData, setItemsData] = useState({
-    totalItems: 0,
-    totalCap: 0,
-    totalTassel: 0,
-    totalGown: 0,
-    totalHood: 0,
-    // Available items (good condition only)
-    availableCap: 0,
-    availableTassel: 0,
-    availableGown: 0,
-    availableHood: 0,
-    availableTotal: 0,
-    tasselColors: {},
-    gownSizes: {},
-    hoodColors: {},
-    capQuantity: 0,
-    statusBreakdown: {
-      goodCondition: 0,
-      forRepair: 0,
-      damaged: 0,
-    },
-    returnStatusBreakdown: {
-      returned: 0,
-      notReturned: 0,
-      na: 0,
-    }
+  // Fetch data from the items endpoint using React Query
+  const { data: itemsFromAPI = [] } = useQuery({
+    queryKey: ['items'],
+    queryFn: itemsAPI.getAll,
   });
 
-  // Fetch data from the items endpoint
-  useEffect(() => {
-    console.log("Fetching items data from API...");
-    fetch("http://localhost:5001/items")
-    .then((res) => res.json())
-    .then((data) => {
-        console.log("Raw items data from API:", data);
-
+  // Process items data
+  const itemsData = useMemo(() => {
         // Initialize counters and storage objects
         let totalCap = 0;
         let totalTassel = 0;
@@ -74,7 +47,7 @@ const Stocks = () => {
         let na = 0;
 
         // Process the items directly (backend returns array directly, not wrapped in .items)
-        data.forEach((item) => {
+        itemsFromAPI.forEach((item) => {
           // Add to total items count based on quantity
           const itemQuantity = item.quantity || 0;
           totalItems += itemQuantity;
@@ -174,21 +147,8 @@ const Stocks = () => {
           }
         };
 
-        console.log("Processed items data:", processedData);
-        console.log("Item status breakdown:", processedData.statusBreakdown);
-        console.log("Return status breakdown:", processedData.returnStatusBreakdown);
-
-        setItemsData(processedData);
-      })
-      .catch((error) => {
-        console.error("Error fetching items data:", error);
-      });
-  }, []);
-
-  // Log whenever itemsData changes
-  useEffect(() => {
-    console.log("Current itemsData state:", itemsData);
-  }, [itemsData]);
+        return processedData;
+  }, [itemsFromAPI]);
 
   const [all, setAll] = useState(true);
   const [cap, setCap] = useState(false);

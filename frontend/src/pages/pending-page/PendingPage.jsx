@@ -4,10 +4,12 @@
  * Shows item status instead of return status and provides grid/table view options
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
+import { useQuery } from '@tanstack/react-query';
 import PendingTable from "../../components/pending-page/PendingTable";
 import SideBar from "../../components/navigations/SideBar";
 import Navbar from "../../components/navigations/NavBar";
+import { inventoryAPI } from "../../lib/api";
 
 /**
  * PendingPage Component
@@ -20,63 +22,47 @@ const PendingPage = () => {
   const [activeTab, setActiveTab] = useState("pending");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [sortOrder, setSortOrder] = useState("name-asc");
-  const [allData, setAllData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]); // for future search/filter
   const [focusedStatus, setFocusedStatus] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch inventory data on mount (ReservationPage pattern)
-  useEffect(() => {
-    console.log("PendingPage: Starting fetch...");
-    // Use direct route to get all accounts with inventory data
-    fetch("http://localhost:5001/inventory")
-      .then((res) => {
-        console.log("PendingPage: Response status:", res.status);
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("=== PENDINGPAGE DEBUG ===");
-        console.log("PendingPage: Raw data received:", data);
-        console.log("PendingPage: Data length:", data.length);
-        console.log("PendingPage: Kenneth's record specifically:");
-        const kenneth = data.find(item => item.first_name?.includes("Kenneth"));
-        console.log("Kenneth found:", kenneth);
-        
-        // Filter to show pending, approved, and rejected users (exclude only deleted users if any)
-        const filtered = data.filter(
-          (item) => 
-            (item.status === 'pending' || item.status === 'approved' || item.status === 'rejected')
-        );
-        console.log("PendingPage: Filtered data:", filtered);
-        console.log("PendingPage: Filtered length:", filtered.length);
-        
-        // Log specific data to debug name/date issues
-        filtered.forEach((item, index) => {
-          console.log(`PendingPage item ${index}:`, {
-            account_id: item.account_id,
-            first_name: item.first_name,
-            surname: item.surname,
-            middle_initial: item.middle_initial,
-            course: item.course,
-            status: item.status,
-            rent_date: item.rent_date,
-            created_at: item.created_at,
-            inventory_id: item.inventory_id,
-            toga_size: item.toga_size,
-            tassel_color: item.tassel_color,
-            hood_color: item.hood_color
-          });
-        });
-        
-        setAllData(filtered);
-        setFilteredData(filtered);
-      })
-      .catch((error) => {
-        console.error("PendingPage: Error fetching data", error);
-      });
-  }, []);
+  // Fetch inventory data using React Query
+  const { data: inventoryData = [], refetch } = useQuery({
+    queryKey: ['inventory'],
+    queryFn: inventoryAPI.getAll,
+  });
+
+  // Filter and process data
+  const allData = useMemo(() => {
+    return inventoryData.filter(
+      (item) => 
+        item.status === 'pending' || 
+        item.status === 'approved' || 
+        item.status === 'rejected'
+    );
+  }, [inventoryData]);
+
+  // Client-side search filtering
+  const filteredData = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return allData;
+    }
+
+    const normalize = str => str.replace(/[\s.,]/g, '').toLowerCase();
+    const normalizedSearch = normalize(searchTerm);
+
+    return allData.filter(item => {
+      const fullName = `${item.surname || ''}, ${item.first_name || ''}${item.middle_initial ? ' ' + item.middle_initial : ''}`;
+      const normalizedName = normalize(fullName);
+      
+      // Also search by ID number and course
+      const idNumber = normalize(item.id_number || '');
+      const course = normalize(item.course || '');
+      
+      return normalizedName.includes(normalizedSearch) || 
+             idNumber.includes(normalizedSearch) ||
+             course.includes(normalizedSearch);
+    });
+  }, [allData, searchTerm]);
 
   // Calculate dynamic counts for sidebar
   const allRequestsCount = allData.length;
@@ -84,38 +70,15 @@ const PendingPage = () => {
   const pendingCount = allData.filter(item => item.status === 'pending').length;
   const rejectedCount = allData.filter(item => item.status === 'rejected').length;
 
-  // Refresh data function to be passed to components
-  const refreshData = () => {
-    fetch("http://localhost:5001/inventory")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const filtered = data.filter(
-          (item) => 
-            (item.status === 'pending' || item.status === 'approved' || item.status === 'rejected')
-        );
-        setAllData(filtered);
-        setFilteredData(filtered);
-      })
-      .catch((error) => {
-        console.error("PendingPage: Error refreshing data", error);
-      });
+  // Handle search from NavBar
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
-  useEffect(() => {
-    setFilteredData(allData); //ishow ang filtered data (refer sa handleSearch sa NavBar.jsx)
-  }, [allData]);
-
-  const handleEvaluationSearch = (results) => {
-    const filtered = results.filter(
-      (item) => item.toga_size !== null && item.toga_size !== undefined
-    );
-    setFilteredData(filtered);
-    };
+  // Refresh data function (refetch from React Query)
+  const refreshData = () => {
+    refetch();
+  };
 
   // Sort handlers for the sidebar controls
   const handleSortNameAsc = () => setSortOrder("name-asc");
@@ -163,7 +126,8 @@ const PendingPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            onSearch={handleEvaluationSearch}
+            onSearch={handleSearch}
+            searchTerm={searchTerm}
           />
         </div>
         <div className="w-full flex flex-col">

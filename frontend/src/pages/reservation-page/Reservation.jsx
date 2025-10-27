@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { useQuery } from '@tanstack/react-query';
 import SideBar from "../../components/navigations/SideBar";
 import NavBar from "../../components/navigations/NavBar";
 import Table from "../../components/common/Table";
+import { inventoryAPI } from "../../lib/api";
 
 const ReservationPage = () => {
   const [isGrid, setIsGrid] = useState(false);
@@ -14,37 +16,56 @@ const ReservationPage = () => {
   const [isNotReturnedTab, setIsNotReturnedTab] = useState(false);
   const [isAZ, setIsAZ] = useState(false);
   const [isZA, setIsZA] = useState(false);
-  const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState([]); // FOR SEARCH BAR
   const [dashboard, setDashboard] = useState([]);
   const [sortOrder, setSortOrder] = useState("name-asc"); // default to A-Z
+  const [searchTerm, setSearchTerm] = useState("");
 
-  //fetch info from db
-  useEffect(() => {
-    fetch("http://localhost:5001/inventory")
-      .then((res) => res.json())
-      .then((data) => {
-        const filteredData = data.filter(
-          (item) =>
-            item.toga_size !== null &&
-            item.toga_size !== undefined
-        );
-        setAllData(filteredData);
-      });
-  }, []);
+  //fetch info from db using React Query
+  const { data: inventoryData = [] } = useQuery({
+    queryKey: ['inventory'],
+    queryFn: inventoryAPI.getAll,
+  });
 
-  //para ma filter ang data if nag search
-  useEffect(() => {
-    setFilteredData(allData);
-  }, [allData]);
-
-  const handleEvaluationSearch = (results) => {
-    const filtered = results.filter(
+  // Filter data - only show users with toga assigned
+  const allData = useMemo(() => {
+    return inventoryData.filter(
       (item) =>
         item.toga_size !== null &&
         item.toga_size !== undefined
     );
-    setFilteredData(filtered);
+  }, [inventoryData]);
+
+  // Client-side search filtering
+  const searchFilteredData = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return allData;
+    }
+
+    const normalize = str => str.replace(/[\s.,]/g, '').toLowerCase();
+    const normalizedSearch = normalize(searchTerm);
+
+    return allData.filter(item => {
+      const fullName = `${item.surname || ''}, ${item.first_name || ''}${item.middle_initial ? ' ' + item.middle_initial : ''}`;
+      const normalizedName = normalize(fullName);
+      
+      // Also search by ID number and course
+      const idNumber = normalize(item.id_number || '');
+      const course = normalize(item.course || '');
+      
+      return normalizedName.includes(normalizedSearch) || 
+             idNumber.includes(normalizedSearch) ||
+             course.includes(normalizedSearch);
+    });
+  }, [allData, searchTerm]);
+
+  //para ma filter ang data if nag search
+  useEffect(() => {
+    setFilteredData(searchFilteredData);
+  }, [searchFilteredData]);
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
   //sorting
@@ -110,7 +131,8 @@ const ReservationPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            onSearch={handleEvaluationSearch}
+            onSearch={handleSearch}
+            searchTerm={searchTerm}
           />
         </div>
         <div className="w-full flex flex-col">

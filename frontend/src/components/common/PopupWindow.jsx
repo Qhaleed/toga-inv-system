@@ -86,7 +86,7 @@ const PopupWindow = ({
 
       // Update inventory
       const inventoryResponse = await fetch(
-        `http://localhost:5001/inventory/${user.id}`,
+        `http://localhost:5001/inventory/${user.inventory_id}`,
         {
           method: "PATCH",
           headers: {
@@ -162,7 +162,7 @@ const PopupWindow = ({
       try {
         // Delete inventory record
         const inventoryResponse = await fetch(
-          `http://localhost:5001/inventory/${user.id}`,
+          `http://localhost:5001/inventory/${user.inventory_id}`,
           {
             method: "DELETE",
             headers: {

@@ -1,60 +1,101 @@
-# How to Start the Project
+# Toga Inventory System
 
-# "Frontend" folder using CRA build. "FrontendVite" folder uses VITE +REACT latest build --- for my shadcn to work
+A modern web application for managing university toga rental inventory built with React and Node.js.
 
-## Advantages of Vite
+## Tech Stack
 
-- **Faster Startup:** Vite uses native ES modules and only bundles code on demand, so the dev server starts almost instantly, even for large projects.
-- **Hot Module Replacement (HMR):** Updates are reflected in the browser instantly as you save files, without a full reload.
-- **Modern Build Tools:** Uses Rollup under the hood for optimized production builds and supports modern JavaScript features out of the box.
-- **Simpler Configuration:** Easier to configure and extend compared to older tools like Webpack.
-- **First-class TypeScript & JSX Support:** Works seamlessly with React, TypeScript, and other modern frameworks.
-- **Better DX:** Error overlays, fast refresh, and a more enjoyable developer experience.
+**Frontend:**
+- React 18 + Vite
+- React Query (TanStack Query) for data fetching
+- React Router for navigation
+- Tailwind CSS for styling
 
-## Start the Vite Frontend
+**Backend:**
+- Node.js + Express
+- Supabase (PostgreSQL)
+- JWT Authentication
 
-```sh
-cd frontendvite
-npm install
-npm run dev
-```
+## Quick Start
 
-- The app will be available at http://localhost:3000
-
-## Start the Backend
+### 1. Backend Setup
 
 ```sh
 cd backend
 npm install
-npm install dotenv
-npm run devStart   # enables nodemon (hot reload)
-# or
 node server.js
 ```
 
-## Start the Temporary JSON Database for Tables
+The backend server will run on `http://localhost:5001`
+
+**Required Environment Variables** (create `.env` file):
+```
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+SECRET_KEY=your_jwt_secret
+PORT=5001
+```
+
+### 2. Frontend Setup
 
 ```sh
-cd frontend/src/components/admin-dashboard
-npx json-server --watch sample.json --port 8000
-# or (from project root)
-npx json-server --watch frontend/src/components/admin-dashboard/sample.json --port 8000
-
-
-
-## Login Guide (Hardcoded Accounts)
-
-**Admin Accounts:**
-
-- Email: admin123@gmail.com, Password: password123
-- Email: admin@toga.edu, Password: admin2024
-
-**Student Accounts:**
-
-- Email: student1@toga.edu, Password: student123
-- Email: student2@toga.edu, Password: student456
-
----
-
-_Note: Tailwind setup is now improved in the Vite project._
+cd frontend
+npm install
+npm run dev
 ```
+
+The frontend will run on `http://localhost:5173`
+
+## Features
+
+- 🔐 **Authentication**: JWT-based login for admins and students
+- 📋 **Pending Page**: Approve/reject student registrations
+- 📦 **Inventory Management**: Track toga items (gowns, hoods, tassels, caps)
+- 📅 **Reservation System**: Manage toga rentals and returns
+- 🔍 **Search**: Fast client-side search across all pages
+- ✅ **Evaluation**: Assess returned items for damage/repair
+- 📊 **Dashboard**: Real-time statistics and reports
+
+## Project Structure
+
+```
+toga-inv-system/
+├── backend/
+│   ├── database/
+│   │   └── db.js              # Supabase connection
+│   ├── routes/
+│   │   ├── accounts.js
+│   │   ├── auth.js
+│   │   ├── inventory.js
+│   │   ├── items.js
+│   │   ├── evaluation.js
+│   │   └── ...
+│   ├── .env                   # Environment variables
+│   ├── server.js              # Express server
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/        # React components
+│   │   ├── pages/             # Page components
+│   │   ├── lib/
+│   │   │   ├── api.js         # API functions
+│   │   │   ├── queryClient.js # React Query config
+│   │   │   └── utils.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+└── README.md
+```
+
+## Default Credentials
+
+Use these to log in after setup:
+
+**Admin Account:**
+- Email: admin@toga.edu
+- Password: admin2024
+
+**Student Account:**
+- Email: student@toga.edu
+- Password: student123

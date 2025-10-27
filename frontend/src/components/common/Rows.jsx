@@ -124,7 +124,7 @@ const Rows = ({
       if (changedRows.length > 0) {
         Promise.all(
           changedRows.map((row) =>
-            fetch(`http://localhost:5001/inventory/${row.id}`, {
+            fetch(`http://localhost:5001/inventory/${row.inventory_id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({

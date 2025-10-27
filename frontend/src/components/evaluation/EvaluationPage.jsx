@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
+import { useQuery } from '@tanstack/react-query';
 import SideBar from "../navigations/SideBar";
 import Navbar from "../navigations/NavBar";
 import EvaluationTable from "./EvaluationTable";
 import EvaluationTab from "./EvaluationTab";
+import { evaluationAPI } from "../../lib/api";
 
 const EvaluationPage = () => {
   const [modifyTable, setmodifyTable] = useState(false);
@@ -17,31 +19,17 @@ const EvaluationPage = () => {
   const [isAZ, setIsAZ] = useState(false);
   const [isZA, setIsZA] = useState(false);
   const [focusedStatus, setFocusedStatus] = useState("all");
-  const [allData, setAllData] = useState([]);
-  const [filteredData, setFilteredData] = useState(allData);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    fetch("http://localhost:5001/evaluation")
-      .then((res) => res.json())
-      .then((data) => {
-        const filteredData = data.filter(
-          (item) =>
-            item.toga_size !== null &&
-            item.toga_size !== undefined &&
-            item.return_status !== "Not Returned" &&
-            item.return_status !== null &&
-            item.return_status !== undefined
-        );
-        setAllData(filteredData);
-      });
-  }, []);
+  // Fetch evaluation data using React Query
+  const { data: evaluationData = [] } = useQuery({
+    queryKey: ['evaluation'],
+    queryFn: evaluationAPI.getAll,
+  });
 
-  useEffect(() => {
-    setFilteredData(allData);
-  }, [allData]);
-
-  const handleEvaluationSearch = (results) => {
-    const filtered = results.filter(
+  // Filter data - only show returned items
+  const allData = useMemo(() => {
+    return evaluationData.filter(
       (item) =>
         item.toga_size !== null &&
         item.toga_size !== undefined &&
@@ -49,7 +37,33 @@ const EvaluationPage = () => {
         item.return_status !== null &&
         item.return_status !== undefined
     );
-    setFilteredData(filtered);
+  }, [evaluationData]);
+
+  // Client-side search filtering
+  const filteredData = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return allData;
+    }
+
+    const normalize = str => str.replace(/[\s.,]/g, '').toLowerCase();
+    const normalizedSearch = normalize(searchTerm);
+
+    return allData.filter(item => {
+      const fullName = `${item.surname || ''}, ${item.first_name || ''}${item.middle_initial ? ' ' + item.middle_initial : ''}`;
+      const normalizedName = normalize(fullName);
+      
+      // Also search by ID number and course
+      const idNumber = normalize(item.id_number || '');
+      const course = normalize(item.course || '');
+      
+      return normalizedName.includes(normalizedSearch) || 
+             idNumber.includes(normalizedSearch) ||
+             course.includes(normalizedSearch);
+    });
+  }, [allData, searchTerm]);
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
   return (
@@ -95,7 +109,8 @@ const EvaluationPage = () => {
             setmodifyTable={setmodifyTable}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            onSearch={handleEvaluationSearch}
+            onSearch={handleSearch}
+            searchTerm={searchTerm}
           />
         </div>
         <div className="w-full flex flex-col">

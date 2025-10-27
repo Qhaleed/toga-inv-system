@@ -10,7 +10,7 @@ import GrayApplication from "../../assets/icons/gray-checkgray.svg?react";
 import GrayRows from "../../assets/icons/gray-rows.svg?react";
 import GrayGrid from "../../assets/icons/gray-grid.svg?react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 import MenuIcon from "@/assets/icons/menu.svg?react";
 
@@ -18,7 +18,8 @@ const Navbar = ({
   modifyTable,
   setmodifyTable,
   activeTab,
-  onSearch, // <-- add this prop for search callback
+  onSearch, // <-- callback for search
+  searchTerm: externalSearchTerm, // <-- controlled search term from parent
 }) => {
   const editallClicked = () => {
     setmodifyTable((prev) => !prev);
@@ -27,7 +28,13 @@ const Navbar = ({
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [sortOption] = useState(""); // Removed unused setter
+
+  // Sync internal search value with external if provided
+  useEffect(() => {
+    if (externalSearchTerm !== undefined) {
+      setSearchValue(externalSearchTerm);
+    }
+  }, [externalSearchTerm]);
 
   // Disable controls if search bar is active
   const searchActive = searchValue.trim().length > 0;
@@ -60,25 +67,12 @@ const Navbar = ({
     }, 1500);
   };
 
-  // Update search handler to include sorting
+  // Update search handler - now uses client-side filtering
   const handleSearch = async (e) => {
     if ((e && e.key === "Enter") || e === "iconClick") {
-      try {
-        setLoading(true);
-        let query = `http://localhost:5001/search?search=${encodeURIComponent(
-          searchValue
-        )}`;
-        if (sortOption) {
-          query += `&sort=${encodeURIComponent(sortOption)}`;
-        }
-        const res = await fetch(query);
-        if (!res.ok) throw new Error("Failed to fetch search results");
-        const data = await res.json();
-        if (onSearch) onSearch(data);
-      } catch (err) {
-        alert("Error searching: " + err.message);
-      } finally {
-        setLoading(false);
+      // Call the parent's onSearch callback with the search term
+      if (onSearch) {
+        onSearch(searchValue);
       }
     }
   };
