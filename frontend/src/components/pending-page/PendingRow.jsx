@@ -14,6 +14,7 @@ import PopupWindow from "../common/PopupWindow";
 import GridView from "../common/GridView";
 import ReactDOM from "react-dom";
 import AlertCard from "../common/AlertCard";
+import { API_BASE_URL } from "../../lib/api";
 
 // Constants for dropdown options
 
@@ -53,7 +54,7 @@ const PendingRow = ({
   // Function to fetch and refresh inventory data
   const fetchLatestData = async () => {
     try {
-      const response = await fetch("http://localhost:5001/inventory", {
+      const response = await fetch(`${API_BASE_URL}/inventory`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -262,7 +263,7 @@ const PendingRow = ({
             let statusPromise = Promise.resolve();
             if (row.status !== orig.status && row.status !== undefined) {
               statusPromise = fetch(
-                `http://localhost:5001/accounts/${row.account_id}`,
+                `${API_BASE_URL}/accounts/${row.account_id}`,
                 {
                   method: "PATCH",
                   headers: { "Content-Type": "application/json" },
@@ -280,7 +281,7 @@ const PendingRow = ({
               if (row.inventory_id) {
                 // Update existing inventory record
                 inventoryPromise = fetch(
-                  `http://localhost:5001/inventory/${row.inventory_id}`,
+                  `${API_BASE_URL}/inventory/${row.inventory_id}`,
                   {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
@@ -298,7 +299,7 @@ const PendingRow = ({
                   rent_date: new Date().toISOString().split('T')[0] // Today's date
                 };
                 inventoryPromise = fetch(
-                  `http://localhost:5001/inventory`,
+                  `${API_BASE_URL}/inventory`,
                   {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -362,7 +363,7 @@ const PendingRow = ({
     let statusPromise = Promise.resolve();
     if (editData.status !== orig.status && editData.status !== undefined) {
       statusPromise = fetch(
-        `http://localhost:5001/accounts/${editData.account_id}`,
+        `${API_BASE_URL}/accounts/${editData.account_id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -379,7 +380,7 @@ const PendingRow = ({
       // Check if this student has an inventory record
       if (editData.inventory_id) {
         // Update existing inventory record
-        inventoryPromise = fetch(`http://localhost:5001/inventory/${editData.inventory_id}`, {
+        inventoryPromise = fetch(`${API_BASE_URL}/inventory/${editData.inventory_id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -397,7 +398,7 @@ const PendingRow = ({
           ...updatedData,
           rent_date: new Date().toISOString().split('T')[0] // Today's date
         };
-        inventoryPromise = fetch(`http://localhost:5001/inventory`, {
+        inventoryPromise = fetch(`${API_BASE_URL}/inventory`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -466,7 +467,7 @@ const PendingRow = ({
 
       // Delete from inventory table if inventory_id exists
       if (row.inventory_id) {
-        const inventoryRes = await fetch(`http://localhost:5001/inventory/${row.inventory_id}`, {
+        const inventoryRes = await fetch(`${API_BASE_URL}/inventory/${row.inventory_id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -481,7 +482,7 @@ const PendingRow = ({
 
       // Delete from accounts table using account_id
       if (row.account_id) {
-        const accountRes = await fetch(`http://localhost:5001/accounts/${row.account_id}`, {
+        const accountRes = await fetch(`${API_BASE_URL}/accounts/${row.account_id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -523,7 +524,7 @@ const PendingRow = ({
 
     try {
       // Fetch items from the inventory endpoint
-      const inventoryRes = await fetch(`http://localhost:5001/items`);
+      const inventoryRes = await fetch(`${API_BASE_URL}/items`);
       if (!inventoryRes.ok) {
         throw new Error(`Failed to fetch inventory: ${inventoryRes.status}`);
       }
@@ -584,7 +585,7 @@ const PendingRow = ({
         );
 
         // Decrement the "Returned" quantity
-        await fetch(`http://localhost:5001/items/${returnedItem.id}`, {
+        await fetch(`${API_BASE_URL}/items/${returnedItem.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -594,7 +595,7 @@ const PendingRow = ({
 
         if (notReturnedItem) {
           // Increment the "Not Returned" quantity
-          await fetch(`http://localhost:5001/items/${notReturnedItem.id}`, {
+          await fetch(`${API_BASE_URL}/items/${notReturnedItem.id}`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -603,7 +604,7 @@ const PendingRow = ({
           });
         } else {
           // Create a new "Not Returned" entry if it doesn't exist
-          await fetch(`http://localhost:5001/items`, {
+          await fetch(`${API_BASE_URL}/items`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -621,7 +622,7 @@ const PendingRow = ({
 
       // Approve the account
       const accountRes = await fetch(
-        `http://localhost:5001/accounts/${row.account_id}`,
+        `${API_BASE_URL}/accounts/${row.account_id}`,
         {
           method: "PATCH",
           headers: {

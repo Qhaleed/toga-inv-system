@@ -3,6 +3,7 @@ import Table from "../common/Table";
 import SideBar from "../navigations/SideBar";
 import NavBar from "../navigations/NavBar";
 import AdminDashboard from "./AdminDashboard"; // Import the AdminDashboard component
+import { API_BASE_URL } from "../../lib/api";
 
 const AdminDashboardCard = () => {
   // States for grid and modifyTable
@@ -19,7 +20,7 @@ const AdminDashboardCard = () => {
   // Function to refresh data after stock operations
   const refreshData = useCallback(() => {
     // Refresh items data
-    fetch("http://localhost:5001/items")
+    fetch(`${API_BASE_URL}/items`)
       .then((res) => res.json())
       .then((data) => {
         setAllData(data);
@@ -30,7 +31,7 @@ const AdminDashboardCard = () => {
       });
     
     // Refresh accounts data
-    fetch("http://localhost:5001/accounts")
+    fetch(`${API_BASE_URL}/accounts`)
       .then((res) => res.json())
       .then((data) => {
         setApprovalRequests(data);
@@ -43,7 +44,7 @@ const AdminDashboardCard = () => {
 
   // Fetch inventory data on mount (like PendingPage)
   useEffect(() => {
-    fetch("http://localhost:5001/items")
+    fetch(`${API_BASE_URL}/items`)
       .then((res) => res.json())
       .then((data) => {
         setAllData(data);
@@ -52,7 +53,7 @@ const AdminDashboardCard = () => {
         console.error("Failed to fetch items data:", err);
       });
     // Fetch approval requests from accounts
-    fetch("http://localhost:5001/accounts")
+    fetch(`${API_BASE_URL}/accounts`)
       .then((res) => res.json())
       .then((data) => {
         setApprovalRequests(data);

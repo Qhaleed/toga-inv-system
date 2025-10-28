@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../navigations/SideBar";
 import UserPending from "./UserPending";
 import UserApproved from "./UserApproved";
+import { API_BASE_URL } from "../../lib/api";
 
 const Dashboard = () => {
   const [userStatus, setUserStatus] = useState(null);
@@ -15,7 +16,7 @@ const Dashboard = () => {
       try {
         const authToken = localStorage.getItem("token");
         // There is no users
-        const userResponse = await fetch("http://localhost:5001/users", {
+        const userResponse = await fetch(`${API_BASE_URL}/users`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

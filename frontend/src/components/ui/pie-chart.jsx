@@ -3,6 +3,7 @@
 import * as React from "react";
 import { TrendingUp } from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
+import { API_BASE_URL } from "../../lib/api";
 
 import {
   Card,
@@ -26,7 +27,7 @@ export function PieChartDash() {
   const [totalStocks, setTotalStocks] = React.useState(0);
 
   React.useEffect(() => {
-    fetch("http://localhost:5001/inventory")
+    fetch(`${API_BASE_URL}/inventory`)
       .then((res) => res.json())
       .then((data) => {
         // Example: group by item type and count remaining stocks

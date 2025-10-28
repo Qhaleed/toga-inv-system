@@ -4,22 +4,29 @@
  */
 
 const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config();
+
+// Only load dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 // Supabase connection credentials
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ Missing Supabase credentials in .env file');
-  console.error('Please add SUPABASE_URL and SUPABASE_ANON_KEY to your .env file');
-  process.exit(1);
+  console.error('❌ Missing Supabase credentials in environment variables');
+  console.error('Please ensure SUPABASE_URL and SUPABASE_ANON_KEY are set');
+  // Don't exit in serverless - just log the error
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
 }
 
 // Create Supabase client
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Test connection on startup
+// Test connection on startup (only in development)
 async function testConnection() {
   try {
     const { data, error } = await supabase
@@ -35,7 +42,10 @@ async function testConnection() {
   }
 }
 
-testConnection();
+// Only test connection in development mode
+if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+  testConnection();
+}
 
 // ============================================
 // HELPER FUNCTIONS (maintain compatibility with existing code)

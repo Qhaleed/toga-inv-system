@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_BASE_URL } from "../../lib/api";
 
 const RemoveStockPopup = ({ open, onClose, onSubmit }) => {
     const [itemType, setItemType] = useState("gown");
@@ -61,7 +62,7 @@ const RemoveStockPopup = ({ open, onClose, onSubmit }) => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch("http://localhost:5001/items");
+            const response = await fetch(`${API_BASE_URL}/items`);
             if (!response.ok) {
                 throw new Error("Failed to fetch available items");
             }

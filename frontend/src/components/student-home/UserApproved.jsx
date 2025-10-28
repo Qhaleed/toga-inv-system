@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import FormWrapper from "../common/FormWrapper";
 import measureInstruct from "../../assets/images/measureinstruct.png";
 import LoaderAnimation from "../login-card/LoaderAnimation";
+import { API_BASE_URL } from "../../lib/api";
 
 const UserApproved = ({ userData, name }) => {
   const [formData, setFormData] = useState({
@@ -73,7 +74,7 @@ useEffect(() => {
         return;
       }
       try {
-        const res = await fetch("http://localhost:5001/users", {
+        const res = await fetch(`${API_BASE_URL}/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -125,7 +126,7 @@ useEffect(() => {
     // Check inventory if account_id is present
     if (accountId) {
       try {
-        const invRes = await fetch("http://localhost:5001/inventory/check-toga-size", {
+        const invRes = await fetch(`${API_BASE_URL}/inventory/check-toga-size`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -184,7 +185,7 @@ useEffect(() => {
       : "";
 
     try {
-      const response = await fetch("http://localhost:5001/student-home", {
+      const response = await fetch(`${API_BASE_URL}/student-home`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

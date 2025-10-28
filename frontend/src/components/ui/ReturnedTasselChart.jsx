@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import ReturnedTasselTooltip from "./ReturnedTasselTooltip";
+import { API_BASE_URL } from "../../lib/api";
 
 const COLOR = "#60a5fa";
 
@@ -65,7 +66,7 @@ export default function SizesChart({ returnData }) {
       }
     } else {
       // Fallback to fetch data directly if no returnData prop
-      fetch("http://localhost:5001/items")
+      fetch(`${API_BASE_URL}/items`)
         .then((res) => res.json())
         .then((data) => {
           const tasselColors = {};

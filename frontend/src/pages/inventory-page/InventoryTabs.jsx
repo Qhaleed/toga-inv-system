@@ -18,6 +18,7 @@ import HoodIcon from "@/assets/icons/hood.svg?react";
 import Stocks from "./Stocks";
 import ItemStatus from "./ItemStatus";
 import CheckReturn from "./CheckReturn";
+import { API_BASE_URL } from "../../lib/api";
 
 export function StocksTab() {
   return (
@@ -65,7 +66,7 @@ export function ViewDamageTab() {
       setIsLoading(true);
       try {
         // Fetch items data - this will be our primary source for damaged items
-        const itemsResponse = await fetch("http://localhost:5001/items");
+        const itemsResponse = await fetch(`${API_BASE_URL}/items`);
         if (!itemsResponse.ok) {
           throw new Error(`HTTP error! Status: ${itemsResponse.status}`);
         }
@@ -135,7 +136,7 @@ export function ViewDamageTab() {
         }));
 
         // Also fetch evaluation data to enrich our damage information where possible
-        const evalResponse = await fetch("http://localhost:5001/evaluation");
+        const evalResponse = await fetch(`${API_BASE_URL}/evaluation`);
         if (evalResponse.ok) {
           const evalData = await evalResponse.json();
 
@@ -391,7 +392,7 @@ export function ViewRepairTab() {
       setIsLoading(true);
       try {
         // Fetch items data - primary source for items needing repair
-        const itemsResponse = await fetch("http://localhost:5001/items");
+        const itemsResponse = await fetch(`${API_BASE_URL}/items`);
         if (!itemsResponse.ok) {
           throw new Error(`HTTP error! Status: ${itemsResponse.status}`);
         }

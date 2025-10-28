@@ -11,6 +11,7 @@ import MissingCapChart from "@/components/ui/MissingCapChart";
 import MissingGownChart from "@/components/ui/MissingGownChart";
 import MissingHoodChart from "@/components/ui/MissingHoodChart";
 import MissingTasselChart from "@/components/ui/MissingTasselChart";
+import { API_BASE_URL } from "../../lib/api";
 
 const CheckReturn = () => {
   const [totals, setTotals] = useState({
@@ -54,7 +55,7 @@ const CheckReturn = () => {
    LANG RIN YUNG DATA DOON*/
 
   useEffect(() => {
-    fetch("http://localhost:5001/items")
+    fetch(`${API_BASE_URL}/items`)
       .then((res) => res.json())
       .then((data) => {
         let cap = 0,

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import LoaderAnimation from "../login-card/LoaderAnimation";
 import FormWrapper from "../common/FormWrapper";
 import LoginLoaderAnimation from "./LoginLoaderAnimation";
+import { API_BASE_URL } from "../../lib/api";
 
 function LoginCard() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ function LoginCard() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5001/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { API_BASE_URL } from "../../lib/api";
 
 import {
   Card,
@@ -30,7 +31,7 @@ export function RadialChart() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5001/inventory")
+    fetch(`${API_BASE_URL}/inventory`)
       .then((res) => res.json())
       .then((data) => {
         let cap = 0,

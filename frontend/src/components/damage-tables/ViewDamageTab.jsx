@@ -3,6 +3,7 @@ import CapDamageTable from "./CapDamageTable";
 import GownDamageTable from "./GownDamageTable";
 import HoodDamageTable from "./HoodDamageTable";
 import TasselDamageTable from "./TasselDamageTable";
+import { API_BASE_URL } from "../../lib/api";
 
 export default function ViewDamageTab() {
   const [damageData, setDamageData] = useState({
@@ -19,7 +20,7 @@ export default function ViewDamageTab() {
       setIsLoading(true);
       try {
         // Fetch evaluation data from backend
-        const response = await fetch("http://localhost:5001/evaluation");
+        const response = await fetch(`${API_BASE_URL}/evaluation`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

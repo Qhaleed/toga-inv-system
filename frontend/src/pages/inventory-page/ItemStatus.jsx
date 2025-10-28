@@ -4,6 +4,7 @@ import ItemStatusCapChart from "../../components/ui/ItemStatusCapChart";
 import ItemStatusTasselChart from "../../components/ui/ItemStatusTasselChart";
 import ItemStatusGownChart from "../../components/ui/ItemStatusGownChart";
 import ItemStatusHoodChart from "../../components/ui/ItemStatusHoodChart";
+import { API_BASE_URL } from "../../lib/api";
 
 const ItemStatus = () => {
   const [selectedChart, setSelectedChart] = useState("all");
@@ -15,7 +16,7 @@ const ItemStatus = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5001/statuses")
+    fetch(`${API_BASE_URL}/statuses`)
       .then((res) => res.json())
       .then((data) => {
         setItems(data.items || []);

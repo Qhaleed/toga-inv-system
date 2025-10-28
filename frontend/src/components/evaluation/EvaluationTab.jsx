@@ -1,6 +1,7 @@
 import RedButton from "../../assets/icons/red-x-icon.svg?react";
 import { useRef } from "react";
 import { useState } from "react";
+import { API_BASE_URL } from "../../lib/api";
 
 const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
   const formRef = useRef(null);
@@ -63,7 +64,7 @@ const EvaluationTab = ({ value, evalTab, setEvaluationTab }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5001/evaluation", {
+      const response = await fetch(`${API_BASE_URL}/evaluation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -10,6 +10,7 @@ import RemoveStockPopup from "../common/RemoveStockPopup";
 import BoxIcon from "../../assets/icons/box.svg";
 import BlackTrashIcon from "../../assets/icons/black-trash.svg";
 import AlertCard from "../common/AlertCard";
+import { API_BASE_URL } from "../../lib/api";
 
 // Add InitialsAvatar component to display user initials
 const InitialsAvatar = ({ name, className = "" }) => {
@@ -140,7 +141,7 @@ const SideBar = ({
       onAdminName && onAdminName("Not logged in");
       return;
     }
-    fetch("http://localhost:5001/users", {
+    fetch(`${API_BASE_URL}/users`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -743,7 +744,7 @@ const SideBar = ({
                 // API call to add stock to items endpoint
                 try {
                   console.log(data);
-                  const response = await fetch("http://localhost:5001/items", {
+                  const response = await fetch(`${API_BASE_URL}/items`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
@@ -769,7 +770,7 @@ const SideBar = ({
                 // API call to remove stock
                 try {
                   const response = await fetch(
-                    "http://localhost:5001/items/remove",
+                    `${API_BASE_URL}/items/remove`,
                     {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },

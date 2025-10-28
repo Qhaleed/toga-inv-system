@@ -1,4 +1,8 @@
-require("dotenv").config();
+// Only load dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const cors = require("cors");
 const db = require("./database/db.js");
@@ -6,8 +10,25 @@ const db = require("./database/db.js");
 const app = express();
 const PORT = 5001;
 
+// More permissive CORS - allow all origins
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  // Allow all origins for now
+  res.header('Access-Control-Allow-Origin', origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cache-Control');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  
+  next();
+});
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Routes
@@ -43,7 +64,11 @@ app.use("/dashboard", dashboardRoute);
 
 // Root Test
 app.get("/", (req, res) => {
-  res.send("Backend is running");
+  res.json({ 
+    status: "success",
+    message: "Backend is running",
+    timestamp: new Date().toISOString()
+  });
 });
 
 // DB test
@@ -57,4 +82,10 @@ app.get("/dashboard", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start server only if not in Vercel environment
+if (process.env.VERCEL !== "1") {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+// Export for Vercel serverless
+module.exports = app;

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import LoginBg from "../../assets/images/loginbg.jpg";
 import LoaderAnimation from "../login-card/LoaderAnimation";
+import { API_BASE_URL } from "../../lib/api";
 
 const PendingApproval = () => {
   const [firstName, setFirstName] = useState("");
@@ -15,7 +16,7 @@ const PendingApproval = () => {
       return;
     }
 
-    fetch("http://localhost:5001/users?firstOnly=true", {
+    fetch(`${API_BASE_URL}/users?firstOnly=true`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

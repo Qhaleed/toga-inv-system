@@ -5,6 +5,7 @@ import { RadialChart } from "../ui/radialchart";
 import { PendingRadial } from "../ui/pendingradial";
 import { EvaluationRadial } from "../ui/evaluationradial";
 import { CheckedOutRadial } from "../ui/checkedoutradial";
+import { API_BASE_URL } from "../../lib/api";
 import {
   PieChart,
   TrendingDownIcon,
@@ -44,7 +45,7 @@ function AdminDashboard({ adminName = "Admin",
 
   // Function to refresh inventory stats
   const refreshInventoryStats = useCallback(() => {
-    fetch("http://localhost:5001/inventory")
+    fetch(`${API_BASE_URL}/inventory`)
       .then((res) => res.json())
       .then((data) => {
         // Calculate dynamic stats from actual inventory data

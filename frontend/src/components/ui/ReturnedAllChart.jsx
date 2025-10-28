@@ -8,6 +8,7 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
+import { API_BASE_URL } from "../../lib/api";
 
 import { ChartContainer } from "./chart";
 
@@ -60,7 +61,7 @@ export default function MyChart({ returnData }) {
       ]);
     } else {
       // Fallback to the original fetch if no returnData is provided
-      fetch("http://localhost:5001/items")
+      fetch(`${API_BASE_URL}/items`)
         .then((res) => res.json())
         .then((data) => {
           let capReturned = 0,

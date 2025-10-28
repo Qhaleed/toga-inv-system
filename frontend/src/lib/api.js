@@ -1,5 +1,5 @@
-// API base URL
-const API_BASE_URL = 'http://localhost:5001';
+// API base URL - automatically uses production URL when deployed
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 // Generic fetch function with error handling
 export const fetchAPI = async (endpoint) => {

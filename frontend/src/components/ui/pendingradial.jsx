@@ -8,6 +8,7 @@ import {
   ChartTooltip,
   CustomRadialTooltip,
 } from "@/components/ui/chart";
+import { API_BASE_URL } from "../../lib/api";
 
 export function PendingRadial() {
   const [chartData, setChartData] = useState([{ pending: 0 }]);
@@ -16,7 +17,7 @@ export function PendingRadial() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5001/inventory")
+    fetch(`${API_BASE_URL}/inventory`)
       .then((res) => res.json())
       .then((data) => {
         let pending = 1; //hardcoded for testing muna

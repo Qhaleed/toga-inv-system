@@ -4,6 +4,7 @@ import UploadIcon from "../../assets/images/cloudupload.png";
 import FormWrapper from "../common/FormWrapper";
 import { useNavigate } from "react-router-dom";
 import "../../styles/animations.css";
+import { API_BASE_URL } from "../../lib/api";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -146,7 +147,7 @@ export default function RegisterForm() {
     }
     
     try {
-            const response = await fetch("http://localhost:5001/register", {
+            const response = await fetch(`${API_BASE_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

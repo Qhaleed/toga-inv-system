@@ -9,6 +9,7 @@ import AlertCard from "./AlertCard";
 
 import { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
+import { API_BASE_URL } from "../../lib/api";
 
 const Rows = ({
   isGrid,
@@ -124,7 +125,7 @@ const Rows = ({
       if (changedRows.length > 0) {
         Promise.all(
           changedRows.map((row) =>
-            fetch(`http://localhost:5001/inventory/${row.inventory_id}`, {
+            fetch(`${API_BASE_URL}/inventory/${row.inventory_id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -177,7 +178,7 @@ const Rows = ({
       toga_size: editData.toga_size,
       return_status: editData.return_status,
     };
-    fetch(`http://localhost:5001/inventory/${inventory_id}`, {
+    fetch(`${API_BASE_URL}/inventory/${inventory_id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -221,7 +222,7 @@ const Rows = ({
   };
 
   const handleDelete = (inventory_id) => {
-    fetch(`http://localhost:5001/inventory/${inventory_id}`, {
+    fetch(`${API_BASE_URL}/inventory/${inventory_id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -442,7 +443,7 @@ const Rows = ({
                             <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
                           </div>
                         </td>
-                        <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-xs">
+                        <td className="text-center max-w-[120px] w-[120px] align-middle relative sm:max-w-[60px] sm:w-[60px] sm:text-[9px] md:max-w-[120px] md:w-[120px] md:text-[10px]">
                           <div className="h-full w-full py-2 flex justify-center items-center">
                             <h3 className="truncate">{row.course}</h3>
                             <span className="absolute right-0 top-1/3 h-7 w-0.5 bg-gray-600 opacity-20 border-2"></span>
@@ -599,7 +600,7 @@ const Rows = ({
                                   try {
                                     // First update the status in the inventory table
                                     const invRes = await fetch(
-                                      `http://localhost:5001/inventory/${row.inventory_id}`,
+                                      `${API_BASE_URL}/inventory/${row.inventory_id}`,
                                       {
                                         method: "PATCH",
                                         headers: {
@@ -628,7 +629,7 @@ const Rows = ({
                                       if (!item.item_type || item.quantity <= 0) continue;
 
                                       const itemRes = await fetch(
-                                        `http://localhost:5001/items/set-returned/${row.inventory_id}`,
+                                        `${API_BASE_URL}/items/set-returned/${row.inventory_id}`,
                                         {
                                           method: "PATCH",
                                           headers: {

@@ -11,6 +11,7 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
+import { API_BASE_URL } from "../../lib/api";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
@@ -88,7 +89,7 @@ export function GroupBarChart() {
   React.useEffect(() => {
     const fetchRentalData = async () => {
       try {
-        const response = await fetch("http://localhost:5001/inventory");
+        const response = await fetch(`${API_BASE_URL}/inventory`);
         const data = await response.json();
 
         // Group rentals and returns by date

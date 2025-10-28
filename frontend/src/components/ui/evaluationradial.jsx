@@ -8,6 +8,7 @@ import {
   ChartTooltip,
   CustomRadialTooltip,
 } from "@/components/ui/chart";
+import { API_BASE_URL } from "../../lib/api";
 
 export function EvaluationRadial() {
   const [chartData, setChartData] = useState([{ evaluated: 0 }]);
@@ -16,7 +17,7 @@ export function EvaluationRadial() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5001/inventory")
+    fetch(`${API_BASE_URL}/inventory`)
       .then((res) => res.json())
       .then((data) => {
         let evaluated = 2;

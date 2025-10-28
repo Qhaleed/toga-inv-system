@@ -6,6 +6,7 @@ import RightArrow from "../../assets/icons/small-arrow.svg?react";
 import Pin from "../../assets/icons/white-pin.svg?react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../lib/api";
 
 const PopupWindow = ({
   open,
@@ -86,7 +87,7 @@ const PopupWindow = ({
 
       // Update inventory
       const inventoryResponse = await fetch(
-        `http://localhost:5001/inventory/${user.inventory_id}`,
+        `${API_BASE_URL}/inventory/${user.inventory_id}`,
         {
           method: "PATCH",
           headers: {
@@ -110,7 +111,7 @@ const PopupWindow = ({
       // Update account status if changed
       if (user.account_id && updatedData.status !== user.status) {
         const accountResponse = await fetch(
-          `http://localhost:5001/accounts/${user.account_id}`,
+          `${API_BASE_URL}/accounts/${user.account_id}`,
           {
             method: "PATCH",
             headers: {
@@ -162,7 +163,7 @@ const PopupWindow = ({
       try {
         // Delete inventory record
         const inventoryResponse = await fetch(
-          `http://localhost:5001/inventory/${user.inventory_id}`,
+          `${API_BASE_URL}/inventory/${user.inventory_id}`,
           {
             method: "DELETE",
             headers: {
@@ -179,7 +180,7 @@ const PopupWindow = ({
         // Delete account record if account_id exists
         if (user.account_id) {
           const accountResponse = await fetch(
-            `http://localhost:5001/accounts/${user.account_id}`,
+            `${API_BASE_URL}/accounts/${user.account_id}`,
             {
               method: "DELETE",
               headers: {
